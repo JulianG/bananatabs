@@ -1,26 +1,22 @@
 import * as React from 'react';
 import SessionView from './view/SessionView';
 
+const MANIFEST = require('./manifest.lnk.json');
+
 class App extends React.Component {
 
   private version: string;
 
   constructor(props: {}) {
     super(props);
-    this.version = this.getVersion();
+    console.assert(MANIFEST.version !== undefined, 'manifest.json must contain a "version" key.');
+    this.version = MANIFEST.version || '0.0';
   }
 
   render() {
     return <SessionView version={this.version} />;
   }
 
-  ///
-
-  private getVersion(): string {
-    const manifest = require('./manifest.json');
-    console.assert(manifest.version !== undefined, 'manifes.json must contain a "version" key.');
-    return (manifest.version || '0.0');
-  }
 }
 
 export default App;
