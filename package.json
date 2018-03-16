@@ -1,11 +1,9 @@
 {
   "name": "banana-tabs",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "private": true,
   "dependencies": {
     "react": "^16.2.0",
-    "react-dnd": "^2.5.4",
-    "react-dnd-html5-backend": "^2.5.4",
     "react-dom": "^16.2.0",
     "react-scripts-ts": "2.12.0"
   },
