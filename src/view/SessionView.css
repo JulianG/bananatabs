@@ -1,0 +1,142 @@
+html {
+	font-size: 1em;
+}
+
+body {
+	padding: 0.625rem;
+	color: #000000;
+	font-family: sans-serif;
+	font-size: 1.0rem;
+	background-color: #cccccc;
+}
+
+img.app-icon {
+	width: 2rem; /*32px;*/
+	height: 2rem; /*32px;*/
+}
+
+h3 {
+	font-size: 1.25rem;
+	font-weight: bolder;
+}
+
+.dragged .window-group {
+	opacity: 0.25;
+}
+
+div {
+	border-radius: 0;
+}
+
+.window-group {
+	margin-bottom: 0.3rem;
+	padding: 0.25rem;
+	white-space: nowrap;
+	background-color: #ffffff;
+	/* box-shadow: 0 0.07em 0.3em #666666; */
+}
+
+.window-group.focused {
+	/* 
+	The Window that is on focus.
+	This is currently the BananaTabs widow, 
+	so there's no point in styling it differently.
+	*/
+}
+
+.window-group.hidden {
+	background-color: #eeeeee;
+	box-shadow: none;
+}
+
+.item-row {
+	height: 2rem;
+}
+
+.window-title {
+	font-size: 1.00rem;
+	font-weight: bold;
+}
+
+.focused .window-title {
+	font-weight: bold;
+}
+
+.tab {
+	white-space: nowrap;
+	overflow: hidden; 
+}
+
+.tab.active {
+	font-weight: bold;
+}
+
+.visible .tab-title {
+	color: #000000;
+}
+
+.hidden .tab-title {
+	color: #999999;
+}
+
+.visible .window-title {
+	color: #000000;
+}
+
+.hidden .window-title {
+	color: #999999;
+}
+
+.floating .window-group {
+	box-shadow: 0em 0.4em 1.6em #666666;
+}
+
+.tab.highlight {
+	background-color: rgba(32, 32, 32, .05);
+}
+
+img.icon {
+	width: 1.5rem; /*24px;*/
+	height: 1.5rem; /*24px;*/
+	margin: 0.125rem;
+	margin-right: 0.5rem;
+}
+
+img.icon.hidden {
+	-webkit-filter: grayscale(1);
+	filter: grayscale(1);
+}
+
+img.window-icon.icon {
+	cursor: pointer;
+}
+
+.tab-tools {
+	border-radius: 0.3rem;
+	float: right;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	padding: 0.2rem;
+}
+
+.tool.icon {
+	width: 1.25rem; /*20px;*/
+	height: 1.25rem; /*20px;*/
+	cursor: pointer;
+}
+
+.tab-tools .icon {
+	width: 1.25rem; /*20px;*/
+	height: 1.25rem; /*20px;*/
+	cursor: pointer;
+	margin: 0rem;
+	margin-left: 0.4rem;
+
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+

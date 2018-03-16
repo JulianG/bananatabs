@@ -1,0 +1,11 @@
+#imgs img {
+
+	width: 1px;
+	height: 1px;
+}
+
+.credits {
+	margin-top: 1em;
+	font-size: 0.70em;
+	color: #444444;
+}

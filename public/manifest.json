@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "short_name": "Banana Tabs!",
+  "name": "Banana Tabs! by JG",
+  "icons": {
+    "16": "icons/app-icon.png",
+    "48": "icons/app-icon.png",
+    "128": "icons/app-icon.png"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "browser_action": {
+    "default_icon": "icons/app-icon.png",
+    "default_title": "Banana Tabs!"
+  },
+  "permissions": [
+    "tabs"
+  ],
+  "version": "0.6.1"
+}
