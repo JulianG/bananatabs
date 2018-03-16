@@ -10,20 +10,19 @@ Icons by Flaticon: https://www.flaticon.com/free-icon/banana_688828 https://www.
 
 ## TO DO:
 
-* Issue: After a reboot windows have new ids, any window resucitated by chrome will contain a different id than the one it was saved with. it could also have different tabs, ifthe user added/removed tabs after the last time they opened Banana Tabs. should we run banana tabs in the background?
 * Support for Incognito
-* Rename project to Banana Tabs
 * Automate build + compress to upload to Chrome WebStore.
 * Add code to GitHub
 
 ## DOING:
 
 * Clean up / refactoring
-* Proper use of images
 
 ## DONE:
 
-* Public to Chrome WebStore
+* Proper use of images
+* Rename project to Banana Tabs
+* Publish to Chrome WebStore
 * Manually sort windows - drag and drop
 * Make the thing work
 * Hidden Windows should be gray
