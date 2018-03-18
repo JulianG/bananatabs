@@ -108,7 +108,7 @@ export default class WindowView extends React.Component<Props, State> {
 		const w = this.props.window;
 		const iconSrc = w.expanded ? Icons.ArrowDown : Icons.ArrowRight;
 		const iconText = w.expanded ? 'Collapse' : 'Expand';
-		const iconStyles = ['window-icon', 'icon', w.visible ? '' : 'hidden'];
+		const iconStyles = ['expand-collapse-icon', 'icon', w.visible ? '' : 'hidden'];
 		return (
 			<img
 				className={iconStyles.join(' ')}

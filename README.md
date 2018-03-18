@@ -10,6 +10,7 @@ Icons by Flaticon: https://www.flaticon.com/free-icon/banana_688828 https://www.
 
 ## TO DO:
 
+* Remove Boostrap dependency !!!!!
 * Support for Incognito
 * Automate build + compress to upload to Chrome WebStore.
 * Add code to GitHub
