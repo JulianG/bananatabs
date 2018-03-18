@@ -6,8 +6,6 @@ import TabMutator, { DefaultTabMutator } from '../model/mutators/TabMutator';
 import * as BT from '../model/CoreTypes';
 import WindowView from './WindowView';
 import DLContext from '../draggable-list/DLContext';
-// import {Window} from '../model/CoreTypes';
-import './SessionView.css';
 
 interface Props {
 	version: string;
