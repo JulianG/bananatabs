@@ -1,6 +1,7 @@
 {
   "manifest_version": 2,
   "short_name": "Banana Tabs!",
+  "version": "0.8.0",
   "name": "Banana Tabs! by JG",
   "icons": {
     "16": "icons/app-icon.png",
@@ -18,6 +19,5 @@
   },
   "permissions": [
     "tabs"
-  ],
-  "version": "0.7.1"
+  ]
 }
