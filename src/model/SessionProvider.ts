@@ -83,13 +83,14 @@ export default class SessionProvider {
 		};
 	}
 
-	private convertTab(t: chrome.tabs.Tab): BT.Tab {
+	private convertTab(t: chrome.tabs.Tab, i: number): BT.Tab {
 		return {
 			id: t.id || -1,
 			title: t.title || '',
 			visible: true,
 			icon: t.favIconUrl || '',
 			index: t.index,
+			listIndex: i,
 			url: t.url || '',
 			active: t.active
 		};

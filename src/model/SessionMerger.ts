@@ -40,18 +40,10 @@ export default class SessionMerger {
 
 				const liveMatchingWindow = live.windows.find(liveWindow => this.compareWindows(liveWindow, storedWindow) > 0.75);
 				if (liveMatchingWindow) {
-
 					consoleLog('  found liveMatchingWindow: ' + liveMatchingWindow.id + ' ' + liveMatchingWindow.title);
-
 					liveMatchingWindow.title = storedWindow.title;
 					liveMatchingWindow.expanded = storedWindow.expanded;
-
-					storedWindow.tabs.forEach((tab, i) => {
-						if (tab.visible === false) {
-							liveMatchingWindow.tabs.splice(tab.index, 0, tab);
-						}
-					});
-
+					liveMatchingWindow.tabs = this.mergeTabs(liveMatchingWindow.tabs, storedWindow.tabs);
 					consoleLog('  pushing live matching window: ' + liveMatchingWindow.title);
 					this.pushUniqueWindow(mergedSessionWindows, liveMatchingWindow);
 
@@ -91,6 +83,53 @@ export default class SessionMerger {
 
 		return { windows: filteredWindows, panelGeometry };
 	}
+
+	private mergeTabs(liveTabs: BT.Tab[], storedTabs: BT.Tab[]): BT.Tab[] {
+
+		const mergedTabs: BT.Tab[] = storedTabs.filter((storedTab, i) => {
+			return storedTab.visible === false ||
+				storedTab.visible && liveTabs.find(liveTab => liveTab.id === storedTab.id);
+		});
+
+		const extraLiveTabs = liveTabs.filter(liveTab => {
+			return (storedTabs.find(storedTab => storedTab.id === liveTab.id) === undefined);
+		});
+
+		extraLiveTabs.forEach(t => {
+			mergedTabs.splice(t.index, 0, t);
+		});
+
+		const mergedLiveTabs = mergedTabs.map(tab => {
+			const liveTab = liveTabs.find(lt => lt.id === tab.id);
+			return liveTab || tab;
+		});
+
+		const sortedTabs = mergedLiveTabs.sort((a, b) => a.index - b.index);
+
+		console.table(sortedTabs);
+
+		return sortedTabs;
+
+	}
+
+	// private insertIntoLiveTabs(tabs: BT.Tab[], index: number, tab: BT.Tab): BT.Tab[] {
+	// 	// const visibleTabsAfterIndex = tabs.slice(index).filter(t => t.visible);
+	// 	tabs.splice(index, 0, tab);
+	// 	// visibleTabsAfterIndex.forEach(t => t.index += 1);
+	// 	return tabs;
+	// }
+
+	// private findTabIndex(list: BT.Tab[], tab: BT.Tab): number {
+	// 	return this.findTabIndexById(list, tab) || this.findTabIndexByURL(list, tab);
+	// }
+
+	// private findTabIndexById(list: BT.Tab[], tab: BT.Tab): number {
+	// 	return list.findIndex(t => t.id === tab.id);
+	// }
+
+	// private findTabIndexByURL(list: BT.Tab[], tab: BT.Tab): number {
+	// 	return list.findIndex(t => t.url === tab.url);
+	// }
 
 	private compareWindows(live: BT.Window, stored: BT.Window): number {
 		// const liveURLs = live.tabs.map(tab => tab.url).sort();

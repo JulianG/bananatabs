@@ -17,7 +17,7 @@ export class DefaultTabMutator implements TabMutator {
 
 	constructor(private provider: SessionProvider) {
 	}
-	
+
 	renameItem(item: BT.ListItem, title: string) {
 		item.title = title;
 		this.updateSession();
@@ -44,8 +44,8 @@ export class DefaultTabMutator implements TabMutator {
 	}
 
 	hideTab(tab: BT.Tab) {
-
 		chrome.tabs.remove(tab.id, () => {
+			tab.id = -1;
 			tab.visible = false;
 			this.updateSession();
 		});
@@ -53,6 +53,12 @@ export class DefaultTabMutator implements TabMutator {
 	}
 
 	showTab(window: BT.Window, tab: BT.Tab) {
+
+		const index = window.tabs.indexOf(tab);
+
+		console.log('showTab');
+		console.table(tab);
+		console.log('index:', index);
 
 		tab.visible = true;
 

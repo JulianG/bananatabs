@@ -25,6 +25,7 @@ export interface Tab extends ListItem {
 
 	id: number;
 	index: number;
+	listIndex: number;
 	active: boolean;
 	url: string;
 }
