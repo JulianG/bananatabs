@@ -34,7 +34,7 @@ export default class SessionView extends React.Component<Props, State> {
 
 		this.refreshWindowList = this.refreshWindowList.bind(this);
 		this.onListUpdated = this.onListUpdated.bind(this);
-		
+
 	}
 
 	componentDidMount() {
@@ -58,7 +58,10 @@ export default class SessionView extends React.Component<Props, State> {
 		const windows = this.state.session.windows;
 		return (
 			<div>
-				<h3><img className="app-icon" src="/icons/app-icon.png" /> Banana Tabs!</h3>
+				<h3>
+					<img className="app-icon" src="/icons/app-icon.png" /><span>Banana Tabs!</span>&nbsp;
+					<div style={{ display: 'inline' }} className="credits">BETA</div>
+				</h3>
 				<DLContext
 					cssClasses="session"
 					items={windows}
