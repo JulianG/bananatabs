@@ -90,7 +90,7 @@ export default class TabView extends React.Component<Props, State> {
 
 		switch (action) {
 			case 'toggle-visibility':
-				this.props.mutator.toggleVisibility(this.props.window, this.props.tab);
+				this.props.mutator.toggleTabVisibility(this.props.window, this.props.tab);
 				break;
 			case 'delete':
 				this.props.mutator.deleteTab(this.props.window, this.props.tab);

@@ -86,37 +86,37 @@ export default class SessionMerger {
 
 	private mergeTabs(liveTabs: BT.Tab[], storedTabs: BT.Tab[]): BT.Tab[] {
 
-		console.clear();
-		console.group('MERGETABS!');
-		console.log('storedTabs...');
-		console.table(storedTabs);
-		console.log('liveTabs...');
-		console.table(liveTabs);
+		// console.clear();
+		// console.group('MERGETABS!');
+		// console.log('storedTabs...');
+		// console.table(storedTabs);
+		// console.log('liveTabs...');
+		// console.table(liveTabs);
 
 		const extraLiveTabs = liveTabs.filter(liveTab => {
 			return (storedTabs.find(storedTab => storedTab.id === liveTab.id) === undefined);
 		});
 
-		console.log('extraLiveTabs... (tabs in liveTabs not present in storedTabs)');
-		console.table(extraLiveTabs);
+		// console.log('extraLiveTabs... (tabs in liveTabs not present in storedTabs)');
+		// console.table(extraLiveTabs);
 
 		const filteredTabs: BT.Tab[] = storedTabs.filter((storedTab, i) => {
 			return storedTab.visible === false ||
 				storedTab.visible && liveTabs.find(liveTab => liveTab.id === storedTab.id);
 		});
 
-		console.log(`filteredTabs... 
-(storedTabs which are either not visible or are visible AND have a liveTab with the same id)`);
-		console.table(filteredTabs);
+// 		console.log(`filteredTabs... 
+// (storedTabs which are either not visible or are visible AND have a liveTab with the same id)`);
+// 		console.table(filteredTabs);
 
 		const mergedTabs = [...filteredTabs];
 		extraLiveTabs.forEach(t => {
 			mergedTabs.splice(t.index, 0, t);
 		});
 
-		console.log(`mergedTabs... 
-(filteredTabs with extraLiveTabs inserted by index... hmmmm not accurate enough?)`);
-		console.table(mergedTabs);
+// 		console.log(`mergedTabs... 
+// (filteredTabs with extraLiveTabs inserted by index... hmmmm not accurate enough?)`);
+// 		console.table(mergedTabs);
 
 		let highestLiveTabIndex = -1;
 		const mergedLiveTabs = mergedTabs.map((tab, i) => {
@@ -130,47 +130,21 @@ export default class SessionMerger {
 			return xTab;
 		});
 
-		console.log('mergedLiveTabs... mergedTabs fixed to get details from liveTabs where possible');
-		console.table(mergedLiveTabs);
+		// console.log('mergedLiveTabs... mergedTabs fixed to get details from liveTabs where possible');
+		// console.table(mergedLiveTabs);
 
 		const sortedTabs = mergedLiveTabs.sort((a, b) => {
 			const aa = a.index + '.' + a.listIndex;
 			const bb = b.index + '.' + b.listIndex;
 			return (aa > bb) ? 1 : (aa < bb) ? -1 : 0;
-			// // return a.listIndex - b.listIndex;
-			// const indexDiff = a.index - b.index;
-			// if (indexDiff !== 0) {
-			// 	return indexDiff;
-			// } else {
-			// 	return a.listIndex - b.listIndex;
-			// }
 		});
 
-		console.log('sortedTabs...');
-		console.table(sortedTabs);
-		console.groupEnd();
+		// console.log('sortedTabs...');
+		// console.table(sortedTabs);
+		// console.groupEnd();
 		return sortedTabs;
 
 	}
-
-	// private insertIntoLiveTabs(tabs: BT.Tab[], index: number, tab: BT.Tab): BT.Tab[] {
-	// 	// const visibleTabsAfterIndex = tabs.slice(index).filter(t => t.visible);
-	// 	tabs.splice(index, 0, tab);
-	// 	// visibleTabsAfterIndex.forEach(t => t.index += 1);
-	// 	return tabs;
-	// }
-
-	// private findTabIndex(list: BT.Tab[], tab: BT.Tab): number {
-	// 	return this.findTabIndexById(list, tab) || this.findTabIndexByURL(list, tab);
-	// }
-
-	// private findTabIndexById(list: BT.Tab[], tab: BT.Tab): number {
-	// 	return list.findIndex(t => t.id === tab.id);
-	// }
-
-	// private findTabIndexByURL(list: BT.Tab[], tab: BT.Tab): number {
-	// 	return list.findIndex(t => t.url === tab.url);
-	// }
 
 	private compareWindows(live: BT.Window, stored: BT.Window): number {
 		// const liveURLs = live.tabs.map(tab => tab.url).sort();

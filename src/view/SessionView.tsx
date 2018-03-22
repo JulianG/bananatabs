@@ -1,8 +1,9 @@
 import * as React from 'react';
 import SessionProvider from '../model/SessionProvider';
 import SessionMutator, { DefaultSessionMutator } from '../model/mutators/SessionMutator';
-import WindowMutator, { DefaultWindowMutator } from '../model/mutators/WindowMutator';
-import TabMutator, { DefaultTabMutator } from '../model/mutators/TabMutator';
+import WindowMutator from '../model/mutators/WindowMutator';
+import TabMutator from '../model/mutators/TabMutator';
+import ChromeWindowAndTabMutator from '../model/mutators/ChromeWindowAndTabMutator';
 import * as BT from '../model/CoreTypes';
 import WindowView from './WindowView';
 import DLContext from '../draggable-list/DLContext';
@@ -27,8 +28,8 @@ export default class SessionView extends React.Component<Props, State> {
 
 		this.sessionProvider = new SessionProvider();
 		this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
-		this.tabMutator = new DefaultTabMutator(this.sessionProvider);
-		this.windowMutator = new DefaultWindowMutator(this.sessionProvider, this.tabMutator);
+
+		this.tabMutator = this.windowMutator = new ChromeWindowAndTabMutator(this.sessionProvider);
 
 		this.state = { session: this.sessionProvider.session };
 

@@ -179,7 +179,7 @@ export default class WindowView extends React.Component<Props, State> {
 
 		switch (action) {
 			case 'toggle-visibility':
-				windowMutator.toggleVisibility(window);
+				windowMutator.toggleWindowVisibility(window);
 				break;
 			case 'delete':
 				windowMutator.deleteWindow(window);
