@@ -86,28 +86,69 @@ export default class SessionMerger {
 
 	private mergeTabs(liveTabs: BT.Tab[], storedTabs: BT.Tab[]): BT.Tab[] {
 
-		const mergedTabs: BT.Tab[] = storedTabs.filter((storedTab, i) => {
-			return storedTab.visible === false ||
-				storedTab.visible && liveTabs.find(liveTab => liveTab.id === storedTab.id);
-		});
+		console.clear();
+		console.group('MERGETABS!');
+		console.log('storedTabs...');
+		console.table(storedTabs);
+		console.log('liveTabs...');
+		console.table(liveTabs);
 
 		const extraLiveTabs = liveTabs.filter(liveTab => {
 			return (storedTabs.find(storedTab => storedTab.id === liveTab.id) === undefined);
 		});
 
+		console.log('extraLiveTabs... (tabs in liveTabs not present in storedTabs)');
+		console.table(extraLiveTabs);
+
+		const filteredTabs: BT.Tab[] = storedTabs.filter((storedTab, i) => {
+			return storedTab.visible === false ||
+				storedTab.visible && liveTabs.find(liveTab => liveTab.id === storedTab.id);
+		});
+
+		console.log(`filteredTabs... 
+(storedTabs which are either not visible or are visible AND have a liveTab with the same id)`);
+		console.table(filteredTabs);
+
+		const mergedTabs = [...filteredTabs];
 		extraLiveTabs.forEach(t => {
 			mergedTabs.splice(t.index, 0, t);
 		});
 
-		const mergedLiveTabs = mergedTabs.map(tab => {
+		console.log(`mergedTabs... 
+(filteredTabs with extraLiveTabs inserted by index... hmmmm not accurate enough?)`);
+		console.table(mergedTabs);
+
+		let highestLiveTabIndex = -1;
+		const mergedLiveTabs = mergedTabs.map((tab, i) => {
 			const liveTab = liveTabs.find(lt => lt.id === tab.id);
-			return liveTab || tab;
+			highestLiveTabIndex = liveTab ? liveTab.index + 1 : highestLiveTabIndex;
+			const xTab = liveTab || tab;
+			xTab.title = (xTab.title !== '') ? xTab.title : tab.title;
+			xTab.icon = (xTab.icon !== '') ? xTab.icon : tab.icon;
+			xTab.index = (xTab === tab) ? highestLiveTabIndex : xTab.index;
+			xTab.listIndex = i;
+			return xTab;
 		});
 
-		const sortedTabs = mergedLiveTabs.sort((a, b) => a.index - b.index);
+		console.log('mergedLiveTabs... mergedTabs fixed to get details from liveTabs where possible');
+		console.table(mergedLiveTabs);
 
+		const sortedTabs = mergedLiveTabs.sort((a, b) => {
+			const aa = a.index + '.' + a.listIndex;
+			const bb = b.index + '.' + b.listIndex;
+			return (aa > bb) ? 1 : (aa < bb) ? -1 : 0;
+			// // return a.listIndex - b.listIndex;
+			// const indexDiff = a.index - b.index;
+			// if (indexDiff !== 0) {
+			// 	return indexDiff;
+			// } else {
+			// 	return a.listIndex - b.listIndex;
+			// }
+		});
+
+		console.log('sortedTabs...');
 		console.table(sortedTabs);
-
+		console.groupEnd();
 		return sortedTabs;
 
 	}
