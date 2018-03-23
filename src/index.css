@@ -162,6 +162,9 @@ img.icon.expand-collapse-icon {
 .dl-item.floating .window-group {
 	box-shadow: 0em 0.4em 1.6em #666666;
 }
+.dl-item.floating {
+	width: 95%;
+}
 
 /* Credits */
 .credits {
