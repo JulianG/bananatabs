@@ -72,11 +72,20 @@ div {
 	height: 2rem;
 	white-space: nowrap;
 	overflow: hidden; 
+	display: flex;
 }
 
 .item-row .window-title {
 	font-size: 1.00rem;
 	font-weight: bold;
+	flex-grow: 10;
+}
+
+.item-row input:focus {
+	/* outline: none; */
+}
+.item-row input {
+	font-size: 1.0rem;
 }
 
 /* The tab that is currently active on each window */
@@ -105,6 +114,10 @@ div {
 
 .visible .window-title {
 	color: #000000;
+}
+
+.item-row .tab-title {
+	flex-grow: 10;
 }
 
 /* Icons */
@@ -171,4 +184,11 @@ img.icon.expand-collapse-icon {
 	margin-top: 1.5em;
 	font-size: 0.70em;
 	color: #444444;
+}
+
+.hint {
+	color: #666666;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	padding-top: 0.4rem;
 }

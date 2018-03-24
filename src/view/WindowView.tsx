@@ -57,7 +57,6 @@ export default class WindowView extends React.Component<Props, State> {
 
 	private renderHeader() {
 		const w = this.props.window;
-		const title = w.title || 'Window';
 		return (
 			<div
 				className="item-row"
@@ -67,8 +66,9 @@ export default class WindowView extends React.Component<Props, State> {
 				{this.renderWindowIcon()}
 				{this.renderVisibilityIcon()}
 				{this.state.renaming ?
-					this.renderInputTitle(title) :
-					this.renderStaticTitle(title)}
+					this.renderInputTitle(w) :
+					this.renderStaticTitle(w)}
+				{this.state.renaming && <div className="hint">&nbsp;Enter to save&nbsp;</div>}
 				{this.renderTools()}
 			</div>
 		);
@@ -119,9 +119,12 @@ export default class WindowView extends React.Component<Props, State> {
 		);
 	}
 
-	private renderInputTitle(title: string): JSX.Element {
+	private renderInputTitle(window: BT.Window): JSX.Element {
+
+		const title = window.title;
 		return (
 			<input
+				className="window-title"
 				autoFocus={true}
 				type="text"
 				defaultValue={title}
@@ -142,15 +145,19 @@ export default class WindowView extends React.Component<Props, State> {
 		);
 	}
 
-	private renderStaticTitle(title: string): JSX.Element {
+	private renderStaticTitle(window: BT.Window): JSX.Element {
+
+		const tabsStr = window.expanded ? '' : ' (' + window.tabs.length + ' tabs)';
+		const title = (window.title || 'Window');
+
 		return (
 			<span
 				className="window-title"
-				onDoubleClick={(event) => {
+				onClick={(event) => {
 					this.onToolsAction('start-rename');
 				}}
 			>
-				{title}
+				{title} <span>{tabsStr}</span>
 			</span>
 		);
 	}
