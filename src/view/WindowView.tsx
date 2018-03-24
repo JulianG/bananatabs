@@ -132,14 +132,18 @@ export default class WindowView extends React.Component<Props, State> {
 					this.setState({ tempTitle: event.target.value });
 				}}
 				onKeyUp={(event) => {
-					if (event.keyCode === 13) {
-						this.props.windowMutator.renameItem(this.props.window, this.state.tempTitle);
-						this.setState({ renaming: false });
+					switch (event.keyCode) {
+						case 13: // enter
+							this.onToolsAction('submit-rename');
+							break;
+						case 27: // esc
+							this.onToolsAction('cancel-rename');
+							break;
+						default:
 					}
 				}}
 				onBlur={(event) => {
-					this.props.windowMutator.renameItem(this.props.window, this.state.tempTitle);
-					this.setState({ renaming: false });
+					this.onToolsAction('cancel-rename');
 				}}
 			/>
 		);
@@ -193,6 +197,13 @@ export default class WindowView extends React.Component<Props, State> {
 				break;
 			case 'start-rename':
 				this.setState({ renaming: true });
+				break;
+			case 'cancel-rename':
+				this.setState({ renaming: false });
+				break;
+			case 'submit-rename':
+				this.props.windowMutator.renameItem(this.props.window, this.state.tempTitle);
+				this.setState({ renaming: false });
 				break;
 			case 'toggle-collapse':
 				if (this.props.window.expanded) {
