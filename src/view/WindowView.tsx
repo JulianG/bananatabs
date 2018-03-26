@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as BT from '../model/CoreTypes';
 import TabView from './TabView';
 import TabToolsView from './TabToolsView';
+import InputForm from './InputForm';
+
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
 
@@ -23,14 +25,13 @@ interface Props {
 interface State {
 	toolsVisible: boolean;
 	renaming: boolean;
-	tempTitle: string;
 }
 
 export default class WindowView extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.state = { toolsVisible: false, renaming: false, tempTitle: props.window.title };
+		this.state = { toolsVisible: false, renaming: false };
 
 		this.onToolsAction = this.onToolsAction.bind(this);
 		this.onToolsAction = this.onToolsAction.bind(this);
@@ -122,27 +123,16 @@ export default class WindowView extends React.Component<Props, State> {
 	private renderInputTitle(window: BT.Window): JSX.Element {
 
 		const title = window.title;
+
 		return (
-			<input
+			<InputForm
 				className="window-title"
-				autoFocus={true}
-				type="text"
-				defaultValue={title}
-				onChange={(event) => {
-					this.setState({ tempTitle: event.target.value });
+				text={title}
+				onSubmit={(text: string) => {
+					this.props.windowMutator.renameItem(this.props.window, text);
+					this.setState({ renaming: false });
 				}}
-				onKeyUp={(event) => {
-					switch (event.keyCode) {
-						case 13: // enter
-							this.onToolsAction('submit-rename');
-							break;
-						case 27: // esc
-							this.onToolsAction('cancel-rename');
-							break;
-						default:
-					}
-				}}
-				onBlur={(event) => {
+				onCancel={() => {
 					this.onToolsAction('cancel-rename');
 				}}
 			/>
@@ -199,10 +189,6 @@ export default class WindowView extends React.Component<Props, State> {
 				this.setState({ renaming: true });
 				break;
 			case 'cancel-rename':
-				this.setState({ renaming: false });
-				break;
-			case 'submit-rename':
-				this.props.windowMutator.renameItem(this.props.window, this.state.tempTitle);
 				this.setState({ renaming: false });
 				break;
 			case 'toggle-collapse':
