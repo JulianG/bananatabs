@@ -13,7 +13,7 @@
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "version": "node sync-manifest-version.js",
-    "postversion": "node post-version.js"
+    "postversion": "node build-and-dist.js"
   },
   "devDependencies": {
     "@types/chrome": "0.0.58",
