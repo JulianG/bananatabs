@@ -1,27 +1,30 @@
 import * as React from 'react';
 
+const doNothing = () => { /**/ };
+
 const Icons = {
 	Edit: require('../icons/edit.png'),
-	On: require('../icons/on.png'),
-	Off: require('../icons/off.png'),
 	Delete: require('../icons/delete.png')
 };
 
 interface Props {
-	itemVisible: boolean;
 	actionIconVisibility: {
 		rename: boolean;
-		visibility: boolean;
 		delete: boolean;
 	};
-	onAction(action: string): void;
+	onRenameAction?(): void;
+	onDeleteAction?(): void;
 }
 
 export default class TabToolsView extends React.Component<Props, {}> {
 
-	render() {
+	constructor(props: Props) {
+		super(props);
+		this.handleRenameAction = this.handleRenameAction.bind(this);
+		this.handleDeleteAction = this.handleDeleteAction.bind(this);
+	}
 
-		const visibilityIcon = this.props.itemVisible ? Icons.On : Icons.Off;
+	render() {
 
 		return (
 			<div className="tab-tools">
@@ -30,23 +33,24 @@ export default class TabToolsView extends React.Component<Props, {}> {
 						title="Rename"
 						className="icon"
 						src={Icons.Edit}
-						onClick={(e) => { this.props.onAction('start-rename'); }}
-					/>}
-				{this.props.actionIconVisibility.visibility &&
-					<img
-						title="Show/Hide"
-						className="icon"
-						src={visibilityIcon}
-						onClick={(e) => { this.props.onAction('toggle-visibility'); }}
+						onClick={this.handleRenameAction}
 					/>}
 				{this.props.actionIconVisibility.delete &&
 					<img
 						title="Close and Delete"
 						className="icon"
 						src={Icons.Delete}
-						onClick={(e) => { this.props.onAction('delete'); }}
+						onClick={this.handleDeleteAction}
 					/>}
 			</div>
 		);
+	}
+
+	private handleRenameAction(e: React.MouseEvent<HTMLImageElement>) {
+		(this.props.onRenameAction || doNothing)();
+	}
+
+	private handleDeleteAction(e: React.MouseEvent<HTMLImageElement>) {
+		(this.props.onDeleteAction || doNothing)();
 	}
 }

@@ -69,6 +69,7 @@ export default class SessionView extends React.Component<Props, State> {
 					layout={'vertical'}
 					threshold={25}
 					onChange={this.onListUpdated}
+					/* tslint:disable-next-line jsx-no-lambda */
 					itemRenderer={(i: number) => {
 						return <WindowView
 							key={'window-' + i}

@@ -33,8 +33,14 @@ export default class WindowView extends React.Component<Props, State> {
 		super(props);
 		this.state = { toolsVisible: false, renaming: false };
 
-		this.onToolsAction = this.onToolsAction.bind(this);
-		this.onToolsAction = this.onToolsAction.bind(this);
+		this.handleStartRename = this.handleStartRename.bind(this);
+		this.handleCancelRename = this.handleCancelRename.bind(this);
+		this.handleSubmitRename = this.handleSubmitRename.bind(this);
+		this.handleDelete = this.handleDelete.bind(this);
+		this.handleToggleVisibility = this.handleToggleVisibility.bind(this);
+		this.handleToggleCollapse = this.handleToggleCollapse.bind(this);
+		this.showTools = this.showTools.bind(this);
+		this.hideTools = this.hideTools.bind(this);
 	}
 
 	render() {
@@ -61,8 +67,8 @@ export default class WindowView extends React.Component<Props, State> {
 		return (
 			<div
 				className="item-row"
-				onMouseEnter={() => this.setState({ toolsVisible: true })}
-				onMouseLeave={() => this.setState({ toolsVisible: false })}
+				onMouseEnter={this.showTools}
+				onMouseLeave={this.hideTools}
 			>
 				{this.renderWindowIcon()}
 				{this.renderVisibilityIcon()}
@@ -84,7 +90,7 @@ export default class WindowView extends React.Component<Props, State> {
 				className="tool icon"
 				src={visibilityIconSrc}
 				title={visibilityIconText}
-				onClick={(e) => { this.onToolsAction('toggle-visibility'); }}
+				onClick={this.handleToggleVisibility}
 			/>
 		);
 	}
@@ -115,7 +121,7 @@ export default class WindowView extends React.Component<Props, State> {
 				className={iconStyles.join(' ')}
 				src={iconSrc}
 				title={iconText}
-				onClick={() => { this.onToolsAction('toggle-collapse'); }}
+				onClick={this.handleToggleCollapse}
 			/>
 		);
 	}
@@ -128,13 +134,8 @@ export default class WindowView extends React.Component<Props, State> {
 			<InputForm
 				className="window-title"
 				text={title}
-				onSubmit={(text: string) => {
-					this.props.windowMutator.renameItem(this.props.window, text);
-					this.setState({ renaming: false });
-				}}
-				onCancel={() => {
-					this.onToolsAction('cancel-rename');
-				}}
+				onSubmit={this.handleSubmitRename}
+				onCancel={this.handleCancelRename}
 			/>
 		);
 	}
@@ -147,9 +148,7 @@ export default class WindowView extends React.Component<Props, State> {
 		return (
 			<span
 				className="window-title"
-				onClick={(event) => {
-					this.onToolsAction('start-rename');
-				}}
+				onClick={this.handleStartRename}
 			>
 				{title} <span>{tabsStr}</span>
 			</span>
@@ -158,12 +157,11 @@ export default class WindowView extends React.Component<Props, State> {
 
 	private renderTools() {
 		if (this.state.toolsVisible) {
-			const w = this.props.window;
 			return (
 				<TabToolsView
-					onAction={this.onToolsAction}
-					itemVisible={w.visible}
-					actionIconVisibility={{ rename: true, visibility: false, delete: true }}
+					actionIconVisibility={{ rename: true, delete: true }}
+					onRenameAction={this.handleStartRename}
+					onDeleteAction={this.handleDelete}
 				/>
 			);
 		} else {
@@ -173,34 +171,40 @@ export default class WindowView extends React.Component<Props, State> {
 
 	////
 
-	private onToolsAction(action: string) {
+	private handleToggleVisibility() {
+		this.props.windowMutator.toggleWindowVisibility(this.props.window);
+	}
 
-		const window = this.props.window;
-		const windowMutator = this.props.windowMutator;
+	private handleDelete() {
+		this.props.windowMutator.deleteWindow(this.props.window);
+	}
 
-		switch (action) {
-			case 'toggle-visibility':
-				windowMutator.toggleWindowVisibility(window);
-				break;
-			case 'delete':
-				windowMutator.deleteWindow(window);
-				break;
-			case 'start-rename':
-				this.setState({ renaming: true });
-				break;
-			case 'cancel-rename':
-				this.setState({ renaming: false });
-				break;
-			case 'toggle-collapse':
-				if (this.props.window.expanded) {
-					this.props.windowMutator.collapseWindow(this.props.window);
-				} else {
-					this.props.windowMutator.expandWindow(this.props.window);
-				}
-				break;
-			default:
+	private handleStartRename() {
+		this.setState({ renaming: true });
+	}
 
+	private handleCancelRename() {
+		this.setState({ renaming: false });
+	}
+
+	private handleSubmitRename(text: string) {
+		this.props.windowMutator.renameItem(this.props.window, text);
+		this.setState({ renaming: false });
+	}
+
+	private handleToggleCollapse() {
+		if (this.props.window.expanded) {
+			this.props.windowMutator.collapseWindow(this.props.window);
+		} else {
+			this.props.windowMutator.expandWindow(this.props.window);
 		}
+	}
+
+	private showTools() {
+		this.setState({ toolsVisible: true });
+	}
+	private hideTools() {
+		this.setState({ toolsVisible: false });
 	}
 
 }

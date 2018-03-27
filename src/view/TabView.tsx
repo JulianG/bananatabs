@@ -26,8 +26,14 @@ export default class TabView extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.onToolsAction = this.onToolsAction.bind(this);
+
 		this.state = { toolsVisible: false };
+
+		this.onSelectAction = this.onSelectAction.bind(this);
+		this.onDeleteAction = this.onDeleteAction.bind(this);
+		this.onToggleVisibilityAction = this.onToggleVisibilityAction.bind(this);
+		this.showTools = this.showTools.bind(this);
+		this.hideTools = this.hideTools.bind(this);
 	}
 
 	render() {
@@ -58,8 +64,8 @@ export default class TabView extends React.Component<Props, State> {
 		return (
 			<div
 				className={styles.join(' ')}
-				onMouseEnter={() => this.setState({ toolsVisible: true })}
-				onMouseLeave={() => this.setState({ toolsVisible: false })}
+				onMouseEnter={this.showTools}
+				onMouseLeave={this.hideTools}
 			>
 				<img className="icon" src={Icons.Connection} />
 
@@ -67,40 +73,45 @@ export default class TabView extends React.Component<Props, State> {
 					className="tool icon"
 					src={visibilityIconSrc}
 					title={visibilityIconText}
-					onClick={(e) => { this.onToolsAction('toggle-visibility'); }}
+					onClick={this.onToggleVisibilityAction}
 				/>
 
-				<img className={iconStyles.join(' ')} src={icon} onDoubleClick={() => this.onToolsAction('selected')} />
+				<img
+					className={iconStyles.join(' ')}
+					src={icon}
+					onClick={this.onSelectAction}
+				/>
 				<span
 					className="tab-title"
-					onClick={() => this.onToolsAction('selected')}
+					onClick={this.onSelectAction}
 				>
 					{title}
 				</span>
 				{this.state.toolsVisible && <TabToolsView
-					onAction={this.onToolsAction}
-					itemVisible={tab.visible}
-					actionIconVisibility={{ rename: false, visibility: false, delete: true }}
+					actionIconVisibility={{ rename: false, delete: true }}
+					onDeleteAction={this.onDeleteAction}
 				/>}
 			</div>
 		);
 	}
 
-	private onToolsAction(action: string) {
+	private onSelectAction() {
+		this.props.mutator.selectTab(this.props.window, this.props.tab);
+	}
 
-		switch (action) {
-			case 'toggle-visibility':
-				this.props.mutator.toggleTabVisibility(this.props.window, this.props.tab);
-				break;
-			case 'delete':
-				this.props.mutator.deleteTab(this.props.window, this.props.tab);
-				break;
-			case 'selected':
-				this.props.mutator.selectTab(this.props.window, this.props.tab);
-				break;
-			default:
-		}
+	private onToggleVisibilityAction() {
+		this.props.mutator.toggleTabVisibility(this.props.window, this.props.tab);
+	}
 
+	private onDeleteAction() {
+		this.props.mutator.deleteTab(this.props.window, this.props.tab);
+	}
+
+	private showTools() {
+		this.setState({ toolsVisible: true });
+	}
+	private hideTools() {
+		this.setState({ toolsVisible: false });
 	}
 
 }
