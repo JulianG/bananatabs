@@ -2,39 +2,36 @@
 
 Install from Chrome WebStore: https://chrome.google.com/webstore/detail/banana-tabs-by-jg/hphakbojjadmnhhkflbgnaeljkgaogfn
 
+
+## Development Run
+
+```sh
+$ npm install
+$ npm start
+```
+
+## Build
+
+```sh
+$ npm run-script build
+```
+
+## Bump Version and Distribute
+
+```sh
+$ npm version major -m "v%s"
+  # or 
+$ npm version minor -m "v%s"
+  # or
+$ npm version patch -m "v%s"
+```
+
 ## Credits:
 
 BananaTabs! developed by Julian Garamendy.
 Icons by Flaticon: https://www.flaticon.com/free-icon/banana_688828 https://www.flaticon.com/packs/font-awesome
 
-
-## TO DO:
-
-* Remove Boostrap dependency !!!!!
-* Support for Incognito
-* Automate build + compress to upload to Chrome WebStore.
-* Add code to GitHub
-
-## DOING:
-
-* Clean up / refactoring
-
-## DONE:
-
-* Proper use of images
-* Rename project to Banana Tabs
-* Publish to Chrome WebStore
-* Manually sort windows - drag and drop
-* Make the thing work
-* Hidden Windows should be gray
-* Hidden item should have gray icons?
-* Collapse / Expand Windows
-
-----------------------------------------
-
-## FUTURE:
-
-* Feature: Add Separators - with Custom Names?
+- - -
 
 - - -
 
