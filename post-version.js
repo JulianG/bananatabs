@@ -20,8 +20,9 @@ exec('npm run-script build', (err, stdout, stderr) => {
 	console.log('done!');
 	if (err == null) {
 		const zip_file = zip_path + manifest.version + '.zip';
-		console.log('zipping...');
-		exec(`zip ${zip_file} ./build `, execLog);
+		const zip_cmd = `zip ${zip_file} ./build `;
+		console.log(zip_cmd);
+		exec(zip_cmd, execLog);
 	} else {
 		console.error(stderr);
 	}
