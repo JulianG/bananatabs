@@ -1,6 +1,6 @@
 {
   "name": "banana-tabs",
-  "version": "0.13.8",
+  "version": "0.13.9",
   "private": true,
   "dependencies": {
     "react": "^16.2.0",
