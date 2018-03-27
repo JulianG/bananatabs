@@ -79,6 +79,7 @@ div {
 	font-size: 1.00rem;
 	font-weight: bold;
 	flex-grow: 10;
+	padding-top: 0.2rem;
 }
 
 .item-row input:focus {
@@ -96,6 +97,10 @@ div {
 /* The row representing a tab and it's currently under the mouse pointer. */
 .item-row.tab.highlight {
 	background-color: rgba(32, 32, 32, .05);
+}
+
+.item-row.tab .left-most.icon {
+	margin-left: 2.25rem;
 }
 
 /* 
@@ -118,6 +123,7 @@ div {
 
 .item-row .tab-title {
 	flex-grow: 10;
+	padding-top: 0.2rem;
 }
 
 /* Icons */

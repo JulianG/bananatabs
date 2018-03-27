@@ -8,8 +8,7 @@ const Icons = {
 	OnHidden: require('../icons/on-hidden.png'),
 	Off: require('../icons/off.png'),
 	Delete: require('../icons/delete.png'),
-	Page: require('../icons/page.png'),
-	Connection: require('../icons/connection.png')
+	Page: require('../icons/page.png')
 };
 
 interface Props {
@@ -67,10 +66,8 @@ export default class TabView extends React.Component<Props, State> {
 				onMouseEnter={this.showTools}
 				onMouseLeave={this.hideTools}
 			>
-				<img className="icon" src={Icons.Connection} />
-
 				<img
-					className="tool icon"
+					className="left-most tool icon"
 					src={visibilityIconSrc}
 					title={visibilityIconText}
 					onClick={this.onToggleVisibilityAction}
