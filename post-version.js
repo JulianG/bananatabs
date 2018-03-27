@@ -1,7 +1,7 @@
 const fs = require('fs');
 const exec = require('child_process').exec;
 
-const zip_path = './dist/bananatabs-v';
+const zip_path = 'bananatabs-v';
 const manifest_file = './public/manifest.json';
 const manifest_text = fs.readFileSync(manifest_file);
 const manifest = JSON.parse(manifest_text);
