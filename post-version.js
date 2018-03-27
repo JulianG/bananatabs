@@ -16,7 +16,11 @@ const execLog = (err, stdout, stderr) => {
 
 exec('npm run-script build', (err, stdout, stderr) => {
 
-	const zip_file = zip_path + manifest.version + '.zip';
-	exec(`zip ${zip_file} ./build `, execLog);
+	if (err == null) {
+		const zip_file = zip_path + manifest.version + '.zip';
+		exec(`zip ${zip_file} ./build `, execLog);
+	} else {
+		console.error(stderr);
+	}
 
 });
