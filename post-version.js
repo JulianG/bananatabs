@@ -1,3 +1,4 @@
+const fs = require('fs');
 const exec = require('child_process').exec;
 
 const zip_path = './dist/bananatabs-v';
