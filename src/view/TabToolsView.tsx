@@ -3,8 +3,8 @@ import * as React from 'react';
 const doNothing = () => { /**/ };
 
 const Icons = {
-	Edit: require('../icons/edit.png'),
-	Delete: require('../icons/delete.png')
+	Edit: require('../icons/edit.svg'),
+	Delete: require('../icons/delete.svg')
 };
 
 interface Props {
