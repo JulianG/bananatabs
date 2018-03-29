@@ -1,6 +1,4 @@
 import * as BT from '../CoreTypes';
-// import WindowMutator from './WindowMutator';
-// import TabMutator from './TabMutator';
 import SessionProvider from '../SessionProvider';
 
 interface WindowSortingFunction {

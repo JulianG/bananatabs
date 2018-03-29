@@ -15,7 +15,7 @@ interface Props {
   layout: 'vertical' | 'horizontal' | 'grid';
   threshold: number;
   itemRenderer(index: number): JSX.Element;
-  onChange(items: Array<Item>): void;
+  onChange(items: Array<Item>, changed: boolean): void;
 }
 
 export default class DLContext extends React.Component<Props, {}> {
@@ -67,6 +67,6 @@ export default class DLContext extends React.Component<Props, {}> {
     } else {
       newItems = items;
     }
-    this.props.onChange(newItems);
+    this.props.onChange(newItems, newItems !== items);
   }
 }
