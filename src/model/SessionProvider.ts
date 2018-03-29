@@ -36,17 +36,19 @@ export default class SessionProvider {
 		const convertWindow = this.convertWindow.bind(this);
 
 		if (chrome && chrome.windows) {
-			console.warn(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
+			// console.warn(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
 			chrome.windows.getAll({ populate: true }, (windows: Array<chrome.windows.Window>) => {
 				const windowsWithTabs = windows.filter(w => (w.tabs || []).length > 0);
 				const sessionWindows: BT.Window[] = windowsWithTabs.map(convertWindow);
+				const panelWindow = this.findChromeExtensionWindow(sessionWindows) || BT.NullWindow;
+				const filteredSessionWindows = sessionWindows.filter(w => w !== panelWindow);
 				const session: BT.Session = {
-					windows: sessionWindows,
-					panelWindow: this.findChromeExtensionWindow(sessionWindows)!
+					windows: filteredSessionWindows,
+					panelWindow
 				};
-				console.group(`  Merging sessions because ${reason}...`);
+				// console.group(`  Merging sessions because ${reason}...`);
 				this.session = this.sessionMerger.mergeSessions(session, this.retrieveSession());
-				console.groupEnd();
+				// console.groupEnd();
 				this.storeSession(this.session);
 				this.onSessionChanged(this.session);
 			});
@@ -59,7 +61,6 @@ export default class SessionProvider {
 	//////////////////////////
 
 	storeSession(session: BT.Session) {
-		console.warn('storeSession');
 		const serialisedSession = JSON.stringify(session);
 		localStorage.setItem('session', serialisedSession);
 	}

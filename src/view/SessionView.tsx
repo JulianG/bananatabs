@@ -103,6 +103,8 @@ export default class SessionView extends React.Component<Props, State> {
 	private onListUpdated(items: BT.Window[], changed: boolean) {
 		if (changed) {
 			this.sessionMutator.updateWindows(items);
+		} else {
+			this.forceUpdate();
 		}
 	}
 
