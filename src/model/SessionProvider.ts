@@ -13,12 +13,14 @@ export default class SessionProvider {
 		this.sessionMerger = new SessionMerger();
 
 		this.initialiseSession = this.initialiseSession.bind(this);
+		this.onWindowRemoved = this.onWindowRemoved.bind(this);
 		this.onTabsUpdated = this.onTabsUpdated.bind(this);
 		this.onTabsMoved = this.onTabsMoved.bind(this);
 		this.onTabsAttached = this.onTabsAttached.bind(this);
 		this.onTabsRemoved = this.onTabsRemoved.bind(this);
 
 		if (chrome && chrome.tabs) {
+			chrome.windows.onRemoved.addListener(this.onWindowRemoved);
 			// chrome.tabs.onCreated.addListener(this.initialiseSession);
 			chrome.tabs.onUpdated.addListener(this.onTabsUpdated);
 			// chrome.tabs.onActivated.addListener(this.initialiseSession);
@@ -109,6 +111,10 @@ export default class SessionProvider {
 		return { top: w.top || 0, left: w.left || 0, width: w.width || 0, height: w.height || 0 };
 	}
 
+	private onWindowRemoved(id: number) {
+		this.initialiseSession('onWindowRemoved ' + id);
+	}
+	
 	private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
 		if (this.isPanelTab(id) === false) {
 			this.initialiseSession('onTabsUpdated ' + id + ':' + JSON.stringify(changeInfo));

@@ -115,11 +115,7 @@ export default class SessionMerger {
 		});
 		_console.table(mergedLiveTabs);
 
-		const sortedTabs = mergedLiveTabs.sort((a, b) => {
-			const aa = a.index + '.' + a.listIndex;
-			const bb = b.index + '.' + b.listIndex;
-			return (aa > bb) ? 1 : (aa < bb) ? -1 : 0;
-		});
+		const sortedTabs = mergedLiveTabs.sort((ta, tb) => ta.index - tb.index);
 
 		_console.log('sortedTabs...');
 		_console.table(sortedTabs);

@@ -54,12 +54,10 @@ export default class TabView extends React.Component<Props, State> {
 			(tab.visible && window.visible) ? '' : 'hidden'
 		];
 
-		const charLimit = 64;
-		const title = (tab.title.length > charLimit) ? (tab.title.substring(0, charLimit) + '...') : tab.title;
-
+		const title = tab.title;
 		const visibilityIconSrc = tab.visible ? window.visible ? Icons.On : Icons.OnHidden : Icons.Off;
-
 		const visibilityIconText = tab.visible ? 'Hide Tab' : 'Show Tab';
+
 		return (
 			<div
 				className={styles.join(' ')}
