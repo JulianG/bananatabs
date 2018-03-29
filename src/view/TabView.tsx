@@ -4,11 +4,11 @@ import TabToolsView from './TabToolsView';
 import TabMutator from '../model/mutators/TabMutator';
 
 const Icons = {
-	On: require('../icons/on.png'),
-	OnHidden: require('../icons/on-hidden.png'),
-	Off: require('../icons/off.png'),
-	Delete: require('../icons/delete.png'),
-	Page: require('../icons/page.png')
+	On: require('../icons/on.svg'),
+	OnHidden: require('../icons/on-hidden.svg'),
+	Off: require('../icons/off.svg'),
+	Delete: require('../icons/delete.svg'),
+	Page: require('../icons/page.svg')
 };
 
 interface Props {

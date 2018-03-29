@@ -1,6 +1,6 @@
 {
   "name": "banana-tabs",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "private": true,
   "dependencies": {
     "react": "^16.2.0",
@@ -12,7 +12,8 @@
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "version": "node sync-manifest-version.js"
+    "version": "node sync-manifest-version.js",
+    "postversion": "node build-and-dist.js"
   },
   "devDependencies": {
     "@types/chrome": "0.0.58",

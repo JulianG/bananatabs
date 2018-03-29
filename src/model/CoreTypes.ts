@@ -1,7 +1,7 @@
 
 export interface Session {
 	windows: Window[];
-	panelGeometry: Geometry;
+	panelWindow: Window;
 }
 
 export interface ListItem {
@@ -36,3 +36,18 @@ export interface Geometry {
 	width: number;
 	height: number;
 }
+
+export const NullWindow: Window = {
+	id: 0,
+	icon: '',
+	title: '',
+	visible: false,
+	focused: false,
+	geometry: { top: 0, left: 0, width: 0, height: 0 },
+	type: '',
+	state: '',
+	tabs: [],
+	expanded: false
+};
+
+export const EmptySession: Session = { windows: [], panelWindow: NullWindow };

@@ -30,6 +30,7 @@ $ npm version patch -m "v%s"
 
 BananaTabs! developed by Julian Garamendy.
 Icons by Flaticon: https://www.flaticon.com/free-icon/banana_688828 https://www.flaticon.com/packs/font-awesome
+SVGs edited using http://vectorpaint.yaks.co.nz/
 
 - - -
 

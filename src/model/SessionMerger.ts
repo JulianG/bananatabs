@@ -54,9 +54,8 @@ export default class SessionMerger {
 			_console.groupEnd();
 		});
 
-		const chromeExtensionWindow = this.findChromeExtensionWindow(live.windows);
 		const nonMatchedWindows = live.windows.filter(liveW => {
-			return liveW !== chromeExtensionWindow && !mergedSessionWindows.some(msW => msW.id === liveW.id);
+			return liveW.id !== live.panelWindow.id && !mergedSessionWindows.some(msW => msW.id === liveW.id);
 		});
 
 		_console.group('adding nonMatchedWindows...');
@@ -64,13 +63,12 @@ export default class SessionMerger {
 		_console.table(nonMatchedWindows);
 		_console.groupEnd();
 
-		const panelGeometry: BT.Geometry = chromeExtensionWindow ?
-			chromeExtensionWindow.geometry
-			: { top: 0, left: 0, width: 0, height: 0 };
-
 		_console.groupEnd();
 
-		return { windows: newSessionWindows, panelGeometry };
+		return {
+			windows: newSessionWindows,
+			panelWindow: live.panelWindow
+		};
 	}
 
 	private mergeTabs(liveTabs: BT.Tab[], storedTabs: BT.Tab[]): BT.Tab[] {
@@ -146,9 +144,4 @@ export default class SessionMerger {
 		}
 	}
 
-	private findChromeExtensionWindow(windows: BT.Window[]): BT.Window | undefined {
-		return windows.find(w => {
-			return (w.tabs.some(t => t.url === chrome.extension.getURL('index.html')));
-		});
-	}
 }
