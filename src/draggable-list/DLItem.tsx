@@ -136,8 +136,7 @@ export default class DLItem extends React.Component<Props, State> {
     return ref.getBoundingClientRect();
   }
   private getOffset(e: { pageX: number, pageY: number }): { x: number; y: number } {
-    // const ref = ReactDOM.findDOMNode(this);
-    const box = this.getBox(); // ref.getBoundingClientRect();
+    const box = this.getBox();
     const docElement = document.documentElement;
     return {
       x: e.pageX - (box.left + docElement.scrollLeft - docElement.clientLeft),
