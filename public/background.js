@@ -24,5 +24,12 @@ chrome.browserAction.onClicked.addListener(tab => {
 const getLocalStoredPanelGeometry = () => {
 	const serialisedSession = localStorage.getItem('session') || 'null';
 	const session = JSON.parse(serialisedSession);
-	return (session) ? session.panelGeometry : null;
+	if(session) {
+		if(session.panelWindow) {
+			return session.panelWindow.geometry; // according to CoreTypes.ts
+		} else {
+			return session.panelGeometry || null;
+		}
+	}
+	return null;
 }
