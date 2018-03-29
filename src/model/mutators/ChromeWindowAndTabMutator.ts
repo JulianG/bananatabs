@@ -112,19 +112,30 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 	}
 
 	showWindow(window: BT.Window) {
+
 		const createData: chrome.windows.CreateData = {
 			left: window.geometry.left,
 			top: window.geometry.top,
 			width: window.geometry.width,
 			height: window.geometry.height,
 			focused: window.focused,
-			type: window.type,
-			url: window.tabs.filter(t => t.visible).map(t => t.url)
+			type: window.type
 		};
+
 		chrome.windows.create(createData, newWindow => {
+
 			if (newWindow) {
+
 				window.visible = true;
 				window.id = newWindow.id;
+				window.tabs.forEach((tab, i) => {
+					if (tab.visible) {
+						this.showTab(window, tab);
+						if (i === window.tabs.length - 1) {
+							this.removeLastTabInWindow(newWindow);
+						}
+					}
+				});
 				this.updateSession();
 			}
 		});
@@ -141,6 +152,13 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 	}
 
 	///
+
+	private removeLastTabInWindow(newWindow: chrome.windows.Window) {
+		const lastTabInNewWindow = newWindow.tabs![newWindow.tabs!.length - 1];
+		if (lastTabInNewWindow) {
+			chrome.tabs.remove(lastTabInNewWindow.id!);
+		}
+	}
 
 	private safeRenameWindow(window: BT.Window) {
 		window.title = window.title || 'My Window';
