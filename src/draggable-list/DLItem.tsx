@@ -21,6 +21,7 @@ interface BoxRect {
 
 export default class DLItem extends React.Component<Props, State> {
   private isDown: boolean = false;
+  private mouseDownTimestamp: number = 0;
   private initialOffset: { x: number; y: number };
   private mouseOverPending: boolean;
 
@@ -77,6 +78,7 @@ export default class DLItem extends React.Component<Props, State> {
 
   private handleMouseDown(e: React.MouseEvent<HTMLElement>) {
     this.isDown = true;
+    this.mouseDownTimestamp = new Date().getTime();
     this.initialOffset = this.getOffset(e);
     e.preventDefault();
     //
@@ -84,7 +86,7 @@ export default class DLItem extends React.Component<Props, State> {
   }
 
   private handleMouseMove(e: MouseEvent) {
-    if (this.isDown === false) {
+    if (this.isDown === false || this.getTimeSinceMouseDown() < 250) {
       return;
     }
 
@@ -101,6 +103,10 @@ export default class DLItem extends React.Component<Props, State> {
     if (this.isDown) {
       this.props.logic.handleMouseMove(this.props.itemId, offset);
     }
+  }
+
+  private getTimeSinceMouseDown(): number {
+    return new Date().getTime() - this.mouseDownTimestamp;
   }
 
   private handleMouseMoveForHover(e: MouseEvent) {

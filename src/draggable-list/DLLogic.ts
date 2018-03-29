@@ -38,9 +38,14 @@ export default class DLLogic {
     return this.threshold;
   }
 
+  getDragDelay(): number {
+    return this.dragDelay;
+  }
+
   constructor(
     private mode: DLLayout,
     private threshold: number,
+    private dragDelay: number,
     private onChange: (id: number, target: number) => void
   ) { }
 
