@@ -70,7 +70,7 @@ export default class WindowView extends React.Component<Props, State> {
 				onMouseEnter={this.showTools}
 				onMouseLeave={this.hideTools}
 			>
-				{this.renderWindowIcon()}
+				{this.renderDisclosureButton()}
 				{this.renderVisibilityIcon()}
 				{this.state.renaming ?
 					this.renderInputTitle(w) :
@@ -111,11 +111,11 @@ export default class WindowView extends React.Component<Props, State> {
 		);
 	}
 
-	private renderWindowIcon() {
+	private renderDisclosureButton() {
 		const w = this.props.window;
 		const iconSrc = w.expanded ? Icons.ArrowDown : Icons.ArrowRight;
 		const iconText = w.expanded ? 'Collapse' : 'Expand';
-		const iconStyles = ['expand-collapse-icon', 'icon', w.visible ? '' : 'hidden'];
+		const iconStyles = ['tool', 'icon', w.visible ? '' : 'hidden'];
 		return (
 			<img
 				className={iconStyles.join(' ')}

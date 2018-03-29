@@ -136,15 +136,19 @@ img.icon {
 	margin-right: 0.5rem;
 }
 
+img.tool.icon {
+	cursor: pointer;
+}
+
 /* and when they're hidden... */
 img.icon.hidden {
 	-webkit-filter: grayscale(1);
 	filter: grayscale(1);
 }
 
-img.icon.expand-collapse-icon {
+/* img.icon.expand-collapse-icon {
 	cursor: pointer;
-}
+} */
 
 /* Tools */
 

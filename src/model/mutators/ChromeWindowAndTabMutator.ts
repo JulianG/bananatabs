@@ -25,8 +25,10 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		tab.active = true;
 		this.updateSession();
 
-		chrome.windows.update(window.id, { focused: true });
-		chrome.tabs.update(tab.id, { active: true });
+		if (chrome && chrome.windows) {
+			chrome.windows.update(window.id, { focused: true });
+			chrome.tabs.update(tab.id, { active: true });
+		}
 	}
 
 	toggleTabVisibility(window: BT.Window, tab: BT.Tab) {
