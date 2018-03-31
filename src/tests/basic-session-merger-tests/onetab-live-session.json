@@ -1,0 +1,54 @@
+{
+	"windows": [{
+		"id": 2050,
+		"title": "",
+		"visible": true,
+		"icon": "",
+		"tabs": [{
+			"id": 2051,
+			"title": "New Tab",
+			"visible": true,
+			"icon": "https://www.google.co.uk/favicon.ico",
+			"index": 0,
+			"listIndex": 0,
+			"url": "chrome://newtab/",
+			"active": true
+		}],
+		"focused": false,
+		"type": "normal",
+		"state": "maximized",
+		"geometry": {
+			"top": 23,
+			"left": 4,
+			"width": 1674,
+			"height": 1027
+		},
+		"expanded": true
+	}],
+	"panelWindow": {
+		"id": 2005,
+		"title": "",
+		"visible": true,
+		"icon": "",
+		"tabs": [{
+			"id": 2006,
+			"title": "Banana Tabs!",
+			"visible": true,
+			"icon": "chrome-extension://inbalflcnihklpnmnnbdcinlfgnmplfl/icons/app-icon.png",
+			"index": 0,
+			"listIndex": 0,
+			"url": "chrome-extension://inbalflcnihklpnmnnbdcinlfgnmplfl/index.html",
+			"active": true
+		}],
+		"focused": true,
+		"type": "popup",
+		"state": "normal",
+		"geometry": {
+			"top": 23,
+			"left": 4,
+			"width": 569,
+			"height": 1027
+		},
+		"expanded": true
+	}
+}

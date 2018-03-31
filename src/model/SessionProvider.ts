@@ -1,6 +1,10 @@
 import * as BT from './CoreTypes';
 import SessionMerger from './SessionMerger';
 
+// import MutedConsole from '../utils/MutedConsole';
+// const _console = new MutedConsole();
+const _console = console; // enable logging
+
 export default class SessionProvider {
 
 	public session: BT.Session;
@@ -38,7 +42,7 @@ export default class SessionProvider {
 		const convertWindow = this.convertWindow.bind(this);
 
 		if (chrome && chrome.windows) {
-			// console.warn(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
+			_console.log(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
 			chrome.windows.getAll({ populate: true }, (windows: Array<chrome.windows.Window>) => {
 				const windowsWithTabs = windows.filter(w => (w.tabs || []).length > 0);
 				const sessionWindows: BT.Window[] = windowsWithTabs.map(convertWindow);
@@ -48,9 +52,17 @@ export default class SessionProvider {
 					windows: filteredSessionWindows,
 					panelWindow
 				};
-				// console.group(`  Merging sessions because ${reason}...`);
-				this.session = this.sessionMerger.mergeSessions(session, this.retrieveSession());
-				// console.groupEnd();
+				const retrievedSession = this.retrieveSession();
+				_console.groupCollapsed(`  Merging sessions because ${reason}...`);				
+				_console.log('live-session:');
+				_console.log(JSON.stringify(session));
+				_console.log('stored-session:');
+				_console.log(JSON.stringify(retrievedSession));
+				this.session = this.sessionMerger.mergeSessions(session, retrievedSession);
+				_console.log('merged-session:');
+				_console.log(JSON.stringify(this.session));
+				_console.groupEnd();
+
 				this.storeSession(this.session);
 				this.onSessionChanged(this.session);
 			});
@@ -116,7 +128,7 @@ export default class SessionProvider {
 	}
 	
 	private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
-		if (this.isPanelTab(id) === false) {
+		if (this.isPanelTab(id) === false && changeInfo.status === 'complete') {
 			this.initialiseSession('onTabsUpdated ' + id + ':' + JSON.stringify(changeInfo));
 		}
 	}

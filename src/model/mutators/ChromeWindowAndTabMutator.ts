@@ -147,10 +147,14 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 
 		const index = this.provider.session.windows.indexOf(window);
 		console.assert(index >= 0);
-		chrome.windows.remove(window.id, () => {
-			this.provider.session.windows.splice(index, 1);
-			this.updateSession();
-		});
+		try {
+			chrome.windows.remove(window.id, () => {
+				this.provider.session.windows.splice(index, 1);
+				this.updateSession();
+			});
+		} catch (e) {
+			console.warn(`Could not delete window for real... ${window.id}`);
+		}
 	}
 
 	///
