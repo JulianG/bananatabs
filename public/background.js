@@ -21,15 +21,24 @@ chrome.browserAction.onClicked.addListener(tab => {
 	});
 });
 
-const getLocalStoredPanelGeometry = () => {
+function getLocalStoredPanelGeometry() {
 	const serialisedSession = localStorage.getItem('session') || 'null';
 	const session = JSON.parse(serialisedSession);
 	if(session) {
 		if(session.panelWindow) {
 			return session.panelWindow.geometry; // according to CoreTypes.ts
 		} else {
-			return session.panelGeometry || null;
+			return session.panelGeometry || getDefaultPanelGeometry();
 		}
 	}
-	return null;
+	return getDefaultPanelGeometry();
+}
+
+function getDefaultPanelGeometry() {
+	return {
+		left: 0,
+		top: 0,
+		width: 480,
+		height: window.screen.availHeight
+	};
 }
