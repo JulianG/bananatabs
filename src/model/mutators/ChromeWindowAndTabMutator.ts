@@ -75,7 +75,8 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		const tabIndex = window.tabs.indexOf(tab);
 		console.assert(tabIndex >= 0);
 		window.tabs.splice(tabIndex, 1);
-		if (window.visible) {
+
+		if (window.visible && tab.visible) {
 			chrome.tabs.remove(tab.id, () => {
 				this.safeRenameWindow(window);
 				this.updateSession();
@@ -121,7 +122,8 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 			width: window.geometry.width,
 			height: window.geometry.height,
 			focused: window.focused,
-			type: window.type
+			type: window.type,
+			url: window.tabs.filter(t => t.visible).map(t => t.url)
 		};
 
 		chrome.windows.create(createData, newWindow => {
@@ -130,14 +132,6 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 
 				window.visible = true;
 				window.id = newWindow.id;
-				window.tabs.forEach((tab, i) => {
-					if (tab.visible) {
-						this.showTab(window, tab);
-						if (i === window.tabs.length - 1) {
-							this.removeLastTabInWindow(newWindow);
-						}
-					}
-				});
 				this.updateSession();
 			}
 		});
@@ -158,13 +152,6 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 	}
 
 	///
-
-	private removeLastTabInWindow(newWindow: chrome.windows.Window) {
-		const lastTabInNewWindow = newWindow.tabs![newWindow.tabs!.length - 1];
-		if (lastTabInNewWindow) {
-			chrome.tabs.remove(lastTabInNewWindow.id!);
-		}
-	}
 
 	private safeRenameWindow(window: BT.Window) {
 		window.title = window.title || 'My Window';

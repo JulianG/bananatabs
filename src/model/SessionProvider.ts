@@ -129,7 +129,7 @@ export default class SessionProvider {
 	
 	private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
 		if (this.isPanelTab(id) === false && changeInfo.status === 'complete') {
-			this.initialiseSession('onTabsUpdated ' + id + ':' + JSON.stringify(changeInfo));
+			this.initialiseSession(`onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
 		}
 	}
 
@@ -145,7 +145,7 @@ export default class SessionProvider {
 
 	private onTabsRemoved(id: number, removedInfo: chrome.tabs.TabRemoveInfo) {
 		if (this.isPanelTab(id) === false && removedInfo.isWindowClosing === false) {
-			this.initialiseSession('onTabsRemoved');
+			this.initialiseSession(`onTabsRemoved - ${id} - ${JSON.stringify(removedInfo)}`);
 		}
 	}
 
