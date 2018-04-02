@@ -1,9 +1,8 @@
 import * as BT from './CoreTypes';
 import SessionMerger from './SessionMerger';
 
-// import MutedConsole from '../utils/MutedConsole';
-// const _console = new MutedConsole();
-const _console = console; // enable logging
+import MutedConsole from '../utils/MutedConsole';
+const console = new MutedConsole();
 
 export default class SessionProvider {
 
@@ -18,6 +17,7 @@ export default class SessionProvider {
 
 		this.initialiseSession = this.initialiseSession.bind(this);
 		this.onWindowRemoved = this.onWindowRemoved.bind(this);
+		this.onTabsCreated = this.onTabsCreated.bind(this);
 		this.onTabsUpdated = this.onTabsUpdated.bind(this);
 		this.onTabsMoved = this.onTabsMoved.bind(this);
 		this.onTabsAttached = this.onTabsAttached.bind(this);
@@ -25,7 +25,7 @@ export default class SessionProvider {
 
 		if (chrome && chrome.tabs) {
 			chrome.windows.onRemoved.addListener(this.onWindowRemoved);
-			// chrome.tabs.onCreated.addListener(this.initialiseSession);
+			chrome.tabs.onCreated.addListener(this.onTabsCreated);
 			chrome.tabs.onUpdated.addListener(this.onTabsUpdated);
 			// chrome.tabs.onActivated.addListener(this.initialiseSession);
 			chrome.tabs.onMoved.addListener(this.onTabsMoved);
@@ -42,7 +42,7 @@ export default class SessionProvider {
 		const convertWindow = this.convertWindow.bind(this);
 
 		if (chrome && chrome.windows) {
-			_console.log(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
+			console.log(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
 			chrome.windows.getAll({ populate: true }, (windows: Array<chrome.windows.Window>) => {
 				const windowsWithTabs = windows.filter(w => (w.tabs || []).length > 0);
 				const sessionWindows: BT.Window[] = windowsWithTabs.map(convertWindow);
@@ -53,15 +53,15 @@ export default class SessionProvider {
 					panelWindow
 				};
 				const retrievedSession = this.retrieveSession();
-				_console.groupCollapsed(`  Merging sessions because ${reason}...`);				
-				_console.log('live-session:');
-				_console.log(JSON.stringify(session));
-				_console.log('stored-session:');
-				_console.log(JSON.stringify(retrievedSession));
+				console.groupCollapsed(`  Merging sessions because ${reason}...`);
+				console.log('live-session:');
+				console.log(JSON.stringify(session));
+				console.log('stored-session:');
+				console.log(JSON.stringify(retrievedSession));
 				this.session = this.sessionMerger.mergeSessions(session, retrievedSession);
-				_console.log('merged-session:');
-				_console.log(JSON.stringify(this.session));
-				_console.groupEnd();
+				console.log('merged-session:');
+				console.log(JSON.stringify(this.session));
+				console.groupEnd();
 
 				this.storeSession(this.session);
 				this.onSessionChanged(this.session);
@@ -126,10 +126,16 @@ export default class SessionProvider {
 	private onWindowRemoved(id: number) {
 		this.initialiseSession('onWindowRemoved ' + id);
 	}
-	
+
+	private onTabsCreated(tab: chrome.tabs.Tab) {
+		console.log(`NOT MERGING -- onTabsCreated ${JSON.stringify(tab, null, 2)}`);
+	}
+
 	private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
 		if (this.isPanelTab(id) === false && changeInfo.status === 'complete') {
 			this.initialiseSession(`onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
+		} else {
+			console.log(`NOT MERGING -- onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
 		}
 	}
 
