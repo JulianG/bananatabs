@@ -44,7 +44,7 @@ export default class SessionProvider {
 		if (chrome && chrome.windows) {
 			console.log(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
 			chrome.windows.getAll({ populate: true }, (windows: Array<chrome.windows.Window>) => {
-				const windowsWithTabs = windows.filter(w => (w.tabs || []).length > 0);
+				const windowsWithTabs = windows.filter(w => (w.tabs || []).length > 0 && w.incognito === false);
 				const sessionWindows: BT.Window[] = windowsWithTabs.map(convertWindow);
 				const panelWindow = this.findChromeExtensionWindow(sessionWindows) || BT.NullWindow;
 				const filteredSessionWindows = sessionWindows.filter(w => w !== panelWindow);
@@ -91,7 +91,7 @@ export default class SessionProvider {
 			title: '',
 			visible: true,
 			icon: '',
-			tabs: (w.tabs || []).map(this.convertTab),
+			tabs: (w.tabs || []).filter(t => t.incognito === false).map(this.convertTab),
 			focused: w.focused || false,
 			type: w.type,
 			state: w.state,
