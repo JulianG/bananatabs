@@ -35,6 +35,18 @@ test('when dropping a tab to an existing window', () => {
 	testSessionsMatch('when-dropping-tab-in');
 });
 
+test('when reopening browser with no changes', () => {
+	testSessionsMatch('restoring-session-no-changes');
+});
+
+test('when reopening browser after having added 1 tab to a window with 2 tabs', () => {
+	testSessionsMatch('restoring-session-adding-1-to-2');
+});
+
+test('when reopening browser after having added 1 tab to a window with 4 tabs', () => {
+	testSessionsMatch('restoring-session-adding-1-to-4');
+});
+
 ///
 
 function testSessionsMatch(name: string) {
