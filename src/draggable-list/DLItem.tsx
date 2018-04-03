@@ -86,7 +86,7 @@ export default class DLItem extends React.Component<Props, State> {
   }
 
   private handleMouseMove(e: MouseEvent) {
-    if (this.isDown === false || this.getTimeSinceMouseDown() < 250) {
+    if (this.isDown === false || this.getTimeSinceMouseDown() < this.props.logic.getDragDelay()) {
       return;
     }
 
