@@ -33,6 +33,7 @@ export default class SessionView extends React.Component<Props, State> {
 
 		this.state = { session: this.sessionProvider.session };
 
+		this.itemRenderer = this.itemRenderer.bind(this);
 		this.refreshWindowList = this.refreshWindowList.bind(this);
 		this.onListUpdated = this.onListUpdated.bind(this);
 
@@ -70,18 +71,22 @@ export default class SessionView extends React.Component<Props, State> {
 					threshold={25}
 					dragDelay={250}
 					onChange={this.onListUpdated}
-					/* tslint:disable-next-line jsx-no-lambda */
-					itemRenderer={(i: number) => {
-						return <WindowView
-							key={'window-' + i}
-							window={windows[i]}
-							windowMutator={this.windowMutator}
-							tabMutator={this.tabMutator}
-						/>;
-					}}
+					itemRenderer={this.itemRenderer}
 				/>
 				{this.renderCredits()}
 			</div>
+		);
+	}
+
+	private itemRenderer(i: number) {
+		const windows = this.state.session.windows;
+		return (
+			<WindowView
+				key={'window-' + i}
+				window={windows[i]}
+				windowMutator={this.windowMutator}
+				tabMutator={this.tabMutator}
+			/>
 		);
 	}
 
