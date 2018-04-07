@@ -90,19 +90,23 @@ export default class DLItem extends React.Component<Props, State> {
       return;
     }
 
-    const offset = {
-      x: e.pageX - this.initialOffset.x,
-      y: e.pageY - this.initialOffset.y
-    };
-
     if (this.state.isDragging === false && this.isDown) {
       this.props.logic.handleDragBegin(this.props.itemId, this.initialOffset);
     }
     this.setState(Object.assign(this.state, { isDragging: this.isDown }));
 
     if (this.isDown) {
+      const offset = this.calculateOffset(e);
       this.props.logic.handleMouseMove(this.props.itemId, offset);
     }
+  }
+
+  private calculateOffset(e: { pageX: number, pageY: number }): { x: number, y: number } {
+    const offset = {
+      x: e.pageX - this.initialOffset.x,
+      y: e.pageY - this.initialOffset.y
+    };
+    return offset;
   }
 
   private getTimeSinceMouseDown(): number {
