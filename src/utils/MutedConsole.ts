@@ -4,6 +4,7 @@ tslint:disable no-empty
 */
 
 export default class MutedConsole implements Console {
+	memory: any;
 	Console: NodeJS.ConsoleConstructor;
 	assert(test?: boolean, message?: string, ...optionalParams: any[]): void { }
 	clear(): void { }
@@ -18,6 +19,7 @@ export default class MutedConsole implements Console {
 	groupEnd(): void { }
 	info(message?: any, ...optionalParams: any[]): void { }
 	log(message?: any, ...optionalParams: any[]): void { }
+	markTimeline(label?: string): void { }
 	msIsIndependentlyComposed(element: Element): boolean { return false; }
 	profile(reportName?: string): void { }
 	profileEnd(): void { }
@@ -25,6 +27,9 @@ export default class MutedConsole implements Console {
 	table(...data: any[]): void { }
 	time(timerName?: string): void { }
 	timeEnd(timerName?: string): void { }
+	timeStamp(label?: string): void { }
+	timeline(label?: string): void { }
+	timelineEnd(label?: string): void { }
 	trace(message?: any, ...optionalParams: any[]): void { }
 	warn(message?: any, ...optionalParams: any[]): void { }
 }

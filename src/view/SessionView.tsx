@@ -6,7 +6,7 @@ import TabMutator from '../model/mutators/TabMutator';
 import ChromeWindowAndTabMutator from '../model/mutators/ChromeWindowAndTabMutator';
 import * as BT from '../model/CoreTypes';
 import WindowView from './WindowView';
-import DLContext from '../draggable-list/DLContext';
+import DLContext from 'react-list-drag-and-drop/lib/DLContext';
 
 interface Props {
 	version: string;
