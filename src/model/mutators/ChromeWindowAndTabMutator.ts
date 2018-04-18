@@ -3,6 +3,9 @@ import SessionProvider from '../SessionProvider';
 import TabMutator from './TabMutator';
 import WindowMutator from './WindowMutator';
 
+import MutedConsole from '../../utils/MutedConsole';
+const console = new MutedConsole();
+
 export default class ChromeWindowAndTabMutator implements TabMutator, WindowMutator {
 
 	constructor(private provider: SessionProvider) {
@@ -53,12 +56,11 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 	}
 
 	showTab(window: BT.Window, tab: BT.Tab) {
-
 		tab.visible = true;
 		if (window.visible) {
 			const props: chrome.tabs.CreateProperties = {
 				windowId: window.visible ? window.id : 0,
-				index: tab.index,
+				index: Math.max(tab.index, 0),
 				url: tab.url,
 				active: tab.active
 			};
