@@ -118,25 +118,20 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 
 	showWindow(window: BT.Window) {
 
-		const createData: chrome.windows.CreateData = {
-			left: window.geometry.left,
-			top: window.geometry.top,
-			width: window.geometry.width,
-			height: window.geometry.height,
-			focused: window.focused,
-			type: window.type,
-			url: window.tabs.filter(t => t.visible).map(t => t.url)
-		};
-
-		chrome.windows.create(createData, newWindow => {
-
-			if (newWindow) {
-
-				window.visible = true;
-				window.id = newWindow.id;
-				this.updateSession();
-			}
-		});
+		const visibleWindows = this.provider.session.windows.filter(w => w.visible).length;
+		if (visibleWindows === 0) {
+			this.provider.disableMerging();
+			const url: string[] = ['http://motherfuckingwebsite.com'];
+			chrome.windows.create({ type: 'normal', state: 'minimized', url: url }, newWindow => {
+				this.provider.enableMerging();
+				this._showWindow(window);
+				if (newWindow) {
+					chrome.windows.remove(newWindow.id);
+				}
+			});
+		} else {
+			this._showWindow(window);
+		}
 	}
 
 	deleteWindow(window: BT.Window) {
@@ -163,4 +158,27 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		this.provider.storeSession(this.provider.session);
 		this.provider.onSessionChanged(this.provider.session);
 	}
+
+	private _showWindow(window: BT.Window) {
+		const createData: chrome.windows.CreateData = {
+			left: window.geometry.left,
+			top: window.geometry.top,
+			width: window.geometry.width,
+			height: window.geometry.height,
+			focused: window.focused,
+			type: window.type,
+			url: window.tabs.filter(t => t.visible).map(t => t.url)
+		};
+
+		chrome.windows.create(createData, newWindow => {
+
+			if (newWindow) {
+
+				window.visible = true;
+				window.id = newWindow.id;
+				this.updateSession();
+			}
+		});
+	}
+
 }

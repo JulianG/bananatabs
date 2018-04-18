@@ -34,26 +34,24 @@ export default class SessionView extends React.Component<Props, State> {
 		this.state = { session: this.sessionProvider.session };
 
 		this.itemRenderer = this.itemRenderer.bind(this);
-		this.refreshWindowList = this.refreshWindowList.bind(this);
-		this.onListUpdated = this.onListUpdated.bind(this);
 
+		this.handleResizeEvent = this.handleResizeEvent.bind(this);
+		this.onListUpdated = this.onListUpdated.bind(this);
 	}
 
 	componentDidMount() {
 
-		window.addEventListener('focus', this.refreshWindowList);
-		window.addEventListener('resize', this.refreshWindowList);
+		window.addEventListener('resize', this.handleResizeEvent);
 
 		this.sessionProvider.onSessionChanged = (session) => {
 			this.setState({ session });
 		};
 
-		this.refreshWindowList();
+		this.refreshWindowList('componentDidMount');
 	}
 
 	componentWillMount() {
-		window.removeEventListener('focus', this.refreshWindowList);
-		window.removeEventListener('resize', this.refreshWindowList);
+		window.removeEventListener('resize', this.handleResizeEvent);
 	}
 
 	render() {
@@ -103,9 +101,14 @@ export default class SessionView extends React.Component<Props, State> {
 		);
 	}
 
-	private refreshWindowList() {
-		this.sessionProvider.initialiseSession();
+	private handleResizeEvent(e: UIEvent) {
+		this.refreshWindowList('resize');
 	}
+
+	private refreshWindowList(reason?: string) {
+		this.sessionProvider.initialiseSession('refreshWindowList ' + reason);
+	}
+
 	private onListUpdated(items: BT.Window[], changed: boolean) {
 		if (changed) {
 			this.sessionMutator.updateWindows(items);
