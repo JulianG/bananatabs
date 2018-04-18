@@ -6,7 +6,7 @@ import TabMutator from '../model/mutators/TabMutator';
 import ChromeWindowAndTabMutator from '../model/mutators/ChromeWindowAndTabMutator';
 import * as BT from '../model/CoreTypes';
 import WindowView from './WindowView';
-import DLContext from 'react-list-drag-and-drop/lib/DLContext';
+import RLDD from 'react-list-drag-and-drop/lib/RLDD';
 
 interface Props {
 	version: string;
@@ -64,7 +64,7 @@ export default class SessionView extends React.Component<Props, State> {
 					<img className="app-icon" src="/icons/app-icon.png" /><span>Banana Tabs!</span>&nbsp;
 					<div style={{ display: 'inline' }} className="credits">BETA</div>
 				</h3>
-				<DLContext
+				<RLDD
 					cssClasses="session"
 					items={windows}
 					layout={'vertical'}
@@ -78,7 +78,7 @@ export default class SessionView extends React.Component<Props, State> {
 		);
 	}
 
-	private itemRenderer(i: number) {
+	private itemRenderer(item: BT.Window, i: number) {
 		const windows = this.state.session.windows;
 		return (
 			<WindowView
