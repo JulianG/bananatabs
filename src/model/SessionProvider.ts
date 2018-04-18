@@ -9,7 +9,6 @@ export default class SessionProvider {
 	public session: BT.Session;
 	public onSessionChanged: (session: BT.Session) => void;
 
-	private mergingEnabled: boolean = true;
 	private sessionMerger: SessionMerger;
 
 	constructor() {
@@ -38,14 +37,6 @@ export default class SessionProvider {
 		}
 	}
 
-	enableMerging() {
-		this.mergingEnabled = true;
-	}
-
-	disableMerging() {
-		this.mergingEnabled = false;
-	}
-
 	initialiseSession(reason?: string): void {
 
 		const convertWindow = this.convertWindow.bind(this);
@@ -63,20 +54,15 @@ export default class SessionProvider {
 				};
 				const retrievedSession = this.retrieveSession();
 
-				if (this.mergingEnabled) {
-					console.groupCollapsed(`  Merging sessions because ${reason}...`);
-					console.log('live-session:');
-					console.log(JSON.stringify(session));
-					console.log('stored-session:');
-					console.log(JSON.stringify(retrievedSession));
-					this.session = this.sessionMerger.mergeSessions(session, retrievedSession);
-					console.log('merged-session:');
-					console.log(JSON.stringify(this.session));
-					console.groupEnd();
-				} else {
-					console.log('Merging is disabled!');
-					this.session = retrievedSession;
-				}
+				console.groupCollapsed(`  Merging sessions because ${reason}...`);
+				console.log('live-session:');
+				console.log(JSON.stringify(session));
+				console.log('stored-session:');
+				console.log(JSON.stringify(retrievedSession));
+				this.session = this.sessionMerger.mergeSessions(session, retrievedSession);
+				console.log('merged-session:');
+				console.log(JSON.stringify(this.session));
+				console.groupEnd();
 
 				this.storeSession(this.session);
 				this.onSessionChanged(this.session);
