@@ -121,8 +121,7 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		const visibleWindows = this.provider.session.windows.filter(w => w.visible).length;
 		if (visibleWindows === 0) {
 			this.provider.disableMerging();
-			const url: string[] = ['http://motherfuckingwebsite.com'];
-			chrome.windows.create({ type: 'normal', state: 'minimized', url: url }, newWindow => {
+			chrome.windows.create({ type: 'normal', state: 'minimized' }, newWindow => {
 				this.provider.enableMerging();
 				this._showWindow(window);
 				if (newWindow) {
