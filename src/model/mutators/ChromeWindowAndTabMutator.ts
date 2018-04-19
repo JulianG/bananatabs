@@ -46,7 +46,7 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		tab.visible = false;
 		if (window.visible) {
 			chrome.tabs.remove(tab.id, () => {
-				tab.id = -1;
+				tab.id = -1; // why?
 				this.safeRenameWindow(window);
 				this.updateSession();
 			});
