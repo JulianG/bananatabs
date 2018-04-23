@@ -144,13 +144,14 @@ export default class WindowView extends React.Component<Props, State> {
 
 		const tabsStr = window.expanded ? '' : ' (' + window.tabs.length + ' tabs)';
 		const title = (window.title || 'Window');
+		const fullscreen = window.state === 'fullscreen' ? '(fullscreen)' : '';
 
 		return (
 			<span
 				className="window-title"
 				onClick={this.handleStartRename}
 			>
-				{title} <span>{tabsStr}</span>
+				{title} <span>{tabsStr}</span> <span>{fullscreen}</span>
 			</span>
 		);
 	}
