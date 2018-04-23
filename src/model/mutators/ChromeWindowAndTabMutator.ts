@@ -156,12 +156,35 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		this.provider.onSessionChanged(this.provider.session);
 	}
 
+	private clampGeomtry(g: BT.Geometry): BT.Geometry {
+		const cg = { ...g };
+		const gRight = g.left + g.width;
+		const gBottom = g.top + g.height;
+
+		const availWidth = window.screen.availHeight;
+		const availHeight = window.screen.availHeight;
+
+		cg.left = gRight > availWidth ? Math.max(0, g.left + gRight - availWidth) : g.left;
+		cg.top = gBottom > availHeight ? Math.max(0, g.top + gBottom - availHeight) : g.top;
+
+		const cgRight = cg.left + cg.width;
+		const cgBottom = cg.top + cg.height;
+
+		cg.width = cgRight > availWidth ? availWidth : cg.width;
+		cg.height = cgBottom > availHeight ? availHeight : cg.height;
+
+		return cg;
+	}
 	private _showWindow(window: BT.Window) {
+
+		this.clampGeomtry(window.geometry);
+		const geom = window.geometry;
+
 		const createData: chrome.windows.CreateData = {
-			left: window.geometry.left,
-			top: window.geometry.top,
-			width: window.geometry.width,
-			height: window.geometry.height,
+			left: geom.left,
+			top: geom.top,
+			width: geom.width,
+			height: geom.height,
 			focused: window.focused,
 			type: window.type,
 			url: window.tabs.filter(t => t.visible).map(t => t.url)
