@@ -49,8 +49,8 @@ div {
 }
 
 .app-icon {
-	width: 2rem; /*32px;*/
-	height: 2rem; /*32px;*/
+	width: 2rem;
+	height: 2rem;
 }
 
 .window-group {
@@ -58,7 +58,6 @@ div {
 	padding: 0.25rem;
 	white-space: nowrap;
 	background-color: #ffffff;
-	/* box-shadow: 0 0.07em 0.3em #666666; */
 }
 
 /* A WindoGroup that's is not currently visible. */
@@ -72,13 +71,11 @@ div {
 	height: 2rem;
 	white-space: nowrap;
 	overflow: hidden; 
-	display: flex;
 }
 
 .item-row .window-title {
 	font-size: 1.00rem;
 	font-weight: bold;
-	flex-grow: 10;
 	padding-top: 0.2rem;
 }
 
@@ -122,7 +119,6 @@ div {
 }
 
 .item-row .tab-title {
-	flex-grow: 10;
 	padding-top: 0.2rem;
 }
 
@@ -146,14 +142,12 @@ img.icon.hidden {
 	filter: grayscale(1);
 }
 
-/* img.icon.expand-collapse-icon {
-	cursor: pointer;
-} */
-
 /* Tools */
 
 .tab-tools {
+	position: relative;
 	border-radius: 0.3rem;
+	background-color: #eeeeee;
 	float: right;
 	display: flex;
 	flex-direction: row;
@@ -167,7 +161,8 @@ img.icon.hidden {
 	width: 1.25rem;
 	height: 1.25rem;
 	margin: 0rem;
-	margin-left: 0.4rem;
+	margin-left: 0.2rem;
+	margin-right: 0.2rem;
 
 	user-select: none;
 	-moz-user-select: none;
@@ -190,6 +185,7 @@ img.icon.hidden {
 }
 
 /* Credits */
+
 .credits {
 	margin-top: 1.5em;
 	font-size: 0.70em;

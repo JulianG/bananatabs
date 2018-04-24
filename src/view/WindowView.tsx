@@ -72,11 +72,11 @@ export default class WindowView extends React.Component<Props, State> {
 			>
 				{this.renderDisclosureButton()}
 				{this.renderVisibilityIcon()}
+				{this.renderTools()}
 				{this.state.renaming ?
 					this.renderInputTitle(w) :
 					this.renderStaticTitle(w)}
 				{this.state.renaming && <div className="hint">&nbsp;Enter to save&nbsp;</div>}
-				{this.renderTools()}
 			</div>
 		);
 	}
