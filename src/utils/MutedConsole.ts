@@ -8,6 +8,7 @@ export default class MutedConsole implements Console {
 	Console: NodeJS.ConsoleConstructor;
 	assert(test?: boolean, message?: string, ...optionalParams: any[]): void { }
 	clear(): void { }
+	countReset(): void { }
 	count(countTitle?: string): void { }
 	debug(message?: any, ...optionalParams: any[]): void { }
 	dir(value?: any, ...optionalParams: any[]): void { }

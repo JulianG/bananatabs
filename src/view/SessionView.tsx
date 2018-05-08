@@ -109,12 +109,8 @@ export default class SessionView extends React.Component<Props, State> {
 		this.sessionProvider.initialiseSession('refreshWindowList ' + reason);
 	}
 
-	private onListUpdated(items: BT.Window[], changed: boolean) {
-		if (changed) {
-			this.sessionMutator.updateWindows(items);
-		} else {
-			this.forceUpdate();
-		}
+	private onListUpdated(items: BT.Window[]) {
+		this.sessionMutator.updateWindows(items);
 	}
 
 }
