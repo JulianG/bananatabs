@@ -68,7 +68,8 @@ export default class SessionProvider {
 				this.onSessionChanged(this.session);
 			});
 		} else {
-			this.onSessionChanged(this.retrieveSession());
+			this.session = this.retrieveSession();
+			this.onSessionChanged(this.session);
 		}
 
 	}
