@@ -3,7 +3,8 @@ import SessionProvider from '../model/SessionProvider';
 import SessionMutator, { DefaultSessionMutator } from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
-import ChromeWindowAndTabMutator from '../model/mutators/ChromeWindowAndTabMutator';
+import WindowAndTabMutator from '../model/mutators/WindowAndTabMutator';
+import { getBrowserController } from '../model/mutators/BrowserController';
 import * as BT from '../model/CoreTypes';
 import WindowView from './WindowView';
 import RLDD from 'react-list-drag-and-drop/lib/RLDD';
@@ -29,7 +30,7 @@ export default class SessionView extends React.Component<Props, State> {
 		this.sessionProvider = new SessionProvider();
 		this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
 
-		this.tabMutator = this.windowMutator = new ChromeWindowAndTabMutator(this.sessionProvider);
+		this.tabMutator = this.windowMutator = new WindowAndTabMutator(this.sessionProvider, getBrowserController());
 
 		this.state = { session: this.sessionProvider.session };
 

@@ -2,13 +2,14 @@ import * as BT from '../CoreTypes';
 import SessionProvider from '../SessionProvider';
 import TabMutator from './TabMutator';
 import WindowMutator from './WindowMutator';
+import BrowserController from './BrowserController';
 
 import MutedConsole from '../../utils/MutedConsole';
 const console = new MutedConsole();
 
-export default class ChromeWindowAndTabMutator implements TabMutator, WindowMutator {
+export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
-	constructor(private provider: SessionProvider) {
+	constructor(private provider: SessionProvider, private browser: BrowserController) {
 	}
 
 	// TabMutator and WindowMutator
@@ -28,10 +29,7 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		tab.active = true;
 		this.updateSession();
 
-		if (chrome && chrome.windows) {
-			chrome.windows.update(window.id, { focused: true });
-			chrome.tabs.update(tab.id, { active: true });
-		}
+		this.browser.selectTab(tab.id);
 	}
 
 	toggleTabVisibility(window: BT.Window, tab: BT.Tab) {
@@ -42,47 +40,40 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		}
 	}
 
-	hideTab(window: BT.Window, tab: BT.Tab) {
+	async hideTab(window: BT.Window, tab: BT.Tab) {
 		tab.visible = false;
 		if (window.visible) {
-			chrome.tabs.remove(tab.id, () => {
-				tab.id = -1; // why?
-				this.safeRenameWindow(window);
-				this.updateSession();
-			});
+			console.log('before await browser close tab');
+			await this.browser.closeTab(tab.id);
+			console.log('after await browser close tab');
+			tab.id = -1; // why?
+			this.safeRenameWindow(window);
+			this.updateSession();
 		} else {
 			this.updateSession();
 		}
+		console.log('end of function');
 	}
 
-	showTab(window: BT.Window, tab: BT.Tab) {
+	async showTab(window: BT.Window, tab: BT.Tab) {
 		tab.visible = true;
 		if (window.visible) {
-			const props: chrome.tabs.CreateProperties = {
-				windowId: window.visible ? window.id : 0,
-				index: Math.max(tab.index, 0),
-				url: tab.url,
-				active: tab.active
-			};
-			chrome.tabs.create(props, newTab => {
-				tab.id = newTab.id || -1;
-				this.updateSession();
-			});
+			await this.browser.createTab(window, tab);
+			this.updateSession();
 		} else {
 			this.showWindow(window);
 		}
 	}
 
-	deleteTab(window: BT.Window, tab: BT.Tab) {
+	async deleteTab(window: BT.Window, tab: BT.Tab) {
 		const tabIndex = window.tabs.indexOf(tab);
 		console.assert(tabIndex >= 0);
 		window.tabs.splice(tabIndex, 1);
 
 		if (window.visible && tab.visible) {
-			chrome.tabs.remove(tab.id, () => {
-				this.safeRenameWindow(window);
-				this.updateSession();
-			});
+			this.safeRenameWindow(window);
+			await this.browser.closeTab(tab.id);
+			this.updateSession();
 		} else {
 			this.updateSession();
 		}
@@ -108,38 +99,30 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		}
 	}
 
-	hideWindow(window: BT.Window) {
-		chrome.windows.remove(window.id, () => {
-			this.safeRenameWindow(window);
-			window.visible = false;
-			this.updateSession();
-		});
+	async hideWindow(window: BT.Window) {
+		this.safeRenameWindow(window);
+		window.visible = false;
+		await this.browser.closeWindow(window.id);
+		this.updateSession();
 	}
 
-	showWindow(window: BT.Window) {
+	async showWindow(window: BT.Window) {
 
+		window.geometry = this.clampGeomtry(window.geometry);
 		const visibleWindows = this.provider.session.windows.filter(w => w.visible).length;
-		if (visibleWindows === 0) {
-			chrome.windows.create({ type: 'normal', state: 'minimized' }, newWindow => {
-				this._showWindow(window);
-				if (newWindow) {
-					chrome.windows.remove(newWindow.id);
-				}
-			});
-		} else {
-			this._showWindow(window);
-		}
+		await this.browser.showWindow(window, visibleWindows === 0);
+		window.visible = true;
+		this.updateSession();
 	}
 
-	deleteWindow(window: BT.Window) {
+	async deleteWindow(window: BT.Window) {
 
 		const index = this.provider.session.windows.indexOf(window);
 		console.assert(index >= 0);
 		try {
-			chrome.windows.remove(window.id, () => {
-				this.provider.session.windows.splice(index, 1);
-				this.updateSession();
-			});
+			await this.browser.closeWindow(window.id);
+			this.provider.session.windows.splice(index, 1);
+			this.updateSession();
 		} catch (e) {
 			console.warn(`Could not delete window for real... ${window.id}`);
 		}
@@ -174,31 +157,6 @@ export default class ChromeWindowAndTabMutator implements TabMutator, WindowMuta
 		cg.height = cgBottom > availHeight ? availHeight : cg.height;
 
 		return cg;
-	}
-	private _showWindow(window: BT.Window) {
-
-		this.clampGeomtry(window.geometry);
-		const geom = window.geometry;
-
-		const createData: chrome.windows.CreateData = {
-			left: geom.left,
-			top: geom.top,
-			width: geom.width,
-			height: geom.height,
-			focused: window.focused,
-			type: window.type,
-			url: window.tabs.filter(t => t.visible).map(t => t.url)
-		};
-
-		chrome.windows.create(createData, newWindow => {
-
-			if (newWindow) {
-
-				window.visible = true;
-				window.id = newWindow.id;
-				this.updateSession();
-			}
-		});
 	}
 
 }
