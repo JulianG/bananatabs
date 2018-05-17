@@ -1,5 +1,8 @@
 import * as BT from '../CoreTypes';
 
+import MutedConsole from '../../utils/MutedConsole';
+const console = new MutedConsole();
+
 // BrowserController (interface)
 
 export default interface BrowserController {

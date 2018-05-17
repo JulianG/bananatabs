@@ -1,7 +1,7 @@
 import * as BT from './CoreTypes';
 
-// import MutedConsole from '../utils/MutedConsole';
-// const console = new MutedConsole();
+import MutedConsole from '../utils/MutedConsole';
+const console = new MutedConsole();
 
 export default class SessionMerger {
 
