@@ -1,7 +1,7 @@
 import * as BT from './CoreTypes';
 
-import MutedConsole from '../utils/MutedConsole';
-const console = new MutedConsole();
+// import MutedConsole from '../utils/MutedConsole';
+// const console = new MutedConsole();
 
 export default class SessionMerger {
 
@@ -14,42 +14,32 @@ export default class SessionMerger {
 		stored.windows.forEach((storedWindow, storedWindowIndex) => {
 
 			console.group('processing a stored window: ' + storedWindow.id + ' ' + storedWindow.title);
+			
+			console.log('looking for a live matching window...');
 
-			if (storedWindow.visible === false) {
-				console.log('window is hidden...');
+			const liveMatchingWindow = live.windows.find(liveWindow => this.compareWindows(liveWindow, storedWindow) > 0.75);
+			if (liveMatchingWindow) {
+				console.log('found liveMatchingWindow: ' + liveMatchingWindow.id + ' ' + liveMatchingWindow.title);
+				liveMatchingWindow.title = storedWindow.title;
+				liveMatchingWindow.expanded = storedWindow.expanded;
+				liveMatchingWindow.tabs = this.mergeTabs(liveMatchingWindow.tabs, storedWindow.tabs);
+				liveMatchingWindow.visible = true;
+				console.log('pushing live matching window: ' + liveMatchingWindow.id + ' ' + liveMatchingWindow.title);
+				this.pushUniqueWindow(mergedSessionWindows, liveMatchingWindow);
+
+			} else {
+				console.log('could not find a live matching window');
+
 				if (storedWindow.title !== '') {
-					console.log('  pushing a hidden window: ' + storedWindow.title);
+					console.log('pushing a hidden window: ' + storedWindow.id + ' ' + storedWindow.title);
 					storedWindow.focused = false;
+					storedWindow.visible = false;
 					this.pushUniqueWindow(mergedSessionWindows, storedWindow);
 				} else {
-					console.warn('NOT pushing hidden window because title was empty string.');
-				}
-			} else {
-				console.log('window is visible...');
-				console.log('looking for a live matching window...');
-
-				const liveMatchingWindow = live.windows.find(liveWindow => this.compareWindows(liveWindow, storedWindow) > 0.75);
-				if (liveMatchingWindow) {
-					console.log('found liveMatchingWindow: ' + liveMatchingWindow.id + ' ' + liveMatchingWindow.title);
-					liveMatchingWindow.title = storedWindow.title;
-					liveMatchingWindow.expanded = storedWindow.expanded;
-					liveMatchingWindow.tabs = this.mergeTabs(liveMatchingWindow.tabs, storedWindow.tabs);
-					console.log('pushing live matching window: ' + liveMatchingWindow.id + ' ' + liveMatchingWindow.title);
-					this.pushUniqueWindow(mergedSessionWindows, liveMatchingWindow);
-
-				} else {
-					console.log('could not find a live matching window');
-
-					if (storedWindow.title !== '') {
-						console.log('pushing a hidden window: ' + storedWindow.id + ' ' + storedWindow.title);
-						storedWindow.focused = false;
-						storedWindow.visible = false;
-						this.pushUniqueWindow(mergedSessionWindows, storedWindow);
-					} else {
-						console.log('NOT pushing stored window because title was empty string.');
-					}
+					console.log('NOT pushing stored window because title was empty string.');
 				}
 			}
+
 			console.groupEnd();
 		});
 
