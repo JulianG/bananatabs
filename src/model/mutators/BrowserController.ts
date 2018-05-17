@@ -103,9 +103,13 @@ export class ChromeBrowserController implements BrowserController {
 	public async showWindow(window: BT.Window, first: boolean) {
 		console.log(`ChromeBrowserController.createTab(...) ...`);
 		if (first) {
-			await this._createMinimisedWindow();
-			const newWindow = await this._showWindow(window);
-			return this.closeWindow(newWindow.id);
+			try {
+				const newWindowId = await this._createMinimisedWindow();
+				await this._showWindow(window);
+				return this.closeWindow(newWindowId);
+			} catch (e) {
+				return this._showWindow(window);
+			}
 		} else {
 			return this._showWindow(window);
 		}
@@ -113,10 +117,14 @@ export class ChromeBrowserController implements BrowserController {
 
 	/////
 
-	private _createMinimisedWindow() {
+	private _createMinimisedWindow(): Promise<number> {
 		return new Promise((resolve, reject) => {
 			chrome.windows.create({ type: 'normal', state: 'minimized' }, newWindow => {
-				resolve(newWindow);
+				if (newWindow) {
+					resolve(newWindow.id);
+				} else {
+					reject();
+				}
 			});
 		});
 	}
