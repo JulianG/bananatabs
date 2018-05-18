@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SessionProvider from '../model/SessionProvider';
+import SessionProvider, { getSessionProvider } from '../model/SessionProvider';
 import SessionMutator, { DefaultSessionMutator } from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
@@ -27,7 +27,7 @@ export default class SessionView extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.sessionProvider = new SessionProvider();
+		this.sessionProvider = getSessionProvider();
 		this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
 
 		this.tabMutator = this.windowMutator = new WindowAndTabMutator(this.sessionProvider, getBrowserController());
@@ -36,6 +36,7 @@ export default class SessionView extends React.Component<Props, State> {
 
 		this.itemRenderer = this.itemRenderer.bind(this);
 
+		this.printState = this.printState.bind(this);
 		this.handleResizeEvent = this.handleResizeEvent.bind(this);
 		this.onListUpdated = this.onListUpdated.bind(this);
 	}
@@ -60,7 +61,7 @@ export default class SessionView extends React.Component<Props, State> {
 		return (
 			<div>
 				<h3>
-					<img className="app-icon" src="/icons/app-icon.png" /><span>Banana Tabs!</span>&nbsp;
+					<img className="app-icon" src="/icons/app-icon.png" onClick={this.printState} /><span>Banana Tabs!</span>&nbsp;
 					<div style={{ display: 'inline' }} className="credits">BETA</div>
 				</h3>
 				<RLDD
@@ -114,4 +115,7 @@ export default class SessionView extends React.Component<Props, State> {
 		this.sessionMutator.updateWindows(items);
 	}
 
+	private printState() {
+		console.log(localStorage.getItem('session'));
+	}
 }
