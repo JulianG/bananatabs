@@ -3,7 +3,11 @@ import * as BT from './CoreTypes';
 import MutedConsole from '../utils/MutedConsole';
 const console = new MutedConsole();
 
-export default class SessionMerger {
+export default interface SessionMerger {
+	mergeSessions(live: BT.Session, stored: BT.Session): BT.Session;
+}
+
+export class DefaultSessionMerger implements SessionMerger {
 
 	mergeSessions(live: BT.Session, stored: BT.Session): BT.Session {
 

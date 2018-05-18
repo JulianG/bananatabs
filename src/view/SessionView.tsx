@@ -1,10 +1,10 @@
 import * as React from 'react';
-import SessionProvider, { getSessionProvider } from '../model/SessionProvider';
+import BananaFactory from '../factory/BananaFactory';
+import SessionProvider from '../model/SessionProvider';
 import SessionMutator, { DefaultSessionMutator } from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
 import WindowAndTabMutator from '../model/mutators/WindowAndTabMutator';
-import { getBrowserController } from '../model/mutators/BrowserController';
 import * as BT from '../model/CoreTypes';
 import WindowView from './WindowView';
 import RLDD from 'react-list-drag-and-drop/lib/RLDD';
@@ -27,10 +27,12 @@ export default class SessionView extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.sessionProvider = getSessionProvider();
+		const factory = new BananaFactory();
+
+		this.sessionProvider = factory.getSessionProvider();
 		this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
 
-		this.tabMutator = this.windowMutator = new WindowAndTabMutator(this.sessionProvider, getBrowserController());
+		this.tabMutator = this.windowMutator = new WindowAndTabMutator(this.sessionProvider, factory.getBrowserController());
 
 		this.state = { session: this.sessionProvider.session };
 
