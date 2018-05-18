@@ -7,6 +7,8 @@ import FakeSessionProvider from '../fake/FakeSessionProvider';
 import ChromeSessionProvider from '../chrome/ChromeSessionProvider';
 import { DefaultSessionMerger } from '../model/SessionMerger';
 
+import LocalStorageSessionPersistence from '../chrome/LocalStorageSessionPersistence';
+
 export default class BananaFactory {
 
 	getBrowserController(): BrowserController {
@@ -17,9 +19,8 @@ export default class BananaFactory {
 
 	getSessionProvider(): SessionProvider {
 		return (chrome && chrome.windows && chrome.tabs) ?
-			new ChromeSessionProvider(new DefaultSessionMerger()) :
-			new FakeSessionProvider();
+			new ChromeSessionProvider(new DefaultSessionMerger(), new LocalStorageSessionPersistence()) :
+			new FakeSessionProvider(new LocalStorageSessionPersistence());
 	}
 
 }
-

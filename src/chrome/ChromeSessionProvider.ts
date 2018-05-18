@@ -1,6 +1,7 @@
 import * as BT from '../model/CoreTypes';
 import SessionProvider from '../model/SessionProvider';
 import SessionMerger from '../model/SessionMerger';
+import SessionPersistence from '../model/SessionPersistence';
 
 import MutedConsole from '../utils/MutedConsole';
 const console = new MutedConsole();
@@ -10,7 +11,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 	public session: BT.Session;
 	public onSessionChanged: (session: BT.Session) => void;
 
-	constructor(private sessionMerger: SessionMerger) {
+	constructor(private sessionMerger: SessionMerger, private persistence: SessionPersistence) {
 		this.session = BT.EmptySession;
 
 		this.initialiseSession = this.initialiseSession.bind(this);
@@ -20,6 +21,9 @@ export default class ChromeSessionProvider implements SessionProvider {
 		this.onTabsMoved = this.onTabsMoved.bind(this);
 		this.onTabsAttached = this.onTabsAttached.bind(this);
 		this.onTabsRemoved = this.onTabsRemoved.bind(this);
+
+		this.convertWindow = this.convertWindow.bind(this);
+		this.convertTab = this.convertTab.bind(this);
 
 		if (chrome && chrome.tabs) {
 			chrome.windows.onRemoved.addListener(this.onWindowRemoved);
@@ -35,53 +39,52 @@ export default class ChromeSessionProvider implements SessionProvider {
 		}
 	}
 
-	initialiseSession(reason?: string): void {
+	async initialiseSession(reason?: string) {
 
-		const convertWindow = this.convertWindow.bind(this);
+		console.log(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
+		const retrievedSession = await this.persistence.retrieveSession();
+		console.log(`... retrieved session`);
+		const liveSession = await this.getChromeSession();
+		console.log(`... got chrome live session`);
+		this.mergeSessions(retrievedSession, liveSession, reason);
+	}
 
-		if (chrome && chrome.windows) {
-			console.log(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
-			chrome.windows.getAll({ populate: true }, (windows: Array<chrome.windows.Window>) => {
-				const windowsWithTabs = windows.filter(w => (w.tabs || []).length > 0 && w.incognito === false);
-				const sessionWindows: BT.Window[] = windowsWithTabs.map(convertWindow);
-				const panelWindow = this.findChromeExtensionWindow(sessionWindows) || BT.NullWindow;
-				const filteredSessionWindows = sessionWindows.filter(w => w !== panelWindow);
-				const session: BT.Session = {
-					windows: filteredSessionWindows,
-					panelWindow
-				};
-				const retrievedSession = this.retrieveSession();
-
-				console.groupCollapsed(`  Merging sessions because ${reason}...`);
-				console.log('live-session:');
-				console.log(JSON.stringify(session));
-				console.log('stored-session:');
-				console.log(JSON.stringify(retrievedSession));
-				this.session = this.sessionMerger.mergeSessions(session, retrievedSession);
-				console.log('merged-session:');
-				console.log(JSON.stringify(this.session));
-				console.groupEnd();
-
-				this.storeSession(this.session);
-				this.onSessionChanged(this.session);
-			});
-		} else {
-			this.session = this.retrieveSession();
-			this.onSessionChanged(this.session);
-		}
-
+	storeSession(session: BT.Session) {
+		this.persistence.storeSession(session);
 	}
 
 	//////////////////////////
 
-	storeSession(session: BT.Session) {
-		const serialisedSession = JSON.stringify(session);
-		localStorage.setItem('session', serialisedSession);
+	private getChromeSession(): Promise<BT.Session> {
+		return new Promise<BT.Session>((resolve, reject) => {
+			chrome.windows.getAll({ populate: true }, (windows: Array<chrome.windows.Window>) => {
+
+				const windowsWithTabs = windows.filter(w => (w.tabs || []).length > 0 && w.incognito === false);
+				const sessionWindows: BT.Window[] = windowsWithTabs.map(this.convertWindow);
+				const panelWindow = this.findChromeExtensionWindow(sessionWindows) || BT.NullWindow;
+				const filteredSessionWindows = sessionWindows.filter(w => w !== panelWindow);
+				resolve({
+					windows: filteredSessionWindows,
+					panelWindow
+				});
+			});
+		});
 	}
 
-	private retrieveSession(): BT.Session {
-		const serialisedSession: string = localStorage.getItem('session') || 'null';
-		return JSON.parse(serialisedSession) || BT.EmptySession;
+	private mergeSessions(retrievedSession: BT.Session, liveSession: BT.Session, reason?: string) {
+
+		console.groupCollapsed(`  Merging sessions because ${reason}...`);
+		console.log('live-session:');
+		console.log(JSON.stringify(liveSession));
+		console.log('stored-session:');
+		console.log(JSON.stringify(retrievedSession));
+		this.session = this.sessionMerger.mergeSessions(liveSession, retrievedSession);
+		console.log('merged-session:');
+		console.log(JSON.stringify(this.session));
+		console.groupEnd();
+
+		this.storeSession(this.session);
+		this.onSessionChanged(this.session);
 	}
 
 	private convertWindow(w: chrome.windows.Window): BT.Window {

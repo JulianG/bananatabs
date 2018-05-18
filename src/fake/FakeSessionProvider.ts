@@ -1,30 +1,25 @@
 import * as BT from '../model/CoreTypes';
 import SessionProvider from '../model/SessionProvider';
+import SessionPersistence from '../model/SessionPersistence';
 
 export default class FakeSessionProvider implements SessionProvider {
 
 	public session: BT.Session;
 	public onSessionChanged: (session: BT.Session) => void;
 
-	constructor() {
+	constructor(private persistence: SessionPersistence) {
 		this.session = BT.EmptySession;
 	}
-	
-	initialiseSession(reason?: string): void {
+
+	async initialiseSession(reason?: string) {
 		console.log(`FakeSessionProvider.initialiseSession. reason ${reason}...`);
-		const onSessionChanged = this.onSessionChanged;
-		const retrieveSession = this.retrieveSession;
-		this.session = this.retrieveSession();
-		setTimeout(() => onSessionChanged(retrieveSession()), 125);
+		this.session = await this.persistence.retrieveSession();
+		this.onSessionChanged(this.session);
 	}
 
 	storeSession(session: BT.Session) {
-		const serialisedSession = JSON.stringify(session);
-		localStorage.setItem('session', serialisedSession);
+		console.log(`FakeSessionProvider.storeSession`);
+		this.persistence.storeSession(session);
 	}
 
-	private retrieveSession(): BT.Session {
-		const serialisedSession: string = localStorage.getItem('session') || 'null';
-		return JSON.parse(serialisedSession) || BT.EmptySession;
-	}
 }

@@ -31,7 +31,6 @@ export default class SessionView extends React.Component<Props, State> {
 
 		this.sessionProvider = factory.getSessionProvider();
 		this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
-
 		this.tabMutator = this.windowMutator = new WindowAndTabMutator(this.sessionProvider, factory.getBrowserController());
 
 		this.state = { session: this.sessionProvider.session };
