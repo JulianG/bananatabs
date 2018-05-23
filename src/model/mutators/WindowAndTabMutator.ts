@@ -4,8 +4,8 @@ import TabMutator from './TabMutator';
 import WindowMutator from './WindowMutator';
 import BrowserController from './BrowserController';
 
-import MutedConsole from '../../utils/MutedConsole';
-const console = new MutedConsole();
+// import MutedConsole from '../../utils/MutedConsole';
+// const console = new MutedConsole();
 
 export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
@@ -29,7 +29,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		tab.active = true;
 		this.updateSession();
 
-		this.browser.selectTab(tab.id);
+		this.browser.selectTab(window.id, tab.id);
 	}
 
 	toggleTabVisibility(window: BT.Window, tab: BT.Tab) {
@@ -43,16 +43,11 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	async hideTab(window: BT.Window, tab: BT.Tab) {
 		tab.visible = false;
 		if (window.visible) {
-			console.log('before await browser close tab');
 			await this.browser.closeTab(tab.id);
-			console.log('after await browser close tab');
 			tab.id = -1; // why?
 			this.safeRenameWindow(window);
-			this.updateSession();
-		} else {
-			this.updateSession();
-		}
-		console.log('end of function');
+		} 
+		this.updateSession();
 	}
 
 	async showTab(window: BT.Window, tab: BT.Tab) {
@@ -107,7 +102,6 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	async showWindow(window: BT.Window) {
-
 		window.geometry = this.clampGeomtry(window.geometry);
 		const visibleWindows = this.provider.session.windows.filter(w => w.visible).length;
 		await this.browser.showWindow(window, visibleWindows === 0);
@@ -116,7 +110,6 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	async deleteWindow(window: BT.Window) {
-
 		const index = this.provider.session.windows.indexOf(window);
 		console.assert(index >= 0);
 		try {

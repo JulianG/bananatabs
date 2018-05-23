@@ -6,7 +6,7 @@ export default class LocalStorageSessionPersistence implements SessionPersistenc
 	storeSession(session: BT.Session) {
 		const serialisedSession = JSON.stringify(session);
 		localStorage.setItem('session', serialisedSession);
-		return new Promise((resolve, reject) => { resolve(); });
+		return Promise.resolve({}); 
 	}
 
 	retrieveSession(): Promise<BT.Session> {
