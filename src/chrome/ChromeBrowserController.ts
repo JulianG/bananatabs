@@ -67,7 +67,6 @@ export default class ChromeBrowserController implements BrowserController {
 			type: window.type,
 			url: window.tabs.filter(t => t.visible).map(t => t.url)
 		};
-		// return promisify(chrome.windows.create, createData);
 
 		const newWindow = await makePromise<chrome.windows.Window>(chrome.windows.create, createData);
 
@@ -78,21 +77,5 @@ export default class ChromeBrowserController implements BrowserController {
 		} else {
 			throw( new Error('Error. Failed to create window.'));
 		}
-
-		// return new Promise((resolve, reject) => {
-		// 	try {
-		// 		chrome.windows.create(createData, newWindow => {
-		// 			if (newWindow) {
-		// 				window.visible = true;
-		// 				window.id = newWindow.id;
-		// 				resolve(window);
-		// 			} else {
-		// 				reject();
-		// 			}
-		// 		});
-		// 	} catch (e) {
-		// 		reject(e);
-		// 	}
-		// });
 	}
 }
