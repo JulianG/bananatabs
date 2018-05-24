@@ -1,27 +1,34 @@
 import * as BT from '../model/CoreTypes';
-import { makePromise } from './Promisify';
+import { promisify } from '../utils/Promisify';
 import BrowserController from '../model/mutators/BrowserController';
 
 // import MutedConsole from '../utils/MutedConsole';
 // const console = new MutedConsole();
 
+const chromeWindowsCreate = promisify<chrome.windows.Window>(chrome.windows.create);
+const chromeWindowsUpdate = promisify(chrome.windows.update);
+const chromeWindowsRemove = promisify(chrome.windows.remove);
+const chromeTabsCreate = promisify<chrome.tabs.Tab>(chrome.tabs.create);
+const chromeTabsUpdate = promisify(chrome.tabs.update);
+const chromeTabsRemove = promisify(chrome.tabs.remove);
+
 export default class ChromeBrowserController implements BrowserController {
 
 	public async closeWindow(id: number) {
 		console.log(`ChromeBrowserController.closeWindow(${id}) ...`);
-		return makePromise(chrome.windows.remove, id);
+		return chromeWindowsRemove(id);
 	}
 
 	public async closeTab(id: number) {
 		console.log(`ChromeBrowserController.closeTab(${id}) ...`);
-		return makePromise(chrome.tabs.remove, id);
+		return chromeTabsRemove(id);
 	}
 
 	public async selectTab(windowId: number, tabId: number) {
 		console.log(`ChromeBrowserController.selectTab(${tabId}) ...`);
-
-		const windowPromise = makePromise(chrome.windows.update, windowId, { focused: true });
-		const tabPromise = makePromise(chrome.tabs.update, tabId, { active: true });
+		
+		const windowPromise = chromeWindowsUpdate(windowId, { focused: true });
+		const tabPromise = chromeTabsUpdate(tabId, { active: true });
 		return Promise.all([windowPromise, tabPromise]);
 	}
 
@@ -33,7 +40,7 @@ export default class ChromeBrowserController implements BrowserController {
 			url: tab.url,
 			active: tab.active
 		};
-		return makePromise<chrome.tabs.Tab>(chrome.tabs.create, props).then(newTab => {
+		return chromeTabsCreate(props).then(newTab => {
 			tab.id = newTab.id || -1;
 		});
 	}
@@ -56,7 +63,7 @@ export default class ChromeBrowserController implements BrowserController {
 	/////
 
 	private _createMinimisedWindow(): Promise<chrome.windows.Window> {
-		return makePromise(chrome.windows.create, { type: 'normal', state: 'minimized' });
+		return chromeWindowsCreate({ type: 'normal', state: 'minimized' });
 	}
 
 	private async _showWindow(window: BT.Window): Promise<BT.Window> {
@@ -68,14 +75,14 @@ export default class ChromeBrowserController implements BrowserController {
 			url: window.tabs.filter(t => t.visible).map(t => t.url)
 		};
 
-		const newWindow = await makePromise<chrome.windows.Window>(chrome.windows.create, createData);
+		const newWindow = await chromeWindowsCreate(createData);
 
 		if (newWindow) {
 			window.visible = true;
 			window.id = newWindow.id;
 			return (window);
 		} else {
-			throw( new Error('Error. Failed to create window.'));
+			throw (new Error('Error. Failed to create window.'));
 		}
 	}
 }
