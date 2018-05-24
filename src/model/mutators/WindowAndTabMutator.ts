@@ -4,8 +4,8 @@ import TabMutator from './TabMutator';
 import WindowMutator from './WindowMutator';
 import BrowserController from './BrowserController';
 
-// import MutedConsole from '../../utils/MutedConsole';
-// const console = new MutedConsole();
+import MutedConsole from '../../utils/MutedConsole';
+const console = new MutedConsole();
 
 export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
@@ -16,7 +16,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
 	renameItem(item: BT.ListItem, title: string) {
 		item.title = title;
-		this.updateSession();
+		this.storeSession();
 	}
 
 	// TabMutator
@@ -27,8 +27,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 			t.active = false;
 		});
 		tab.active = true;
-		this.updateSession();
-
+		this.storeSession();
 		this.browser.selectTab(window.id, tab.id);
 	}
 
@@ -41,22 +40,24 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	async hideTab(window: BT.Window, tab: BT.Tab) {
+		console.log(`WindowAndTabMutator.hideTab:`);
 		tab.visible = false;
+		this.storeSession();
 		if (window.visible) {
+			this.safeRenameWindow(window);
 			await this.browser.closeTab(tab.id);
 			tab.id = -1; // why?
-			this.safeRenameWindow(window);
-		} 
-		this.updateSession();
+		}
 	}
 
 	async showTab(window: BT.Window, tab: BT.Tab) {
 		tab.visible = true;
+		this.storeSession();
+		this.dispatchSessionChange();
 		if (window.visible) {
 			await this.browser.createTab(window, tab);
-			this.updateSession();
 		} else {
-			this.showWindow(window);
+			this._showWindow(window);
 		}
 	}
 
@@ -64,49 +65,44 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		const tabIndex = window.tabs.indexOf(tab);
 		console.assert(tabIndex >= 0);
 		window.tabs.splice(tabIndex, 1);
-
 		if (window.visible && tab.visible) {
 			this.safeRenameWindow(window);
 			await this.browser.closeTab(tab.id);
-			this.updateSession();
-		} else {
-			this.updateSession();
 		}
+		this.storeSession();
 	}
 
 	/// WindowMutator
 
 	collapseWindow(window: BT.Window) {
 		window.expanded = false;
-		this.updateSession();
+		this.storeSession();
+		this.dispatchSessionChange();
 	}
 
 	expandWindow(window: BT.Window) {
 		window.expanded = true;
-		this.updateSession();
+		this.storeSession();
+		this.dispatchSessionChange();
 	}
 
-	toggleWindowVisibility(window: BT.Window) {
+	async toggleWindowVisibility(window: BT.Window) {
 		if (window.visible) {
-			this.hideWindow(window);
+			await this._hideWindow(window);
 		} else {
-			this.showWindow(window);
+			await this._showWindow(window);
 		}
+		this.dispatchSessionChange();
 	}
 
 	async hideWindow(window: BT.Window) {
-		this.safeRenameWindow(window);
-		window.visible = false;
-		await this.browser.closeWindow(window.id);
-		this.updateSession();
+		await this._hideWindow(window);
+		this.dispatchSessionChange();
 	}
 
 	async showWindow(window: BT.Window) {
-		window.geometry = this.clampGeomtry(window.geometry);
-		const visibleWindows = this.provider.session.windows.filter(w => w.visible).length;
-		await this.browser.showWindow(window, visibleWindows === 0);
-		window.visible = true;
-		this.updateSession();
+		await this._showWindow(window);
+		this.dispatchSessionChange();
 	}
 
 	async deleteWindow(window: BT.Window) {
@@ -115,10 +111,27 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		try {
 			await this.browser.closeWindow(window.id);
 			this.provider.session.windows.splice(index, 1);
-			this.updateSession();
+			this.storeSession();
 		} catch (e) {
 			console.warn(`Could not delete window for real... ${window.id}`);
 		}
+	}
+
+	///
+
+	private async _hideWindow(window: BT.Window) {
+		this.safeRenameWindow(window);
+		window.visible = false;
+		this.storeSession();
+		await this.browser.closeWindow(window.id);
+	}
+
+	private async _showWindow(window: BT.Window) {
+		window.geometry = this.clampGeomtry(window.geometry);
+		const visibleWindows = this.provider.session.windows.filter(w => w.visible).length;
+		window.visible = true;
+		this.storeSession();
+		await this.browser.showWindow(window, visibleWindows === 0);
 	}
 
 	///
@@ -127,11 +140,14 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		window.title = window.title || 'My Window';
 	}
 
-	private updateSession() {
+	private storeSession() {
 		this.provider.storeSession(this.provider.session);
-		this.provider.onSessionChanged(this.provider.session);
 	}
 
+	private dispatchSessionChange() {
+		this.provider.onSessionChanged(this.provider.session);
+	}
+	
 	private clampGeomtry(g: BT.Geometry): BT.Geometry {
 		const cg = { ...g };
 		const gRight = g.left + g.width;
@@ -151,5 +167,4 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
 		return cg;
 	}
-
 }
