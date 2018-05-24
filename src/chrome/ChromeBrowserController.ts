@@ -1,34 +1,27 @@
 import * as BT from '../model/CoreTypes';
-import { promisify } from '../utils/Promisify';
+import { PromisingChromeAPI } from './PromisingChromeAPI';
 import BrowserController from '../model/mutators/BrowserController';
 
-// import MutedConsole from '../utils/MutedConsole';
-// const console = new MutedConsole();
-
-const chromeWindowsCreate = promisify<chrome.windows.Window>(chrome.windows.create);
-const chromeWindowsUpdate = promisify(chrome.windows.update);
-const chromeWindowsRemove = promisify(chrome.windows.remove);
-const chromeTabsCreate = promisify<chrome.tabs.Tab>(chrome.tabs.create);
-const chromeTabsUpdate = promisify(chrome.tabs.update);
-const chromeTabsRemove = promisify(chrome.tabs.remove);
+import MutedConsole from '../utils/MutedConsole';
+const console = new MutedConsole();
 
 export default class ChromeBrowserController implements BrowserController {
 
 	public async closeWindow(id: number) {
 		console.log(`ChromeBrowserController.closeWindow(${id}) ...`);
-		return chromeWindowsRemove(id);
+		return PromisingChromeAPI.windows.remove(id);
 	}
 
 	public async closeTab(id: number) {
 		console.log(`ChromeBrowserController.closeTab(${id}) ...`);
-		return chromeTabsRemove(id);
+		return PromisingChromeAPI.tabs.remove(id);
 	}
 
 	public async selectTab(windowId: number, tabId: number) {
 		console.log(`ChromeBrowserController.selectTab(${tabId}) ...`);
-		
-		const windowPromise = chromeWindowsUpdate(windowId, { focused: true });
-		const tabPromise = chromeTabsUpdate(tabId, { active: true });
+
+		const windowPromise = PromisingChromeAPI.windows.update(windowId, { focused: true });
+		const tabPromise = PromisingChromeAPI.tabs.update(tabId, { active: true });
 		return Promise.all([windowPromise, tabPromise]);
 	}
 
@@ -40,21 +33,15 @@ export default class ChromeBrowserController implements BrowserController {
 			url: tab.url,
 			active: tab.active
 		};
-		return chromeTabsCreate(props).then(newTab => {
+		return PromisingChromeAPI.tabs.create(props).then(newTab => {
 			tab.id = newTab.id || -1;
 		});
 	}
 
-	public async showWindow(window: BT.Window, first: boolean) {
-		console.log(`ChromeBrowserController.createTab(...) ...`);
-		if (first) {
-			try {
-				const newWindow = await this._createMinimisedWindow();
-				await this._showWindow(window);
-				return this.closeWindow(newWindow.id);
-			} catch (e) {
-				return this._showWindow(window);
-			}
+	public async showWindow(window: BT.Window, asFirst: boolean) {
+		console.log(`ChromeBrowserController.showWindow(...) ...`);
+		if (asFirst) {
+			return this._showWindowAsFirst(window);
 		} else {
 			return this._showWindow(window);
 		}
@@ -62,8 +49,30 @@ export default class ChromeBrowserController implements BrowserController {
 
 	/////
 
-	private _createMinimisedWindow(): Promise<chrome.windows.Window> {
-		return chromeWindowsCreate({ type: 'normal', state: 'minimized' });
+	private _createMinimisedWindow() {
+		return PromisingChromeAPI.windows.create({ type: 'normal', state: 'minimized' });
+	}
+
+	private async _showWindowAsFirst(window: BT.Window) {
+		/*
+		This is a horrible work-around for when Chrome settings are
+		set to re-open the last open session.
+		We only call this if there are no other windows open.
+		We first create an "empty" minimised window, just in case
+		Chrome wants to add a bunch of previously opened tabs to it.
+		Then we open the window that the user is trying to show.
+		Then we close the minimised window.
+		 */
+		try {
+			const minWindow = await this._createMinimisedWindow();
+			await this._showWindow(window);
+			if (minWindow) {
+				await this.closeWindow(minWindow.id);				
+			}
+			return Promise.resolve(window);
+		} catch (e) {
+			return this._showWindow(window);
+		}
 	}
 
 	private async _showWindow(window: BT.Window): Promise<BT.Window> {
@@ -75,7 +84,7 @@ export default class ChromeBrowserController implements BrowserController {
 			url: window.tabs.filter(t => t.visible).map(t => t.url)
 		};
 
-		const newWindow = await chromeWindowsCreate(createData);
+		const newWindow = await PromisingChromeAPI.windows.create(createData);
 
 		if (newWindow) {
 			window.visible = true;
