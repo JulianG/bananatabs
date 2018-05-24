@@ -38,7 +38,10 @@ export default class ChromeBrowserController implements BrowserController {
 		});
 	}
 
-	public async showWindow(window: BT.Window, asFirst: boolean) {
+	public async showWindow(window: BT.Window) {
+
+		const liveWindows = await PromisingChromeAPI.windows.getAll({});
+		const asFirst = liveWindows.length <= 1;
 		console.log(`ChromeBrowserController.showWindow(...) ...`);
 		if (asFirst) {
 			return this._showWindowAsFirst(window);
@@ -48,10 +51,6 @@ export default class ChromeBrowserController implements BrowserController {
 	}
 
 	/////
-
-	private _createMinimisedWindow() {
-		return PromisingChromeAPI.windows.create({ type: 'normal', state: 'minimized' });
-	}
 
 	private async _showWindowAsFirst(window: BT.Window) {
 		/*
@@ -67,12 +66,16 @@ export default class ChromeBrowserController implements BrowserController {
 			const minWindow = await this._createMinimisedWindow();
 			await this._showWindow(window);
 			if (minWindow) {
-				await this.closeWindow(minWindow.id);				
+				await this.closeWindow(minWindow.id);
 			}
 			return Promise.resolve(window);
 		} catch (e) {
 			return this._showWindow(window);
 		}
+	}
+
+	private _createMinimisedWindow() {
+		return PromisingChromeAPI.windows.create({ type: 'normal', state: 'minimized' });
 	}
 
 	private async _showWindow(window: BT.Window): Promise<BT.Window> {

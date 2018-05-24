@@ -1,5 +1,6 @@
 import { promisify } from '../utils/Promisify';
 
+const winsGetAll = promisify<chrome.windows.Window[]>(chrome.windows.getAll);
 const winsCreate = promisify<chrome.windows.Window | undefined>(chrome.windows.create);
 const winsUpdate = promisify<chrome.windows.Window>(chrome.windows.update);
 const winsRemove = promisify<void>(chrome.windows.remove);
@@ -9,6 +10,10 @@ const tabsRemove = promisify<void>(chrome.tabs.remove);
 
 export const PromisingChromeAPI = {
 	windows: {
+
+		getAll: (getInfo: chrome.windows.GetInfo) => {
+			return winsGetAll(getInfo);
+		},
 		create: (createData: chrome.windows.CreateData) => {
 			return winsCreate(createData);
 		},

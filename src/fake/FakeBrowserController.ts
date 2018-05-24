@@ -19,7 +19,7 @@ export default class FakeBrowserController implements BrowserController {
 		return Promise.resolve();
 	}
 
-	public showWindow(window: BT.Window, first: boolean) {
+	public showWindow(window: BT.Window) {
 		console.log(`FakeBrowserController.showWindow(...) ...`);
 		return Promise.resolve();
 	}

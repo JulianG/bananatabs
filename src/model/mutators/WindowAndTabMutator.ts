@@ -128,10 +128,9 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
 	private async _showWindow(window: BT.Window) {
 		window.geometry = this.clampGeomtry(window.geometry);
-		const visibleWindows = this.provider.session.windows.filter(w => w.visible).length;
 		window.visible = true;
 		this.storeSession();
-		await this.browser.showWindow(window, visibleWindows === 0);
+		await this.browser.showWindow(window);
 	}
 
 	///
