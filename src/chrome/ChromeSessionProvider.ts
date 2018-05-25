@@ -41,12 +41,25 @@ export default class ChromeSessionProvider implements SessionProvider {
 
 	async initialiseSession(reason?: string) {
 
-		console.log(`SessionProvider.initialiseSession because ${reason}. calling chrome.windows.getAll...`);
+		console.log(`SessionProvider.initialiseSession because ${reason}.
+		 getting sessions from disk and chrome.windows.getAll...`);
 		const retrievedSession = await this.persistence.retrieveSession();
 		console.log(`... retrieved session`);
 		const liveSession = await this.getChromeSession();
 		console.log(`... got chrome live session`);
-		this.mergeSessions(retrievedSession, liveSession, reason);
+		this.session = this.mergeSessions(retrievedSession, liveSession, reason);
+		this.storeSession(this.session);
+		this.onSessionChanged(this.session);
+	}
+
+	async updateSession(reason?: string) {
+		console.log(`SessionProvider.updateSession because ${reason}.
+		 calling only chrome.windows.getAll...`);
+		const liveSession = await this.getChromeSession();
+		console.log(`... got chrome live session`);
+		this.session = this.mergeSessions(this.session, liveSession, reason);
+		this.storeSession(this.session);
+		this.onSessionChanged(this.session);
 	}
 
 	storeSession(session: BT.Session) {
@@ -78,13 +91,11 @@ export default class ChromeSessionProvider implements SessionProvider {
 		console.log(JSON.stringify(liveSession));
 		console.log('stored-session:');
 		console.log(JSON.stringify(retrievedSession));
-		this.session = this.sessionMerger.mergeSessions(liveSession, retrievedSession);
+		const session = this.sessionMerger.mergeSessions(liveSession, retrievedSession);
 		console.log('merged-session:');
-		console.log(JSON.stringify(this.session));
+		console.log(JSON.stringify(session));
 		console.groupEnd();
-
-		this.storeSession(this.session);
-		this.onSessionChanged(this.session);
+		return session;
 	}
 
 	private convertWindow(w: chrome.windows.Window): BT.Window {
@@ -127,16 +138,16 @@ export default class ChromeSessionProvider implements SessionProvider {
 	}
 
 	private onWindowRemoved(id: number) {
-		this.initialiseSession('onWindowRemoved ' + id);
+		this.updateSession('onWindowRemoved ' + id);
 	}
 
 	private onTabsCreated(tab: chrome.tabs.Tab) {
-		console.log(`NOT MERGING -- onTabsCreated ${JSON.stringify(tab, null, 2)}`);
+		this.updateSession(`onTabsCreated ${JSON.stringify(tab, null, 2)}`);
 	}
 
 	private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
 		if (this.isPanelTab(id) === false && changeInfo.status === 'complete') {
-			this.initialiseSession(`onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
+			this.updateSession(`onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
 		} else {
 			console.log(`NOT MERGING -- onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
 		}
@@ -144,17 +155,17 @@ export default class ChromeSessionProvider implements SessionProvider {
 
 	private onTabsMoved(id: number, moveInfo: chrome.tabs.TabMoveInfo) {
 		if (this.isPanelTab(id) === false) {
-			this.initialiseSession('onTabsMoved');
+			this.updateSession('onTabsMoved');
 		}
 	}
 
 	private onTabsAttached(id: number, info: chrome.tabs.TabAttachInfo) {
-		this.initialiseSession('onTabsAttached');
+		this.updateSession('onTabsAttached');
 	}
 
 	private onTabsRemoved(id: number, removedInfo: chrome.tabs.TabRemoveInfo) {
 		if (this.isPanelTab(id) === false && removedInfo.isWindowClosing === false) {
-			this.initialiseSession(`onTabsRemoved - ${id} - ${JSON.stringify(removedInfo)}`);
+			this.updateSession(`onTabsRemoved - ${id} - ${JSON.stringify(removedInfo)}`);
 		}
 	}
 

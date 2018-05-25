@@ -50,7 +50,7 @@ export default class SessionView extends React.Component<Props, State> {
 			this.setState({ session });
 		};
 
-		this.refreshWindowList('componentDidMount');
+		this.sessionProvider.initialiseSession('componentDidMount');
 	}
 
 	componentWillMount() {
@@ -105,12 +105,12 @@ export default class SessionView extends React.Component<Props, State> {
 	}
 
 	private handleResizeEvent(e: UIEvent) {
-		this.refreshWindowList('resize');
+		this.sessionProvider.updateSession('handleResizeEvent');
 	}
 
-	private refreshWindowList(reason?: string) {
-		this.sessionProvider.initialiseSession('refreshWindowList ' + reason);
-	}
+	// private refreshWindowList(reason?: string) {
+		// this.sessionProvider.initialiseSession('refreshWindowList ' + reason);
+	// }
 
 	private onListUpdated(items: BT.Window[]) {
 		this.sessionMutator.updateWindows(items);
