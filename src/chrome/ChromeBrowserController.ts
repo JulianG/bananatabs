@@ -9,7 +9,12 @@ export default class ChromeBrowserController implements BrowserController {
 
 	public async closeWindow(id: number) {
 		console.log(`ChromeBrowserController.closeWindow(${id}) ...`);
-		return PromisingChromeAPI.windows.remove(id);
+		return PromisingChromeAPI.windows.remove(id)
+			.then(() => id)
+			.catch(e => {
+				console.warn(`Could not delete window for real... ${id}`);
+				console.warn(e);
+			});
 	}
 
 	public async closeTab(id: number) {

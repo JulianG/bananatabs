@@ -108,13 +108,12 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	async deleteWindow(window: BT.Window) {
 		const index = this.provider.session.windows.indexOf(window);
 		console.assert(index >= 0);
-		try {
+		this.provider.session.windows.splice(index, 1);
+		this.storeSession();
+		if (window.visible) {
 			await this.browser.closeWindow(window.id);
-			this.provider.session.windows.splice(index, 1);
-			this.storeSession();
-		} catch (e) {
-			console.warn(`Could not delete window for real... ${window.id}`);
 		}
+		this.dispatchSessionChange();
 	}
 
 	///
@@ -146,7 +145,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	private dispatchSessionChange() {
 		this.provider.onSessionChanged(this.provider.session);
 	}
-	
+
 	private clampGeomtry(g: BT.Geometry): BT.Geometry {
 		const cg = { ...g };
 		const gRight = g.left + g.width;
