@@ -32,24 +32,16 @@ export default class SessionView extends React.Component<Props, State> {
 		this.sessionProvider = factory.getSessionProvider();
 		this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
 		this.tabMutator = this.windowMutator = new WindowAndTabMutator(this.sessionProvider, factory.getBrowserController());
-
 		this.state = { session: this.sessionProvider.session };
-
 		this.itemRenderer = this.itemRenderer.bind(this);
-
 		this.printState = this.printState.bind(this);
 		this.handleResizeEvent = this.handleResizeEvent.bind(this);
 		this.onListUpdated = this.onListUpdated.bind(this);
 	}
 
 	componentDidMount() {
-
 		window.addEventListener('resize', this.handleResizeEvent);
-
-		this.sessionProvider.onSessionChanged = (session) => {
-			this.setState({ session });
-		};
-
+		this.sessionProvider.onSessionChanged = session => this.setState({ session });
 		this.sessionProvider.initialiseSession('componentDidMount');
 	}
 
