@@ -17,12 +17,16 @@ export default class FakeSessionProvider implements SessionProvider {
 		this.onSessionChanged(this.session);
 	}
 
-	updateSession(reason?: string) {
+	async updateSession(reason?: string) {
 		console.log(`FakeSessionProvider.updateSession. reason ${reason}...`);
 		this.onSessionChanged(this.session);
 	}
 
-	storeSession(session: BT.Session) {
+	async updateSessionSilently(reason?: string) {
+		console.log(`FakeSessionProvider.updateSessionSilently. reason ${reason}...`);
+	}
+
+	async storeSession(session: BT.Session) {
 		console.log(`FakeSessionProvider.storeSession`);
 		this.persistence.storeSession(session);
 	}

@@ -126,7 +126,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	private async _showWindow(window: BT.Window) {
-		window.geometry = this.clampGeomtry(window.geometry);
+		window.geometry = this.clampGeometry(window.geometry);
 		window.visible = true;
 		this.storeSession();
 		await this.browser.showWindow(window);
@@ -146,23 +146,15 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		this.provider.onSessionChanged(this.provider.session);
 	}
 
-	private clampGeomtry(g: BT.Geometry): BT.Geometry {
-		const cg = { ...g };
-		const gRight = g.left + g.width;
-		const gBottom = g.top + g.height;
+	private clampGeometry(g: BT.Geometry): BT.Geometry {
+		const screenW = window.screen.availHeight;
+		const screenH = window.screen.availHeight;
 
-		const availWidth = window.screen.availHeight;
-		const availHeight = window.screen.availHeight;
-
-		cg.left = gRight > availWidth ? Math.max(0, g.left + gRight - availWidth) : g.left;
-		cg.top = gBottom > availHeight ? Math.max(0, g.top + gBottom - availHeight) : g.top;
-
-		const cgRight = cg.left + cg.width;
-		const cgBottom = cg.top + cg.height;
-
-		cg.width = cgRight > availWidth ? availWidth : cg.width;
-		cg.height = cgBottom > availHeight ? availHeight : cg.height;
-
-		return cg;
+		return {
+			width: g.width,
+			height: g.height,
+			left: (g.left > screenW) ? 0 : g.left,
+			top: (g.top > screenH) ? 0 : g.top
+		};
 	}
 }

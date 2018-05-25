@@ -80,7 +80,11 @@ export default class ChromeBrowserController implements BrowserController {
 	}
 
 	private _createMinimisedWindow() {
-		return PromisingChromeAPI.windows.create({ type: 'normal', state: 'minimized' });
+		return PromisingChromeAPI.windows.create({
+			type: 'normal',
+			state: 'minimized',
+			url: 'chrome://version/?bananatabs-ignore'
+		});
 	}
 
 	private async _showWindow(window: BT.Window): Promise<BT.Window> {

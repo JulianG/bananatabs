@@ -18,10 +18,13 @@ export class DefaultSessionMerger implements SessionMerger {
 		stored.windows.forEach((storedWindow, storedWindowIndex) => {
 
 			console.group('processing a stored window: ' + storedWindow.id + ' ' + storedWindow.title);
-			
+
 			console.log('looking for a live matching window...');
 
-			const liveMatchingWindow = live.windows.find(liveWindow => this.compareWindows(liveWindow, storedWindow) > 0.75);
+			const liveMatchingWindow = live.windows.find(liveWindow => {
+				return this.compareWindows(liveWindow, storedWindow) > 0.75 &&
+					this.shouldAddLiveWindow(liveWindow, live);
+			});
 			if (liveMatchingWindow) {
 				console.log('found liveMatchingWindow: ' + liveMatchingWindow.id + ' ' + liveMatchingWindow.title);
 				liveMatchingWindow.title = storedWindow.title;
@@ -48,7 +51,7 @@ export class DefaultSessionMerger implements SessionMerger {
 		});
 
 		const nonMatchedWindows = live.windows.filter(liveW => {
-			return liveW.id !== live.panelWindow.id && !mergedSessionWindows.some(msW => msW.id === liveW.id);
+			return this.shouldAddLiveWindow(liveW, live) && !mergedSessionWindows.some(msW => msW.id === liveW.id);
 		});
 
 		console.group('adding nonMatchedWindows...');
@@ -131,6 +134,11 @@ export class DefaultSessionMerger implements SessionMerger {
 		} else {
 			console.warn('duplicate window: ', window.id, window.title);
 		}
+	}
+
+	private shouldAddLiveWindow(liveW: BT.Window, liveSession: BT.Session): boolean {
+		return liveW.id !== liveSession.panelWindow.id &&
+			liveW.tabs.every(t => t.url.indexOf('bananatabs-ignore') < 0);
 	}
 
 }
