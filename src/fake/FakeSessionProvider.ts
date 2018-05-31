@@ -8,7 +8,12 @@ export default class FakeSessionProvider implements SessionProvider {
 	public onSessionChanged: (session: BT.Session) => void;
 
 	constructor(private persistence: SessionPersistence) {
+		console.error('WAT!?');
 		this.session = BT.EmptySession;
+	}
+
+	getWindow(id: number): BT.Window | undefined {
+		return { ...BT.NullWindow, id };
 	}
 
 	async initialiseSession(reason?: string) {
@@ -22,13 +27,16 @@ export default class FakeSessionProvider implements SessionProvider {
 		this.onSessionChanged(this.session);
 	}
 
-	async updateSessionSilently(reason?: string) {
-		console.log(`FakeSessionProvider.updateSessionSilently. reason ${reason}...`);
-	}
-
 	async storeSession(session: BT.Session) {
 		console.log(`FakeSessionProvider.storeSession`);
 		this.persistence.storeSession(session);
+	}
+
+	hookBrowserEvents() {
+		console.log(`FakeSessionProvider.hookBrowserEvents`);
+	}
+	unhookBrowserEvents() {
+		console.log(`FakeSessionProvider.unhookBrowserEvents`);
 	}
 
 }

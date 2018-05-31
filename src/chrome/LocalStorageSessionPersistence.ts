@@ -1,12 +1,17 @@
 import * as BT from '../model/CoreTypes';
 import SessionPersistence from '../model/SessionPersistence';
+import * as Logging from '../utils/Logging';
 
 export default class LocalStorageSessionPersistence implements SessionPersistence {
 
 	storeSession(session: BT.Session) {
 		const serialisedSession = JSON.stringify(session);
+		
+		console.log('LocalStorageSessionPersistence.storeSession:');
+		Logging.printSession(session);
+		
 		localStorage.setItem('session', serialisedSession);
-		return Promise.resolve({}); 
+		return Promise.resolve({});
 	}
 
 	retrieveSession(): Promise<BT.Session> {

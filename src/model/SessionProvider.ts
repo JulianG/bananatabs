@@ -5,6 +5,10 @@ export default interface SessionProvider {
 	onSessionChanged(session: BT.Session): void;
 	initialiseSession(reason?: string): Promise<void>;
 	updateSession(reason?: string): Promise<void>;
-	updateSessionSilently(reason?: string): Promise<void>;
 	storeSession(session: BT.Session): Promise<void>;
+
+	getWindow(id: number): BT.Window | undefined;
+	
+	hookBrowserEvents(): void;
+	unhookBrowserEvents(): void;
 }

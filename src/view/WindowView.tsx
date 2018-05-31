@@ -173,7 +173,7 @@ export default class WindowView extends React.Component<Props, State> {
 	////
 
 	private handleToggleVisibility() {
-		this.props.windowMutator.toggleWindowVisibility(this.props.window);
+		this.props.windowMutator.toggleWindowVisibility(this.props.window.id);
 	}
 
 	private handleDelete() {
