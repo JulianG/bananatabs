@@ -22,11 +22,11 @@ export default class ChromeSessionProvider implements SessionProvider {
 		this.convertTab = this.convertTab.bind(this);
 
 		if (chrome && chrome.tabs) {
-			chrome.windows.onRemoved.addListener((id) => this.initialiseSession(`onWindowRemoved ${id}`));
-			chrome.windows.onFocusChanged.addListener((_) => this._updateSession('onFocusChanged'));
+			chrome.windows.onRemoved.addListener((id) => this.updateSession(`onWindowRemoved ${id}`));
+			chrome.windows.onFocusChanged.addListener((_) => this.updateSession('onFocusChanged'));
 			chrome.tabs.onCreated.addListener((tab) => this.updateSession(`onTabsCreated ${tab.id}`));
 			chrome.tabs.onUpdated.addListener(this.onTabsUpdated.bind(this));
-			chrome.tabs.onMoved.addListener(this.onTabsMoved.bind(this));
+			chrome.tabs.onMoved.addListener((_) => this.updateSession('onTabsMoved'));
 			chrome.tabs.onAttached.addListener((id, info) => this.updateSession('onTabsAttached'));
 			chrome.tabs.onRemoved.addListener(this.onTabsRemoved.bind(this));
 			chrome.tabs.onActivated.addListener((_) => this.updateSession('onActivated'));
@@ -113,9 +113,8 @@ export default class ChromeSessionProvider implements SessionProvider {
 	}
 
 	private mergeSessions(retrievedSession: BT.Session, liveSession: BT.Session, reason?: string) {
-		console.groupCollapsed(`  Merging sessions because ${reason}...`);
+		console.log(`  Merging sessions because ${reason}...`);
 		const session = this.sessionMerger.mergeSessions(liveSession, retrievedSession);
-		console.groupEnd();
 		return session;
 	}
 
@@ -160,14 +159,6 @@ export default class ChromeSessionProvider implements SessionProvider {
 	private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
 		if (this.isPanelTab(id) === false && changeInfo.status === 'complete') {
 			this.updateSession(`onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
-		} else {
-			console.log(`NOT MERGING -- onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
-		}
-	}
-
-	private onTabsMoved(id: number, moveInfo: chrome.tabs.TabMoveInfo) {
-		if (this.isPanelTab(id) === false) {
-			this.updateSession('onTabsMoved');
 		}
 	}
 
