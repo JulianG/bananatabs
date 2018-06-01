@@ -11,13 +11,13 @@ import LocalStorageSessionPersistence from '../chrome/LocalStorageSessionPersist
 
 export default class BananaFactory {
 
-	getBrowserController(): BrowserController {
+	createBrowserController(): BrowserController {
 		return (chrome && chrome.windows && chrome.tabs) ?
 			new ChromeBrowserController() :
 			new FakeBrowserController();
 	}
 
-	getSessionProvider(): SessionProvider {
+	createSessionProvider(): SessionProvider {
 		return (chrome && chrome.windows && chrome.tabs) ?
 			new ChromeSessionProvider(new DefaultSessionMerger(), new LocalStorageSessionPersistence()) :
 			new FakeSessionProvider(new LocalStorageSessionPersistence());
