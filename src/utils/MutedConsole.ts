@@ -3,7 +3,8 @@ tslint:disable no-any
 tslint:disable no-empty
 */
 
-export default class MutedConsole implements Console {
+class MutedConsole implements Console {
+
 	memory: any;
 	Console: NodeJS.ConsoleConstructor;
 	assert(test?: boolean, message?: string, ...optionalParams: any[]): void { }
@@ -34,3 +35,8 @@ export default class MutedConsole implements Console {
 	trace(message?: any, ...optionalParams: any[]): void { }
 	warn(message?: any, ...optionalParams: any[]): void { }
 }
+
+const mutedConsole = new MutedConsole();
+export default mutedConsole;
+
+console.log('Using MutedConsole');

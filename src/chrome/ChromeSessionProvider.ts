@@ -3,8 +3,7 @@ import SessionProvider from '../model/SessionProvider';
 import SessionMerger from '../model/SessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 
-import MutedConsole from '../utils/MutedConsole';
-const console = new MutedConsole();
+import console from '../utils/MutedConsole';
 
 export default class ChromeSessionProvider implements SessionProvider {
 

@@ -1,7 +1,6 @@
 import * as BT from './CoreTypes';
 
-import MutedConsole from '../utils/MutedConsole';
-const console = new MutedConsole();
+import console from '../utils/MutedConsole';
 
 export default interface SessionMerger {
 	mergeSessions(live: BT.Session, stored: BT.Session): BT.Session;

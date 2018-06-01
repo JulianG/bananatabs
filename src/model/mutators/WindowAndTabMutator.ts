@@ -4,8 +4,7 @@ import TabMutator from './TabMutator';
 import WindowMutator from './WindowMutator';
 import BrowserController from './BrowserController';
 
-import MutedConsole from '../../utils/MutedConsole';
-const console = new MutedConsole();
+import console from '../../utils/MutedConsole';
 
 export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 

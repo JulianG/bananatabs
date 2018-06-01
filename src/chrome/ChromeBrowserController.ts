@@ -2,8 +2,7 @@ import * as BT from '../model/CoreTypes';
 import { PromisingChromeAPI } from './PromisingChromeAPI';
 import BrowserController from '../model/mutators/BrowserController';
 
-import MutedConsole from '../utils/MutedConsole';
-const console = new MutedConsole();
+import console from '../utils/MutedConsole';
 
 export default class ChromeBrowserController implements BrowserController {
 
