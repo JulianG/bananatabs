@@ -91,15 +91,15 @@ export default class TabView extends React.Component<Props, State> {
 	}
 
 	private onSelectAction() {
-		this.props.mutator.selectTab(this.props.window, this.props.tab);
+		this.props.mutator.selectTab(this.props.window.id, this.props.tab.id);
 	}
 
 	private onToggleVisibilityAction() {
-		this.props.mutator.toggleTabVisibility(this.props.window, this.props.tab);
+		this.props.mutator.toggleTabVisibility(this.props.window.id, this.props.tab.id);
 	}
 
 	private onDeleteAction() {
-		this.props.mutator.deleteTab(this.props.window, this.props.tab);
+		this.props.mutator.deleteTab(this.props.window.id, this.props.tab.id);
 	}
 
 	private showTools() {

@@ -16,6 +16,10 @@ export default class FakeSessionProvider implements SessionProvider {
 		return { ...BT.NullWindow, id };
 	}
 
+	getTab(id: number): BT.Tab | undefined {
+		return { ...BT.NullTab, id };
+	}
+
 	async initialiseSession(reason?: string) {
 		console.log(`FakeSessionProvider.initialiseSession. reason ${reason}...`);
 		this.session = await this.persistence.retrieveSession();

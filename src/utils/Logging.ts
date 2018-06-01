@@ -10,3 +10,18 @@ export const printSession = (session: BT.Session) => {
 		};
 	}));
 };
+
+export const printSessionDetailed = (session: BT.Session) => {
+	session.windows.filter(w => w.visible).forEach(w => {
+		console.log(`Window id: ${w.id}, ${w.title}`);
+		console.table(w.tabs.map(t => {
+			return {
+				id: t.id,
+				title: t.title,
+				active: t.active ? 'active' : '',
+				visible: t.visible ? 'visible' : ''
+			};
+		}));
+
+	});
+};

@@ -1,13 +1,12 @@
-import * as BT from '../CoreTypes';
 
 interface WindowMutator {
-	renameItem(item: BT.ListItem, title: string): void;
-	collapseWindow(window: BT.Window): void;
-	expandWindow(window: BT.Window): void;
-	toggleWindowVisibility(windowId: number): void;
-	hideWindow(window: BT.Window): void;
-	showWindow(window: BT.Window): void;
-	deleteWindow(window: BT.Window): void;
+	renameWindow(id: number, title: string): void;
+	collapseWindow(id: number): void;
+	expandWindow(id: number): void;
+	toggleWindowVisibility(id: number): void;
+	hideWindow(id: number): void;
+	showWindow(id: number): void;
+	deleteWindow(id: number): void;
 }
 
 export default WindowMutator;

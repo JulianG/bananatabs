@@ -50,4 +50,15 @@ export const NullWindow: Window = {
 	expanded: false
 };
 
+export const NullTab: Tab = {
+	id: 0,
+	title: 'Null Tab',
+	icon: '',
+	visible: false,
+	active: false,
+	url: '',
+	listIndex: 0,
+	index: 0
+};
+
 export const EmptySession: Session = { windows: [], panelWindow: NullWindow };

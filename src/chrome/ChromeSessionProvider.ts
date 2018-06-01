@@ -3,14 +3,8 @@ import SessionProvider from '../model/SessionProvider';
 import SessionMerger from '../model/SessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 
-// import MutedConsole from '../utils/MutedConsole';
-// const console = new MutedConsole();
-
-const printSession = (session: BT.Session) => {
-	console.log(
-		session.windows.map(w => `${w.id}: visible: ${w.visible}, tabs:${w.tabs.length}, `)
-	);
-};
+import MutedConsole from '../utils/MutedConsole';
+const console = new MutedConsole();
 
 export default class ChromeSessionProvider implements SessionProvider {
 
@@ -46,50 +40,53 @@ export default class ChromeSessionProvider implements SessionProvider {
 		return this.session.windows.find(w => w.id === id);
 	}
 
+	getTab(id: number): BT.Tab | undefined {
+		return (this.session.windows.find(w => w.tabs.some(t => t.id === id)) || BT.NullWindow).tabs.find(t => t.id === id);
+	}
+
 	async initialiseSession(reason?: string) {
-		this.safeMode(async () => {
-			this.unhookBrowserEvents();
-			console.log(`SessionProvider.initialiseSession because ${reason}.
-			getting sessions from disk and chrome.windows.getAll...`);
+		await this.safeMode(async () => {
+			console.log(`SessionProvider.initialiseSession ... because ${reason}.`);
+			console.log(`  getting session from disk...`);
 			const retrievedSession = await this.persistence.retrieveSession();
+			console.log(`  getting session from chrome.windows.getAll...`);
 			const liveSession = await this.getChromeSession();
+			console.log(`  done. now merging sessions`);
 			this.session = this.mergeSessions(retrievedSession, liveSession, reason);
+			console.log(`  done. now storing session`);
 			await this.storeSession(this.session);
-			console.log(`SessionProvider calling onSessionChanged`);
+			console.log(`  done. now...`);
+			console.log(`SessionProvider.initialiseSession calling onSessionChanged beacuse: ${reason}`);
 			this.onSessionChanged(this.session);
-			this.hookBrowserEvents();
 		});
 	}
 
 	async updateSession(reason?: string) {
-		console.log(`SessionProvider.updateSession because ${reason}.`);
-		console.log(`  calling only chrome.windows.getAll...`);
+		console.log(`SessionProvider.updateSession ... beacuse: ${reason}`);
 		await this._updateSession(reason);
-		console.log(`SessionProvider calling onSessionChanged`);
+		console.log(`SessionProvider.updateSession calling onSessionChanged beacuse: ${reason}`);
 		this.onSessionChanged(this.session);
 	}
 
 	async storeSession(session: BT.Session) {
-		console.log(`storeSession: before...`);
 		await this.persistence.storeSession(session);
-		console.log(`storeSession: after...`);
 	}
 
 	hookBrowserEvents() {
-		console.warn('ChromeSessionProvider.chromeEventsEnabled = true');
 		this.chromeEventsEnabled = true;
+		console.log('OK.');
 	}
 
 	unhookBrowserEvents() {
-		console.warn('ChromeSessionProvider.chromeEventsEnabled = false');
 		this.chromeEventsEnabled = false;
+		console.log('KO.');
 	}
 
 	//////////////////////////
 
 	private async _updateSession(reason?: string) {
-		this.safeMode(async () => {
-			console.log(`SessionProvider.updateSessionSilently because ${reason}.`);
+		await this.safeMode(async () => {
+			console.log(`SessionProvider._updateSession because ${reason}.`);
 			const liveSession = await this.getChromeSession();
 			this.session = this.mergeSessions(this.session, liveSession, reason);
 			await this.storeSession(this.session);
@@ -117,13 +114,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 
 	private mergeSessions(retrievedSession: BT.Session, liveSession: BT.Session, reason?: string) {
 		console.groupCollapsed(`  Merging sessions because ${reason}...`);
-		console.log('live-session:');
-		printSession(liveSession); // console.log(JSON.stringify(liveSession));
-		console.log('stored-session:');
-		printSession(retrievedSession); // console.log(JSON.stringify(retrievedSession));
 		const session = this.sessionMerger.mergeSessions(liveSession, retrievedSession);
-		printSession(session); // console.log('merged-session:');
-		console.log(JSON.stringify(session));
 		console.groupEnd();
 		return session;
 	}
@@ -192,11 +183,13 @@ export default class ChromeSessionProvider implements SessionProvider {
 
 	private async safeMode(f: () => void) {
 		if (this.chromeEventsEnabled) {
-			console.log('ChromeSessionProvider.safeMode start.');
-			this.unhookBrowserEvents();
+			this.chromeEventsEnabled = false;
+			console.log('KO');
 			await f();
-			this.hookBrowserEvents();
-			console.log('ChromeSessionProvider.safeMode end.');
+			this.chromeEventsEnabled = true;
+			console.log('OK');
+		} else {
+			console.warn('oh-oh');
 		}
 	}
 

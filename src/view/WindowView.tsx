@@ -177,7 +177,7 @@ export default class WindowView extends React.Component<Props, State> {
 	}
 
 	private handleDelete() {
-		this.props.windowMutator.deleteWindow(this.props.window);
+		this.props.windowMutator.deleteWindow(this.props.window.id);
 	}
 
 	private handleStartRename() {
@@ -189,15 +189,15 @@ export default class WindowView extends React.Component<Props, State> {
 	}
 
 	private handleSubmitRename(text: string) {
-		this.props.windowMutator.renameItem(this.props.window, text);
+		this.props.windowMutator.renameWindow(this.props.window.id, text);
 		this.setState({ renaming: false });
 	}
 
 	private handleToggleCollapse() {
 		if (this.props.window.expanded) {
-			this.props.windowMutator.collapseWindow(this.props.window);
+			this.props.windowMutator.collapseWindow(this.props.window.id);
 		} else {
-			this.props.windowMutator.expandWindow(this.props.window);
+			this.props.windowMutator.expandWindow(this.props.window.id);
 		}
 	}
 
