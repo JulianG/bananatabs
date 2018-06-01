@@ -8,7 +8,7 @@ export default class FakeSessionProvider implements SessionProvider {
 	public onSessionChanged: (session: BT.Session) => void;
 
 	constructor(private persistence: SessionPersistence) {
-		console.error('WAT!?');
+		console.warn('FakeSessionProvider');
 		this.session = BT.EmptySession;
 	}
 

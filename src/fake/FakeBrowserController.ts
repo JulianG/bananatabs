@@ -2,6 +2,10 @@ import * as BT from '../model/CoreTypes';
 import BrowserController from '../model/mutators/BrowserController';
 
 export default class FakeBrowserController implements BrowserController {
+
+	constructor() {
+		console.warn('FakeBrowserController');
+	}
 	public closeWindow(id: number) {
 		console.log(`FakeBrowserController.closeWindow(${id}) ...`);
 		return Promise.resolve();
