@@ -4,19 +4,11 @@ import TabMutator from './TabMutator';
 import WindowMutator from './WindowMutator';
 import BrowserController from './BrowserController';
 
-// import console from '../../utils/MutedConsole';
+import console from '../../utils/MutedConsole';
 
 export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
 	constructor(private provider: SessionProvider, private browser: BrowserController) {
-	}
-
-	// TabMutator and WindowMutator interfaces
-
-	async renameWindow(id: number, title: string) {
-		const win = this.provider.getWindow(id) || BT.NullWindow;
-		win.title = title;
-		await this.storeSession();
 	}
 
 	// TabMutator interface
@@ -94,6 +86,12 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	/// WindowMutator
+
+	async renameWindow(id: number, title: string) {
+		const win = this.provider.getWindow(id) || BT.NullWindow;
+		win.title = title;
+		await this.storeSession();
+	}
 
 	async collapseWindow(id: number) {
 		console.log('WindowAndTabMutator.collapseWindow ' + id);
