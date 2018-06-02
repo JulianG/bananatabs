@@ -42,7 +42,12 @@ export default class SessionView extends React.Component<Props, State> {
 
 	componentDidMount() {
 		window.addEventListener('resize', this.handleResizeEvent);
-		this.sessionProvider.onSessionChanged = session => this.setState({ session });
+		console.warn('SessionView componentDidMount');
+		this.sessionProvider.onSessionChanged = session => {
+			console.log('this.sessionProvider.onSessionChanged!!!');
+			console.table(session.windows);
+			this.setState({ session });
+		};
 		this.sessionProvider.initialiseSession('componentDidMount');
 	}
 

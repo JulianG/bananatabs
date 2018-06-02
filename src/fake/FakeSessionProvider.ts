@@ -13,11 +13,11 @@ export default class FakeSessionProvider implements SessionProvider {
 	}
 
 	getWindow(id: number): BT.Window | undefined {
-		return { ...BT.NullWindow, id };
+		return this.session.windows.find(w => w.id === id);
 	}
 
 	getTab(id: number): BT.Tab | undefined {
-		return { ...BT.NullTab, id };
+		return (this.session.windows.find(w => w.tabs.some(t => t.id === id)) || BT.NullWindow).tabs.find(t => t.id === id);
 	}
 
 	async initialiseSession(reason?: string) {

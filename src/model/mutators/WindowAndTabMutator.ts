@@ -4,7 +4,7 @@ import TabMutator from './TabMutator';
 import WindowMutator from './WindowMutator';
 import BrowserController from './BrowserController';
 
-import console from '../../utils/MutedConsole';
+// import console from '../../utils/MutedConsole';
 
 export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
@@ -54,7 +54,6 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 				await this.safeBrowserCall(async () => {
 					await this.browser.closeTab(tab.id);
 				});
-				tab.id = -1; // why?
 			}
 			this.dispatchSessionChange();
 		}
@@ -97,11 +96,16 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	/// WindowMutator
 
 	async collapseWindow(id: number) {
+		console.log('WindowAndTabMutator.collapseWindow ' + id);
 		const win = this.provider.getWindow(id);
 		if (win) {
 			win.expanded = false;
+			console.log('collapseWindow before storeSession');
 			await this.storeSession();
+			console.log('collapseWindow after storeSession');
+			console.log('collapseWindow before dispatchSessionChange');
 			await this.dispatchSessionChange();
+			console.log('collapseWindow after dispatchSessionChange');
 		}
 	}
 
@@ -186,6 +190,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	private storeSession() {
+		console.table(this.provider.session.windows);
 		this.provider.storeSession(this.provider.session);
 	}
 
@@ -193,21 +198,14 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		this.provider.onSessionChanged(this.provider.session);
 	}
 
-	private _pauseEvents() {
-		this.provider.unhookBrowserEvents();
-	}
-	private _resumeEvents() {
-		this.provider.hookBrowserEvents();
-	}
-
 	//////////////////////
 	//////////////////////
 	//////////////////////
 	//////////////////////
 	private async safeBrowserCall(f: () => void) {
-		this._pauseEvents();
+		this.provider.unhookBrowserEvents();
 		await f();
-		this._resumeEvents();
+		this.provider.hookBrowserEvents();
 	}
 
 }

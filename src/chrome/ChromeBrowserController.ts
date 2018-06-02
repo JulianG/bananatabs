@@ -26,7 +26,7 @@ export default class ChromeBrowserController implements BrowserController {
 
 		const windowPromise = PromisingChromeAPI.windows.update(windowId, { focused: true });
 		const tabPromise = PromisingChromeAPI.tabs.update(tabId, { active: true });
-		return Promise.all([windowPromise, tabPromise]);
+		await Promise.all([windowPromise, tabPromise]);
 	}
 
 	public async createTab(window: BT.Window, tab: BT.Tab) {
@@ -48,9 +48,9 @@ export default class ChromeBrowserController implements BrowserController {
 		const asFirst = liveWindows.length <= 1;
 		console.log(`ChromeBrowserController.showWindow(...) ...`);
 		if (asFirst) {
-			return this._showWindowAsFirst(window);
+			await this._showWindowAsFirst(window);
 		} else {
-			return this._showWindow(window);
+			await this._showWindow(window);
 		}
 	}
 
