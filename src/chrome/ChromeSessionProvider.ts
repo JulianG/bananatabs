@@ -2,7 +2,7 @@ import * as BT from '../model/CoreTypes';
 import SessionProvider from '../model/SessionProvider';
 import SessionMerger from '../model/SessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
-
+import ChromeEventHandler from './ChromeEventHandler';
 import console from '../utils/MutedConsole';
 
 export default class ChromeSessionProvider implements SessionProvider {
@@ -10,7 +10,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 	public session: BT.Session;
 	public onSessionChanged: (session: BT.Session) => void;
 
-	private chromeEventsEnabled: boolean = true;
+	private chromeEventHandler: ChromeEventHandler;
 
 	constructor(private sessionMerger: SessionMerger, private persistence: SessionPersistence) {
 		this.session = BT.EmptySession;
@@ -20,31 +20,27 @@ export default class ChromeSessionProvider implements SessionProvider {
 		this.convertWindow = this.convertWindow.bind(this);
 		this.convertTab = this.convertTab.bind(this);
 
-		if (chrome && chrome.tabs) {
-			chrome.windows.onRemoved.addListener((id) => this.updateSession(`onWindowRemoved ${id}`));
-			chrome.windows.onFocusChanged.addListener((_) => this.updateSession('onFocusChanged'));
-			chrome.tabs.onCreated.addListener((tab) => this.updateSession(`onTabsCreated ${tab.id}`));
-			chrome.tabs.onUpdated.addListener(this.onTabsUpdated.bind(this));
-			chrome.tabs.onMoved.addListener((_) => this.updateSession('onTabsMoved'));
-			chrome.tabs.onAttached.addListener((id, info) => this.updateSession('onTabsAttached'));
-			chrome.tabs.onRemoved.addListener(this.onTabsRemoved.bind(this));
-			chrome.tabs.onActivated.addListener((_) => this.updateSession('onActivated'));
-			// chrome.tabs.onHighlighted.addListener((_) => this.updateSessionSilently('onHighlighted'));
-			// chrome.tabs.onDetached.addListener((_) => this.updateSessionSilently('onDetached'));
-			// chrome.tabs.onReplaced.addListener((_) => this.updateSessionSilently('onReplaced'));
-		}
+		this.chromeEventHandler = new ChromeEventHandler(this);
+		this.chromeEventHandler.enable();
+		
 	}
 
-	getWindow(id: number): BT.Window | undefined {
-		return this.session.windows.find(w => w.id === id);
+	getWindow(id: number): BT.Window {
+		const win = this.session.windows.find(w => w.id === id);
+		console.assert(win !== undefined, `Could not find a window with id ${id} in the current session.`);
+		return win || { ...BT.NullWindow, id };
 	}
 
-	getTab(id: number): BT.Tab | undefined {
-		return (this.session.windows.find(w => w.tabs.some(t => t.id === id)) || BT.NullWindow).tabs.find(t => t.id === id);
+	getTab(id: number): BT.Tab {
+		const win = (this.session.windows.find(w => w.tabs.some(t => t.id === id)) || BT.NullWindow);
+		const tab = win.tabs.find(t => t.id === id);
+		console.assert(tab !== undefined, `Could not find a tab with id ${id} in the current session.`);
+		return tab || { ...BT.NullTab, id };
 	}
 
 	async initialiseSession(reason?: string) {
-		await this.safeMode(async () => {
+		if (this.chromeEventHandler.isEnabled()) {
+			this.chromeEventHandler.disable();
 			console.log(`SessionProvider.initialiseSession ... because ${reason}.`);
 			console.log(`  getting session from disk...`);
 			const retrievedSession = await this.persistence.retrieveSession();
@@ -57,7 +53,8 @@ export default class ChromeSessionProvider implements SessionProvider {
 			console.log(`  done. now...`);
 			console.log(`SessionProvider.initialiseSession calling onSessionChanged beacuse: ${reason}`);
 			this.onSessionChanged(this.session);
-		});
+			this.chromeEventHandler.enable();
+		}
 	}
 
 	async updateSession(reason?: string) {
@@ -71,27 +68,26 @@ export default class ChromeSessionProvider implements SessionProvider {
 		await this.persistence.storeSession(session);
 	}
 
-	hookBrowserEvents() {
-		this.chromeEventsEnabled = true;
-		console.log('OK.');
+	enableBrowserEvents() {
+		this.chromeEventHandler.enable();
 	}
 
-	unhookBrowserEvents() {
-		this.chromeEventsEnabled = false;
-		console.log('KO.');
+	disableBrowserEvents() {
+		this.chromeEventHandler.disable();
 	}
 
 	//////////////////////////
 
 	private async _updateSession(reason?: string) {
-		await this.safeMode(async () => {
+		if (this.chromeEventHandler.isEnabled()) {
+			this.chromeEventHandler.disable();
 			console.log(`SessionProvider._updateSession because ${reason}.`);
 			const liveSession = await this.getChromeSession();
 			this.session = this.mergeSessions(this.session, liveSession, reason);
 			await this.storeSession(this.session);
-		});
+			this.chromeEventHandler.enable();
+		}
 	}
-
 
 	private getChromeSession(): Promise<BT.Session> {
 		console.log('chrome.windows.getAll...');
@@ -153,34 +149,6 @@ export default class ChromeSessionProvider implements SessionProvider {
 
 	private getWindowGeometry(w: chrome.windows.Window): BT.Geometry {
 		return { top: w.top || 0, left: w.left || 0, width: w.width || 0, height: w.height || 0 };
-	}
-
-	private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
-		if (this.isPanelTab(id) === false && changeInfo.status === 'complete') {
-			this.updateSession(`onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
-		}
-	}
-
-	private onTabsRemoved(id: number, removedInfo: chrome.tabs.TabRemoveInfo) {
-		if (this.isPanelTab(id) === false && removedInfo.isWindowClosing === false) {
-			this.updateSession(`onTabsRemoved - ${id} - ${JSON.stringify(removedInfo)}`);
-		}
-	}
-
-	private isPanelTab(id: number): boolean {
-		return (id === this.session.panelWindow.tabs[0].id);
-	}
-
-	private async safeMode(f: () => void) {
-		if (this.chromeEventsEnabled) {
-			this.chromeEventsEnabled = false;
-			console.log('KO');
-			await f();
-			this.chromeEventsEnabled = true;
-			console.log('OK');
-		} else {
-			console.warn('oh-oh');
-		}
 	}
 
 }

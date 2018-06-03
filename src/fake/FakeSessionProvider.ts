@@ -12,12 +12,17 @@ export default class FakeSessionProvider implements SessionProvider {
 		this.session = BT.EmptySession;
 	}
 
-	getWindow(id: number): BT.Window | undefined {
-		return this.session.windows.find(w => w.id === id);
+	getWindow(id: number): BT.Window {
+		const win = this.session.windows.find(w => w.id === id);
+		console.assert(win !== undefined, `Could not find a window with id ${id} in the current session.`);
+		return win || { ...BT.NullWindow, id };
 	}
 
-	getTab(id: number): BT.Tab | undefined {
-		return (this.session.windows.find(w => w.tabs.some(t => t.id === id)) || BT.NullWindow).tabs.find(t => t.id === id);
+	getTab(id: number): BT.Tab {
+		const win = (this.session.windows.find(w => w.tabs.some(t => t.id === id)) || BT.NullWindow);
+		const tab = win.tabs.find(t => t.id === id);
+		console.assert(tab !== undefined, `Could not find a tab with id ${id} in the current session.`);
+		return tab || { ...BT.NullTab, id };
 	}
 
 	async initialiseSession(reason?: string) {
@@ -36,11 +41,11 @@ export default class FakeSessionProvider implements SessionProvider {
 		this.persistence.storeSession(session);
 	}
 
-	hookBrowserEvents() {
-		console.log(`FakeSessionProvider.hookBrowserEvents`);
+	enableBrowserEvents() {
+		console.log(`FakeSessionProvider.enableBrowserEvents`);
 	}
-	unhookBrowserEvents() {
-		console.log(`FakeSessionProvider.unhookBrowserEvents`);
+	disableBrowserEvents() {
+		console.log(`FakeSessionProvider.disableBrowserEvents`);
 	}
 
 }

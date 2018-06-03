@@ -7,9 +7,10 @@ export default interface SessionProvider {
 	updateSession(reason?: string): Promise<void>;
 	storeSession(session: BT.Session): Promise<void>;
 
-	getWindow(id: number): BT.Window | undefined;
-	getTab(id: number): BT.Tab | undefined;
+	getWindow(id: number): BT.Window;
+	getTab(id: number): BT.Tab;
 	
-	hookBrowserEvents(): void;
-	unhookBrowserEvents(): void;
+	enableBrowserEvents(): void;
+	disableBrowserEvents(): void;
+
 }

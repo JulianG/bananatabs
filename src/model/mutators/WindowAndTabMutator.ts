@@ -15,74 +15,66 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
 	async selectTab(winId: number, tabId: number) {
 		const win = this.provider.getWindow(winId);
-		const tab = this.provider.getTab(tabId);
-		if (win && tab) {
-			win.tabs.forEach(t => t.active = t === tab);
-			await this.storeSession();
-			this.safeBrowserCall(async () => {
-				await this.browser.selectTab(win.id, tab.id);
-			});
-		}
+		win.tabs.forEach(t => t.active = t.id === tabId);
+		await this.storeSession();
+		this.safeBrowserCall(async () => {
+			await this.browser.selectTab(win.id, tabId);
+		});
 	}
 
 	toggleTabVisibility(winId: number, tabId: number) {
 		const tab = this.provider.getTab(tabId);
-		if (tab) {
-			(tab.visible) ?
-				this.hideTab(winId, tabId) :
-				this.showTab(winId, tabId);
-		}
+		(tab.visible) ?
+			this.hideTab(winId, tabId) :
+			this.showTab(winId, tabId);
 	}
 
 	async hideTab(winId: number, tabId: number) {
 		const win = this.provider.getWindow(winId);
 		const tab = this.provider.getTab(tabId);
-		if (win && tab) {
-			tab.visible = false;
-			this.storeSession();
-			if (win.visible) {
-				this.safeRenameWindow(win);
-				await this.storeSession();
-				await this.safeBrowserCall(async () => {
-					await this.browser.closeTab(tab.id);
-				});
-			}
-			this.dispatchSessionChange();
+		tab.visible = false;
+		this.storeSession();
+		if (win.visible) {
+			this.safeRenameWindow(win);
+			await this.storeSession();
+			await this.safeBrowserCall(async () => {
+				await this.browser.closeTab(tab.id);
+			});
 		}
+		this.dispatchSessionChange();
 	}
 
 	async showTab(winId: number, tabId: number) {
 		const win = this.provider.getWindow(winId);
 		const tab = this.provider.getTab(tabId);
-		if (win && tab) {
-			tab.visible = true;
-			await this.storeSession();
-			this.dispatchSessionChange();
-			if (win.visible) {
-				await this.safeBrowserCall(async () => {
-					await this.browser.createTab(win, tab);
-				});
-			} else {
-				this._showWindow(win);
-			}
+		tab.visible = true;
+		await this.storeSession();
+		if (win.visible) {
+			await this.safeBrowserCall(async () => {
+				await this.browser.createTab(win, tab);
+			});
+		} else {
+			await this._showWindow(win);
 		}
+		this.dispatchSessionChange();
 	}
 
 	async deleteTab(winId: number, tabId: number) {
 		const win = this.provider.getWindow(winId);
 		const tab = this.provider.getTab(tabId);
-		if (win && tab) {
-			const tabIndex = win.tabs.indexOf(tab);
-			console.assert(tabIndex >= 0);
+		const tabIndex = win.tabs.indexOf(tab);
+		console.assert(tabIndex >= 0);
+		if (tabIndex >= 0) {
 			win.tabs.splice(tabIndex, 1);
-			if (win.visible && tab.visible) {
-				this.safeRenameWindow(win);
-				await this.safeBrowserCall(async () => {
-					await this.browser.closeTab(tab.id);
-				});
-			}
-			await this.storeSession();
 		}
+		if (win.visible && tab.visible) {
+			this.safeRenameWindow(win);
+			await this.safeBrowserCall(async () => {
+				await this.browser.closeTab(tab.id);
+			});
+		}
+		await this.storeSession();
+		this.dispatchSessionChange();
 	}
 
 	/// WindowMutator
@@ -94,70 +86,53 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	async collapseWindow(id: number) {
-		console.log('WindowAndTabMutator.collapseWindow ' + id);
 		const win = this.provider.getWindow(id);
-		if (win) {
-			win.expanded = false;
-			console.log('collapseWindow before storeSession');
-			await this.storeSession();
-			console.log('collapseWindow after storeSession');
-			console.log('collapseWindow before dispatchSessionChange');
-			await this.dispatchSessionChange();
-			console.log('collapseWindow after dispatchSessionChange');
-		}
+		win.expanded = false;
+		await this.storeSession();
+		await this.dispatchSessionChange();
 	}
 
 	async expandWindow(id: number) {
 		const win = this.provider.getWindow(id);
-		if (win) {
-			win.expanded = true;
-			await this.storeSession();
-			await this.dispatchSessionChange();
-		}
+		win.expanded = true;
+		await this.storeSession();
+		this.dispatchSessionChange();
 	}
 
 	async toggleWindowVisibility(id: number) {
 		const win = this.provider.getWindow(id);
-		if (win) {
-			if (win.visible) {
-				await this._hideWindow(win);
-			} else {
-				await this._showWindow(win);
-			}
-			this.dispatchSessionChange();
-		}
+		(win.visible) ?
+			await this._hideWindow(win) :
+			await this._showWindow(win);
+		this.dispatchSessionChange();
 	}
 
 	async hideWindow(id: number) {
 		const win = this.provider.getWindow(id);
-		if (win) {
-			await this._hideWindow(win);
-			this.dispatchSessionChange();
-		}
+		await this._hideWindow(win);
+		this.dispatchSessionChange();
 	}
 
 	async showWindow(id: number) {
 		const win = this.provider.getWindow(id);
-		if (win) {
-			await this._showWindow(win);
-			this.dispatchSessionChange();
-		}
+		await this._showWindow(win);
+		this.dispatchSessionChange();
 	}
 
 	async deleteWindow(id: number) {
 		const win = this.provider.getWindow(id);
-		if (win) {
-			const index = this.provider.session.windows.indexOf(win);
-			console.assert(index >= 0);
+		const index = this.provider.session.windows.indexOf(win);
+		console.assert(index >= 0);
+		if (index >= 0) {
 			this.provider.session.windows.splice(index, 1);
-			await this.storeSession();
-			if (win.visible) {
-				await this.safeBrowserCall(async () => {
-					await this.browser.closeWindow(win.id);
-				});
-			}
-			this.dispatchSessionChange();
 		}
+		await this.storeSession();
+		if (win.visible) {
+			await this.safeBrowserCall(async () => {
+				await this.browser.closeWindow(win.id);
+			});
+		}
+		this.dispatchSessionChange();
 	}
 
 	///
@@ -188,7 +163,6 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	private storeSession() {
-		console.table(this.provider.session.windows);
 		this.provider.storeSession(this.provider.session);
 	}
 
@@ -197,13 +171,11 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	//////////////////////
-	//////////////////////
-	//////////////////////
-	//////////////////////
+	
 	private async safeBrowserCall(f: () => void) {
-		this.provider.unhookBrowserEvents();
+		this.provider.disableBrowserEvents();
 		await f();
-		this.provider.hookBrowserEvents();
+		this.provider.enableBrowserEvents();
 	}
 
 }
