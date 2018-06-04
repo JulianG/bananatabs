@@ -1,62 +1,32 @@
 import * as React from 'react';
-import BananaFactory from '../factory/BananaFactory';
-import SessionProvider from '../model/SessionProvider';
-import SessionMutator, { DefaultSessionMutator } from '../model/mutators/SessionMutator';
+import * as BT from '../model/CoreTypes';
+
+import SessionMutator from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
-import WindowAndTabMutator from '../model/mutators/WindowAndTabMutator';
-import * as BT from '../model/CoreTypes';
+
 import WindowView from './WindowView';
 import RLDD from 'react-list-drag-and-drop/lib/RLDD';
 
 interface Props {
 	version: string;
-}
-
-interface State {
 	session: BT.Session;
+	sessionMutator: SessionMutator;
+	windowMutator: WindowMutator;
+	tabMutator: TabMutator;
 }
 
-export default class SessionView extends React.Component<Props, State> {
-
-	private sessionProvider: SessionProvider;
-	private sessionMutator: SessionMutator;
-	private windowMutator: WindowMutator;
-	private tabMutator: TabMutator;
+export default class SessionView extends React.Component<Props, {}> {
 
 	constructor(props: Props) {
 		super(props);
-
-		const factory = new BananaFactory();
-
-		this.sessionProvider = factory.createSessionProvider();
-		this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
-		const mutator = new WindowAndTabMutator(this.sessionProvider, factory.createBrowserController());
-		this.tabMutator = this.windowMutator = mutator;
-		this.state = { session: this.sessionProvider.session };
 		this.itemRenderer = this.itemRenderer.bind(this);
 		this.printState = this.printState.bind(this);
-		this.handleResizeEvent = this.handleResizeEvent.bind(this);
 		this.onListUpdated = this.onListUpdated.bind(this);
 	}
 
-	componentDidMount() {
-		window.addEventListener('resize', this.handleResizeEvent);
-		console.warn('SessionView componentDidMount');
-		this.sessionProvider.onSessionChanged = session => {
-			console.log('this.sessionProvider.onSessionChanged!!!');
-			console.table(session.windows);
-			this.setState({ session });
-		};
-		this.sessionProvider.initialiseSession('componentDidMount');
-	}
-
-	componentWillMount() {
-		window.removeEventListener('resize', this.handleResizeEvent);
-	}
-
 	render() {
-		const windows = this.state.session.windows;
+		const windows = this.props.session.windows;
 		return (
 			<div>
 				<h3>
@@ -78,13 +48,13 @@ export default class SessionView extends React.Component<Props, State> {
 	}
 
 	private itemRenderer(item: BT.Window, i: number) {
-		const windows = this.state.session.windows;
+		const windows = this.props.session.windows;
 		return (
 			<WindowView
 				key={'window-' + i}
 				window={windows[i]}
-				windowMutator={this.windowMutator}
-				tabMutator={this.tabMutator}
+				windowMutator={this.props.windowMutator}
+				tabMutator={this.props.tabMutator}
 			/>
 		);
 	}
@@ -102,12 +72,8 @@ export default class SessionView extends React.Component<Props, State> {
 		);
 	}
 
-	private handleResizeEvent(e: UIEvent) {
-		this.sessionProvider.updateSession('handleResizeEvent');
-	}
-
 	private onListUpdated(items: BT.Window[]) {
-		this.sessionMutator.updateWindows(items);
+		this.props.sessionMutator.updateWindows(items);
 	}
 
 	private printState() {
