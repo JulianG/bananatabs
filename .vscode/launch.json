@@ -10,17 +10,6 @@
 			"request": "launch",
 			"url": "http://localhost:3000",
 			"webRoot": "${workspaceFolder}/src"
-		},
-		{
-            "name": "Attach Chrome",
-            "type": "node",
-            "request": "attach",
-            "port": 9222,
-            "address": "localhost",
-            "restart": false,
-            "sourceMaps": false,
-            "localRoot": "${workspaceRoot}/src",
-            "remoteRoot": null
-        }
+		}
 	]
 }
