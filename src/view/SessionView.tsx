@@ -5,8 +5,11 @@ import SessionMutator from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
 
-import WindowView from './WindowView';
-import RLDD from 'react-list-drag-and-drop/lib/RLDD';
+import Title from './Title';
+import WindowListView from './WindowListView';
+import TextSessionView from './TextSessionView';
+import Footer from './Footer';
+
 
 interface Props {
 	version: string;
@@ -16,67 +19,61 @@ interface Props {
 	tabMutator: TabMutator;
 }
 
-export default class SessionView extends React.Component<Props, {}> {
+interface State {
+	textMode: boolean;
+}
+
+export default class SessionView extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.itemRenderer = this.itemRenderer.bind(this);
-		this.printState = this.printState.bind(this);
-		this.onListUpdated = this.onListUpdated.bind(this);
+		this.state = { textMode: false };
+		this.changeToFullMode = this.changeToFullMode.bind(this);
+		this.toggleMode = this.toggleMode.bind(this);
 	}
 
 	render() {
-		const windows = this.props.session.windows;
+
 		return (
 			<div>
-				<h3>
-					<img className="app-icon" src="/icons/app-icon.png" onClick={this.printState} /><span>Banana Tabs!</span>&nbsp;
-					<div style={{ display: 'inline' }} className="credits">BETA</div>
-				</h3>
-				<RLDD
-					cssClasses="session"
-					items={windows}
-					layout={'vertical'}
-					threshold={25}
-					dragDelay={250}
-					onChange={this.onListUpdated}
-					itemRenderer={this.itemRenderer}
-				/>
-				{this.renderCredits()}
+				<Title onClick={this.toggleMode} />
+				{this.renderSession()}
+				<Footer version={this.props.version} />
 			</div>
 		);
 	}
 
-	private itemRenderer(item: BT.Window, i: number) {
+	renderSession() {
 		const windows = this.props.session.windows;
-		return (
-			<WindowView
-				key={'window-' + i}
-				window={windows[i]}
-				windowMutator={this.props.windowMutator}
-				tabMutator={this.props.tabMutator}
-			/>
-		);
+		if (this.state.textMode === false) {
+			return (
+				<WindowListView
+					windows={windows}
+					sessionMutator={this.props.sessionMutator}
+					windowMutator={this.props.windowMutator}
+					tabMutator={this.props.tabMutator}
+				/>
+			);
+		} else {
+			return (
+				<TextSessionView
+					version={this.props.version}
+					windows={windows}
+					sessionMutator={this.props.sessionMutator}
+					onClose={this.changeToFullMode}
+				/>
+			);
+		}
 	}
 
-	private renderCredits() {
-		return (
-			<div className="credits">
-				<p><strong>BananaTabs! v{this.props.version}</strong><br />
-					Developed by Julian Garamendy.<br />
-					Icons designed by Dave Gandy from&nbsp;
-					<a href="https://www.flaticon.com/packs/font-awesome" target="_blank">FlatIcon</a>. -
-					Banana icon by Freepik from&nbsp;
-					<a href="https://www.flaticon.com/free-icon/banana_688828" target="_blank">FlatIcon</a>.</p>
-			</div>
-		);
+	private toggleMode() {
+		this.setState((prevState: State) => {
+			return { textMode: !prevState.textMode };
+		});
 	}
 
-	private onListUpdated(items: BT.Window[]) {
-		this.props.sessionMutator.updateWindows(items);
+	private changeToFullMode() {
+		this.setState({ textMode: false });
 	}
 
-	private printState() {
-		console.log(localStorage.getItem('session'));
-	}
 }

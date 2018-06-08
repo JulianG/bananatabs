@@ -42,10 +42,7 @@ class App extends React.Component<{}, State> {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResizeEvent.bind(this));
-    console.warn('SessionView componentDidMount');
     this.sessionProvider.onSessionChanged = session => {
-      console.log('this.sessionProvider.onSessionChanged!!!');
-      console.table(session.windows);
       this.setState({ session });
     };
     this.sessionProvider.initialiseSession('componentDidMount');
