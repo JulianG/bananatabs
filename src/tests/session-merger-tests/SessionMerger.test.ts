@@ -1,7 +1,7 @@
 import * as BT from '../../model/CoreTypes';
 import * as TestUtils from '../TestUtils';
 
-import { DefaultSessionMerger } from '../../model/mergers/SessionMerger';
+import { DefaultLiveSessionMerger } from '../../model/mergers/SessionMerger';
 
 test('when no windows visible. merged session is same as stored session', () => {
 	testSessionsMatch('no-windows');
@@ -51,7 +51,7 @@ test('when reopening browser after having added 1 tab to a window with 4 tabs', 
 
 function testSessionsMatch(name: string) {
 	const { live, stored, expected } = getSessions(name);
-	const merger = new DefaultSessionMerger();
+	const merger = new DefaultLiveSessionMerger();
 	const mergedSession = merger.mergeLiveAndStored(live, stored);
 	try {
 		expect(TestUtils.compareSessions(mergedSession, expected)).toBeTruthy();

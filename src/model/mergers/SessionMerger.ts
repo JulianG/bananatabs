@@ -2,12 +2,12 @@ import * as BT from '../CoreTypes';
 
 import console from '../../utils/MutedConsole';
 
-export default interface SessionMerger {
+export default interface LiveSessionMerger {
 	mergeLiveAndStored(live: BT.Session, stored: BT.Session): BT.Session;
 	mergeManualAndStored(manual: BT.Window[], stored: BT.Window[]): BT.Window[];
 }
 
-export class DefaultSessionMerger implements SessionMerger {
+export class DefaultLiveSessionMerger implements LiveSessionMerger {
 
 	mergeManualAndStored(manual: BT.Window[], stored: BT.Window[]): BT.Window[] {
 

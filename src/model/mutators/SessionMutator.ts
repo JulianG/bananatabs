@@ -1,6 +1,6 @@
 import * as BT from '../CoreTypes';
 import SessionProvider from '../SessionProvider';
-import SessionMerger from '../mergers/SessionMerger';
+import LiveSessionMerger from '../mergers/SessionMerger';
 
 interface WindowSortingFunction {
 	(a: BT.Window, b: BT.Window): number;
@@ -16,7 +16,7 @@ export default SessionMutator;
 
 export class DefaultSessionMutator {
 
-	constructor(private provider: SessionProvider, private sessionMerger: SessionMerger) {
+	constructor(private provider: SessionProvider, private sessionMerger: LiveSessionMerger) {
 	}
 
 	sortWindows(f: WindowSortingFunction): void {

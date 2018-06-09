@@ -1,6 +1,6 @@
 import * as BT from '../model/CoreTypes';
 import SessionProvider from '../model/SessionProvider';
-import SessionMerger from '../model/mergers/SessionMerger';
+import LiveSessionMerger from '../model/mergers/SessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 import ChromeEventHandler from './ChromeEventHandler';
 import console from '../utils/MutedConsole';
@@ -12,7 +12,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 
 	private chromeEventHandler: ChromeEventHandler;
 
-	constructor(private sessionMerger: SessionMerger, private persistence: SessionPersistence) {
+	constructor(private sessionMerger: LiveSessionMerger, private persistence: SessionPersistence) {
 		this.session = BT.EmptySession;
 
 		this._updateSession = this._updateSession.bind(this);
