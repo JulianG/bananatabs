@@ -18,7 +18,7 @@ export class DefaultTextSessionMerger implements TextSessionMerger {
 				return comp > 0.75;
 			});
 			if (matchedWindow) {
-				const tabs = this.mergeManualAndStoredTabs(mw.tabs, matchedWindow.tabs);
+				const tabs = this.mergeTabs(mw.tabs, matchedWindow.tabs);
 				mergedWindows.push({ ...matchedWindow, tabs });
 			} else {
 				mergedWindows.push({ ...mw });
@@ -29,7 +29,7 @@ export class DefaultTextSessionMerger implements TextSessionMerger {
 
 	////
 
-	private mergeManualAndStoredTabs(manualTabs: BT.Tab[], storedTabs: BT.Tab[]): BT.Tab[] {
+	private mergeTabs(manualTabs: BT.Tab[], storedTabs: BT.Tab[]): BT.Tab[] {
 		const tabs: BT.Tab[] = [];
 
 		manualTabs.forEach((mt) => {
