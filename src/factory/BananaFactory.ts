@@ -5,7 +5,7 @@ import ChromeBrowserController from '../chrome/ChromeBrowserController';
 import SessionProvider from '../model/SessionProvider';
 import FakeSessionProvider from '../fake/FakeSessionProvider';
 import ChromeSessionProvider from '../chrome/ChromeSessionProvider';
-import LiveSessionMerger, { DefaultLiveSessionMerger } from '../model/mergers/SessionMerger';
+import LiveSessionMerger, { DefaultLiveSessionMerger } from '../model/mergers/LiveSessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 import SessionMutator, { DefaultSessionMutator } from '../model/mutators/SessionMutator';
 
