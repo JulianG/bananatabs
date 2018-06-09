@@ -1,6 +1,6 @@
 import * as BT from '../CoreTypes';
 import SessionProvider from '../SessionProvider';
-import LiveSessionMerger from '../mergers/LiveSessionMerger';
+import TextSessionMerger from '../mergers/TextSessionMerger';
 
 interface WindowSortingFunction {
 	(a: BT.Window, b: BT.Window): number;
@@ -16,7 +16,7 @@ export default SessionMutator;
 
 export class DefaultSessionMutator {
 
-	constructor(private provider: SessionProvider, private sessionMerger: LiveSessionMerger) {
+	constructor(private provider: SessionProvider, private sessionMerger: TextSessionMerger) {
 	}
 
 	sortWindows(f: WindowSortingFunction): void {
@@ -32,7 +32,7 @@ export class DefaultSessionMutator {
 	}
 
 	mergeWithWindows(windows: BT.Window[]): void {
-		this.provider.session.windows = this.sessionMerger.mergeManualAndStored(windows, this.provider.session.windows);
+		this.provider.session.windows = this.sessionMerger.merge(windows, this.provider.session.windows);
 		this.updateSession();
 	}
 
