@@ -1,6 +1,6 @@
 import * as BT from '../model/CoreTypes';
 import SessionProvider from '../model/SessionProvider';
-import SessionMerger from '../model/SessionMerger';
+import SessionMerger from '../model/mergers/SessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 import ChromeEventHandler from './ChromeEventHandler';
 import console from '../utils/MutedConsole';

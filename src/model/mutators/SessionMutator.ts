@@ -1,6 +1,6 @@
 import * as BT from '../CoreTypes';
 import SessionProvider from '../SessionProvider';
-import SessionMerger from '../SessionMerger';
+import SessionMerger from '../mergers/SessionMerger';
 
 interface WindowSortingFunction {
 	(a: BT.Window, b: BT.Window): number;

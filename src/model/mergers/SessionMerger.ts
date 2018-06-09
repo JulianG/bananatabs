@@ -1,6 +1,6 @@
-import * as BT from './CoreTypes';
+import * as BT from '../CoreTypes';
 
-import console from '../utils/MutedConsole';
+import console from '../../utils/MutedConsole';
 
 export default interface SessionMerger {
 	mergeLiveAndStored(live: BT.Session, stored: BT.Session): BT.Session;

@@ -1,7 +1,7 @@
 import * as BT from '../../model/CoreTypes';
 import * as TestUtils from '../TestUtils';
 
-import { DefaultSessionMerger } from '../../model/SessionMerger';
+import { DefaultSessionMerger } from '../../model/mergers/SessionMerger';
 
 test('when no windows visible. merged session is same as stored session', () => {
 	testSessionsMatch('no-windows');
