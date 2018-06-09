@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as BT from './model/CoreTypes';
 import BananaFactory from './factory/BananaFactory';
 import SessionProvider from './model/SessionProvider';
-import SessionMutator, { DefaultSessionMutator } from './model/mutators/SessionMutator';
+import SessionMutator from './model/mutators/SessionMutator';
 import WindowMutator from './model/mutators/WindowMutator';
 import TabMutator from './model/mutators/TabMutator';
 import WindowAndTabMutator from './model/mutators/WindowAndTabMutator';
@@ -32,9 +32,9 @@ class App extends React.Component<{}, State> {
 
     const factory = new BananaFactory();
 
-    this.sessionProvider = factory.createSessionProvider();
-    this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
-    const mutator = new WindowAndTabMutator(this.sessionProvider, factory.createBrowserController());
+    this.sessionMutator = factory.getSessionMutator();
+    this.sessionProvider = factory.getSessionProvider();
+    const mutator = new WindowAndTabMutator(this.sessionProvider, factory.getBrowserController());
     this.tabMutator = this.windowMutator = mutator;
     this.state = { session: this.sessionProvider.session };
 

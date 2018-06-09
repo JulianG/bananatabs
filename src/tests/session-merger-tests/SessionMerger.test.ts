@@ -52,7 +52,7 @@ test('when reopening browser after having added 1 tab to a window with 4 tabs', 
 function testSessionsMatch(name: string) {
 	const { live, stored, expected } = getSessions(name);
 	const merger = new DefaultSessionMerger();
-	const mergedSession = merger.mergeSessions(live, stored);
+	const mergedSession = merger.mergeLiveAndStored(live, stored);
 	try {
 		expect(TestUtils.compareSessions(mergedSession, expected)).toBeTruthy();
 	} catch (e) {

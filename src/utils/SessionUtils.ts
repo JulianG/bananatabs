@@ -12,7 +12,7 @@ export function windowsToString(windows: BT.Window[]): string {
 
 export function stringToWindows(str: string): BT.Window[] {
 
-	let _id = 1000;
+	let _id = Math.floor(Math.random() * 99999);
 	const getId = () => {
 		return ++_id;
 	};

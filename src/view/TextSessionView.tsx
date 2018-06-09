@@ -67,7 +67,7 @@ export default class TextSessionView extends React.Component<Props, State> {
 
 	private updateWindows() {
 		const windows = stringToWindows(this.state.text);
-		this.props.sessionMutator.updateWindows(windows);
+		this.props.sessionMutator.mergeWithWindows(windows);
 		this.props.onClose();
 	}
 

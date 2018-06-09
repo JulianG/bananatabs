@@ -109,7 +109,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 
 	private mergeSessions(retrievedSession: BT.Session, liveSession: BT.Session, reason?: string) {
 		console.log(`  Merging sessions because ${reason}...`);
-		const session = this.sessionMerger.mergeSessions(liveSession, retrievedSession);
+		const session = this.sessionMerger.mergeLiveAndStored(liveSession, retrievedSession);
 		return session;
 	}
 
