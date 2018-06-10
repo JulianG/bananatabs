@@ -34,7 +34,7 @@ html {
 body {
 	padding: 0.625rem;
 	color: #000000;
-	font-family: sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-size: 1.0rem;
 	background-color: #cccccc;
 }
@@ -219,10 +219,28 @@ img.icon.hidden {
 	font-size: 1rem;
 	resize: none;
 	overflow: hidden;
+	font-family: 'Inconsolata', 'Courier New', Courier, monospace;
 }
 
 .textsession button {
 	margin-top: 0.6rem;
 	padding: 0.6rem;
+	padding-left: 1.2rem;
+	padding-right: 1.2rem;
 	font-size: 1rem;
+	border-bottom-color: #999999;
+    border-right-color: #999999;
+	box-shadow: 0.1rem 0.1rem 0.15rem #00000066;
+}
+.textsession button:hover {
+	box-shadow: 0.1rem 0.1rem 0.1rem #00000066;
+}
+
+.textsession button.apply {
+	font-weight: bold;
+	background-color: white;
+}
+
+.textsession button.cancel {
+	background-color: #eeeeee;
 }

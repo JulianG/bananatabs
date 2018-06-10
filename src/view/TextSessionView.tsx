@@ -48,8 +48,8 @@ export default class TextSessionView extends React.Component<Props, State> {
 					onKeyUp={this.handleKeyPress}
 				/>
 				<div >
-					<button onClick={this.updateWindows}>Apply</button>
-					<button onClick={this.props.onClose}>Cancel</button>
+					<button className="apply" onClick={this.updateWindows}>Apply</button>&nbsp;
+					<button className="cancel" onClick={this.props.onClose}>Cancel</button>
 				</div>
 			</div>
 		);
