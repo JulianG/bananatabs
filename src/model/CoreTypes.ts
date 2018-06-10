@@ -44,8 +44,8 @@ export const NullWindow: Window = {
 	visible: false,
 	focused: false,
 	geometry: { top: 0, left: 0, width: 0, height: 0 },
-	type: '',
-	state: '',
+	type: 'normal',
+	state: 'normal',
 	tabs: [],
 	expanded: false
 };
