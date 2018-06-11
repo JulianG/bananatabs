@@ -77,7 +77,7 @@ export default class TabView extends React.Component<Props, State> {
 					onClick={this.onSelectAction}
 				/>
 				{this.state.toolsVisible && <TabToolsView
-					actionIconVisibility={{ rename: false, delete: true }}
+					actionIconVisibility={{ delete: true, rename: false, copy: false }}
 					onDeleteAction={this.onDeleteAction}
 				/>}
 				<span

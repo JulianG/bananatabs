@@ -37,6 +37,7 @@ export default class WindowView extends React.Component<Props, State> {
 		this.handleCancelRename = this.handleCancelRename.bind(this);
 		this.handleSubmitRename = this.handleSubmitRename.bind(this);
 		this.handleDelete = this.handleDelete.bind(this);
+		this.handleCopy = this.handleCopy.bind(this);
 		this.handleToggleVisibility = this.handleToggleVisibility.bind(this);
 		this.handleToggleCollapse = this.handleToggleCollapse.bind(this);
 		this.showTools = this.showTools.bind(this);
@@ -160,9 +161,10 @@ export default class WindowView extends React.Component<Props, State> {
 		if (this.state.toolsVisible) {
 			return (
 				<TabToolsView
-					actionIconVisibility={{ rename: true, delete: true }}
+					actionIconVisibility={{ rename: true, delete: true, copy: true }}
 					onRenameAction={this.handleStartRename}
 					onDeleteAction={this.handleDelete}
+					onCopyAction={this.handleCopy}
 				/>
 			);
 		} else {
@@ -171,6 +173,15 @@ export default class WindowView extends React.Component<Props, State> {
 	}
 
 	////
+
+	private handleCopy() {
+		alert('aaaaa'); 
+		// bubble up or use context or something!
+		// have only 1 textarea component for reading
+		// have another textarea component for writing new windows
+		// call the artifacts in the logic "copy" and "paste"
+		// so that one day, we remove the textfield!
+	}
 
 	private handleToggleVisibility() {
 		this.props.windowMutator.toggleWindowVisibility(this.props.window.id);

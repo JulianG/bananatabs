@@ -9,11 +9,13 @@ const Icons = {
 
 interface Props {
 	actionIconVisibility: {
+		copy: boolean;
 		rename: boolean;
 		delete: boolean;
 	};
 	onRenameAction?(): void;
 	onDeleteAction?(): void;
+	onCopyAction?(): void;
 }
 
 export default class TabToolsView extends React.Component<Props, {}> {
@@ -22,12 +24,17 @@ export default class TabToolsView extends React.Component<Props, {}> {
 		super(props);
 		this.handleRenameAction = this.handleRenameAction.bind(this);
 		this.handleDeleteAction = this.handleDeleteAction.bind(this);
+		this.handleCopyAction = this.handleCopyAction.bind(this);
 	}
 
 	render() {
 
 		return (
 			<div className="tab-tools">
+				{this.props.actionIconVisibility.copy &&
+					<a onClick={this.handleCopyAction}>copy
+					</a>
+				}
 				{this.props.actionIconVisibility.rename &&
 					<img
 						title="Rename"
@@ -52,5 +59,9 @@ export default class TabToolsView extends React.Component<Props, {}> {
 
 	private handleDeleteAction(e: React.MouseEvent<HTMLImageElement>) {
 		(this.props.onDeleteAction || doNothing)();
+	}
+
+	private handleCopyAction(e: React.MouseEvent<HTMLElement>) {
+		(this.props.onCopyAction || doNothing)();
 	}
 }
