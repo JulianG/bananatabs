@@ -7,7 +7,7 @@ import TabMutator from '../model/mutators/TabMutator';
 
 import Title from './Title';
 import WindowListView from './WindowListView';
-import TextSessionView from './TextSessionView';
+import TextWindowView from './TextWindowView';
 import Footer from './Footer';
 
 
@@ -23,7 +23,7 @@ interface State {
 	textMode: boolean;
 }
 
-export default class SessionView extends React.Component<Props, State> {
+export default class MainView extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
@@ -56,7 +56,7 @@ export default class SessionView extends React.Component<Props, State> {
 			);
 		} else {
 			return (
-				<TextSessionView
+				<TextWindowView
 					version={this.props.version}
 					windows={windows}
 					sessionMutator={this.props.sessionMutator}

@@ -8,7 +8,7 @@ import WindowMutator from './model/mutators/WindowMutator';
 import TabMutator from './model/mutators/TabMutator';
 import WindowAndTabMutator from './model/mutators/WindowAndTabMutator';
 
-import SessionView from './view/SessionView';
+import MainView from './view/MainView';
 
 const MANIFEST = require('./manifest.lnk.json');
 
@@ -54,7 +54,7 @@ class App extends React.Component<{}, State> {
 
   render() {
     return (
-      <SessionView
+      <MainView
         version={this.version}
         session={this.state.session}
         sessionMutator={this.sessionMutator}

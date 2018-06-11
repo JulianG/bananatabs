@@ -16,7 +16,7 @@ interface State {
 	edited: boolean;
 }
 
-export default class TextSessionView extends React.Component<Props, State> {
+export default class TextWindowView extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
