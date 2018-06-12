@@ -1,12 +1,16 @@
 import * as React from 'react';
 
-const Title = ({ onClick }: { onClick(): void }) => {
+interface Props {
+	onClick?(): void;
+}
+
+const Title = (props: Props) => {
 	return (
 		<h3>
 			<img
 				className="app-icon"
 				src="/icons/app-icon.png"
-				onClick={onClick}
+				onClick={props.onClick}
 			/>
 			<span>Banana Tabs!</span>&nbsp;
 			<div style={{ display: 'inline' }} className="credits">BETA</div>

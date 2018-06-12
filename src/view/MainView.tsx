@@ -8,8 +8,8 @@ import TabMutator from '../model/mutators/TabMutator';
 import Title from './Title';
 import WindowListView from './WindowListView';
 import TextWindowView from './TextWindowView';
+import NewWindowView from './NewWindowView';
 import Footer from './Footer';
-
 
 interface Props {
 	version: string;
@@ -20,23 +20,26 @@ interface Props {
 }
 
 interface State {
-	textMode: boolean;
+	mode: 'list' | 'read' | 'write';
+	windowId: number;
 }
 
 export default class MainView extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.state = { textMode: false };
-		this.changeToFullMode = this.changeToFullMode.bind(this);
-		this.toggleMode = this.toggleMode.bind(this);
+		this.state = { mode: 'list', windowId: 0 };
+
+		this.changeToWriteMode = this.changeToWriteMode.bind(this);
+		this.changeToListMode = this.changeToListMode.bind(this);
+		this.addWindowGroup = this.addWindowGroup.bind(this);
 	}
 
 	render() {
 
 		return (
 			<div>
-				<Title onClick={this.toggleMode} />
+				<Title />
 				{this.renderSession()}
 				<Footer version={this.props.version} />
 			</div>
@@ -45,35 +48,59 @@ export default class MainView extends React.Component<Props, State> {
 
 	renderSession() {
 		const windows = this.props.session.windows;
-		if (this.state.textMode === false) {
-			return (
-				<WindowListView
-					windows={windows}
-					sessionMutator={this.props.sessionMutator}
-					windowMutator={this.props.windowMutator}
-					tabMutator={this.props.tabMutator}
-				/>
-			);
-		} else {
-			return (
-				<TextWindowView
-					version={this.props.version}
-					windows={windows}
-					sessionMutator={this.props.sessionMutator}
-					onClose={this.changeToFullMode}
-				/>
-			);
-		}
+		const mode = this.state.mode;
+		return (
+			<div>
+				{mode === 'list' &&
+					(
+						<WindowListView
+							windows={windows}
+							sessionMutator={this.props.sessionMutator}
+							windowMutator={this.props.windowMutator}
+							tabMutator={this.props.tabMutator}
+						/>
+					)
+				}
+				{mode === 'list' &&
+					(
+						<button className="add" onClick={this.changeToWriteMode}>add links</button>
+					)
+				}
+				{mode === 'read' &&
+					(
+						<TextWindowView
+							window={windows.find(w => w.id === this.state.windowId)!}
+							onClose={this.changeToListMode}
+						/>
+					)
+				}
+				{mode === 'write' &&
+					(
+						<NewWindowView
+							minimumLines={10}
+							onSave={this.addWindowGroup}
+							onCancel={this.changeToListMode}
+						/>
+					)
+				}
+			</div>
+		);
 	}
 
-	private toggleMode() {
-		this.setState((prevState: State) => {
-			return { textMode: !prevState.textMode };
-		});
+
+	private changeToListMode() {
+		this.setState({ mode: 'list' });
 	}
 
-	private changeToFullMode() {
-		this.setState({ textMode: false });
+	private changeToWriteMode() {
+		this.setState({ mode: 'write' });
+	}
+
+	private addWindowGroup(windows: BT.Window[]) {
+		console.log(`adding window:`);
+		console.table(windows);
+		this.props.sessionMutator.addWindows(windows);
+		this.changeToListMode();
 	}
 
 }
