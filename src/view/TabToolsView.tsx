@@ -3,6 +3,7 @@ import * as React from 'react';
 const doNothing = () => { /**/ };
 
 const Icons = {
+	Copy: require('../icons/text.svg'),
 	Edit: require('../icons/edit.svg'),
 	Delete: require('../icons/delete.svg')
 };
@@ -32,8 +33,12 @@ export default class TabToolsView extends React.Component<Props, {}> {
 		return (
 			<div className="tab-tools">
 				{this.props.actionIconVisibility.copy &&
-					<a onClick={this.handleCopyAction}>copy
-					</a>
+					<img
+						title="Copy"
+						className="icon"
+						src={Icons.Copy}
+						onClick={this.handleCopyAction}
+					/>
 				}
 				{this.props.actionIconVisibility.rename &&
 					<img
