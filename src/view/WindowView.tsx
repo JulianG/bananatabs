@@ -20,6 +20,7 @@ interface Props {
 	window: BT.Window;
 	windowMutator: WindowMutator;
 	tabMutator: TabMutator;
+	onCopy(windowId: number): void;
 }
 
 interface State {
@@ -175,12 +176,7 @@ export default class WindowView extends React.Component<Props, State> {
 	////
 
 	private handleCopy() {
-		alert('aaaaa'); 
-		// bubble up or use context or something!
-		// have only 1 textarea component for reading
-		// have another textarea component for writing new windows
-		// call the artifacts in the logic "copy" and "paste"
-		// so that one day, we remove the textfield!
+		this.props.onCopy(this.props.window.id);
 	}
 
 	private handleToggleVisibility() {

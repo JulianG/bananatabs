@@ -14,6 +14,7 @@ const TextWindowView = (props: Props) => {
 	return (
 		<div className="textsession">
 			<textarea
+				contentEditable={false}
 				rows={rows}
 				autoComplete="off"
 				wrap="off"

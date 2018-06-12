@@ -30,8 +30,9 @@ export default class MainView extends React.Component<Props, State> {
 		super(props);
 		this.state = { mode: 'list', windowId: 0 };
 
-		this.changeToWriteMode = this.changeToWriteMode.bind(this);
 		this.changeToListMode = this.changeToListMode.bind(this);
+		this.changeToReadMode = this.changeToReadMode.bind(this);
+		this.changeToWriteMode = this.changeToWriteMode.bind(this);
 		this.addWindowGroup = this.addWindowGroup.bind(this);
 	}
 
@@ -58,6 +59,7 @@ export default class MainView extends React.Component<Props, State> {
 							sessionMutator={this.props.sessionMutator}
 							windowMutator={this.props.windowMutator}
 							tabMutator={this.props.tabMutator}
+							onWindowCopied={this.changeToReadMode}
 						/>
 					)
 				}
@@ -87,9 +89,12 @@ export default class MainView extends React.Component<Props, State> {
 		);
 	}
 
-
 	private changeToListMode() {
 		this.setState({ mode: 'list' });
+	}
+
+	private changeToReadMode(windowId: number) {
+		this.setState({ mode: 'read', windowId });
 	}
 
 	private changeToWriteMode() {
