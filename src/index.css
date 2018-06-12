@@ -171,6 +171,12 @@ img.icon.hidden {
 	-ms-user-select: none;
 }
 
+.tab-tools .tooltip {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	padding-top: 0.15rem;
+}
+
 /* Drag and Drop */
 
 .dl-item.dragged .window-group {
