@@ -1,13 +1,14 @@
 import * as BT from '../model/CoreTypes';
 
-function tabsToString(tabs: BT.Tab[]): string {
-	return tabs.map(t => ` * ${t.url}`).join('\n');
-}
 
 export function windowsToString(windows: BT.Window[]): string {
 	return windows.map(w => {
 		return `${w.title}:\n${tabsToString(w.tabs)}\n`;
 	}).join('\n');
+}
+
+function tabsToString(tabs: BT.Tab[]): string {
+	return tabs.map(t => ` * ${t.url}`).join('\n');
 }
 
 export function stringToWindows(str: string): BT.Window[] {
@@ -26,7 +27,7 @@ export function stringToWindows(str: string): BT.Window[] {
 
 		if (!a) {
 			a = true;
-			win = { ...BT.NullWindow, tabs: [], id: getId(), expanded: true, title: 'A' };
+			win = { ...BT.NullWindow, tabs: [], id: getId(), expanded: true, title: 'Window' };
 			wins.push(win);
 		}
 		const isTab = isTabLine(line);
@@ -37,7 +38,7 @@ export function stringToWindows(str: string): BT.Window[] {
 			win.title = line.substr(0, line.length - 1);
 		}
 		if (isTab) {
-			const url = line.substr(3).trim();
+			const url = extractURL(line);
 			if (isValidURL(url)) {
 				win.tabs.push({ ...BT.NullTab, url, title: url, id: getId() });
 			}
@@ -50,12 +51,32 @@ export function stringToWindows(str: string): BT.Window[] {
 	return wins.filter(w => w.tabs.length > 0);
 }
 
-function isTabLine(line: string) {
-	return line.substr(0, 3) === ' * ';
+function isTabLine(line: string): boolean {
+	return line.substr(0, 3) === ' * ' ||
+		line.substr(0, 2) === '* ' ||
+		isValidURL(line);
 }
 
 function isValidURL(str: string) {
 	const trimmed = str.trim();
 	return trimmed.substr(0, 7) === 'http://' ||
 		trimmed.substr(0, 8) === 'https://';
+}
+
+function extractURL(line: string) {
+	const lead = detectLeadOnTabLine(line);
+	return line.substr(lead).trim();
+}
+
+function detectLeadOnTabLine(line: string): number {
+	if (line.substr(0, 3) === ' * ') {
+		return 3;
+	}
+	if (line.substr(0, 2) === '* ') {
+		return 2;
+	}
+	if (isValidURL(line)) {
+		return 0;
+	}
+	throw (new Error(`The specified line is not a valid URL. line contents:${line}`));
 }

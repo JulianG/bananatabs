@@ -220,6 +220,9 @@ img.icon.hidden {
 	resize: none;
 	overflow: hidden;
 	font-family: 'Inconsolata', 'Courier New', Courier, monospace;
+	background-color: #ffffff;
+	outline: #00000000;
+	border: 0;
 }
 
 button {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import * as BT from '../model/CoreTypes';
 
 import { windowsToString } from '../utils/SessionUtils';
@@ -8,23 +9,35 @@ interface Props {
 	onClose(): void;
 }
 
-const TextWindowView = (props: Props) => {
-	const text = windowsToString([props.window]);
-	const rows = text.split('\n').length;
-	return (
-		<div className="textsession">
-			<textarea
-				contentEditable={false}
-				rows={rows}
-				autoComplete="off"
-				wrap="off"
-				value={text}
-			/>
-			<div >
-				<button className="apply" onClick={props.onClose}>ok</button>&nbsp;
-				</div>
-		</div>
-	);
-};
+export default class TextWindowView extends React.Component<Props> {
 
-export default TextWindowView;
+	private textAreaRef: HTMLTextAreaElement | null;
+
+	render() {
+		const text = windowsToString([this.props.window]);
+		const rows = text.split('\n').length;
+		return (
+			<div className="textsession">
+				<textarea
+					ref={(ref) => this.textAreaRef = ref}
+					readOnly={true}
+					rows={rows}
+					autoComplete="off"
+					wrap="off"
+					value={text}
+				/>
+				<div >
+					<button className="apply" onClick={this.props.onClose}>ok</button>&nbsp;
+						</div>
+			</div>
+		);
+	}
+
+	componentDidMount() {
+		if (this.textAreaRef) {
+			this.textAreaRef.select();
+		}
+	}
+}
+
+
