@@ -232,24 +232,20 @@ img.icon.hidden {
 }
 
 button {
+	border-radius: 0.5rem;
 	margin-top: 0.6rem;
-	padding: 0.6rem;
+	padding: 1rem;
 	padding-left: 1.2rem;
 	padding-right: 1.2rem;
 	font-size: 1rem;
-	border-bottom-color: #999999;
-    border-right-color: #999999;
-	box-shadow: 0.1rem 0.1rem 0.15rem #00000066;
-}
-button:hover {
-	box-shadow: 0.1rem 0.1rem 0.1rem #00000066;
 }
 
-.textsession button.apply {
-	font-weight: bold;
-	background-color: white;
+button.ok {
+	background-color: #ffe048;
+	border-bottom-color: #b49b1e;
 }
 
-.textsession button.cancel {
+button.cancel {
 	background-color: #eeeeee;
+	border-bottom-color: #999999;
 }

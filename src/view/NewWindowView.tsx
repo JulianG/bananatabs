@@ -6,7 +6,7 @@ import { stringToWindows } from '../utils/SessionUtils';
 interface Props {
 	minimumLines: number;
 	onSave(windows: BT.Window[]): void;
-	onCancel(): void;
+	onClose(): void;
 }
 
 interface State {
@@ -40,8 +40,8 @@ export default class TextWindowView extends React.Component<Props, State> {
 					onKeyUp={this.handleKeyPress}
 				/>
 				<div >
-					<button className="save" onClick={this.save}>Apply</button>&nbsp;
-					<button className="cancel" onClick={this.props.onCancel}>Cancel</button>
+					<button className="ok" onClick={this.save}>add links</button>&nbsp;
+					<button className="cancel" onClick={this.props.onClose}>go back</button>
 				</div>
 			</div>
 		);

@@ -65,7 +65,7 @@ export default class MainView extends React.Component<Props, State> {
 				}
 				{mode === 'list' &&
 					(
-						<button className="add" onClick={this.changeToWriteMode}>add links</button>
+						<button className="ok" onClick={this.changeToWriteMode}>Add Links</button>
 					)
 				}
 				{mode === 'read' &&
@@ -81,7 +81,7 @@ export default class MainView extends React.Component<Props, State> {
 						<NewWindowView
 							minimumLines={10}
 							onSave={this.addWindowGroup}
-							onCancel={this.changeToListMode}
+							onClose={this.changeToListMode}
 						/>
 					)
 				}

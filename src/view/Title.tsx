@@ -12,7 +12,7 @@ const Title = (props: Props) => {
 				src="/icons/app-icon.png"
 				onClick={props.onClick}
 			/>
-			<span>Banana Tabs!</span>&nbsp;
+			&nbsp;<span>Banana Tabs!</span>&nbsp;
 			<div style={{ display: 'inline' }} className="credits">BETA</div>
 		</h3>
 	);

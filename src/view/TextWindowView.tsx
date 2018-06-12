@@ -13,6 +13,11 @@ export default class TextWindowView extends React.Component<Props> {
 
 	private textAreaRef: HTMLTextAreaElement | null;
 
+	constructor(props: Props) {
+		super(props);
+		this.copyToClipboardAndClose = this.copyToClipboardAndClose.bind(this);
+	}
+
 	render() {
 		const text = windowsToString([this.props.window]);
 		const rows = text.split('\n').length;
@@ -27,8 +32,19 @@ export default class TextWindowView extends React.Component<Props> {
 					value={text}
 				/>
 				<div >
-					<button className="apply" onClick={this.props.onClose}>ok</button>&nbsp;
-						</div>
+					<button
+						className="ok"
+						onClick={this.copyToClipboardAndClose}
+					>
+						Copy to Clipboard
+					</button>
+					<button
+						className="cancel"
+						onClick={this.props.onClose}
+					>
+						Go Back
+					</button>
+				</div>
 			</div>
 		);
 	}
@@ -37,6 +53,11 @@ export default class TextWindowView extends React.Component<Props> {
 		if (this.textAreaRef) {
 			this.textAreaRef.select();
 		}
+	}
+
+	private copyToClipboardAndClose() {
+		document.execCommand('copy');
+		this.props.onClose();
 	}
 }
 
