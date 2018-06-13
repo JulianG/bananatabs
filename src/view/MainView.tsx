@@ -7,6 +7,7 @@ import TabMutator from '../model/mutators/TabMutator';
 
 import Title from './Title';
 import WindowListView from './WindowListView';
+import MainViewCmdButtons from './MainViewCmdButtons';
 import TextWindowView from './TextWindowView';
 import NewWindowView from './NewWindowView';
 import Footer from './Footer';
@@ -33,6 +34,7 @@ export default class MainView extends React.Component<Props, State> {
 		this.changeToListMode = this.changeToListMode.bind(this);
 		this.changeToReadMode = this.changeToReadMode.bind(this);
 		this.changeToWriteMode = this.changeToWriteMode.bind(this);
+		this.changeToReadModeAllWindows = this.changeToReadModeAllWindows.bind(this);
 		this.addWindowGroup = this.addWindowGroup.bind(this);
 	}
 
@@ -65,13 +67,19 @@ export default class MainView extends React.Component<Props, State> {
 				}
 				{mode === 'list' &&
 					(
-						<button className="ok" onClick={this.changeToWriteMode}>Add Links</button>
+						<MainViewCmdButtons
+							onPaste={this.changeToWriteMode}
+							onCopyAll={this.changeToReadModeAllWindows}
+						/>
 					)
 				}
 				{mode === 'read' &&
 					(
 						<TextWindowView
-							window={windows.find(w => w.id === this.state.windowId)!}
+							windows={windows.filter(w => {
+								return this.state.windowId === -1 ||
+									w.id === this.state.windowId;
+							})}
 							onClose={this.changeToListMode}
 						/>
 					)
@@ -106,6 +114,10 @@ export default class MainView extends React.Component<Props, State> {
 		console.table(windows);
 		this.props.sessionMutator.addWindows(windows);
 		this.changeToListMode();
+	}
+
+	private changeToReadModeAllWindows() {
+		this.changeToReadMode(-1);
 	}
 
 }

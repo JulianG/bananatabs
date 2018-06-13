@@ -5,7 +5,7 @@ import * as BT from '../model/CoreTypes';
 import { windowsToString } from '../utils/SessionUtils';
 
 interface Props {
-	window: BT.Window;
+	windows: BT.Window[];
 	onClose(): void;
 }
 
@@ -19,7 +19,7 @@ export default class TextWindowView extends React.Component<Props> {
 	}
 
 	render() {
-		const text = windowsToString([this.props.window]);
+		const text = windowsToString(this.props.windows);
 		const rows = text.split('\n').length;
 		return (
 			<div className="textsession">
@@ -31,13 +31,14 @@ export default class TextWindowView extends React.Component<Props> {
 					wrap="off"
 					value={text}
 				/>
-				<div >
+				<div className="command-buttons">
 					<button
 						className="ok"
 						onClick={this.copyToClipboardAndClose}
 					>
 						Copy to Clipboard
 					</button>
+					<span />
 					<button
 						className="cancel"
 						onClick={this.props.onClose}

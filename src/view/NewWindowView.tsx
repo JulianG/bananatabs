@@ -39,8 +39,9 @@ export default class TextWindowView extends React.Component<Props, State> {
 					onChange={this.handleChange}
 					onKeyUp={this.handleKeyPress}
 				/>
-				<div >
-					<button className="ok" onClick={this.save}>add links</button>&nbsp;
+				<div className="command-buttons">
+					<button className="ok" onClick={this.save}>add links</button>
+					<span />
 					<button className="cancel" onClick={this.props.onClose}>go back</button>
 				</div>
 			</div>
