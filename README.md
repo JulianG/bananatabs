@@ -1,7 +1,10 @@
 # BANANA TABS!
 
-Install from Chrome WebStore: https://chrome.google.com/webstore/detail/banana-tabs-by-jg/hphakbojjadmnhhkflbgnaeljkgaogfn
+## Install from Chrome WebStore:
 
+https://chrome.google.com/webstore/detail/banana-tabs-by-jg/hphakbojjadmnhhkflbgnaeljkgaogfn
+
+![](https://github.com/JulianG/bananatabs/blob/master/img/drag-drop.gif?raw=true)
 
 ## Development
 
