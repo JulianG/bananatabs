@@ -3,9 +3,9 @@ import * as React from 'react';
 const doNothing = () => { /**/ };
 
 const Icons = {
-	Copy: require('../icons/text.svg'),
-	Edit: require('../icons/edit.svg'),
-	Delete: require('../icons/delete.svg')
+	Copy: require('./icons/text.svg'),
+	Edit: require('./icons/edit.svg'),
+	Delete: require('./icons/delete.svg')
 };
 
 interface Props {

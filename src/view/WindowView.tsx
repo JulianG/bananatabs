@@ -8,12 +8,12 @@ import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
 
 const Icons = {
-	Edit: require('../icons/edit.svg'),
-	On: require('../icons/on.svg'),
-	Off: require('../icons/off.svg'),
-	Delete: require('../icons/delete.svg'),
-	ArrowDown: require('../icons/arrow-down.svg'),
-	ArrowRight: require('../icons/arrow-right.svg')
+	Edit: require('./icons/edit.svg'),
+	On: require('./icons/on.svg'),
+	Off: require('./icons/off.svg'),
+	Delete: require('./icons/delete.svg'),
+	ArrowDown: require('./icons/arrow-down.svg'),
+	ArrowRight: require('./icons/arrow-right.svg')
 };
 
 interface Props {
