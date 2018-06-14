@@ -1,5 +1,7 @@
 # BANANA TABS!
 
+[![Build Status](https://travis-ci.org/JulianG/bananatabs.svg?branch=master&x)](https://travis-ci.org/JulianG/bananatabs)
+
 ## Install from Chrome WebStore:
 
 https://chrome.google.com/webstore/detail/banana-tabs-by-jg/hphakbojjadmnhhkflbgnaeljkgaogfn
