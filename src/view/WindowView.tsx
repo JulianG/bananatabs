@@ -20,6 +20,7 @@ interface Props {
 	window: BT.Window;
 	windowMutator: WindowMutator;
 	tabMutator: TabMutator;
+	debug?: boolean;
 	onCopy(windowId: number): void;
 }
 
@@ -107,6 +108,7 @@ export default class WindowView extends React.Component<Props, State> {
 						window={this.props.window}
 						tab={tab}
 						mutator={this.props.tabMutator}
+						debug={this.props.debug}
 					/>
 				);
 			})
@@ -145,7 +147,7 @@ export default class WindowView extends React.Component<Props, State> {
 	private renderStaticTitle(window: BT.Window): JSX.Element {
 
 		const tabsStr = window.expanded ? '' : ' (' + window.tabs.length + ' tabs)';
-		const title = (window.title || 'Window');
+		const title = (this.props.debug ? `(${window.id}) ` : '') + (window.title || 'Window');
 		const fullscreen = window.state === 'fullscreen' ? '(fullscreen)' : '';
 
 		return (

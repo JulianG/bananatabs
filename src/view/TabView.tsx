@@ -15,6 +15,7 @@ interface Props {
 	window: BT.Window;
 	tab: BT.Tab;
 	mutator: TabMutator;
+	debug?: boolean;
 }
 
 interface State {
@@ -54,7 +55,7 @@ export default class TabView extends React.Component<Props, State> {
 			(tab.visible && window.visible) ? '' : 'hidden'
 		];
 
-		const title = tab.title;
+		const title = (this.props.debug ? `(${tab.id}) ` : '') + tab.title;
 		const visibilityIconSrc = tab.visible ? window.visible ? Icons.On : Icons.OnHidden : Icons.Off;
 		const visibilityIconText = tab.visible ? 'Hide Tab' : 'Show Tab';
 

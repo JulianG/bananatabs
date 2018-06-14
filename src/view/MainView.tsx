@@ -5,6 +5,8 @@ import SessionMutator from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
 
+import ClickCounter from './ClickCounter';
+
 import { stringToWindows, windowsToString } from '../utils/MarkdownSerialisation';
 
 import Title from './Title';
@@ -25,26 +27,24 @@ interface Props {
 interface State {
 	mode: 'list' | 'read' | 'write';
 	windowId: number;
+	debug: boolean;
 }
 
 export default class MainView extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.state = { mode: 'list', windowId: 0 };
-
-		this.changeToListMode = this.changeToListMode.bind(this);
-		this.changeToReadMode = this.changeToReadMode.bind(this);
-		this.changeToWriteMode = this.changeToWriteMode.bind(this);
-		this.changeToReadModeAllWindows = this.changeToReadModeAllWindows.bind(this);
-		this.addWindowGroup = this.addWindowGroup.bind(this);
+		this.state = { mode: 'list', windowId: 0, debug: false };
+		this.bindFunctions();
 	}
 
 	render() {
 
 		return (
 			<div>
-				<Title />
+				<ClickCounter onClick={this.handleClickCount}>
+					<Title />
+				</ClickCounter>
 				{this.renderSession()}
 				<Footer version={this.props.version} />
 			</div>
@@ -63,6 +63,7 @@ export default class MainView extends React.Component<Props, State> {
 							sessionMutator={this.props.sessionMutator}
 							windowMutator={this.props.windowMutator}
 							tabMutator={this.props.tabMutator}
+							debug={this.state.debug}
 							onWindowCopied={this.changeToReadMode}
 						/>
 					)
@@ -122,6 +123,21 @@ export default class MainView extends React.Component<Props, State> {
 
 	private changeToReadModeAllWindows() {
 		this.changeToReadMode(-1);
+	}
+
+	private handleClickCount(count: number) {
+		console.log('click ' + count);
+		this.setState({ debug: count % 5 === 0 });
+	}
+
+	private bindFunctions() {
+		// code-smell: too many bind(s)
+		this.changeToListMode = this.changeToListMode.bind(this);
+		this.changeToReadMode = this.changeToReadMode.bind(this);
+		this.changeToWriteMode = this.changeToWriteMode.bind(this);
+		this.changeToReadModeAllWindows = this.changeToReadModeAllWindows.bind(this);
+		this.addWindowGroup = this.addWindowGroup.bind(this);
+		this.handleClickCount = this.handleClickCount.bind(this);
 	}
 
 }

@@ -13,6 +13,7 @@ interface Props {
 	sessionMutator: SessionMutator;
 	windowMutator: WindowMutator;
 	tabMutator: TabMutator;
+	debug?: boolean;
 	onWindowCopied(id: number): void;
 }
 
@@ -47,6 +48,7 @@ export default class WindowListView extends React.Component<Props, {}> {
 				window={windows[i]}
 				windowMutator={this.props.windowMutator}
 				tabMutator={this.props.tabMutator}
+				debug={this.props.debug}
 				onCopy={this.props.onWindowCopied}
 			/>
 		);
