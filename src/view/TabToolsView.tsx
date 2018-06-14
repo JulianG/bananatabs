@@ -3,7 +3,7 @@ import * as React from 'react';
 const doNothing = () => { /**/ };
 
 const Icons = {
-	Copy: require('./icons/text.svg'),
+	Share: require('./icons/share.svg'),
 	Edit: require('./icons/edit.svg'),
 	Delete: require('./icons/delete.svg')
 };
@@ -45,7 +45,7 @@ export default class TabToolsView extends React.Component<Props, State> {
 						id={'share'}
 						title="share"
 						className="icon"
-						src={Icons.Copy}
+						src={Icons.Share}
 						onClick={this.handleCopyAction}
 						onMouseOver={this.handleMouseOver}
 					/>
