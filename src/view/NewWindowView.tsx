@@ -29,7 +29,7 @@ export default class TextWindowView extends React.Component<Props, State> {
 		const rows = Math.max(this.props.minimumLines, text.split('\n').length);
 		return (
 			<div className="textsession">
-				<p>You can paste a list of links to be added to Banana Tabs!</p>
+				<p>You can paste a list of links to be added to Banana Tabs in a new window.</p>
 				<textarea
 					rows={rows}
 					autoComplete="off"
@@ -39,9 +39,9 @@ export default class TextWindowView extends React.Component<Props, State> {
 					onKeyUp={this.handleKeyPress}
 				/>
 				<div className="command-buttons">
-					<button className="ok" onClick={this.save}>add links</button>
+					<button className="ok" onClick={this.save}>Add links</button>
 					<span />
-					<button className="cancel" onClick={this.props.onClose}>go back</button>
+					<button className="cancel" onClick={this.props.onClose}>Go back</button>
 				</div>
 			</div>
 		);

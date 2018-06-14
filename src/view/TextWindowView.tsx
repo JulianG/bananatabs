@@ -35,14 +35,14 @@ export default class TextWindowView extends React.Component<Props> {
 						className="ok"
 						onClick={this.copyToClipboardAndClose}
 					>
-						Copy to Clipboard
+						Copy to clipboard
 					</button>
 					<span />
 					<button
 						className="cancel"
 						onClick={this.props.onClose}
 					>
-						Go Back
+						Go back
 					</button>
 				</div>
 			</div>

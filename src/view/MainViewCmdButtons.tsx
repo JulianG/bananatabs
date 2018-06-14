@@ -8,9 +8,9 @@ interface Props {
 const MainViewCmdButtons = (props: Props) => {
 	return (
 		<div className="command-buttons">
-			<button className="ok" onClick={props.onPaste}>Add Links</button>
+			<button className="ok" onClick={props.onPaste}>Add links</button>
 			<span />
-			<button className="cancel" onClick={props.onCopyAll}>Share All Windows</button>
+			<button className="cancel" onClick={props.onCopyAll}>Share all windows</button>
 		</div>
 	);
 };
