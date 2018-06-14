@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import * as BT from '../model/CoreTypes';
 
-import { windowsToString } from '../utils/SessionUtils';
-
 interface Props {
 	windows: BT.Window[];
+	windowsToString(windows: BT.Window[]): string;
 	onClose(): void;
 }
 
@@ -19,7 +18,7 @@ export default class TextWindowView extends React.Component<Props> {
 	}
 
 	render() {
-		const text = windowsToString(this.props.windows);
+		const text = this.props.windowsToString(this.props.windows);
 		const rows = text.split('\n').length;
 		return (
 			<div className="textsession">

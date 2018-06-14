@@ -5,6 +5,8 @@ import SessionMutator from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
 
+import { stringToWindows, windowsToString } from '../utils/MarkdownSerialisation';
+
 import Title from './Title';
 import WindowListView from './WindowListView';
 import MainViewCmdButtons from './MainViewCmdButtons';
@@ -80,6 +82,7 @@ export default class MainView extends React.Component<Props, State> {
 								return this.state.windowId === -1 ||
 									w.id === this.state.windowId;
 							})}
+							windowsToString={windowsToString}
 							onClose={this.changeToListMode}
 						/>
 					)
@@ -88,6 +91,7 @@ export default class MainView extends React.Component<Props, State> {
 					(
 						<NewWindowView
 							minimumLines={10}
+							stringToWindows={stringToWindows}
 							onSave={this.addWindowGroup}
 							onClose={this.changeToListMode}
 						/>

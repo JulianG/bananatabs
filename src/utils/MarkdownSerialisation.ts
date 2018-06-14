@@ -21,13 +21,19 @@ export function stringToWindows(str: string): BT.Window[] {
 	const wins: BT.Window[] = [];
 	const lines = str.split('\n');
 
-	let win: BT.Window; // = { ...BT.NullWindow };
-	let a: boolean = false;
+	let win: BT.Window;
+	let shouldCreateNewWindow: boolean = true;
 	lines.forEach(line => {
 
-		if (!a) {
-			a = true;
-			win = { ...BT.NullWindow, tabs: [], id: getId(), expanded: true, title: 'Window' };
+		if (shouldCreateNewWindow) {
+			shouldCreateNewWindow = false;
+			win = {
+				...BT.NullWindow,
+				id: getId(),
+				title: 'Window',
+				tabs: [],
+				expanded: true
+			};
 			wins.push(win);
 		}
 		const isTab = isTabLine(line);
@@ -44,7 +50,7 @@ export function stringToWindows(str: string): BT.Window[] {
 			}
 		}
 		if (isEmpty) {
-			a = false;
+			shouldCreateNewWindow = true;
 		}
 	});
 

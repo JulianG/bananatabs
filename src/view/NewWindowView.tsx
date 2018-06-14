@@ -1,10 +1,9 @@
 import * as React from 'react';
 import * as BT from '../model/CoreTypes';
 
-import { stringToWindows } from '../utils/SessionUtils';
-
 interface Props {
 	minimumLines: number;
+	stringToWindows(str: string): BT.Window[];
 	onSave(windows: BT.Window[]): void;
 	onClose(): void;
 }
@@ -59,7 +58,7 @@ export default class TextWindowView extends React.Component<Props, State> {
 	}
 
 	private save() {
-		const windows = stringToWindows(this.state.text);
+		const windows = this.props.stringToWindows(this.state.text);
 		this.props.onSave(windows);
 	}
 

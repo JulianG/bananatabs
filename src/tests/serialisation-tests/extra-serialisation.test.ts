@@ -1,4 +1,4 @@
-import { windowsToString, stringToWindows } from '../../utils/SessionUtils';
+import { windowsToString, stringToWindows } from '../../utils/MarkdownSerialisation';
 
 const expectedMd = `My Window 482:
  * http://www.bananalink.org.uk/all-about-bananas
