@@ -43,7 +43,7 @@ export default class TabToolsView extends React.Component<Props, State> {
 				{this.props.actionIconVisibility.copy &&
 					<img
 						id={'share'}
-						title="Copy"
+						title="share"
 						className="icon"
 						src={Icons.Copy}
 						onClick={this.handleCopyAction}
@@ -53,7 +53,7 @@ export default class TabToolsView extends React.Component<Props, State> {
 				{this.props.actionIconVisibility.rename &&
 					<img
 						id={'rename'}
-						title="Rename"
+						title="rename"
 						className="icon"
 						src={Icons.Edit}
 						onClick={this.handleRenameAction}
@@ -62,7 +62,7 @@ export default class TabToolsView extends React.Component<Props, State> {
 				{this.props.actionIconVisibility.delete &&
 					<img
 						id={'delete'}
-						title="Close and Delete"
+						title="delete"
 						className="icon"
 						src={Icons.Delete}
 						onClick={this.handleDeleteAction}
