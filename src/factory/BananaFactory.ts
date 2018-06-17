@@ -38,7 +38,11 @@ export default class BananaFactory {
 	getSessionProvider(): SessionProvider {
 		if (!this.sessionProvider) {
 			if (chrome && chrome.windows && chrome.tabs) {
-				this.sessionProvider = new ChromeSessionProvider(this.liveSessionMerger, this.persistence);
+				this.sessionProvider = new ChromeSessionProvider(
+					this.getBrowserController(),
+					this.liveSessionMerger,
+					this.persistence
+				);
 			} else {
 				this.sessionProvider = new FakeSessionProvider(this.persistence);
 			}

@@ -1,4 +1,5 @@
 import * as BT from '../model/CoreTypes';
+import BrowserController from '../model/mutators/BrowserController';
 import SessionProvider from '../model/SessionProvider';
 import LiveSessionMerger from '../model/mergers/LiveSessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
@@ -12,17 +13,15 @@ export default class ChromeSessionProvider implements SessionProvider {
 
 	private chromeEventHandler: ChromeEventHandler;
 
-	constructor(private sessionMerger: LiveSessionMerger, private persistence: SessionPersistence) {
+	constructor(
+		private browserController: BrowserController,
+		private sessionMerger: LiveSessionMerger,
+		private persistence: SessionPersistence
+	) {
 		this.session = BT.EmptySession;
-
 		this._updateSession = this._updateSession.bind(this);
-
-		this.convertWindow = this.convertWindow.bind(this);
-		this.convertTab = this.convertTab.bind(this);
-
 		this.chromeEventHandler = new ChromeEventHandler(this);
 		this.chromeEventHandler.enable();
-		
 	}
 
 	getWindow(id: number): BT.Window {
@@ -44,7 +43,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 			console.log(`SessionProvider.initialiseSession ... because ${reason}.`);
 			console.log(`  getting session from disk...`);
 			const retrievedSession = await this.persistence.retrieveSession();
-			console.log(`  getting session from chrome.windows.getAll...`);
+			console.log(`  getting session from browser...`);
 			const liveSession = await this.getChromeSession();
 			console.log(`  done. now merging sessions`);
 			this.session = this.mergeSessions(retrievedSession, liveSession, reason);
@@ -89,22 +88,11 @@ export default class ChromeSessionProvider implements SessionProvider {
 		}
 	}
 
-	private getChromeSession(): Promise<BT.Session> {
-		console.log('chrome.windows.getAll...');
-		return new Promise<BT.Session>((resolve, reject) => {
-			chrome.windows.getAll({ populate: true }, (windows: Array<chrome.windows.Window>) => {
-				console.log('getChromeSession... retrieved!');
-				const windowsWithTabs = windows.filter(w => (w.tabs || []).length > 0 && w.incognito === false);
-				const sessionWindows: BT.Window[] = windowsWithTabs.map(this.convertWindow);
-				const panelWindow = this.findChromeExtensionWindow(sessionWindows) || BT.NullWindow;
-				const filteredSessionWindows = sessionWindows.filter(w => w !== panelWindow);
-				console.log('getChromeSession... resolving...');
-				resolve({
-					windows: filteredSessionWindows,
-					panelWindow
-				});
-			});
-		});
+	private async getChromeSession(): Promise<BT.Session> {
+		const sessionWindows: BT.Window[] = await this.browserController.getAllWindows();
+		const panelWindow = this.findChromeExtensionWindow(sessionWindows) || BT.NullWindow;
+		const filteredSessionWindows = sessionWindows.filter(w => w !== panelWindow);
+		return { windows: filteredSessionWindows, panelWindow };
 	}
 
 	private mergeSessions(retrievedSession: BT.Session, liveSession: BT.Session, reason?: string) {
@@ -113,42 +101,10 @@ export default class ChromeSessionProvider implements SessionProvider {
 		return session;
 	}
 
-	private convertWindow(w: chrome.windows.Window): BT.Window {
-		return {
-			id: w.id,
-			title: '',
-			visible: true,
-			icon: '',
-			tabs: (w.tabs || []).filter(t => t.incognito === false).map(this.convertTab),
-			focused: w.focused || false,
-			type: w.type,
-			state: w.state,
-			geometry: this.getWindowGeometry(w),
-			expanded: true
-		};
-	}
-
-	private convertTab(t: chrome.tabs.Tab, i: number): BT.Tab {
-		return {
-			id: t.id || -1,
-			title: t.title || '',
-			visible: true,
-			icon: t.favIconUrl || '',
-			index: t.index,
-			listIndex: i,
-			url: t.url || '',
-			active: t.active
-		};
-	}
-
 	private findChromeExtensionWindow(windows: BT.Window[]): BT.Window | undefined {
 		return windows.find(w => {
-			return (w.tabs.some(t => t.url === chrome.extension.getURL('index.html')));
+			return (w.tabs.some(t => t.url === window.location.toString()));
 		});
-	}
-
-	private getWindowGeometry(w: chrome.windows.Window): BT.Geometry {
-		return { top: w.top || 0, left: w.left || 0, width: w.width || 0, height: w.height || 0 };
 	}
 
 }

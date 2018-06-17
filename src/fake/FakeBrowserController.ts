@@ -27,4 +27,7 @@ export default class FakeBrowserController implements BrowserController {
 		console.log(`FakeBrowserController.showWindow(...) ...`);
 		return Promise.resolve();
 	}
+	public async getAllWindows(): Promise<BT.Window[]> {
+		return [];
+	}
 }

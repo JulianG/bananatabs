@@ -54,6 +54,11 @@ export default class ChromeBrowserController implements BrowserController {
 		}
 	}
 
+	public async getAllWindows(): Promise<BT.Window[]> {
+		const wins = await PromisingChromeAPI.windows.getAll({ populate: true });
+		return wins.map(convertWindow);
+	}
+
 	/////
 
 	private async _showWindowAsFirst(window: BT.Window) {
@@ -105,4 +110,37 @@ export default class ChromeBrowserController implements BrowserController {
 			throw (new Error('Error. Failed to create window.'));
 		}
 	}
+
+}
+
+function convertWindow(w: chrome.windows.Window): BT.Window {
+	return {
+		id: w.id,
+		title: '',
+		visible: true,
+		icon: '',
+		tabs: (w.tabs || []).filter(t => t.incognito === false).map(convertTab),
+		focused: w.focused || false,
+		type: w.type,
+		state: w.state,
+		geometry: getWindowGeometry(w),
+		expanded: true
+	};
+}
+
+function convertTab(t: chrome.tabs.Tab, i: number): BT.Tab {
+	return {
+		id: t.id || -1,
+		title: t.title || '',
+		visible: true,
+		icon: t.favIconUrl || '',
+		index: t.index,
+		listIndex: i,
+		url: t.url || '',
+		active: t.active
+	};
+}
+
+function getWindowGeometry(w: chrome.windows.Window): BT.Geometry {
+	return { top: w.top || 0, left: w.left || 0, width: w.width || 0, height: w.height || 0 };
 }
