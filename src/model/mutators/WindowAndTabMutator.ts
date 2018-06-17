@@ -142,9 +142,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		window.visible = false;
 		await this.storeSession();
 		await this.safeBrowserCall(async () => {
-			await this.safeBrowserCall(async () => {
-				await this.browser.closeWindow(window.id);
-			});
+			await this.browser.closeWindow(window.id);
 		});
 	}
 
@@ -171,7 +169,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	}
 
 	//////////////////////
-	
+
 	private async safeBrowserCall(f: () => void) {
 		this.provider.disableBrowserEvents();
 		await f();
