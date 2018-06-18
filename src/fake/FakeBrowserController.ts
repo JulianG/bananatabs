@@ -30,4 +30,21 @@ export default class FakeBrowserController implements BrowserController {
 	public async getAllWindows(): Promise<BT.Window[]> {
 		return [];
 	}
+
+	public addEventListener(listener: (event: string, reason?: string) => void) {
+		//
+	}
+
+	public removeEventListener(listener: (event: string, reason?: string) => void) {
+		//
+	}
+
+	public toggleEvents(t: boolean) {
+		//
+	}
+
+	public areEventsEnabled(): boolean {
+		return true;
+	}
+
 }

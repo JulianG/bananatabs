@@ -1,10 +1,18 @@
 import * as BT from '../model/CoreTypes';
 import { PromisingChromeAPI } from './PromisingChromeAPI';
 import BrowserController from '../model/mutators/BrowserController';
+import ChromeEventHandler from './ChromeEventHandler';
 
 import console from '../utils/MutedConsole';
 
+
 export default class ChromeBrowserController implements BrowserController {
+
+	private chromeEventHandler: ChromeEventHandler;
+
+	constructor() {
+		this.chromeEventHandler = new ChromeEventHandler();
+	}
 
 	public async closeWindow(id: number) {
 		console.log(`ChromeBrowserController.closeWindow(${id}) ...`);
@@ -57,6 +65,26 @@ export default class ChromeBrowserController implements BrowserController {
 	public async getAllWindows(): Promise<BT.Window[]> {
 		const wins = await PromisingChromeAPI.windows.getAll({ populate: true });
 		return wins.map(convertWindow);
+	}
+
+	/////
+
+	public toggleEvents(t: boolean) {
+		t ?
+			this.chromeEventHandler.enable() :
+			this.chromeEventHandler.disable();
+	}
+
+	public areEventsEnabled(): boolean {
+		return this.chromeEventHandler.isEnabled();
+	}
+
+	public addEventListener(listener: (event: string, reason?: string) => void) {
+		this.chromeEventHandler.addEventListener(listener);
+	}
+
+	public removeEventListener(listener: (event: string, reason?: string) => void) {
+		this.chromeEventHandler.removeEventListener(listener);
 	}
 
 	/////
