@@ -55,10 +55,14 @@ export default class ChromeSessionProvider implements SessionProvider {
 	}
 
 	async updateSession(reason?: string) {
-		console.log(`SessionProvider.updateSession ... beacuse: ${reason}`);
-		await this._updateSession(reason);
-		console.log(`SessionProvider.updateSession calling onSessionChanged beacuse: ${reason}`);
-		this.onSessionChanged(this.session);
+		if (!this.busy) {
+			this.busy = true;
+			console.log(`SessionProvider.updateSession ... beacuse: ${reason}`);
+			await this._updateSession(reason);
+			console.log(`SessionProvider.updateSession calling onSessionChanged beacuse: ${reason}`);
+			this.onSessionChanged(this.session);
+			this.busy = false;
+		}
 	}
 
 	async storeSession(session: BT.Session) {

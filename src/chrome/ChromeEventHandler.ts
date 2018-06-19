@@ -50,11 +50,6 @@ export default class ChromeEventHandler {
 		}
 	}
 
-
-	public isEnabled() {
-		return this.enabled;
-	}
-
 	enable() {
 		this.enabled = true;
 	}
@@ -79,13 +74,13 @@ export default class ChromeEventHandler {
 	}
 
 	private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
-		if (this.enabled && this.isPanelTab(id) === false && changeInfo.status === 'complete') {
+		if (this.isPanelTab(id) === false && changeInfo.status === 'complete') {
 			this.dispatchEvent('onTabsUpdated', `onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
 		}
 	}
 
 	private onTabsRemoved(id: number, removedInfo: chrome.tabs.TabRemoveInfo) {
-		if (this.enabled && this.isPanelTab(id) === false && removedInfo.isWindowClosing === false) {
+		if (this.isPanelTab(id) === false && removedInfo.isWindowClosing === false) {
 			this.dispatchEvent('onTabsRemoved', `onTabsRemoved - ${id} - ${JSON.stringify(removedInfo)}`);
 		}
 	}
