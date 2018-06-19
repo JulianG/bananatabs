@@ -5,7 +5,6 @@ import ChromeEventHandler from './ChromeEventHandler';
 
 import console from '../utils/MutedConsole';
 
-
 export default class ChromeBrowserController implements BrowserController {
 
 	private events: ChromeEventHandler;
@@ -78,22 +77,16 @@ export default class ChromeBrowserController implements BrowserController {
 
 	/////
 
-	public toggleEvents(t: boolean) {
-		t ?
-			this.events.enable() :
-			this.events.disable();
-	}
-
-	public areEventsEnabled(): boolean {
-		return this.events.isEnabled();
-	}
-
 	public addEventListener(listener: (event: string, reason?: string) => void) {
 		this.events.addEventListener(listener);
 	}
 
 	public removeEventListener(listener: (event: string, reason?: string) => void) {
 		this.events.removeEventListener(listener);
+	}
+
+	public getAppURL(): string {
+		return chrome.extension.getURL('index.html');
 	}
 
 	/////

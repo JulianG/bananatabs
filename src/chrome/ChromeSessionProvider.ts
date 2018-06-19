@@ -65,14 +65,6 @@ export default class ChromeSessionProvider implements SessionProvider {
 		await this.persistence.storeSession(session);
 	}
 
-	// enableBrowserEvents() {
-	// 	this.busy = false;
-	// }
-
-	// disableBrowserEvents() {
-	// 	this.busy = true;
-	// }
-
 	//////////////////////////
 
 	private handleBrowserEvent(event: string, reason?: string) {
@@ -109,8 +101,9 @@ export default class ChromeSessionProvider implements SessionProvider {
 	}
 
 	private findChromeExtensionWindow(windows: BT.Window[]): BT.Window | undefined {
+		const appURL = this.browserController.getAppURL();
 		return windows.find(w => {
-			return (w.tabs.some(t => t.url === window.location.toString()));
+			return (w.tabs.some(t => t.url === appURL));
 		});
 	}
 

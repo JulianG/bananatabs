@@ -10,6 +10,6 @@ export default interface BrowserController {
 
 	addEventListener(listener: (event: string, reason?: string) => void): void;
 	removeEventListener(listener: (event: string, reason?: string) => void): void;
-	toggleEvents(t: boolean): void;
-	areEventsEnabled(): boolean;
+
+	getAppURL(): string;
 }

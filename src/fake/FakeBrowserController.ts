@@ -39,12 +39,8 @@ export default class FakeBrowserController implements BrowserController {
 		//
 	}
 
-	public toggleEvents(t: boolean) {
-		//
-	}
-
-	public areEventsEnabled(): boolean {
-		return true;
+	public getAppURL(): string {
+		return window.location.toString();
 	}
 
 }
