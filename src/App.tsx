@@ -19,6 +19,7 @@ interface State {
 class App extends React.Component<{}, State> {
 
   private version: string;
+  private buildString: string;
 
   private sessionProvider: SessionProvider;
   private sessionMutator: SessionMutator;
@@ -29,6 +30,7 @@ class App extends React.Component<{}, State> {
     super(props);
     console.assert(MANIFEST.version !== undefined, 'manifest.json must contain a "version" key.');
     this.version = MANIFEST.version || '0.0';
+    this.buildString = MANIFEST.buildString || 'aaa';
 
     const factory = new BananaFactory();
 
@@ -56,6 +58,7 @@ class App extends React.Component<{}, State> {
     return (
       <MainView
         version={this.version}
+        buildString={this.buildString}
         session={this.state.session}
         sessionMutator={this.sessionMutator}
         windowMutator={this.windowMutator}

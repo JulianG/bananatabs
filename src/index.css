@@ -205,6 +205,11 @@ img.icon.hidden {
 	padding-top: 0.4rem;
 }
 
+.credits a.version {
+	color: #000000;
+	text-decoration: none;
+}
+
 /* TextSessionView  */
 
 .textsession {

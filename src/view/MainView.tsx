@@ -18,6 +18,7 @@ import Footer from './Footer';
 
 interface Props {
 	version: string;
+	buildString: string;
 	session: BT.Session;
 	sessionMutator: SessionMutator;
 	windowMutator: WindowMutator;
@@ -46,7 +47,7 @@ export default class MainView extends React.Component<Props, State> {
 					<Title />
 				</ClickCounter>
 				{this.renderSession()}
-				<Footer version={this.props.version} />
+				<Footer version={this.props.version} buildString={this.props.buildString} />
 			</div>
 		);
 	}

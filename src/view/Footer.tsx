@@ -1,9 +1,13 @@
 import * as React from 'react';
 
-const Footer = ({ version }: { version: string }) => {
+interface Props {
+	version: string;
+	buildString: string;
+}
+const Footer = ({ version, buildString }: Props) => {
 	return (
 		<div className="credits">
-			<p><strong>BananaTabs! v{version}</strong><br />
+			<p><strong>BananaTabs! <a href="#" className="version" title={buildString}>v{version}</a></strong><br />
 				Developed by Julian Garamendy.<br />
 				Icons designed by Dave Gandy from&nbsp;
 				<a href="https://www.flaticon.com/packs/font-awesome" target="_blank">FlatIcon</a>. -
