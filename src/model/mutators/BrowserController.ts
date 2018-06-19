@@ -1,7 +1,7 @@
 import * as BT from '../CoreTypes';
 
 export default interface BrowserController {
-	closeWindow(id: number): Promise<number | void>;
+	closeWindow(id: number): Promise<void>;
 	closeTab(id: number): Promise<void>;
 	selectTab(windowId: number, tabId: number): Promise<void>;
 	createTab(window: BT.Window, tab: BT.Tab): Promise<void>;

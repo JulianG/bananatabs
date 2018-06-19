@@ -10,7 +10,7 @@ export default interface SessionProvider {
 	getWindow(id: number): BT.Window;
 	getTab(id: number): BT.Tab;
 	
-	enableBrowserEvents(): void;
-	disableBrowserEvents(): void;
+	// enableBrowserEvents(): void;
+	// disableBrowserEvents(): void;
 
 }

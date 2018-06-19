@@ -1,4 +1,6 @@
 
+import console from '../utils/MutedConsole';
+
 interface EventListener {
 	(event: string, reason?: string): void;
 }
@@ -11,6 +13,7 @@ export default class ChromeEventHandler {
 
 	constructor() {
 
+		this.enabled = true;
 		this.eventListeners = [];
 		
 		if (chrome && chrome.tabs) {
@@ -64,7 +67,10 @@ export default class ChromeEventHandler {
 
 	private dispatchEvent(event: string, reason?: string) {
 		if (this.enabled) {
-			this.eventListeners.forEach(listener => listener(event, reason));
+			console.log(`${event} event dispatched`);
+			this.eventListeners.forEach(listener => listener(event, reason || event));
+		} else {
+			console.warn(`${event} event NOT dispatched`);
 		}
 	}
 

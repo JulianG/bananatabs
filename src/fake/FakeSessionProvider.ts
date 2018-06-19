@@ -41,11 +41,11 @@ export default class FakeSessionProvider implements SessionProvider {
 		this.persistence.storeSession(session);
 	}
 
-	enableBrowserEvents() {
-		console.log(`FakeSessionProvider.enableBrowserEvents`);
-	}
-	disableBrowserEvents() {
-		console.log(`FakeSessionProvider.disableBrowserEvents`);
-	}
+	// enableBrowserEvents() {
+	// 	console.log(`FakeSessionProvider.enableBrowserEvents`);
+	// }
+	// disableBrowserEvents() {
+	// 	console.log(`FakeSessionProvider.disableBrowserEvents`);
+	// }
 
 }

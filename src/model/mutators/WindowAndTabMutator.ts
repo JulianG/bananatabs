@@ -171,9 +171,9 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	//////////////////////
 
 	private async safeBrowserCall(f: () => void) {
-		this.provider.disableBrowserEvents();
+		// this.provider.disableBrowserEvents();
 		await f();
-		this.provider.enableBrowserEvents();
+		// this.provider.enableBrowserEvents();
 	}
 
 }

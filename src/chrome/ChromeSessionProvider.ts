@@ -65,19 +65,22 @@ export default class ChromeSessionProvider implements SessionProvider {
 		await this.persistence.storeSession(session);
 	}
 
-	enableBrowserEvents() {
-		this.busy = false;
-	}
+	// enableBrowserEvents() {
+	// 	this.busy = false;
+	// }
 
-	disableBrowserEvents() {
-		this.busy = true;
-	}
+	// disableBrowserEvents() {
+	// 	this.busy = true;
+	// }
 
 	//////////////////////////
 
 	private handleBrowserEvent(event: string, reason?: string) {
 		if (!this.busy) {
+			console.log(`handleBrowserEvent: ${event} because ${reason}`);
 			this.updateSession(reason);
+		} else {
+			console.warn(`not handling browser event: ${event} because I was busy! (Actually ${reason})`);
 		}
 	}
 
