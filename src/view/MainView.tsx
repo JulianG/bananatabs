@@ -116,8 +116,6 @@ export default class MainView extends React.Component<Props, State> {
 	}
 
 	private addWindowGroup(windows: BT.Window[]) {
-		console.log(`adding window:`);
-		console.table(windows);
 		this.props.sessionMutator.addWindows(windows);
 		this.changeToListMode();
 	}
@@ -127,7 +125,6 @@ export default class MainView extends React.Component<Props, State> {
 	}
 
 	private handleClickCount(count: number) {
-		console.log('click ' + count);
 		this.setState({ debug: count % 5 === 0 });
 	}
 

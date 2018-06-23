@@ -30,4 +30,17 @@ export default class FakeBrowserController implements BrowserController {
 	public async getAllWindows(): Promise<BT.Window[]> {
 		return [];
 	}
+
+	public addEventListener(listener: (event: string, reason?: string) => void) {
+		//
+	}
+
+	public removeEventListener(listener: (event: string, reason?: string) => void) {
+		//
+	}
+
+	public getAppURL(): string {
+		return window.location.toString();
+	}
+
 }

@@ -46,7 +46,7 @@ export function stringToWindows(str: string): BT.Window[] {
 		if (isTab) {
 			const url = extractURL(line);
 			if (isValidURL(url)) {
-				win.tabs.push({ ...BT.NullTab, url, title: url, id: getId() });
+				win.tabs.push({ ...BT.NullTab, visible: true, url, title: url, id: getId() });
 			}
 		}
 		if (isEmpty) {

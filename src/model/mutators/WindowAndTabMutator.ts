@@ -17,9 +17,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		const win = this.provider.getWindow(winId);
 		win.tabs.forEach(t => t.active = t.id === tabId);
 		await this.storeSession();
-		this.safeBrowserCall(async () => {
-			await this.browser.selectTab(win.id, tabId);
-		});
+		await this.browser.selectTab(win.id, tabId);
 	}
 
 	toggleTabVisibility(winId: number, tabId: number) {
@@ -37,9 +35,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		if (win.visible) {
 			this.safeRenameWindow(win);
 			await this.storeSession();
-			await this.safeBrowserCall(async () => {
-				await this.browser.closeTab(tab.id);
-			});
+			await this.browser.closeTab(tab.id);
 		}
 		this.dispatchSessionChange();
 	}
@@ -50,9 +46,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		tab.visible = true;
 		await this.storeSession();
 		if (win.visible) {
-			await this.safeBrowserCall(async () => {
-				await this.browser.createTab(win, tab);
-			});
+			await this.browser.createTab(win, tab);
 		} else {
 			await this._showWindow(win);
 		}
@@ -69,9 +63,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		}
 		if (win.visible && tab.visible) {
 			this.safeRenameWindow(win);
-			await this.safeBrowserCall(async () => {
-				await this.browser.closeTab(tab.id);
-			});
+			await this.browser.closeTab(tab.id);
 		}
 		await this.storeSession();
 		this.dispatchSessionChange();
@@ -128,9 +120,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		}
 		await this.storeSession();
 		if (win.visible) {
-			await this.safeBrowserCall(async () => {
-				await this.browser.closeWindow(win.id);
-			});
+			await this.browser.closeWindow(win.id);
 		}
 		this.dispatchSessionChange();
 	}
@@ -141,17 +131,13 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 		this.safeRenameWindow(window);
 		window.visible = false;
 		await this.storeSession();
-		await this.safeBrowserCall(async () => {
-			await this.browser.closeWindow(window.id);
-		});
+		await this.browser.closeWindow(window.id);
 	}
 
 	private async _showWindow(window: BT.Window) {
 		window.visible = true;
 		await this.storeSession();
-		await this.safeBrowserCall(async () => {
-			await this.browser.showWindow(window);
-		});
+		await this.browser.showWindow(window);
 	}
 
 	///
@@ -166,14 +152,6 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
 	private dispatchSessionChange() {
 		this.provider.onSessionChanged(this.provider.session);
-	}
-
-	//////////////////////
-
-	private async safeBrowserCall(f: () => void) {
-		this.provider.disableBrowserEvents();
-		await f();
-		this.provider.enableBrowserEvents();
 	}
 
 }

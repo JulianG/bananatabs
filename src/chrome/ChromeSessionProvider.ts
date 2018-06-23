@@ -3,15 +3,13 @@ import BrowserController from '../model/mutators/BrowserController';
 import SessionProvider from '../model/SessionProvider';
 import LiveSessionMerger from '../model/mergers/LiveSessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
-import ChromeEventHandler from './ChromeEventHandler';
 import console from '../utils/MutedConsole';
 
 export default class ChromeSessionProvider implements SessionProvider {
 
 	public session: BT.Session;
 	public onSessionChanged: (session: BT.Session) => void;
-
-	private chromeEventHandler: ChromeEventHandler;
+	private busy: boolean;
 
 	constructor(
 		private browserController: BrowserController,
@@ -20,8 +18,8 @@ export default class ChromeSessionProvider implements SessionProvider {
 	) {
 		this.session = BT.EmptySession;
 		this._updateSession = this._updateSession.bind(this);
-		this.chromeEventHandler = new ChromeEventHandler(this);
-		this.chromeEventHandler.enable();
+		this.browserController.addEventListener(this.handleBrowserEvent.bind(this));
+		this.busy = false;
 	}
 
 	getWindow(id: number): BT.Window {
@@ -38,8 +36,8 @@ export default class ChromeSessionProvider implements SessionProvider {
 	}
 
 	async initialiseSession(reason?: string) {
-		if (this.chromeEventHandler.isEnabled()) {
-			this.chromeEventHandler.disable();
+		if (!this.busy) {
+			this.busy = true;
 			console.log(`SessionProvider.initialiseSession ... because ${reason}.`);
 			console.log(`  getting session from disk...`);
 			const retrievedSession = await this.persistence.retrieveSession();
@@ -52,39 +50,44 @@ export default class ChromeSessionProvider implements SessionProvider {
 			console.log(`  done. now...`);
 			console.log(`SessionProvider.initialiseSession calling onSessionChanged beacuse: ${reason}`);
 			this.onSessionChanged(this.session);
-			this.chromeEventHandler.enable();
+			this.busy = false;
 		}
 	}
 
 	async updateSession(reason?: string) {
-		console.log(`SessionProvider.updateSession ... beacuse: ${reason}`);
-		await this._updateSession(reason);
-		console.log(`SessionProvider.updateSession calling onSessionChanged beacuse: ${reason}`);
-		this.onSessionChanged(this.session);
+		if (!this.busy) {
+			this.busy = true;
+			console.log(`SessionProvider.updateSession ... beacuse: ${reason}`);
+			await this._updateSession(reason);
+			console.log(`SessionProvider.updateSession calling onSessionChanged beacuse: ${reason}`);
+			this.onSessionChanged(this.session);
+			this.busy = false;
+		}
 	}
 
 	async storeSession(session: BT.Session) {
 		await this.persistence.storeSession(session);
 	}
 
-	enableBrowserEvents() {
-		this.chromeEventHandler.enable();
-	}
-
-	disableBrowserEvents() {
-		this.chromeEventHandler.disable();
-	}
-
 	//////////////////////////
 
+	private handleBrowserEvent(event: string, reason?: string) {
+		if (!this.busy) {
+			console.log(`handleBrowserEvent: ${event} because ${reason}`);
+			this.updateSession(reason);
+		} else {
+			console.warn(`not handling browser event: ${event} because I was busy! (Actually ${reason})`);
+		}
+	}
+
 	private async _updateSession(reason?: string) {
-		if (this.chromeEventHandler.isEnabled()) {
-			this.chromeEventHandler.disable();
+		if (!this.busy) {
+			this.busy = true;
 			console.log(`SessionProvider._updateSession because ${reason}.`);
 			const liveSession = await this.getChromeSession();
 			this.session = this.mergeSessions(this.session, liveSession, reason);
 			await this.storeSession(this.session);
-			this.chromeEventHandler.enable();
+			this.busy = false;
 		}
 	}
 
@@ -102,8 +105,9 @@ export default class ChromeSessionProvider implements SessionProvider {
 	}
 
 	private findChromeExtensionWindow(windows: BT.Window[]): BT.Window | undefined {
+		const appURL = this.browserController.getAppURL();
 		return windows.find(w => {
-			return (w.tabs.some(t => t.url === window.location.toString()));
+			return (w.tabs.some(t => t.url === appURL));
 		});
 	}
 
