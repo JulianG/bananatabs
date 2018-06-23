@@ -30,7 +30,7 @@ class App extends React.Component<{}, State> {
     super(props);
     console.assert(MANIFEST.version !== undefined, 'manifest.json must contain a "version" key.');
     this.version = MANIFEST.version || '0.0';
-    this.buildString = MANIFEST.buildString || 'aaa';
+    this.buildString = 'master';
 
     const factory = new BananaFactory();
 

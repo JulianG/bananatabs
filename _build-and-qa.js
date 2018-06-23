@@ -14,7 +14,7 @@ exec('npm run-script build', (err, stdout, stderr) => {
 
 	if (err == null) {
 		console.log(stdout);
-		const cmd = `cp -R ./build ../bananatabs-qa-build`;
+		const cmd = `cp -R ./build/ ../bananatabs-qa-build`;
 		console.log('\n' + cmd);
 		exec(cmd, execLog);
 	} else {

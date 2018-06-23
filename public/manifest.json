@@ -2,7 +2,6 @@
   "manifest_version": 2,
   "short_name": "Banana Tabs!",
   "version": "0.26.1",
-  "buildString": "",
   "name": "Banana Tabs! by JG",
   "description": "BananaTabs! Automatically organises your tabs and windows.",
   "icons": {
