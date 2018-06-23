@@ -11,16 +11,15 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
 	merge(live: BT.Session, stored: BT.Session): BT.Session {
 
 		console.group('SessionMerger.mergeSessions');
-
 		const mergedSessionWindows: BT.Window[] = [];
-
+		const liveWindowsWithTabs = live.windows.filter(w => w.tabs.length > 0);
 		stored.windows.forEach(storedWindow => {
 
 			console.group('processing a stored window: ' + storedWindow.id + ' ' + storedWindow.title);
 
 			console.log('looking for a live matching window...');
 
-			const liveMatchingWindow = live.windows.find(liveWindow => {
+			const liveMatchingWindow = liveWindowsWithTabs.find(liveWindow => {
 				return this.compareWindows(liveWindow, storedWindow) > 0.75 &&
 					this.shouldAddLiveWindow(liveWindow, live);
 			});
@@ -49,7 +48,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
 			console.groupEnd();
 		});
 
-		const nonMatchedWindows = live.windows.filter(liveW => {
+		const nonMatchedWindows = liveWindowsWithTabs.filter(liveW => {
 			return this.shouldAddLiveWindow(liveW, live) && !mergedSessionWindows.some(msW => msW.id === liveW.id);
 		});
 
