@@ -110,12 +110,25 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
 		});
 		console.table(mergedLiveTabs);
 
-		const sortedTabs = mergedLiveTabs.sort((ta, tb) => ta.index - tb.index);
+		let finalTabs = mergedLiveTabs.sort((ta, tb) => ta.index - tb.index);
 
-		console.log('sortedTabs...');
-		console.table(sortedTabs);
+		console.log('finalTabs...');
+		console.table(finalTabs);
+
+		if (finalTabs.length === 0 ||
+			(finalTabs.length < liveTabs.length
+				&& finalTabs.length < storedTabs.length)
+		) {
+			console.error(`ERROR! merging tabs!
+					live tabs   : ${liveTabs.length} vs. 
+					stored tabs : ${storedTabs.length}
+					final tabs  : ${finalTabs.length}`);
+			console.warn('Using stored tabs instead of live or merged tabs.');
+			finalTabs = storedTabs;
+		}
+
 		console.groupEnd();
-		return sortedTabs;
+		return finalTabs;
 
 	}
 
