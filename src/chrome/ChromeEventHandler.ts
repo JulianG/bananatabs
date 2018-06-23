@@ -65,7 +65,7 @@ export default class ChromeEventHandler {
 			console.log(`${event} event dispatched`);
 			this.eventListeners.forEach(listener => listener(event, reason || event));
 		} else {
-			console.warn(`${event} event NOT dispatched`);
+			console.log(`${event} event not dispatched`);
 		}
 	}
 

@@ -3,6 +3,7 @@ import BrowserController from '../model/mutators/BrowserController';
 import SessionProvider from '../model/SessionProvider';
 import LiveSessionMerger from '../model/mergers/LiveSessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
+
 import console from '../utils/MutedConsole';
 
 export default class ChromeSessionProvider implements SessionProvider {
@@ -51,18 +52,16 @@ export default class ChromeSessionProvider implements SessionProvider {
 			console.log(`SessionProvider.initialiseSession calling onSessionChanged beacuse: ${reason}`);
 			this.onSessionChanged(this.session);
 			this.busy = false;
+		} else {
+			console.warn('SessionProvider.initialiseSession -- skipping because busy');
 		}
 	}
 
 	async updateSession(reason?: string) {
-		if (!this.busy) {
-			this.busy = true;
-			console.log(`SessionProvider.updateSession ... beacuse: ${reason}`);
-			await this._updateSession(reason);
-			console.log(`SessionProvider.updateSession calling onSessionChanged beacuse: ${reason}`);
-			this.onSessionChanged(this.session);
-			this.busy = false;
-		}
+		console.log(`SessionProvider.updateSession ... beacuse: ${reason}`);
+		await this._updateSession(reason);
+		console.log(`SessionProvider.updateSession calling onSessionChanged beacuse: ${reason}`);
+		this.onSessionChanged(this.session);
 	}
 
 	async storeSession(session: BT.Session) {
@@ -72,12 +71,8 @@ export default class ChromeSessionProvider implements SessionProvider {
 	//////////////////////////
 
 	private handleBrowserEvent(event: string, reason?: string) {
-		if (!this.busy) {
-			console.log(`handleBrowserEvent: ${event} because ${reason}`);
-			this.updateSession(reason);
-		} else {
-			console.warn(`not handling browser event: ${event} because I was busy! (Actually ${reason})`);
-		}
+		console.log(`handleBrowserEvent: ${event} because ${reason}`);
+		this.updateSession(reason);
 	}
 
 	private async _updateSession(reason?: string) {
@@ -88,6 +83,8 @@ export default class ChromeSessionProvider implements SessionProvider {
 			this.session = this.mergeSessions(this.session, liveSession, reason);
 			await this.storeSession(this.session);
 			this.busy = false;
+		} else {
+			console.warn('SessionProvider._updateSession -- skipping because busy');
 		}
 	}
 
