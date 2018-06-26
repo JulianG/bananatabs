@@ -9,7 +9,12 @@ test('converted session is valid', () => {
 	expect(TestUtils.compareSessions(convertedSession, legacySession)).toBeTruthy();
 });
 
-test('given a legacy session, when converting, converted session has bounds for all windows matching "geometry" from legacy session', () => {
+test('conversion of legacy session ', () => {
+	/*
+	given a legacy session, when converting, 
+	the converted session has bounds for all windows 
+	matching the "geometry" property from the legacy session windows
+	*/
 	const legacySession = require('./legacy-session.json');
 	const convertedSession: BT.Session = convertLegacySession(legacySession);
 	expect(convertedSession.panelWindow.bounds).toEqual(legacySession.panelWindow.geometry);
@@ -18,7 +23,12 @@ test('given a legacy session, when converting, converted session has bounds for 
 	});
 });
 
-test('given a current session, when converting, converted session has bounds for all windows matching "bounds" from given session', () => {
+test('conversion of current session', () => {
+	/*
+	given a current session, when converting, 
+	the converted session has bounds for all windows 
+	matching the "bounds" property from the given session windows
+	*/
 	const currentSession = require('./current-session.json');
 	const convertedSession: BT.Session = convertLegacySession(currentSession);
 	expect(convertedSession.panelWindow.bounds).toEqual(currentSession.panelWindow.bounds);
