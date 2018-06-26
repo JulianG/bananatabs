@@ -14,7 +14,7 @@ export interface Window extends ListItem {
 
 	id: number;
 	focused: boolean;
-	geometry: Geometry;
+	bounds: Rectangle;
 	type: string;
 	state: string;
 	tabs: Tab[];
@@ -30,7 +30,7 @@ export interface Tab extends ListItem {
 	url: string;
 }
 
-export interface Geometry {
+export interface Rectangle {
 	top: number;
 	left: number;
 	width: number;
@@ -43,7 +43,7 @@ export const NullWindow: Window = {
 	title: '',
 	visible: false,
 	focused: false,
-	geometry: { top: 0, left: 0, width: 0, height: 0 },
+	bounds: { top: 0, left: 0, width: 0, height: 0 },
 	type: 'normal',
 	state: 'normal',
 	tabs: [],
@@ -62,3 +62,10 @@ export const NullTab: Tab = {
 };
 
 export const EmptySession: Session = { windows: [], panelWindow: NullWindow };
+
+export interface DisplayInfo {
+	id: string;
+	name: string;
+	bounds: Rectangle;
+	workArea: Rectangle;
+}

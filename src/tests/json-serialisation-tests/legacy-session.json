@@ -1,0 +1,116 @@
+{
+	"windows": [
+		{
+			"id": 4835,
+			"title": "My Window 1",
+			"visible": true,
+			"icon": "",
+			"tabs": [
+				{
+					"id": 4836,
+					"title": "Example Domain",
+					"visible": true,
+					"icon": "",
+					"index": 0,
+					"listIndex": 0,
+					"url": "http://example.com/",
+					"active": true
+				}
+			],
+			"focused": false,
+			"type": "normal",
+			"state": "normal",
+			"geometry": {
+				"top": -127,
+				"left": 2011,
+				"width": 1200,
+				"height": 1027
+			},
+			"expanded": true
+		},
+		{
+			"id": 4927,
+			"title": "My Window 2",
+			"visible": true,
+			"icon": "",
+			"tabs": [
+				{
+					"id": 4924,
+					"title": "All about bananas | Banana Link",
+					"visible": true,
+					"icon": "http://www.bananalink.org.uk/sites/default/files/favicon_0.ico",
+					"index": 0,
+					"listIndex": 0,
+					"url": "http://www.bananalink.org.uk/all-about-bananas",
+					"active": true
+				}
+			],
+			"focused": false,
+			"type": "normal",
+			"state": "normal",
+			"geometry": {
+				"top": -19,
+				"left": 2304,
+				"width": 1200,
+				"height": 1027
+			},
+			"expanded": true
+		},
+		{
+			"id": 4929,
+			"title": "My Window 3",
+			"visible": true,
+			"icon": "",
+			"tabs": [
+				{
+					"id": 4930,
+					"title": "United Fruit Company - Wikipedia",
+					"visible": true,
+					"icon": "https://en.wikipedia.org/static/favicon/wikipedia.ico",
+					"index": 0,
+					"listIndex": 0,
+					"url": "https://en.wikipedia.org/wiki/United_Fruit_Company",
+					"active": true
+				}
+			],
+			"focused": false,
+			"type": "normal",
+			"state": "normal",
+			"geometry": {
+				"top": -6,
+				"left": 2103,
+				"width": 1200,
+				"height": 1027
+			},
+			"expanded": true
+		}
+	],
+	"panelWindow": {
+		"id": 4863,
+		"title": "",
+		"visible": true,
+		"icon": "",
+		"tabs": [
+			{
+				"id": 4864,
+				"title": "Banana Tabs!",
+				"visible": true,
+				"icon": "chrome-extension://inbalflcnihklpnmnnbdcinlfgnmplfl/icons/app-icon.png",
+				"index": 0,
+				"listIndex": 0,
+				"url": "chrome-extension://inbalflcnihklpnmnnbdcinlfgnmplfl/index.html",
+				"active": true
+			}
+		],
+		"focused": false,
+		"type": "popup",
+		"state": "normal",
+		"geometry": {
+			"top": 23,
+			"left": 1684,
+			"width": 480,
+			"height": 1027
+		},
+		"expanded": true
+	}
+}
