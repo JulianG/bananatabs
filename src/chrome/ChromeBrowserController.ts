@@ -1,6 +1,6 @@
 import * as BT from '../model/CoreTypes';
 import { PromisingChromeAPI } from './PromisingChromeAPI';
-import BrowserController from '../model/mutators/BrowserController';
+import BrowserController, { SystemDisplayInfo } from '../model/mutators/BrowserController';
 import ChromeEventHandler from './ChromeEventHandler';
 
 import console from '../utils/MutedConsole';
@@ -83,6 +83,13 @@ export default class ChromeBrowserController implements BrowserController {
 
 	public removeEventListener(listener: (event: string, reason?: string) => void) {
 		this.events.removeEventListener(listener);
+	}
+
+	public async getDisplayInfo(): Promise<SystemDisplayInfo[]> {
+		const chromeDisplays = await PromisingChromeAPI.system.display.getInfo({});
+		return chromeDisplays.map(d => {
+			return { id: d.id, bounds: d.bounds };
+		});
 	}
 
 	public getAppURL(): string {

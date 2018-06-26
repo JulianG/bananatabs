@@ -1,5 +1,11 @@
 import * as BT from '../CoreTypes';
 
+export interface SystemDisplayInfo {
+	id: string;
+	bounds: BT.Rectangle;
+}
+
+
 export default interface BrowserController {
 	closeWindow(id: number): Promise<void>;
 	closeTab(id: number): Promise<void>;
@@ -10,6 +16,8 @@ export default interface BrowserController {
 
 	addEventListener(listener: (event: string, reason?: string) => void): void;
 	removeEventListener(listener: (event: string, reason?: string) => void): void;
+
+	getDisplayInfo(): Promise<SystemDisplayInfo[]>;
 
 	getAppURL(): string;
 }

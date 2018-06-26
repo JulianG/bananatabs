@@ -4,7 +4,7 @@ import SessionProvider from '../model/SessionProvider';
 import LiveSessionMerger from '../model/mergers/LiveSessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 
-import console from '../utils/MutedConsole';
+// import console from '../utils/MutedConsole';
 
 export default class ChromeSessionProvider implements SessionProvider {
 

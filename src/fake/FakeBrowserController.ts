@@ -1,5 +1,5 @@
 import * as BT from '../model/CoreTypes';
-import BrowserController from '../model/mutators/BrowserController';
+import BrowserController, { SystemDisplayInfo } from '../model/mutators/BrowserController';
 
 export default class FakeBrowserController implements BrowserController {
 
@@ -37,6 +37,10 @@ export default class FakeBrowserController implements BrowserController {
 
 	public removeEventListener(listener: (event: string, reason?: string) => void) {
 		//
+	}
+
+	public async getDisplayInfo(): Promise<SystemDisplayInfo[]> {
+		return [];
 	}
 
 	public getAppURL(): string {

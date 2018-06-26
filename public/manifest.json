@@ -19,6 +19,7 @@
     "default_title": "Banana Tabs!"
   },
   "permissions": [
-    "tabs"
+    "tabs",
+    "system.display"
   ]
 }
