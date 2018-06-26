@@ -122,7 +122,7 @@ export default class ChromeBrowserController implements BrowserController {
 	}
 
 	private async _showWindow(window: BT.Window): Promise<BT.Window> {
-		const geom = window.geometry;
+		const geom = window.bounds;
 		const createData: chrome.windows.CreateData = {
 			...geom,
 			focused: window.focused,
@@ -153,7 +153,7 @@ function convertWindow(w: chrome.windows.Window): BT.Window {
 		focused: w.focused || false,
 		type: w.type,
 		state: w.state,
-		geometry: getWindowGeometry(w),
+		bounds: getWindowBounds(w),
 		expanded: true
 	};
 }
@@ -171,6 +171,6 @@ function convertTab(t: chrome.tabs.Tab, i: number): BT.Tab {
 	};
 }
 
-function getWindowGeometry(w: chrome.windows.Window): BT.Geometry {
+function getWindowBounds(w: chrome.windows.Window): BT.Rectangle {
 	return { top: w.top || 0, left: w.left || 0, width: w.width || 0, height: w.height || 0 };
 }
