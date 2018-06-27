@@ -3,7 +3,7 @@ import { PromisingChromeAPI } from './PromisingChromeAPI';
 import BrowserController from '../model/mutators/BrowserController';
 import ChromeEventHandler from './ChromeEventHandler';
 
-import console from '../utils/MutedConsole';
+// import console from '../utils/MutedConsole';
 
 export default class ChromeBrowserController implements BrowserController {
 
@@ -122,9 +122,12 @@ export default class ChromeBrowserController implements BrowserController {
 	}
 
 	private async _showWindow(window: BT.Window): Promise<BT.Window> {
-		const geom = window.bounds;
+		const bounds = window.bounds;
+
+		console.warn(`Creating Window with bounds: ${JSON.stringify(bounds)}`);
+
 		const createData: chrome.windows.CreateData = {
-			...geom,
+			...bounds,
 			focused: window.focused,
 			type: window.type,
 			url: window.tabs.filter(t => t.visible).map(t => t.url)

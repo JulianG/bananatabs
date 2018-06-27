@@ -270,3 +270,10 @@ img.icon.hidden {
 .command-buttons button.cancel {
 	flex-grow: 2;
 }
+
+.debug-info {
+	background-color: #fff3b5;
+	color: black;
+	font-size: 0.5rem;
+	margin: 0.25rem;
+}

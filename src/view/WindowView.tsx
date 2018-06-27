@@ -3,6 +3,7 @@ import * as BT from '../model/CoreTypes';
 import TabView from './TabView';
 import TabToolsView from './TabToolsView';
 import InputForm from './InputForm';
+import { createDebugInfo } from '../utils/DebugUtils';
 
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
@@ -61,6 +62,7 @@ export default class WindowView extends React.Component<Props, State> {
 		return (
 			<div className={styles.join(' ')}>
 				{this.renderHeader()}
+				{this.props.debug && createDebugInfo(w, ['id', 'bounds'])}
 				{this.renderTabs()}
 			</div>
 		);
@@ -148,7 +150,7 @@ export default class WindowView extends React.Component<Props, State> {
 	private renderStaticTitle(window: BT.Window): JSX.Element {
 
 		const tabsStr = window.expanded ? '' : ' (' + window.tabs.length + ' tabs)';
-		const title = (this.props.debug ? `(${window.id}) ` : '') + (window.title || 'Window');
+		const title = window.title || 'Window';
 		const fullscreen = window.state === 'fullscreen' ? '(fullscreen)' : '';
 
 		return (
