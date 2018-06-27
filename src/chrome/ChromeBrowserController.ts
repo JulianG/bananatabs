@@ -3,7 +3,7 @@ import { PromisingChromeAPI } from './PromisingChromeAPI';
 import BrowserController from '../model/mutators/BrowserController';
 import ChromeEventHandler from './ChromeEventHandler';
 
-// import console from '../utils/MutedConsole';
+import console from '../utils/MutedConsole';
 
 export default class ChromeBrowserController implements BrowserController {
 
