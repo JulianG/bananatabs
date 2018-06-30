@@ -25,9 +25,10 @@ interface State {
 
 export default class TabToolsView extends React.Component<Props, State> {
 
+	readonly state: State = { tooltip: '' };
+	
 	constructor(props: Props) {
 		super(props);
-		this.state = { tooltip: '' };
 		this.handleRenameAction = this.handleRenameAction.bind(this);
 		this.handleDeleteAction = this.handleDeleteAction.bind(this);
 		this.handleCopyAction = this.handleCopyAction.bind(this);

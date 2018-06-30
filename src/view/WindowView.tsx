@@ -31,9 +31,10 @@ interface State {
 
 export default class WindowView extends React.Component<Props, State> {
 
+	readonly state: State = { toolsVisible: false, renaming: false };
+	
 	constructor(props: Props) {
 		super(props);
-		this.state = { toolsVisible: false, renaming: false };
 
 		this.handleStartRename = this.handleStartRename.bind(this);
 		this.handleCancelRename = this.handleCancelRename.bind(this);

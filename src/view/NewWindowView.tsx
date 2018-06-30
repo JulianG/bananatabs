@@ -15,9 +15,10 @@ interface State {
 
 export default class TextWindowView extends React.Component<Props, State> {
 
+	readonly state: State = { text: '', edited: false };
+	
 	constructor(props: Props) {
 		super(props);
-		this.state = { text: '', edited: false };
 		//
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.handleChange = this.handleChange.bind(this);

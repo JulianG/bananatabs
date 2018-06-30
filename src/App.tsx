@@ -18,6 +18,7 @@ interface State {
 
 class App extends React.Component<{}, State> {
 
+  readonly state: State = { session: BT.EmptySession };
   private version: string;
   private buildString: string;
 
@@ -38,8 +39,6 @@ class App extends React.Component<{}, State> {
     this.sessionProvider = factory.getSessionProvider();
     const mutator = new WindowAndTabMutator(this.sessionProvider, factory.getBrowserController());
     this.tabMutator = this.windowMutator = mutator;
-    this.state = { session: this.sessionProvider.session };
-
   }
 
   componentDidMount() {

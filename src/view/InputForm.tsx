@@ -11,15 +11,22 @@ interface Props {
 }
 
 interface State {
+	edited: boolean;
 	tempText: string;
 }
 
 export default class InputForm extends React.Component<Props, State> {
+
+	readonly state: State = { tempText: '', edited: false };
+	
+	static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+		return (prevState.edited) ?
+			prevState :
+			{ tempText: nextProps.text, edited: false };
+	}
+
 	constructor(props: Props) {
 		super(props);
-
-		this.state = { tempText: this.props.text };
-
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.handleBlur = this.handleBlur.bind(this);
@@ -42,7 +49,7 @@ export default class InputForm extends React.Component<Props, State> {
 	}
 
 	private handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-		this.setState({ tempText: event.target.value });
+		this.setState({ tempText: event.target.value, edited: true });
 	}
 
 	private handleKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {

@@ -24,11 +24,10 @@ interface State {
 
 export default class TabView extends React.Component<Props, State> {
 
+	readonly state: State = { toolsVisible: false };
+	
 	constructor(props: Props) {
 		super(props);
-
-		this.state = { toolsVisible: false };
-
 		this.onSelectAction = this.onSelectAction.bind(this);
 		this.onDeleteAction = this.onDeleteAction.bind(this);
 		this.onToggleVisibilityAction = this.onToggleVisibilityAction.bind(this);
