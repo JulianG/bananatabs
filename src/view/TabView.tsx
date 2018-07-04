@@ -54,7 +54,6 @@ export default class TabView extends React.Component<Props, State> {
 			(tab.visible && window.visible) ? '' : 'hidden'
 		];
 
-		const title = (this.props.debug ? `(${tab.id}) ` : '') + tab.title;
 		const visibilityIconSrc = tab.visible ? window.visible ? Icons.On : Icons.OnHidden : Icons.Off;
 		const visibilityIconText = tab.visible ? 'Hide Tab' : 'Show Tab';
 
@@ -84,7 +83,8 @@ export default class TabView extends React.Component<Props, State> {
 					className="tab-title"
 					onClick={this.onSelectAction}
 				>
-					{title}
+					{this.props.debug && <span className="debug-info">{tab.id}</span>}
+					{tab.title}
 				</span>
 			</div>
 		);
