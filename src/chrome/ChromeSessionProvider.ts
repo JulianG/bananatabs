@@ -4,7 +4,7 @@ import SessionProvider from '../model/SessionProvider';
 import LiveSessionMerger from '../model/mergers/LiveSessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 
-// import console from '../utils/MutedConsole';
+import console from '../utils/MutedConsole';
 
 export default class ChromeSessionProvider implements SessionProvider {
 
@@ -34,7 +34,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 		const tab = win.tabs.find(t => t.id === id);
 		console.assert(tab !== undefined, `Could not find a tab with id ${id} in the current session.`);
 		return tab || { ...BT.NullTab, id };
-	}
+	} 
 
 	async initialiseSession(reason?: string) {
 		if (!this.busy) {

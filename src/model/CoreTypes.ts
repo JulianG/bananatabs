@@ -26,8 +26,11 @@ export interface Tab extends ListItem {
 	id: number;
 	index: number;
 	listIndex: number;
-	active: boolean;
 	url: string;
+	active: boolean;
+	selected: boolean;
+	highlighted: boolean;
+	status: string;
 }
 
 export interface Rectangle {
@@ -55,10 +58,13 @@ export const NullTab: Tab = {
 	title: 'Null Tab',
 	icon: '',
 	visible: false,
-	active: false,
 	url: '',
 	listIndex: 0,
-	index: 0
+	index: 0,
+	active: false,
+	selected: false,
+	highlighted: false,
+	status: ''
 };
 
 export const EmptySession: Session = { windows: [], panelWindow: NullWindow };

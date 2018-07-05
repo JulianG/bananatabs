@@ -177,7 +177,10 @@ function convertTab(t: chrome.tabs.Tab, i: number): BT.Tab {
 		index: t.index,
 		listIndex: i,
 		url: t.url || '',
-		active: t.active
+		active: t.active,
+		selected: t.selected,
+		highlighted: t.highlighted,
+		status: t.status || ''
 	};
 }
 
