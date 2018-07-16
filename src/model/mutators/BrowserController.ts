@@ -5,6 +5,9 @@ export interface SystemDisplayInfo {
 	bounds: BT.Rectangle;
 }
 
+export interface EventListener {
+	(event: string, reason?: string): void;
+}
 
 export default interface BrowserController {
 	closeWindow(id: number): Promise<void>;
@@ -14,8 +17,8 @@ export default interface BrowserController {
 	showWindow(window: BT.Window): Promise<void>;
 	getAllWindows(): Promise<BT.Window[]>;
 
-	addEventListener(listener: (event: string, reason?: string) => void): void;
-	removeEventListener(listener: (event: string, reason?: string) => void): void;
+	addEventListener(listener: EventListener): void;
+	removeEventListener(listener: EventListener): void;
 
 	getDisplayInfo(): Promise<SystemDisplayInfo[]>;
 

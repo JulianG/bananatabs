@@ -15,14 +15,14 @@ export default class FakeSessionProvider implements SessionProvider {
 	getWindow(id: number): BT.Window {
 		const win = this.session.windows.find(w => w.id === id);
 		console.assert(win !== undefined, `Could not find a window with id ${id} in the current session.`);
-		return win || { ...BT.NullWindow, id };
+		return win || { ...BT.getNullWindow(), id };
 	}
 
 	getTab(id: number): BT.Tab {
-		const win = (this.session.windows.find(w => w.tabs.some(t => t.id === id)) || BT.NullWindow);
+		const win = (this.session.windows.find(w => w.tabs.some(t => t.id === id)) || BT.getNullWindow());
 		const tab = win.tabs.find(t => t.id === id);
 		console.assert(tab !== undefined, `Could not find a tab with id ${id} in the current session.`);
-		return tab || { ...BT.NullTab, id };
+		return tab || { ...BT.getNullTab(), id };
 	}
 
 	async initialiseSession(reason?: string) {

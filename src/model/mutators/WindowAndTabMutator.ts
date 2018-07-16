@@ -72,7 +72,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 	/// WindowMutator
 
 	async renameWindow(id: number, title: string) {
-		const win = this.provider.getWindow(id) || BT.NullWindow;
+		const win = this.provider.getWindow(id) || BT.getNullWindow();
 		win.title = title;
 		await this.storeSession();
 	}

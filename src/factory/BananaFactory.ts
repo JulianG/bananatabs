@@ -1,5 +1,5 @@
 import BrowserController from '../model/mutators/BrowserController';
-import FakeBrowserController from '../fake/FakeBrowserController';
+import FakeBrowserController, { fakeDisplayInfo } from '../fake/FakeBrowserController';
 import ChromeBrowserController from '../chrome/ChromeBrowserController';
 
 import SessionProvider from '../model/SessionProvider';
@@ -29,7 +29,7 @@ export default class BananaFactory {
 			if (chrome && chrome.windows && chrome.tabs) {
 				this.browserController = new ChromeBrowserController();
 			} else {
-				this.browserController = new FakeBrowserController();
+				this.browserController = new FakeBrowserController([fakeDisplayInfo], []);
 			}
 		}
 		return this.browserController;

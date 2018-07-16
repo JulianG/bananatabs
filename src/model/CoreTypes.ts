@@ -40,38 +40,54 @@ export interface Rectangle {
 	height: number;
 }
 
-export const NullWindow: Window = {
-	id: 0,
-	icon: '',
-	title: '',
-	visible: false,
-	focused: false,
-	bounds: { top: 0, left: 0, width: 0, height: 0 },
-	type: 'normal',
-	state: 'normal',
-	tabs: [],
-	expanded: false
+export const getNullWindow = (): Window => {
+	return {
+		id: 0,
+		icon: '',
+		title: '',
+		visible: false,
+		focused: false,
+		bounds: { top: 0, left: 0, width: 0, height: 0 },
+		type: 'normal',
+		state: 'normal',
+		tabs: [],
+		expanded: false
+	};
 };
 
-export const NullTab: Tab = {
-	id: 0,
-	title: 'Null Tab',
-	icon: '',
-	visible: false,
-	url: '',
-	listIndex: 0,
-	index: 0,
-	active: false,
-	selected: false,
-	highlighted: false,
-	status: ''
+export const getNullTab = (): Tab => {
+	return {
+		id: 0,
+		title: 'Null Tab',
+		icon: '',
+		visible: false,
+		url: '',
+		listIndex: 0,
+		index: 0,
+		active: false,
+		selected: false,
+		highlighted: false,
+		status: ''
+	};
 };
 
-export const EmptySession: Session = { windows: [], panelWindow: NullWindow };
+export const EmptySession: Session = { windows: [], panelWindow: getNullWindow() };
 
 export interface DisplayInfo {
 	id: string;
 	name: string;
 	bounds: Rectangle;
-	workArea: Rectangle;
+	workArea?: Rectangle;
+}
+
+export function cloneWindow(w: Window): Window {
+	return {
+		...w,
+		tabs: cloneTabs(w.tabs),
+		bounds: { ...w.bounds }
+	};
+}
+
+function cloneTabs(tabs: Tab[]): Tab[] {
+	return [...tabs.map(t => { return { ...t }; })];
 }
