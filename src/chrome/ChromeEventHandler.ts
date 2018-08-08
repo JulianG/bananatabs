@@ -1,47 +1,54 @@
+import { PromisingChromeAPI } from './PromisingChromeAPI';
+import { BrowserEventDispatcher, BrowserEventListener } from '../model/mutators/BrowserEventDispatcher';
 
-import console from '../utils/MutedConsole';
+// import console from '../utils/MutedConsole';
 
-interface EventListener {
-	(event: string, reason?: string): void;
-}
-
-export default class ChromeEventHandler {
+export class ChromeEventHandler implements BrowserEventDispatcher {
 
 	private appTabId: number = 0;
 	private enabled: boolean;
-	private eventListeners: EventListener[];
+	private eventListeners: BrowserEventListener[];
 
 	constructor() {
 
+		console.log('ChromeEventHandler');
+		
 		this.enabled = true;
 		this.eventListeners = [];
-		
-		if (chrome && chrome.tabs) {
-			chrome.windows.onRemoved.addListener((id) => this.dispatchEvent('onRemoved', `onWindowRemoved ${id}`));
-			chrome.windows.onFocusChanged.addListener((_) => this.dispatchEvent('onFocusChanged'));
-			chrome.tabs.onCreated.addListener((tab) => this.dispatchEvent('onTabsCreated', `onTabsCreated ${tab.id}`));
-			chrome.tabs.onUpdated.addListener(this.onTabsUpdated.bind(this));
-			chrome.tabs.onMoved.addListener((_) => this.dispatchEvent('onTabsMoved'));
-			chrome.tabs.onAttached.addListener((id, info) => this.dispatchEvent('onTabsAttached'));
-			chrome.tabs.onRemoved.addListener(this.onTabsRemoved.bind(this));
-			chrome.tabs.onActivated.addListener((_) => this.dispatchEvent('onActivated'));
-			// chrome.tabs.onHighlighted.addListener((_) => this.updateSessionSilently('onHighlighted'));
-			// chrome.tabs.onDetached.addListener((_) => this.updateSessionSilently('onDetached'));
-			// chrome.tabs.onReplaced.addListener((_) => this.updateSessionSilently('onReplaced'));
 
-			chrome.tabs.getCurrent((tab) => {
-				if (tab) {
-					this.appTabId = tab.id || 0;
+		this.dispatchEvent = this.dispatchEvent.bind(this);
+
+		PromisingChromeAPI.windows.onRemoved.addListener(this.dispatchEvent);
+		PromisingChromeAPI.windows.onFocusChanged.addListener(this.dispatchEvent);
+		PromisingChromeAPI.tabs.onCreated.addListener(this.dispatchEvent);
+		PromisingChromeAPI.tabs.onUpdated.addListener(this.dispatchEvent);
+		PromisingChromeAPI.tabs.onMoved.addListener(this.dispatchEvent);
+		PromisingChromeAPI.tabs.onAttached.addListener(this.dispatchEvent);
+		PromisingChromeAPI.tabs.onRemoved.addListener(this.dispatchEvent);
+		PromisingChromeAPI.tabs.onActivated.addListener(this.dispatchEvent);
+		// PromisingChromeAPI.tabs.onHighlighted.addListener((_) => this.updateSessionSilently('onHighlighted'));
+		// PromisingChromeAPI.tabs.onDetached.addListener((_) => this.updateSessionSilently('onDetached'));
+		// PromisingChromeAPI.tabs.onReplaced.addListener((_) => this.updateSessionSilently('onReplaced'));
+
+		PromisingChromeAPI.tabs.getCurrent()
+			.then(
+				(tab) => {
+					if (tab) {
+						this.appTabId = tab.id || 0;
+					}
 				}
-			});
-		}
+			);
+
+		// nonsense to avoid warning while some methods are unused	
+		console.log(this.isPanelTab(0));
+		//
 	}
 
-	public addEventListener(listener: EventListener): void {
+	public addListener(listener: BrowserEventListener): void {
 		this.eventListeners.push(listener);
 	}
 
-	public removeEventListener(listener: EventListener): void {
+	public removeListener(listener: BrowserEventListener): void {
 		const index = this.eventListeners.indexOf(listener);
 		if (index >= 0) {
 			this.eventListeners.splice(index, 1);
@@ -73,16 +80,16 @@ export default class ChromeEventHandler {
 		return (id === this.appTabId);
 	}
 
-	private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
-		if (this.isPanelTab(id) === false && changeInfo.status === 'complete') {
-			this.dispatchEvent('onTabsUpdated', `onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
-		}
-	}
+	// private onTabsUpdated(id: number, changeInfo: chrome.tabs.TabChangeInfo) {
+	// 	if (this.isPanelTab(id) === false && changeInfo.status === 'complete') {
+	// 		this.dispatchEvent('onTabsUpdated', `onTabsUpdated ${id}:${JSON.stringify(changeInfo)}`);
+	// 	}
+	// }
 
-	private onTabsRemoved(id: number, removedInfo: chrome.tabs.TabRemoveInfo) {
-		if (this.isPanelTab(id) === false && removedInfo.isWindowClosing === false) {
-			this.dispatchEvent('onTabsRemoved', `onTabsRemoved - ${id} - ${JSON.stringify(removedInfo)}`);
-		}
-	}
+	// private onTabsRemoved(id: number, removedInfo: chrome.tabs.TabRemoveInfo) {
+	// 	if (this.isPanelTab(id) === false && removedInfo.isWindowClosing === false) {
+	// 		this.dispatchEvent('onTabsRemoved', `onTabsRemoved - ${id} - ${JSON.stringify(removedInfo)}`);
+	// 	}
+	// }
 
 }

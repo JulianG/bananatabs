@@ -1,49 +1,50 @@
 import * as BT from '../model/CoreTypes';
 import { PromisingChromeAPI } from './PromisingChromeAPI';
 import BrowserController, { SystemDisplayInfo } from '../model/mutators/BrowserController';
-import ChromeEventHandler from './ChromeEventHandler';
+import { BrowserEventDispatcher } from 'model/mutators/BrowserEventDispatcher';
+import { ChromeEventHandler } from './ChromeEventHandler';
 
 import console from '../utils/MutedConsole';
 
 export default class ChromeBrowserController implements BrowserController {
 
-	private events: ChromeEventHandler;
+	private browserEventHandler: BrowserEventDispatcher;
 
 	constructor() {
-		this.events = new ChromeEventHandler();
+		this.browserEventHandler = new ChromeEventHandler();
 	}
 
 	public async closeWindow(id: number) {
 		console.log(`ChromeBrowserController.closeWindow(${id}) ...`);
-		this.events.disable();
+		this.browserEventHandler.disable();
 		try {
 			await PromisingChromeAPI.windows.remove(id);
 		} catch (e) {
 			console.warn(`Could not delete window for real... ${id}`);
 			console.warn(e);
 		}
-		this.events.enable();
+		this.browserEventHandler.enable();
 	}
 
 	public async closeTab(id: number) {
 		console.log(`ChromeBrowserController.closeTab(${id}) ...`);
-		this.events.disable();
+		this.browserEventHandler.disable();
 		await PromisingChromeAPI.tabs.remove(id);
-		this.events.enable();
+		this.browserEventHandler.enable();
 	}
 
 	public async selectTab(windowId: number, tabId: number) {
 		console.log(`ChromeBrowserController.selectTab(${tabId}) ...`);
-		this.events.disable();
+		this.browserEventHandler.disable();
 		const windowPromise = PromisingChromeAPI.windows.update(windowId, { focused: true });
 		const tabPromise = PromisingChromeAPI.tabs.update(tabId, { active: true });
 		await Promise.all([windowPromise, tabPromise]);
-		this.events.enable();
+		this.browserEventHandler.enable();
 	}
 
 	public async createTab(window: BT.Window, tab: BT.Tab) {
 		console.log(`ChromeBrowserController.createTab(...) ...`);
-		this.events.disable();
+		this.browserEventHandler.disable();
 		const props: chrome.tabs.CreateProperties = {
 			windowId: window.visible ? window.id : 0,
 			index: Math.max(tab.index, 0),
@@ -52,11 +53,11 @@ export default class ChromeBrowserController implements BrowserController {
 		};
 		const newTab = await PromisingChromeAPI.tabs.create(props);
 		tab.id = newTab.id || -1;
-		this.events.enable();
+		this.browserEventHandler.enable();
 	}
 
 	public async showWindow(window: BT.Window) {
-		this.events.disable();
+		this.browserEventHandler.disable();
 		const liveWindows = await PromisingChromeAPI.windows.getAll({});
 		const asFirst = liveWindows.length <= 1;
 		console.log(`ChromeBrowserController.showWindow(...) ...`);
@@ -65,24 +66,24 @@ export default class ChromeBrowserController implements BrowserController {
 		} else {
 			await this._showWindow(window);
 		}
-		this.events.enable();
+		this.browserEventHandler.enable();
 	}
 
 	public async getAllWindows(): Promise<BT.Window[]> {
-		this.events.disable();
+		this.browserEventHandler.disable();
 		const wins = await PromisingChromeAPI.windows.getAll({ populate: true });
-		this.events.enable();
+		this.browserEventHandler.enable();
 		return wins.map(convertWindow);
 	}
 
 	/////
 
 	public addEventListener(listener: (event: string, reason?: string) => void) {
-		this.events.addEventListener(listener);
+		this.browserEventHandler.addListener(listener);
 	}
 
 	public removeEventListener(listener: (event: string, reason?: string) => void) {
-		this.events.removeEventListener(listener);
+		this.browserEventHandler.removeListener(listener);
 	}
 
 	public async getDisplayInfo(): Promise<SystemDisplayInfo[]> {
