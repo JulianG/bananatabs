@@ -94,7 +94,7 @@ export default class ChromeBrowserController implements BrowserController {
 	}
 
 	public getAppURL(): string {
-		return chrome.extension.getURL('index.html');
+		return PromisingChromeAPI.extension.getURL('index.html');
 	}
 
 	/////

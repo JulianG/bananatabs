@@ -1,28 +1,29 @@
-import { 
-	ChromeAPI, 
-	ChromeWindowsAPI, 
-	ChromeTabsAPI, 
-	ChromeSystemAPI
- } from './PromisingChromeAPI';
+import {
+	ChromeAPI,
+	ChromeWindowsAPI,
+	ChromeTabsAPI,
+	ChromeSystemAPI,
+	ChromeExtensionAPI
+} from './PromisingChromeAPI';
 import FakeChromeEvent from './FakeChromeEvent';
 
-class WindowReferenceEvent 
+class WindowReferenceEvent
 	extends FakeChromeEvent<(window: chrome.windows.Window, filters?: chrome.windows.WindowEventFilter) => void> { }
-class WindowIdEvent 
+class WindowIdEvent
 	extends FakeChromeEvent<((windowId: number, filters?: chrome.windows.WindowEventFilter | undefined) => undefined)> { }
 // class TabHighlightedEvent extends FakeChromeEvent<(highlightInfo: chrome.tabs.HighlightInfo) => void> { }
-class TabRemovedEvent 
+class TabRemovedEvent
 	extends FakeChromeEvent<(tabId: number, removeInfo: chrome.tabs.TabRemoveInfo) => void> { }
-class TabUpdatedEvent 
+class TabUpdatedEvent
 	extends FakeChromeEvent<(tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => void> { }
-class TabAttachedEvent 
+class TabAttachedEvent
 	extends FakeChromeEvent<(tabId: number, attachInfo: chrome.tabs.TabAttachInfo) => void> { }
-class TabMovedEvent 
+class TabMovedEvent
 	extends FakeChromeEvent<(tabId: number, moveInfo: chrome.tabs.TabMoveInfo) => void> { }
 // class TabDetachedEvent extends FakeChromeEvent<(tabId: number, detachInfo: chrome.tabs.TabDetachInfo) => void> { }
-class TabCreatedEvent 
+class TabCreatedEvent
 	extends FakeChromeEvent<(tab: chrome.tabs.Tab) => void> { }
-class TabActivatedEvent 
+class TabActivatedEvent
 	extends FakeChromeEvent<(activeInfo: chrome.tabs.TabActiveInfo) => void> { }
 // class TabReplacedEvent extends FakeChromeEvent<(addedTabId: number, removedTabId: number) => void> { }
 // class TabSelectedEvent extends FakeChromeEvent<(tabId: number, selectInfo: chrome.tabs.TabWindowInfo) => void> { }
@@ -42,6 +43,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 	public readonly windows: ChromeWindowsAPI;
 	public readonly tabs: ChromeTabsAPI;
 	public readonly system: ChromeSystemAPI;
+	public readonly extension: ChromeExtensionAPI;
 
 	private fakeDisplayUnitInfoArray: chrome.system.display.DisplayUnitInfo[];
 
@@ -148,6 +150,12 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 					await self.delay();
 					return self.fakeDisplayUnitInfoArray;
 				}
+			}
+		};
+
+		this.extension = {
+			getURL: (path: string) => {
+				return '/' + path;
 			}
 		};
 

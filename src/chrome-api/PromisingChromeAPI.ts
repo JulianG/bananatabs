@@ -8,6 +8,7 @@ export interface ChromeAPI {
 	windows: ChromeWindowsAPI;
 	tabs: ChromeTabsAPI;
 	system: ChromeSystemAPI;
+	extension: ChromeExtensionAPI;
 }
 
 export interface ChromeWindowsAPI {
@@ -40,6 +41,10 @@ export interface ChromeSystemAPI {
 
 export interface ChromeSystemDisplayAPI {
 	getInfo(options: {}): Promise<chrome.system.display.DisplayUnitInfo[]>;
+}
+
+export interface ChromeExtensionAPI {
+	getURL(path: string): string;
 }
 
 let PromisingChromeAPI: ChromeAPI;
@@ -81,10 +86,16 @@ if (chrome && chrome.windows) {
 			display: {
 				getInfo: (options: {}) => systemDisplayGetInfo(options)
 			}
+		},
+		extension: {
+			getURL: (path: string) => {
+				return '/' + path;
+			}
 		}
 	};
-	
+
 } else {
+	console.warn('using FakePromisingChromeAPI');
 	PromisingChromeAPI = new FakePromisingChromeAPI();
 }
 

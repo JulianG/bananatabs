@@ -1,19 +1,23 @@
 /*
 tslint:disable no-any
 */
-interface T extends Function {}
+interface T extends Function { }
 
 export default class FakeChromeEvent<S extends T> implements chrome.events.Event<T> {
 
 	private list: T[];
 
+	constructor() {
+		this.list = [];
+	}
+
 	fakeDispatch(...args: any[]) {
 
-		this.list.forEach( cb => {
+		this.list.forEach(cb => {
 			cb(...args);
 		});
 	}
-	
+
 	getRules() {
 		return [];
 	}
