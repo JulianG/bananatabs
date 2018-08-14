@@ -1,8 +1,8 @@
 import * as BT from '../model/CoreTypes';
-import { PromisingChromeAPI } from './PromisingChromeAPI';
+import PromisingChromeAPI from '../chrome-api/PromisingChromeAPI';
 import BrowserController, { SystemDisplayInfo } from '../model/mutators/BrowserController';
-import { BrowserEventDispatcher } from 'model/mutators/BrowserEventDispatcher';
-import { ChromeEventHandler } from './ChromeEventHandler';
+import BrowserEventDispatcher from 'model/mutators/BrowserEventDispatcher';
+import ChromeEventHandler from './ChromeEventHandler';
 
 import console from '../utils/MutedConsole';
 

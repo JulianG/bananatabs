@@ -2,8 +2,7 @@
 tslint:disable no-any
 */
 import { promisify } from '../utils/Promisify';
-
-// interface to be renamed to PromisingChromeAPI
+import FakePromisingChromeAPI from './FakePromisingChromeAPI';
 
 export interface ChromeAPI {
 	windows: ChromeWindowsAPI;
@@ -12,6 +11,8 @@ export interface ChromeAPI {
 }
 
 export interface ChromeWindowsAPI {
+
+	onCreated: chrome.windows.WindowReferenceEvent;
 	onRemoved: chrome.windows.WindowIdEvent;
 	onFocusChanged: chrome.windows.WindowIdEvent;
 	getAll(getInfo: chrome.windows.GetInfo): Promise<chrome.windows.Window[]>;
@@ -56,6 +57,7 @@ if (chrome && chrome.windows) {
 
 	PromisingChromeAPI = {
 		windows: {
+			onCreated: chrome.windows.onCreated,
 			onRemoved: chrome.windows.onRemoved,
 			onFocusChanged: chrome.windows.onFocusChanged,
 			getAll: (getInfo: chrome.windows.GetInfo) => winsGetAll(getInfo),
@@ -83,8 +85,7 @@ if (chrome && chrome.windows) {
 	};
 	
 } else {
-	// assign to fake methods of a fake object!
-	
+	PromisingChromeAPI = new FakePromisingChromeAPI();
 }
 
-export PromisingChromeAPI;
+export default PromisingChromeAPI;
