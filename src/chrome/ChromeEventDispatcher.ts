@@ -7,7 +7,7 @@ interface EventListener {
 	(event: string, reason?: string): void;
 }
 
-export default class ChromeEventHandler implements BrowserEventDispatcher {
+export default class ChromeEventDispatcher implements BrowserEventDispatcher {
 
 	private appTabId: number = 0;
 	private enabled: boolean;

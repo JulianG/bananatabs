@@ -2,7 +2,7 @@ import * as BT from '../model/CoreTypes';
 import PromisingChromeAPI from '../chrome-api/PromisingChromeAPI';
 import BrowserController, { SystemDisplayInfo } from '../model/mutators/BrowserController';
 import BrowserEventDispatcher from 'model/mutators/BrowserEventDispatcher';
-import ChromeEventHandler from './ChromeEventHandler';
+import ChromeEventDispatcher from './ChromeEventDispatcher';
 
 import console from '../utils/MutedConsole';
 
@@ -11,7 +11,7 @@ export default class ChromeBrowserController implements BrowserController {
 	private browserEventHandler: BrowserEventDispatcher;
 
 	constructor() {
-		this.browserEventHandler = new ChromeEventHandler();
+		this.browserEventHandler = new ChromeEventDispatcher();
 	}
 
 	public async closeWindow(id: number) {
