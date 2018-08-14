@@ -6,7 +6,7 @@ import SessionPersistence from '../model/SessionPersistence';
 
 import console from '../utils/MutedConsole';
 
-export default class ChromeSessionProvider implements SessionProvider {
+export default class DefaultSessionProvider implements SessionProvider {
 
 	public session: BT.Session;
 	public onSessionChanged: (session: BT.Session) => void;
@@ -43,7 +43,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 			console.log(`  getting session from disk...`);
 			const retrievedSession = await this.persistence.retrieveSession();
 			console.log(`  getting session from browser...`);
-			const liveSession = await this.getChromeSession();
+			const liveSession = await this.getLiveSession();
 			console.log(`  done. now merging sessions`);
 			this.session = this.mergeSessions(retrievedSession, liveSession, reason);
 			console.log(`  done. now storing session`);
@@ -79,7 +79,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 		if (!this.busy) {
 			this.busy = true;
 			console.log(`SessionProvider._updateSession because ${reason}.`);
-			const liveSession = await this.getChromeSession();
+			const liveSession = await this.getLiveSession();
 			this.session = this.mergeSessions(this.session, liveSession, reason);
 			await this.storeSession(this.session);
 			this.busy = false;
@@ -88,9 +88,9 @@ export default class ChromeSessionProvider implements SessionProvider {
 		}
 	}
 
-	private async getChromeSession(): Promise<BT.Session> {
+	private async getLiveSession(): Promise<BT.Session> {
 		const sessionWindows: BT.Window[] = await this.browserController.getAllWindows();
-		const panelWindow = this.findChromeExtensionWindow(sessionWindows) || BT.getNullWindow();
+		const panelWindow = this.findBrowserExtensionWindow(sessionWindows) || BT.getNullWindow();
 		const filteredSessionWindows = sessionWindows.filter(w => w !== panelWindow);
 		return { windows: filteredSessionWindows, panelWindow };
 	}
@@ -101,7 +101,7 @@ export default class ChromeSessionProvider implements SessionProvider {
 		return session;
 	}
 
-	private findChromeExtensionWindow(windows: BT.Window[]): BT.Window | undefined {
+	private findBrowserExtensionWindow(windows: BT.Window[]): BT.Window | undefined {
 		const appURL = this.browserController.getAppURL();
 		return windows.find(w => {
 			return (w.tabs.some(t => t.url === appURL));
