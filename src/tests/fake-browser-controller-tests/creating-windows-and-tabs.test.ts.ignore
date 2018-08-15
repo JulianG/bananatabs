@@ -1,0 +1,57 @@
+import * as Utils from './utils';
+
+describe('creating new windows and tabs', async () => {
+
+	Utils._test('new window (showWindow)', async () => {
+
+		// given an empty browser
+		const br = Utils.createFakeBrowserController([]);
+		const callback = jest.fn();
+		br.addEventListener(callback);
+
+		// when showing a new empty window
+		const w = Utils.createWindowById(0);
+		await br.showWindow(w);
+
+		// expect the correct event
+		// Utils.expectEvents(callback, ['onWindowCreated']);
+		Utils.expectEvents(callback, [
+			'onWindowCreated',
+			'onTabCreated',
+			'onTabSelected',
+			'onTabsUpdated']);
+
+		// also expect the new window to be in the list
+		const windows = await br.getAllWindows();
+		expect(windows.length).toBe(1);
+
+	});
+
+	test('new tab in existing window', async () => {
+
+		// given a window with one existing tab
+		const br = Utils.createFakeBrowserController([{ id: 111, tabs: 1 }]);
+		const window = br.fakeGetWindows()[0];
+
+		const callback = jest.fn();
+		br.addEventListener(callback);
+
+		// when adding a new tab
+		const tab = Utils.createTab(1111, 'bbb');
+		await br.createTab(window, tab);
+
+		// expect the window has two tabs
+		const windows = await br.getAllWindows();
+		expect(windows).toHaveLength(1);
+		expect(windows[0].tabs).toHaveLength(2);
+
+		// also expect the event handler to be called once with the correct events
+		Utils.expectEvents(callback, [
+			'onTabCreated',
+			'onTabSelected',
+			'onTabsUpdated'
+		]);
+	});
+
+});
+
