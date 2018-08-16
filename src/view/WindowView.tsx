@@ -33,7 +33,7 @@ interface State {
 export default class WindowView extends React.Component<Props, State> {
 
 	readonly state: State = { toolsVisible: false, renaming: false };
-	
+
 	constructor(props: Props) {
 		super(props);
 
@@ -62,7 +62,7 @@ export default class WindowView extends React.Component<Props, State> {
 		return (
 			<div className={styles.join(' ')}>
 				{this.renderHeader()}
-				{this.props.debug && createDebugInfo(w, ['id', 'bounds'])}
+				{this.props.debug && createDebugInfo(w, ['id'])/* ['id', 'bounds'] */}
 				{this.renderTabs()}
 			</div>
 		);

@@ -33,8 +33,8 @@ interface State {
 
 export default class MainView extends React.Component<Props, State> {
 
-	readonly state: State = { mode: 'list', windowId: 0, debug: false };
-	
+	readonly state: State = { mode: 'list', windowId: 0, debug: true };
+
 	constructor(props: Props) {
 		super(props);
 		this.bindFunctions();
@@ -44,7 +44,9 @@ export default class MainView extends React.Component<Props, State> {
 
 		return (
 			<div>
-				<ClickCounter onClick={this.handleClickCount}>
+				<ClickCounter
+					onClick={this.handleClickCount}
+				>
 					<Title />
 				</ClickCounter>
 				{this.renderSession()}

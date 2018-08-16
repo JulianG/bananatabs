@@ -11,7 +11,7 @@ interface State {
 export default class ClickCounter extends React.Component<Props, State> {
 
 	readonly state: State = { count: 0 };
-	
+
 	constructor(props: Props) {
 		super(props);
 		this.handleClick = this.handleClick.bind(this);

@@ -84,7 +84,7 @@ export default class TabView extends React.Component<Props, State> {
 					onClick={this.onSelectAction}
 				>
 					{this.props.debug && <span className="debug-info">{tab.id}</span>}
-					{tab.title}
+					{tab.title || tab.url}
 				</span>
 			</div>
 		);

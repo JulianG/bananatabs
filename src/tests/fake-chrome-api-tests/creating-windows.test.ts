@@ -41,7 +41,7 @@ describe('creating windows', async () => {
 		const chrome = new FakePromisingChromeAPI([]);
 
 		// when a widow is created with focused: true		
-		await chrome.windows.create({focused: true});
+		await chrome.windows.create({ focused: true });
 
 		// expect the first window to be focused
 		const wins = await chrome.windows.getAll({});
@@ -55,7 +55,7 @@ describe('creating windows', async () => {
 		const chrome = new FakePromisingChromeAPI([]);
 
 		// when a widow is created with focused: false		
-		await chrome.windows.create({focused: false});
+		await chrome.windows.create({ focused: false });
 
 		// expect the first window NOT to be focused
 		const wins = await chrome.windows.getAll({});
@@ -81,7 +81,7 @@ describe('creating windows', async () => {
 
 		// given one focused window
 		const chrome = new FakePromisingChromeAPI([]);
-		await chrome.windows.create({focused: true});
+		await chrome.windows.create({ focused: true });
 
 		// when a second widow is created without specifying focus
 		await chrome.windows.create({});
@@ -98,10 +98,10 @@ describe('creating windows', async () => {
 
 		// given one focused window
 		const chrome = new FakePromisingChromeAPI([]);
-		await chrome.windows.create({focused: true});
+		await chrome.windows.create({ focused: true });
 
 		// when a second widow is created with focused: true
-		await chrome.windows.create({focused: true});
+		await chrome.windows.create({ focused: true });
 
 		// expect the focuse to shift to the second window
 		const wins = await chrome.windows.getAll({});
@@ -109,6 +109,29 @@ describe('creating windows', async () => {
 		expect(wins[0].focused).toBe(false);
 		expect(wins[1].focused).toBe(true);
 
+	});
+
+	test('creating a window with a list of tabs', async () => {
+
+		// given no windows
+		const chrome = new FakePromisingChromeAPI([]);
+
+		// when a widow is created with 3 urls		
+		const urls = ['url0', 'url1', 'url2'];
+		await chrome.windows.create({ url: urls });
+
+		// expect a window with 3 tabs with the correct urls
+		const wins = await chrome.windows.getAll({});
+		expect(wins).toHaveLength(1);
+		expect(wins[0].tabs!).toHaveLength(3);
+		expect(wins[0].tabs![0].url).toEqual(urls[0]);
+		expect(wins[0].tabs![1].url).toEqual(urls[1]);
+		expect(wins[0].tabs![2].url).toEqual(urls[2]);
+
+		// also expect only the most recent tab to be active
+		expect(wins[0].tabs![0].active).toBe(false);
+		expect(wins[0].tabs![1].active).toBe(false);
+		expect(wins[0].tabs![2].active).toBe(true);
 	});
 
 });
