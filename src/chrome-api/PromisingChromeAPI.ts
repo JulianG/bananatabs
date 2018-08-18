@@ -29,6 +29,7 @@ export interface ChromeTabsAPI {
 	onAttached: chrome.tabs.TabAttachedEvent;
 	onRemoved: chrome.tabs.TabRemovedEvent;
 	onActivated: chrome.tabs.TabActivatedEvent;
+	onHighlighted: chrome.tabs.TabHighlightedEvent;
 	create(props: chrome.tabs.CreateProperties): Promise<chrome.tabs.Tab>;
 	update(id: number, props: chrome.tabs.UpdateProperties): Promise<chrome.tabs.Tab | undefined>;
 	remove(id: number): Promise<void>;
@@ -77,6 +78,7 @@ if (chrome && chrome.windows) {
 			onMoved: chrome.tabs.onMoved,
 			onRemoved: chrome.tabs.onRemoved,
 			onUpdated: chrome.tabs.onUpdated,
+			onHighlighted: chrome.tabs.onHighlighted,
 			create: (props: chrome.tabs.CreateProperties) => tabsCreate(props),
 			update: (id: number, props: chrome.tabs.UpdateProperties) => tabsUpdate(id, props),
 			remove: (id: number) => tabsRemove(id),

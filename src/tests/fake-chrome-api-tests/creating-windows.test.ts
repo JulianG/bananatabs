@@ -21,7 +21,8 @@ describe('creating windows', async () => {
 		expect(allCallbacks).toHaveBeenCalledLike([
 			{ event: fchrome.windows.onCreated, times: 1 },
 			{ event: fchrome.tabs.onCreated, times: 1 },
-			{ event: fchrome.tabs.onActivated, times: 1 }
+			{ event: fchrome.tabs.onActivated, times: 1 },
+			{ event: fchrome.tabs.onHighlighted, times: 1 }
 		]);
 
 	});
@@ -44,7 +45,8 @@ describe('creating windows', async () => {
 			{ event: fchrome.windows.onCreated, times: 1 },
 			{ event: fchrome.windows.onFocusChanged, times: 1},
 			{ event: fchrome.tabs.onCreated, times: 1 },
-			{ event: fchrome.tabs.onActivated, times: 1 }
+			{ event: fchrome.tabs.onActivated, times: 1 },
+			{ event: fchrome.tabs.onHighlighted, times: 1 }
 		]);
 
 	});
@@ -66,7 +68,8 @@ describe('creating windows', async () => {
 		expect(allCallbacks).toHaveBeenCalledLike([
 			{ event: fchrome.windows.onCreated, times: 1 },
 			{ event: fchrome.tabs.onCreated, times: 1 },
-			{ event: fchrome.tabs.onActivated, times: 1 }
+			{ event: fchrome.tabs.onActivated, times: 1 },
+			{ event: fchrome.tabs.onHighlighted, times: 1 }
 		]);
 
 	});
@@ -88,7 +91,8 @@ describe('creating windows', async () => {
 		expect(allCallbacks).toHaveBeenCalledLike([
 			{ event: fchrome.windows.onCreated, times: 1 },
 			{ event: fchrome.tabs.onCreated, times: 1 },
-			{ event: fchrome.tabs.onActivated, times: 1 }
+			{ event: fchrome.tabs.onActivated, times: 1 },
+			{ event: fchrome.tabs.onHighlighted, times: 1 }
 		]);
 
 	});
@@ -113,7 +117,8 @@ describe('creating windows', async () => {
 		expect(allCallbacks).toHaveBeenCalledLike([
 			{ event: fchrome.windows.onCreated, times: 1 },
 			{ event: fchrome.tabs.onCreated, times: 1 },
-			{ event: fchrome.tabs.onActivated, times: 1 }
+			{ event: fchrome.tabs.onActivated, times: 1 },
+			{ event: fchrome.tabs.onHighlighted, times: 1 }
 		]);
 
 	});
@@ -139,7 +144,8 @@ describe('creating windows', async () => {
 			{ event: fchrome.windows.onCreated, times: 1 },
 			{ event: fchrome.windows.onFocusChanged, times: 1},
 			{ event: fchrome.tabs.onCreated, times: 1 },
-			{ event: fchrome.tabs.onActivated, times: 1 }
+			{ event: fchrome.tabs.onActivated, times: 1 },
+			{ event: fchrome.tabs.onHighlighted, times: 1 }
 		]);
 
 	});
@@ -171,7 +177,8 @@ describe('creating windows', async () => {
 		expect(allCallbacks).toHaveBeenCalledLike([
 			{ event: fchrome.windows.onCreated, times: 1 },
 			{ event: fchrome.tabs.onCreated, times: 3 },
-			{ event: fchrome.tabs.onActivated, times: 3 }
+			{ event: fchrome.tabs.onActivated, times: 3 },
+			{ event: fchrome.tabs.onHighlighted, times: 3 }
 		]);
 	});
 

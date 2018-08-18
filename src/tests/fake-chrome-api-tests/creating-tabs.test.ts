@@ -7,7 +7,7 @@ describe('creating tabs', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
-	
+
 		// when creating a window
 		await fchrome.windows.create({});
 
@@ -20,7 +20,7 @@ describe('creating tabs', async () => {
 	test('creating a tab: content', async () => {
 
 		// given one window with a default tab
-		const fchrome = new FakePromisingChromeAPI([]);		
+		const fchrome = new FakePromisingChromeAPI([]);
 		const window0 = await fchrome.windows.create({ focused: true });
 		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
@@ -34,8 +34,9 @@ describe('creating tabs', async () => {
 
 		// expect exactly these events
 		expect(allCallbacks).toHaveBeenCalledLike([
-			{event: fchrome.tabs.onCreated, times: 1},
-			{event: fchrome.tabs.onActivated, times: 1}
+			{ event: fchrome.tabs.onCreated, times: 1 },
+			{ event: fchrome.tabs.onActivated, times: 1 },
+			{ event: fchrome.tabs.onHighlighted, times: 1 }
 		]);
 
 	});
@@ -43,7 +44,7 @@ describe('creating tabs', async () => {
 	test('creating a tab: content', async () => {
 
 		// given one window with a default tab
-		const fchrome = new FakePromisingChromeAPI([]);		
+		const fchrome = new FakePromisingChromeAPI([]);
 		const window0 = await fchrome.windows.create({ focused: true });
 		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
@@ -59,8 +60,9 @@ describe('creating tabs', async () => {
 
 		// expect exactly these events
 		expect(allCallbacks).toHaveBeenCalledLike([
-			{event: fchrome.tabs.onCreated, times: 1},
-			{event: fchrome.tabs.onActivated, times: 1}
+			{ event: fchrome.tabs.onCreated, times: 1 },
+			{ event: fchrome.tabs.onActivated, times: 1 },
+			{ event: fchrome.tabs.onHighlighted, times: 1 }
 		]);
 
 	});
@@ -68,11 +70,11 @@ describe('creating tabs', async () => {
 	test('creating a tab in the first window', async () => {
 
 		// given two windows
-		const fchrome = new FakePromisingChromeAPI([]);		
+		const fchrome = new FakePromisingChromeAPI([]);
 		const window0 = await fchrome.windows.create({ focused: true });
 		await fchrome.windows.create({});
 		const allCallbacks = Utils.getAllCallbacks(fchrome);
-		
+
 		// when a tab is created on the first window
 		const windowId = window0!.id;
 		await fchrome.tabs.create({ windowId });
@@ -86,10 +88,11 @@ describe('creating tabs', async () => {
 
 		// expect exactly these events
 		expect(allCallbacks).toHaveBeenCalledLike([
-			{event: fchrome.tabs.onCreated, times: 1},
-			{event: fchrome.tabs.onActivated, times: 1}
+			{ event: fchrome.tabs.onCreated, times: 1 },
+			{ event: fchrome.tabs.onActivated, times: 1 },
+			{ event: fchrome.tabs.onHighlighted, times: 1 }
 		]);
-		
+
 
 	});
 

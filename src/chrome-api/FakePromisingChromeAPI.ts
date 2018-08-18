@@ -11,7 +11,7 @@ class WindowReferenceEvent
 	extends FakeChromeEvent<(window: chrome.windows.Window, filters?: chrome.windows.WindowEventFilter) => void> { }
 class WindowIdEvent
 	extends FakeChromeEvent<((windowId: number, filters?: chrome.windows.WindowEventFilter | undefined) => undefined)> { }
-// class TabHighlightedEvent extends FakeChromeEvent<(highlightInfo: chrome.tabs.HighlightInfo) => void> { }
+class TabHighlightedEvent extends FakeChromeEvent<(highlightInfo: chrome.tabs.HighlightInfo) => void> { }
 class TabRemovedEvent
 	extends FakeChromeEvent<(tabId: number, removeInfo: chrome.tabs.TabRemoveInfo) => void> { }
 class TabUpdatedEvent
@@ -86,6 +86,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 					newWindow.tabs.forEach( async (tab) => {
 						(self.tabs.onCreated as TabCreatedEvent).fakeDispatch(tab);
 						(self.tabs.onActivated as TabActivatedEvent).fakeDispatch({ tabId: tab.id, windowId: tab.windowId });
+						(self.tabs.onHighlighted as TabHighlightedEvent).fakeDispatch({ tabIds: [tab.id], windowId: tab.windowId });
 					});
 				}
 				return newWindow;
@@ -116,6 +117,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 			onMoved: new TabMovedEvent(), // never triggered!
 			onRemoved: new TabRemovedEvent(),
 			onUpdated: new TabUpdatedEvent(),
+			onHighlighted: new TabHighlightedEvent(), // never triggered!
 
 			async create(props: chrome.tabs.CreateProperties): Promise<chrome.tabs.Tab> {
 				await self.delay();
@@ -365,10 +367,12 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 
 		window.tabs!.forEach(t => {
 			t.active = (t.id === id) ? value : false;
+			t.highlighted = t.active;
 		});
 
 		if (change && value || forceEventDispatch) {
 			(this.tabs.onActivated as TabActivatedEvent).fakeDispatch({ tabId: id, windowId: tab.windowId });
+			(this.tabs.onHighlighted as TabHighlightedEvent).fakeDispatch({ tabIds: [id], windowId: tab.windowId });
 		}
 	}
 
