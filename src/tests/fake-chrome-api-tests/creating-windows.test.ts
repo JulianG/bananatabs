@@ -1,127 +1,161 @@
 import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
+import * as Utils from './chrome-events-utils';
 
 describe('creating windows', async () => {
 
-	test('creating a window: content', async () => {
+	test('creating a window: content and events', async () => {
 
 		// given no windows
-		const chrome = new FakePromisingChromeAPI([]);
+		const fchrome = new FakePromisingChromeAPI([]);
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
-		// when a widow		
-		await chrome.windows.create({});
+		// when a window is created		
+		await fchrome.windows.create({});
 
 		// expect one window with one tab
-		const wins = await chrome.windows.getAll({});
+		const wins = await fchrome.windows.getAll({});
 		expect(wins).toHaveLength(1);
 		expect(wins[0].tabs).toHaveLength(1);
 
-	});
-
-	test('creating a window: events', async () => {
-
-		// given no windows
-		const chrome = new FakePromisingChromeAPI([]);
-		const onWinCreatedCallback = jest.fn();
-		chrome.windows.onCreated.addListener(onWinCreatedCallback);
-		const onTabCreatedCallback = jest.fn();
-		chrome.tabs.onCreated.addListener(onTabCreatedCallback);
-
-		// when a widow is created
-		await chrome.windows.create({});
-
-		// expect two events
-		expect(onWinCreatedCallback).toHaveBeenCalledTimes(1);
-		expect(onTabCreatedCallback).toHaveBeenCalledTimes(1);
+		// expect only these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.windows.onCreated, times: 1 },
+			{ event: fchrome.tabs.onCreated, times: 1 },
+			{ event: fchrome.tabs.onActivated, times: 1 }
+		]);
 
 	});
 
 	test('creating a window: focused', async () => {
 
 		// given no windows
-		const chrome = new FakePromisingChromeAPI([]);
+		const fchrome = new FakePromisingChromeAPI([]);
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
 		// when a widow is created with focused: true		
-		await chrome.windows.create({ focused: true });
+		await fchrome.windows.create({ focused: true });
 
 		// expect the first window to be focused
-		const wins = await chrome.windows.getAll({});
+		const wins = await fchrome.windows.getAll({});
 		expect(wins[0].focused).toBe(true);
+
+		// expect only these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.windows.onCreated, times: 1 },
+			{ event: fchrome.windows.onFocusChanged, times: 1},
+			{ event: fchrome.tabs.onCreated, times: 1 },
+			{ event: fchrome.tabs.onActivated, times: 1 }
+		]);
 
 	});
 
 	test('creating a window: not focused', async () => {
 
 		// given no windows
-		const chrome = new FakePromisingChromeAPI([]);
+		const fchrome = new FakePromisingChromeAPI([]);
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
 		// when a widow is created with focused: false		
-		await chrome.windows.create({ focused: false });
+		await fchrome.windows.create({ focused: false });
 
 		// expect the first window NOT to be focused
-		const wins = await chrome.windows.getAll({});
+		const wins = await fchrome.windows.getAll({});
 		expect(wins[0].focused).toBe(false);
+
+		// expect only these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.windows.onCreated, times: 1 },
+			{ event: fchrome.tabs.onCreated, times: 1 },
+			{ event: fchrome.tabs.onActivated, times: 1 }
+		]);
 
 	});
 
-	test('creating a window: focused not specified', async () => {
+	test('creating a window: focus not specified', async () => {
 
 		// given no windows
-		const chrome = new FakePromisingChromeAPI([]);
+		const fchrome = new FakePromisingChromeAPI([]);
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
 		// when a widow is created without specifying focus
-		await chrome.windows.create({});
+		await fchrome.windows.create({});
 
 		// expect the first window NOT to be focused
-		const wins = await chrome.windows.getAll({});
+		const wins = await fchrome.windows.getAll({});
 		expect(wins[0].focused).toBe(false);
+
+		// expect only these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.windows.onCreated, times: 1 },
+			{ event: fchrome.tabs.onCreated, times: 1 },
+			{ event: fchrome.tabs.onActivated, times: 1 }
+		]);
 
 	});
 
 	test('creating a second window: not focused', async () => {
 
 		// given one focused window
-		const chrome = new FakePromisingChromeAPI([]);
-		await chrome.windows.create({ focused: true });
+		const fchrome = new FakePromisingChromeAPI([]);
+		await fchrome.windows.create({ focused: true });
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
 		// when a second widow is created without specifying focus
-		await chrome.windows.create({});
+		await fchrome.windows.create({});
 
 		// expect the first window to remain focused
-		const wins = await chrome.windows.getAll({});
+		const wins = await fchrome.windows.getAll({});
 		expect(wins).toHaveLength(2);
 		expect(wins[0].focused).toBe(true);
 		expect(wins[1].focused).toBe(false);
+
+		// expect only these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.windows.onCreated, times: 1 },
+			{ event: fchrome.tabs.onCreated, times: 1 },
+			{ event: fchrome.tabs.onActivated, times: 1 }
+		]);
 
 	});
 
 	test('creating a second window: focused', async () => {
 
 		// given one focused window
-		const chrome = new FakePromisingChromeAPI([]);
-		await chrome.windows.create({ focused: true });
+		const fchrome = new FakePromisingChromeAPI([]);
+		await fchrome.windows.create({ focused: true });
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
 		// when a second widow is created with focused: true
-		await chrome.windows.create({ focused: true });
+		await fchrome.windows.create({ focused: true });
 
 		// expect the focuse to shift to the second window
-		const wins = await chrome.windows.getAll({});
+		const wins = await fchrome.windows.getAll({});
 		expect(wins).toHaveLength(2);
 		expect(wins[0].focused).toBe(false);
 		expect(wins[1].focused).toBe(true);
+
+		// expect only these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.windows.onCreated, times: 1 },
+			{ event: fchrome.windows.onFocusChanged, times: 1},
+			{ event: fchrome.tabs.onCreated, times: 1 },
+			{ event: fchrome.tabs.onActivated, times: 1 }
+		]);
 
 	});
 
 	test('creating a window with a list of tabs', async () => {
 
 		// given no windows
-		const chrome = new FakePromisingChromeAPI([]);
+		const fchrome = new FakePromisingChromeAPI([]);
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
 		// when a widow is created with 3 urls		
 		const urls = ['url0', 'url1', 'url2'];
-		await chrome.windows.create({ url: urls });
+		await fchrome.windows.create({ url: urls });
 
 		// expect a window with 3 tabs with the correct urls
-		const wins = await chrome.windows.getAll({});
+		const wins = await fchrome.windows.getAll({});
 		expect(wins).toHaveLength(1);
 		expect(wins[0].tabs!).toHaveLength(3);
 		expect(wins[0].tabs![0].url).toEqual(urls[0]);
@@ -132,6 +166,13 @@ describe('creating windows', async () => {
 		expect(wins[0].tabs![0].active).toBe(false);
 		expect(wins[0].tabs![1].active).toBe(false);
 		expect(wins[0].tabs![2].active).toBe(true);
+
+		// also expect only these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.windows.onCreated, times: 1 },
+			{ event: fchrome.tabs.onCreated, times: 3 },
+			{ event: fchrome.tabs.onActivated, times: 3 }
+		]);
 	});
 
 });

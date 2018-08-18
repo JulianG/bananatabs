@@ -76,14 +76,17 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 				await self.delay();
 
 				if (createData.focused) {
-					await self.focusWindow(newWindow.id, true);
+					await self.focusWindow(newWindow.id, true, true);
 				}
 
 				self.normaliseActiveTabs(newWindow);
 
 				(self.windows.onCreated as WindowReferenceEvent).fakeDispatch(newWindow);
-				if (newWindow.tabs && newWindow.tabs.length > 0) {
-					(self.tabs.onCreated as TabCreatedEvent).fakeDispatch(newWindow.tabs![0]);
+				if (newWindow.tabs) {
+					newWindow.tabs.forEach( async (tab) => {
+						(self.tabs.onCreated as TabCreatedEvent).fakeDispatch(tab);
+						(self.tabs.onActivated as TabActivatedEvent).fakeDispatch({ tabId: tab.id, windowId: tab.windowId });
+					});
 				}
 				return newWindow;
 			},
@@ -128,7 +131,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 				await self.delay();
 				try {
 					const tab = self.updateTab(id, props);
-					(this.onUpdated as TabUpdatedEvent).fakeDispatch(id, {status: tab.status, pinned: tab.pinned});
+					(this.onUpdated as TabUpdatedEvent).fakeDispatch(id, { status: tab.status, pinned: tab.pinned });
 					return tab;
 				} catch (e) {
 					return Promise.reject(`failed to update tab with id: ${id}`);
@@ -136,7 +139,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 			},
 			async remove(id: number) {
 				await self.delay();
-				await self.removeTab(id);
+				await self.removeTab(id, false);
 			},
 			async getCurrent() {
 				await self.delay();
@@ -214,7 +217,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 
 			const win = this.fakeWindows[index];
 			const tabIds = (win.tabs || []).map(t => t.id);
-			const removeAllTabs = tabIds.map(tId => (tId) ? this.removeTab(tId) : Promise.resolve());
+			const removeAllTabs = tabIds.map(tId => (tId) ? this.removeTab(tId, true) : Promise.resolve());
 			await Promise.all(removeAllTabs);
 			this.fakeWindows.splice(index, 1);
 
@@ -235,12 +238,12 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 		window.width = (updateInfo.width !== undefined) ? updateInfo.width : window.width;
 		window.height = (updateInfo.height !== undefined) ? updateInfo.height : window.height;
 		if (updateInfo.focused !== undefined) {
-			this.focusWindow(window.id, updateInfo.focused);
+			this.focusWindow(window.id, updateInfo.focused, false);
 		}
 		return window;
 	}
 
-	private focusWindow(id: number, value: boolean) {
+	private focusWindow(id: number, value: boolean, forceEventDispatch: boolean) {
 		const window = this.getWindow(id);
 		if (!window) {
 			throw (new Error(`Cannot find window id: ${id}`));
@@ -252,7 +255,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 			w.focused = (w.id === id) ? value : false;
 		});
 
-		if (change) {
+		if (change || forceEventDispatch) {
 			(this.windows.onFocusChanged as WindowIdEvent).fakeDispatch(this.getFocusedWindowId());
 		}
 	}
@@ -306,12 +309,12 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 		return tab;
 	}
 
-	private async removeTab(id: number): Promise<void> {
+	private async removeTab(id: number, isWindowClosing: boolean): Promise<void> {
 		try {
 			const win = this.getWindowForTab(id);
 			const index = win!.tabs!.findIndex(t => t.id === id);
 			win!.tabs!.splice(index, 1);
-			(this.tabs.onRemoved as TabRemovedEvent).fakeDispatch(id, { windowId: win!.id, isWindowClosing: false });
+			(this.tabs.onRemoved as TabRemovedEvent).fakeDispatch(id, { windowId: win!.id, isWindowClosing });
 			return;
 		} catch (e) {
 			return Promise.reject(`failed to remove tab with id: ${id}`);
@@ -365,7 +368,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 		});
 
 		if (change && value || forceEventDispatch) {
-			(this.tabs.onActivated as TabActivatedEvent).fakeDispatch(id);
+			(this.tabs.onActivated as TabActivatedEvent).fakeDispatch({ tabId: id, windowId: tab.windowId });
 		}
 	}
 
@@ -392,4 +395,3 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 		// console.table(table);
 	}
 }
-
