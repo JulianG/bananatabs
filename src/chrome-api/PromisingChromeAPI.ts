@@ -91,7 +91,7 @@ if (chrome && chrome.windows) {
 		},
 		extension: {
 			getURL: (path: string) => {
-				return '/' + path;
+				return chrome.extension.getURL(path);
 			}
 		}
 	};
