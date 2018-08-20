@@ -279,20 +279,6 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 		return (focusedWindow) ? focusedWindow.id : -1;
 	}
 
-	private normaliseFocusedWindows() {
-
-		const focusedWindows = this.fakeWindows.filter(w => w.focused);
-
-		const id = (focusedWindows.length) ?
-			focusedWindows[focusedWindows.length - 1].id :
-			this.fakeWindows[this.fakeWindows.length - 1].id;
-
-		if (id) {
-			this.focusWindow(id, true, false);
-		}
-
-	}
-
 	private createTab(props: chrome.tabs.CreateProperties): chrome.tabs.Tab {
 
 		const windowId = props.windowId || this.getFocusedWindowId();
