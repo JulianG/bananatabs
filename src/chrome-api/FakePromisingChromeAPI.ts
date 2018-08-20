@@ -83,7 +83,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 
 				(self.windows.onCreated as WindowReferenceEvent).fakeDispatch(newWindow);
 				if (newWindow.tabs) {
-					newWindow.tabs.forEach( async (tab) => {
+					newWindow.tabs.forEach(async (tab) => {
 						(self.tabs.onCreated as TabCreatedEvent).fakeDispatch(tab);
 						(self.tabs.onActivated as TabActivatedEvent).fakeDispatch({ tabId: tab.id, windowId: tab.windowId });
 						(self.tabs.onHighlighted as TabHighlightedEvent).fakeDispatch({ tabIds: [tab.id], windowId: tab.windowId });
@@ -103,7 +103,15 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 			},
 			async remove(id: number): Promise<void> {
 				await self.delay();
-				await self.removeWindow(id);
+				const win = await self.removeWindow(id);
+
+				if (win.focused) {
+					const nextFocusedWindowId = (self.fakeWindows.length >= 1) ?
+						self.fakeWindows[self.fakeWindows.length - 1].id :
+						-1;
+					self.focusWindow(nextFocusedWindowId, true, true);
+				}
+
 				(this.onRemoved as WindowIdEvent).fakeDispatch(id);
 			}
 
@@ -222,7 +230,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 			const removeAllTabs = tabIds.map(tId => (tId) ? this.removeTab(tId, true) : Promise.resolve());
 			await Promise.all(removeAllTabs);
 			this.fakeWindows.splice(index, 1);
-
+			return win;
 		} else {
 			throw (new Error(`failed to remove window with id: ${id}`));
 		}
@@ -246,12 +254,16 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 	}
 
 	private focusWindow(id: number, value: boolean, forceEventDispatch: boolean) {
-		const window = this.getWindow(id);
-		if (!window) {
-			throw (new Error(`Cannot find window id: ${id}`));
-		}
 
-		const change = window.focused !== value;
+		let change = false;
+
+		if (id !== -1) {
+			const window = this.getWindow(id);
+			if (!window) {
+				throw (new Error(`Cannot find window id: ${id}`));
+			}
+			change = window.focused !== value;
+		}
 
 		this.fakeWindows.forEach(w => {
 			w.focused = (w.id === id) ? value : false;
@@ -265,6 +277,20 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 	private getFocusedWindowId(): number {
 		const focusedWindow = this.fakeWindows.find(w => w.focused);
 		return (focusedWindow) ? focusedWindow.id : -1;
+	}
+
+	private normaliseFocusedWindows() {
+
+		const focusedWindows = this.fakeWindows.filter(w => w.focused);
+
+		const id = (focusedWindows.length) ?
+			focusedWindows[focusedWindows.length - 1].id :
+			this.fakeWindows[this.fakeWindows.length - 1].id;
+
+		if (id) {
+			this.focusWindow(id, true, false);
+		}
+
 	}
 
 	private createTab(props: chrome.tabs.CreateProperties): chrome.tabs.Tab {

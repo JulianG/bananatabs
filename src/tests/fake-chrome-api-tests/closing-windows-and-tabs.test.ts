@@ -1,55 +1,80 @@
 import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
+import * as Utils from './chrome-events-utils';
 
 describe('closing windows and tabs', async () => {
 
-	test('closing a window with 1 tab', async () => {
+	test('closing a focused window with 1 tab', async () => {
 
 		// given 1 window
-		const chrome = new FakePromisingChromeAPI([]);
-		await chrome.windows.create({});
-		const windowId = (await chrome.windows.getAll({}))[0].id;
-		const onWinRemovedCallback = jest.fn();
-		chrome.windows.onRemoved.addListener(onWinRemovedCallback);
-		const onTabRemovedCallback = jest.fn();
-		chrome.tabs.onRemoved.addListener(onTabRemovedCallback);
+		const fchrome = new FakePromisingChromeAPI([]);
+		await fchrome.windows.create({ focused: true });
+		const windowId = (await fchrome.windows.getAll({}))[0].id;
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
 		// when the window is closed
-		await chrome.windows.remove(windowId);
+		await fchrome.windows.remove(windowId);
 
 		// expect no windows
-		const wins = await chrome.windows.getAll({});
+		const wins = await fchrome.windows.getAll({});
 		expect(wins).toHaveLength(0);
 
-		// also expect some events
-		expect(onWinRemovedCallback).toHaveBeenCalledTimes(1);
-		expect(onTabRemovedCallback).toHaveBeenCalledTimes(1);
+		// expect exactly these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.tabs.onRemoved, times: 1 },
+			{ event: fchrome.windows.onFocusChanged, times: 1 },
+			{ event: fchrome.windows.onRemoved, times: 1 }
+		]);
 
 	});
 
-	test('closing a window with 2 tabs', async () => {
+	test('closing a non focused window with 1 tab', async () => {
 
 		// given 1 window
-		const chrome = new FakePromisingChromeAPI([]);
-		await chrome.windows.create({});
-		const windowId = (await chrome.windows.getAll({}))[0].id;
-
-		await chrome.tabs.create({windowId});
-
-		const onWinRemovedCallback = jest.fn();
-		chrome.windows.onRemoved.addListener(onWinRemovedCallback);
-		const onTabRemovedCallback = jest.fn();
-		chrome.tabs.onRemoved.addListener(onTabRemovedCallback);
+		const fchrome = new FakePromisingChromeAPI([]);
+		await fchrome.windows.create({ focused: false });
+		const windowId = (await fchrome.windows.getAll({}))[0].id;
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
 		// when the window is closed
-		await chrome.windows.remove(windowId);
+		await fchrome.windows.remove(windowId);
 
 		// expect no windows
-		const wins = await chrome.windows.getAll({});
+		const wins = await fchrome.windows.getAll({});
 		expect(wins).toHaveLength(0);
 
-		// also expect some events
-		expect(onWinRemovedCallback).toHaveBeenCalledTimes(1);
-		expect(onTabRemovedCallback).toHaveBeenCalledTimes(2);
+		// expect exactly these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.tabs.onRemoved, times: 1 },
+			{ event: fchrome.windows.onRemoved, times: 1 }
+		]);
+
+	});
+
+
+	test('closing a focused window with 2 tabs', async () => {
+
+		// given 1 window
+		const fchrome = new FakePromisingChromeAPI([]);
+		await fchrome.windows.create({focused: true});
+		const windowId = (await fchrome.windows.getAll({}))[0].id;
+
+		await fchrome.tabs.create({ windowId });
+		const allCallbacks = Utils.getAllCallbacks(fchrome);
+
+		// when the window is closed
+		await fchrome.windows.remove(windowId);
+
+		// expect no windows
+		const wins = await fchrome.windows.getAll({});
+		expect(wins).toHaveLength(0);
+
+		// expect exactly these events
+		expect(allCallbacks).toHaveBeenCalledLike([
+			{ event: fchrome.tabs.onRemoved, times: 2 },
+			{ event: fchrome.windows.onFocusChanged, times: 1 },
+			{ event: fchrome.windows.onRemoved, times: 1 }
+		]);
+
 
 	});
 });
