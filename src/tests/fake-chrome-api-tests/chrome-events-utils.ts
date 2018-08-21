@@ -65,9 +65,7 @@ function confirmExpectations(allCallbacks: AllCallbacks, expectations: Expectati
 
 		const expectation = expectations.find(ex => ex.event === pair.event);
 		const times = (expectation) ? expectation.times : 0;
-
-		// console.log(`${pair.id} expected ${times}... pair.callback.mock.calls.length: ${pair.callback.mock.calls.length}`);
-
+		
 		if (pair.callback.mock.calls.length !== times) {
 			return {
 				message: () => {
