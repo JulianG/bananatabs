@@ -249,7 +249,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 		window.width = (updateInfo.width !== undefined) ? updateInfo.width : window.width;
 		window.height = (updateInfo.height !== undefined) ? updateInfo.height : window.height;
 		if (updateInfo.focused !== undefined) {
-			const focusChanged = this._focusWindow(window.id, updateInfo.focused);
+			this._focusWindow(window.id, updateInfo.focused);
 		}
 		return window;
 	}

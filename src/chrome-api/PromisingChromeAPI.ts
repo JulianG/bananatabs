@@ -1,8 +1,6 @@
-/*
-tslint:disable no-any
-*/
-import { promisify } from '../utils/Promisify';
+
 import FakePromisingChromeAPI from './FakePromisingChromeAPI';
+import RealPromisingChromeAPI from './RealPromisingChromeAPI';
 
 export interface ChromeAPI {
 	windows: ChromeWindowsAPI;
@@ -51,53 +49,8 @@ export interface ChromeExtensionAPI {
 let PromisingChromeAPI: ChromeAPI;
 
 if (chrome && chrome.windows) {
-	const winsGetAll = promisify<chrome.windows.Window[]>(chrome.windows.getAll);
-	const winsCreate = promisify<chrome.windows.Window | undefined>(chrome.windows.create);
-	const winsRemove = promisify<void>(chrome.windows.remove);
-	const winsUpdate = promisify<chrome.windows.Window>(chrome.windows.update);
-	const tabsCreate = promisify<chrome.tabs.Tab>(chrome.tabs.create);
-	const tabsUpdate = promisify<chrome.tabs.Tab | undefined>(chrome.tabs.update);
-	const tabsRemove = promisify<void>(chrome.tabs.remove);
-	const tabsGetCurrent = promisify<chrome.tabs.Tab>(chrome.tabs.getCurrent);
-	const systemDisplayGetInfo = promisify<chrome.system.display.DisplayUnitInfo[]>(chrome.system.display.getInfo);
-
-	PromisingChromeAPI = {
-		windows: {
-			onCreated: chrome.windows.onCreated,
-			onRemoved: chrome.windows.onRemoved,
-			onFocusChanged: chrome.windows.onFocusChanged,
-			getAll: (getInfo: chrome.windows.GetInfo) => winsGetAll(getInfo),
-			create: (createData: chrome.windows.CreateData) => winsCreate(createData),
-			update: (id: number, updateInfo: chrome.windows.UpdateInfo) => winsUpdate(id, updateInfo),
-			remove: (id: number) => winsRemove(id)
-		},
-		tabs: {
-			onActivated: chrome.tabs.onActivated,
-			onAttached: chrome.tabs.onAttached,
-			onCreated: chrome.tabs.onCreated,
-			onMoved: chrome.tabs.onMoved,
-			onRemoved: chrome.tabs.onRemoved,
-			onUpdated: chrome.tabs.onUpdated,
-			onHighlighted: chrome.tabs.onHighlighted,
-			create: (props: chrome.tabs.CreateProperties) => tabsCreate(props),
-			update: (id: number, props: chrome.tabs.UpdateProperties) => tabsUpdate(id, props),
-			remove: (id: number) => tabsRemove(id),
-			getCurrent: () => tabsGetCurrent()
-		},
-		system: {
-			display: {
-				getInfo: (options: {}) => systemDisplayGetInfo(options)
-			}
-		},
-		extension: {
-			getURL: (path: string) => {
-				return chrome.extension.getURL(path);
-			}
-		}
-	};
-
+	PromisingChromeAPI = new RealPromisingChromeAPI();
 } else {
-	console.warn('using FakePromisingChromeAPI');
 	PromisingChromeAPI = new FakePromisingChromeAPI();
 }
 
