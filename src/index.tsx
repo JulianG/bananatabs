@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import ChromeEventLogger from 'utils/ChromeEventLogger';
 import './index.css';
 
 ReactDOM.render(
@@ -9,3 +10,5 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
+
+console.log(new ChromeEventLogger());

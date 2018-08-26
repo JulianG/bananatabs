@@ -170,6 +170,11 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 	private async updateTab(id: number, props: chrome.tabs.UpdateProperties) {
 		const tab = this._getTab(id);
 		if (tab) {
+
+			const changeInfo:chrome.tabs.TabChangeInfo = {};
+			changeInfo.pinned = props.pinned !== undefined ? props.pinned : undefined;
+
+			tab.status = 'complete';
 			tab.autoDiscardable = (props.autoDiscardable !== undefined) ? props.autoDiscardable : tab.autoDiscardable;
 			tab.highlighted = (props.highlighted !== undefined) ? props.highlighted : tab.highlighted;
 			tab.openerTabId = (props.openerTabId !== undefined) ? props.openerTabId : tab.openerTabId;
@@ -183,7 +188,9 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 					this.dispatchTabActivated(id, tab.windowId);
 				}
 			}
-			(this.tabs.onUpdated as FCE.TabUpdatedEvent).fakeDispatch(id, { status: tab.status, pinned: tab.pinned });
+			if(changeInfo.pinned !== undefined ) {
+				(this.tabs.onUpdated as FCE.TabUpdatedEvent).fakeDispatch(id, changeInfo);
+			}
 		} else {
 			throw ('Failed to update tab id: ' + id);
 		}

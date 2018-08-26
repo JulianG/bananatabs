@@ -1,4 +1,17 @@
 import { ChromeAPI } from 'chrome-api/PromisingChromeAPI';
+import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
+
+export async function initialiseFchrome(windowTabs: number[], focusIndex: number): Promise<FakePromisingChromeAPI> {
+	const fchrome = new FakePromisingChromeAPI([]);
+	windowTabs.forEach( async (tabs, i) => {
+		const focused = (i===focusIndex);
+		const win = await fchrome.windows.create({ focused });
+		const windowId = win!.id;
+		await fchrome.tabs.create({windowId});
+	});
+	return fchrome;
+}
+
 
 interface ChromeEvent {
 	addListener: Function;
