@@ -171,7 +171,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 		const tab = this._getTab(id);
 		if (tab) {
 
-			const changeInfo:chrome.tabs.TabChangeInfo = {};
+			const changeInfo: chrome.tabs.TabChangeInfo = {};
 			changeInfo.pinned = props.pinned !== undefined ? props.pinned : undefined;
 
 			tab.status = 'complete';
@@ -188,7 +188,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 					this.dispatchTabActivated(id, tab.windowId);
 				}
 			}
-			if(changeInfo.pinned !== undefined ) {
+			if (changeInfo.pinned !== undefined) {
 				(this.tabs.onUpdated as FCE.TabUpdatedEvent).fakeDispatch(id, changeInfo);
 			}
 		} else {

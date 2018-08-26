@@ -1,4 +1,3 @@
-import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
 import * as Utils from './chrome-events-utils';
 
 describe('updating windows', async () => {
@@ -11,9 +10,7 @@ describe('updating windows', async () => {
 		await fchrome.windows.create({ focused: true });
 		const windowId = (await fchrome.windows.getAll({}))[0].id;
 		const allCallbacks = Utils.getAllCallbacks(fchrome);
-		const initialWins = await fchrome.windows.getAll({});
-
-		const width = initialWins[0].width;
+		await fchrome.windows.getAll({});
 
 		// when the window is resized
 		const updateInfo: chrome.windows.UpdateInfo = {
@@ -22,7 +19,7 @@ describe('updating windows', async () => {
 			width: 0,
 			height: 450,
 		};
-		const updateResult = await fchrome.windows.update(windowId, updateInfo);
+		await fchrome.windows.update(windowId, updateInfo);
 
 		// expect the window dimensions to be correct
 		const wins = await fchrome.windows.getAll({});

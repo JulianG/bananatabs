@@ -3,11 +3,11 @@ import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
 
 export async function initialiseFchrome(windowTabs: number[], focusIndex: number): Promise<FakePromisingChromeAPI> {
 	const fchrome = new FakePromisingChromeAPI([]);
-	windowTabs.forEach( async (tabs, i) => {
-		const focused = (i===focusIndex);
+	windowTabs.forEach(async (tabs, i) => {
+		const focused = (i === focusIndex);
 		const win = await fchrome.windows.create({ focused });
 		const windowId = win!.id;
-		await fchrome.tabs.create({windowId});
+		await fchrome.tabs.create({ windowId });
 	});
 	return fchrome;
 }
@@ -78,7 +78,7 @@ function confirmExpectations(allCallbacks: AllCallbacks, expectations: Expectati
 
 		const expectation = expectations.find(ex => ex.event === pair.event);
 		const times = (expectation) ? expectation.times : 0;
-		
+
 		if (pair.callback.mock.calls.length !== times) {
 			return {
 				message: () => {

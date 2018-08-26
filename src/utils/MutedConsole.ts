@@ -38,5 +38,3 @@ class MutedConsole implements Console {
 
 const mutedConsole = new MutedConsole();
 export default mutedConsole;
-
-console.log('Using MutedConsole');
