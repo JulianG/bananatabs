@@ -33,7 +33,7 @@ interface State {
 export default class WindowView extends React.Component<Props, State> {
 
 	readonly state: State = { toolsVisible: false, renaming: false };
-	
+
 	constructor(props: Props) {
 		super(props);
 

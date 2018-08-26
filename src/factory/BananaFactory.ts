@@ -1,10 +1,8 @@
 import BrowserController from '../model/mutators/BrowserController';
-import FakeBrowserController, { fakeDisplayInfo } from '../fake/FakeBrowserController';
 import ChromeBrowserController from '../chrome/ChromeBrowserController';
 
 import SessionProvider from '../model/SessionProvider';
-import FakeSessionProvider from '../fake/FakeSessionProvider';
-import ChromeSessionProvider from '../chrome/ChromeSessionProvider';
+import DefaultSessionProvider from '../model/DefaultSessionProvider';
 import LiveSessionMerger, { DefaultLiveSessionMerger } from '../model/mergers/LiveSessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 import SessionMutator, { DefaultSessionMutator } from '../model/mutators/SessionMutator';
@@ -26,26 +24,18 @@ export default class BananaFactory {
 
 	getBrowserController(): BrowserController {
 		if (!this.browserController) {
-			if (chrome && chrome.windows && chrome.tabs) {
-				this.browserController = new ChromeBrowserController();
-			} else {
-				this.browserController = new FakeBrowserController([fakeDisplayInfo], []);
-			}
+			this.browserController = new ChromeBrowserController();
 		}
 		return this.browserController;
 	}
 
 	getSessionProvider(): SessionProvider {
 		if (!this.sessionProvider) {
-			if (chrome && chrome.windows && chrome.tabs) {
-				this.sessionProvider = new ChromeSessionProvider(
-					this.getBrowserController(),
-					this.liveSessionMerger,
-					this.persistence
-				);
-			} else {
-				this.sessionProvider = new FakeSessionProvider(this.persistence);
-			}
+			this.sessionProvider = new DefaultSessionProvider(
+				this.getBrowserController(),
+				this.liveSessionMerger,
+				this.persistence
+			);
 		}
 		return this.sessionProvider;
 	}
