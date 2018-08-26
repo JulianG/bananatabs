@@ -33,7 +33,7 @@ interface State {
 
 export default class MainView extends React.Component<Props, State> {
 
-	readonly state: State = { mode: 'list', windowId: 0, debug: true };
+	readonly state: State = { mode: 'list', windowId: 0, debug: false };
 
 	constructor(props: Props) {
 		super(props);
