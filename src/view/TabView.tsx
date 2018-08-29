@@ -25,7 +25,7 @@ interface State {
 export default class TabView extends React.Component<Props, State> {
 
 	readonly state: State = { toolsVisible: false };
-	
+
 	constructor(props: Props) {
 		super(props);
 		this.onSelectAction = this.onSelectAction.bind(this);
@@ -59,11 +59,13 @@ export default class TabView extends React.Component<Props, State> {
 
 		return (
 			<div
+				id={'tab'}
 				className={styles.join(' ')}
 				onMouseEnter={this.showTools}
 				onMouseLeave={this.hideTools}
 			>
 				<img
+					id={'tab-visibility' + (tab.visible ? '-visible' : '-hidden')}
 					className="left-most tool icon"
 					src={visibilityIconSrc}
 					title={visibilityIconText}

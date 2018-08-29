@@ -48,8 +48,7 @@ export default class WindowView extends React.Component<Props, State> {
 		this.hideTools = this.hideTools.bind(this);
 	}
 
-	render() {
-
+	render() {		
 		const w = this.props.window;
 
 		const styles = [
@@ -60,7 +59,10 @@ export default class WindowView extends React.Component<Props, State> {
 		];
 
 		return (
-			<div className={styles.join(' ')}>
+			<div
+				id={'window-group'}
+				className={styles.join(' ')}
+			>
 				{this.renderHeader()}
 				{this.props.debug && createDebugInfo(w, ['id', 'bounds'])}
 				{this.renderTabs()}
@@ -91,8 +93,10 @@ export default class WindowView extends React.Component<Props, State> {
 		const w = this.props.window;
 		const visibilityIconSrc = w.visible ? Icons.On : Icons.Off;
 		const visibilityIconText = w.visible ? 'Hide Window' : 'Show Window';
+		const imgId = 'visibility' + (w.visible ? '-visible' : '-hidden');
 		return (
 			<img
+				id={imgId}
 				className="tool icon"
 				src={visibilityIconSrc}
 				title={visibilityIconText}
@@ -125,6 +129,7 @@ export default class WindowView extends React.Component<Props, State> {
 		const iconStyles = ['tool', 'icon', w.visible ? '' : 'hidden'];
 		return (
 			<img
+				id="disclosure"
 				className={iconStyles.join(' ')}
 				src={iconSrc}
 				title={iconText}
