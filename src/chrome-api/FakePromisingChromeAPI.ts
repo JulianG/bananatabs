@@ -241,7 +241,9 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 			return [this._createTab({ windowId })];
 		}
 		if (Array.isArray(urls)) {
-			return urls.map(url => this._createTab({ windowId, url }));
+			return (urls.length > 0) ? 
+				urls.map(url => this._createTab({ windowId, url })) :
+				[this._createTab({ windowId })];
 		} else {
 			const url = urls;
 			return [this._createTab({ windowId, url })];
@@ -287,7 +289,7 @@ export default class FakePromisingChromeAPI implements ChromeAPI {
 			selected: props.selected || false,
 			discarded: false,
 			autoDiscardable: false,
-			url: props.url,
+			url: props.url || 'chrome://newtab/',
 			openerTabId: props.openerTabId
 		};
 

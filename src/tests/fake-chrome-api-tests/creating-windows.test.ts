@@ -157,7 +157,7 @@ describe('creating windows', async () => {
 		const allCallbacks = Utils.getAllCallbacks(fchrome);
 
 		// when a widow is created with 3 urls		
-		const urls = ['url0', 'url1', 'url2'];
+		const urls = ['url0', 'url1', ''];
 		await fchrome.windows.create({ url: urls });
 
 		// expect a window with 3 tabs with the correct urls
@@ -166,7 +166,7 @@ describe('creating windows', async () => {
 		expect(wins[0].tabs!).toHaveLength(3);
 		expect(wins[0].tabs![0].url).toEqual(urls[0]);
 		expect(wins[0].tabs![1].url).toEqual(urls[1]);
-		expect(wins[0].tabs![2].url).toEqual(urls[2]);
+		expect(wins[0].tabs![2].url).toEqual('chrome://newtab/');
 
 		// also expect only the most recent tab to be active
 		expect(wins[0].tabs![0].active).toBe(false);
@@ -180,6 +180,61 @@ describe('creating windows', async () => {
 			{ event: fchrome.tabs.onActivated, times: 3 },
 			{ event: fchrome.tabs.onHighlighted, times: 3 }
 		]);
+	});
+
+	test('creating a window: url as string', async () => {
+
+		// given no windows
+		const fchrome = new FakePromisingChromeAPI([]);
+
+		// when
+		await fchrome.windows.create({url: 'http://foo.bar'});
+
+		// expect
+		const wins = await fchrome.windows.getAll({});
+		expect(wins[0].tabs![0].url).toBe('http://foo.bar');
+
+	});
+
+	test('creating a window: url as empty string', async () => {
+
+		// given no windows
+		const fchrome = new FakePromisingChromeAPI([]);
+
+		// when
+		await fchrome.windows.create({url: ''});
+
+		// expect
+		const wins = await fchrome.windows.getAll({});
+		expect(wins[0].tabs![0].url).toBe('chrome://newtab/');
+
+	});
+	test('creating a window: url as empty array', async () => {
+
+		// given no windows
+		const fchrome = new FakePromisingChromeAPI([]);
+
+		// when
+		await fchrome.windows.create({url: []});
+
+		// expect
+		const wins = await fchrome.windows.getAll({});
+		expect(wins[0].tabs![0].url).toBe('chrome://newtab/');
+
+	});
+
+	test('creating a window: url undefined', async () => {
+
+		// given no windows
+		const fchrome = new FakePromisingChromeAPI([]);
+
+		// when
+		await fchrome.windows.create({url: undefined});
+
+		// expect
+		const wins = await fchrome.windows.getAll({});
+		expect(wins[0].tabs![0].url).toBe('chrome://newtab/');
+
 	});
 
 });
