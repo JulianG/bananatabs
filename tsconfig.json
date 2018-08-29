@@ -21,11 +21,13 @@
   "exclude": [
     "node_modules",
     "build",
-    "scripts",
+    "public",
+    "coverage",
     "acceptance-tests",
     "webpack",
     "jest",
-    "src/setupTests.ts"
+    "scripts",
+    "./*.js"
   ],
   "types": [
         "chrome"
