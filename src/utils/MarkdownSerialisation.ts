@@ -81,8 +81,5 @@ function detectLeadOnTabLine(line: string): number {
 	if (line.substr(0, 2) === '* ') {
 		return 2;
 	}
-	if (isValidURL(line)) {
-		return 0;
-	}
-	throw (new Error(`The specified line is not a valid URL. line contents:${line}`));
+	return 0;
 }
