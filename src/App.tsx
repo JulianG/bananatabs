@@ -7,6 +7,7 @@ import SessionMutator from './model/mutators/SessionMutator';
 import WindowMutator from './model/mutators/WindowMutator';
 import TabMutator from './model/mutators/TabMutator';
 import WindowAndTabMutator from './model/mutators/WindowAndTabMutator';
+import ChromeAPIFactory from 'chrome-api/ChromeAPIFactory';
 
 import MainView from './view/MainView';
 
@@ -33,7 +34,7 @@ class App extends React.Component<{}, State> {
     this.version = MANIFEST.version || '0.0';
     this.buildString = '';
 
-    const factory = new BananaFactory();
+    const factory = new BananaFactory(ChromeAPIFactory());
 
     this.sessionMutator = factory.getSessionMutator();
     this.sessionProvider = factory.getSessionProvider();

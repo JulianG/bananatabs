@@ -1,4 +1,4 @@
-import PromisingChromeAPI from '../chrome-api/PromisingChromeAPI';
+import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
 import BrowserEventDispatcher from '../model/mutators/BrowserEventDispatcher';
 
 import console from '../utils/MutedConsole';
@@ -13,28 +13,28 @@ export default class ChromeEventDispatcher implements BrowserEventDispatcher {
 	private enabled: boolean;
 	private eventListeners: EventListener[];
 
-	constructor() {
+	constructor(chromeAPI: PromisingChromeAPI) {
 
 		this.enabled = true;
 		this.eventListeners = [];
 
-		PromisingChromeAPI.windows.onRemoved.addListener((id) => {
+		chromeAPI.windows.onRemoved.addListener((id) => {
 			this.dispatchEvent('onRemoved', `onWindowRemoved ${id}`);
 		});
-		PromisingChromeAPI.windows.onFocusChanged.addListener((_) => this.dispatchEvent('onFocusChanged'));
-		PromisingChromeAPI.tabs.onCreated.addListener((tab) => {
+		chromeAPI.windows.onFocusChanged.addListener((_) => this.dispatchEvent('onFocusChanged'));
+		chromeAPI.tabs.onCreated.addListener((tab) => {
 			this.dispatchEvent('onTabsCreated', `onTabsCreated ${tab.id}`);
 		});
-		PromisingChromeAPI.tabs.onUpdated.addListener(this.onTabsUpdated.bind(this));
-		PromisingChromeAPI.tabs.onMoved.addListener((_) => this.dispatchEvent('onTabsMoved'));
-		PromisingChromeAPI.tabs.onAttached.addListener((id, info) => this.dispatchEvent('onTabsAttached'));
-		PromisingChromeAPI.tabs.onRemoved.addListener(this.onTabsRemoved.bind(this));
-		PromisingChromeAPI.tabs.onActivated.addListener((_) => this.dispatchEvent('onActivated'));
-		// PromisingChromeAPI.tabs.onHighlighted.addListener((_) => this.updateSessionSilently('onHighlighted'));
-		// PromisingChromeAPI.tabs.onDetached.addListener((_) => this.updateSessionSilently('onDetached'));
-		// PromisingChromeAPI.tabs.onReplaced.addListener((_) => this.updateSessionSilently('onReplaced'));
+		chromeAPI.tabs.onUpdated.addListener(this.onTabsUpdated.bind(this));
+		chromeAPI.tabs.onMoved.addListener((_) => this.dispatchEvent('onTabsMoved'));
+		chromeAPI.tabs.onAttached.addListener((id, info) => this.dispatchEvent('onTabsAttached'));
+		chromeAPI.tabs.onRemoved.addListener(this.onTabsRemoved.bind(this));
+		chromeAPI.tabs.onActivated.addListener((_) => this.dispatchEvent('onActivated'));
+		// chromeAPI.tabs.onHighlighted.addListener((_) => this.updateSessionSilently('onHighlighted'));
+		// chromeAPI.tabs.onDetached.addListener((_) => this.updateSessionSilently('onDetached'));
+		// chromeAPI.tabs.onReplaced.addListener((_) => this.updateSessionSilently('onReplaced'));
 
-		PromisingChromeAPI.tabs.getCurrent().then((tab) => {
+		chromeAPI.tabs.getCurrent().then((tab) => {
 			if (tab) {
 				this.appTabId = tab.id || 0;
 			}

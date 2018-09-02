@@ -1,5 +1,5 @@
 import {
-	ChromeAPI,
+	PromisingChromeAPI,
 	ChromeWindowsAPI,
 	ChromeTabsAPI,
 	ChromeSystemAPI,
@@ -17,7 +17,7 @@ const FakeDisplayUnitInfo: chrome.system.display.DisplayUnitInfo = {
 	workArea: { top: 0, left: 0, width: 1920, height: 1040 }
 };
 
-export default class FakePromisingChromeAPI implements ChromeAPI {
+export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 
 	public readonly windows: ChromeWindowsAPI;
 	public readonly tabs: ChromeTabsAPI;

@@ -1,5 +1,5 @@
 import {
-	ChromeAPI,
+	PromisingChromeAPI,
 	ChromeWindowsAPI,
 	ChromeTabsAPI,
 	ChromeSystemAPI,
@@ -8,7 +8,7 @@ import {
 
 import { promisify } from '../utils/Promisify';
 
-export default class RealPromisingChromeAPI implements ChromeAPI {
+export default class RealPromisingChromeAPI implements PromisingChromeAPI {
 
 	public readonly windows: ChromeWindowsAPI;
 	public readonly tabs: ChromeTabsAPI;

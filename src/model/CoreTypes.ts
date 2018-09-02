@@ -79,15 +79,3 @@ export interface DisplayInfo {
 	bounds: Rectangle;
 	workArea?: Rectangle;
 }
-
-export function cloneWindow(w: Window): Window {
-	return {
-		...w,
-		tabs: cloneTabs(w.tabs),
-		bounds: { ...w.bounds }
-	};
-}
-
-function cloneTabs(tabs: Tab[]): Tab[] {
-	return [...tabs.map(t => { return { ...t }; })];
-}

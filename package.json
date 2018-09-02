@@ -12,6 +12,7 @@
     "start": "react-scripts-ts start",
     "build-qa": "node _build-and-qa.js",
     "test": "react-scripts-ts test --env=jsdom",
+    "test-coverage": "react-scripts-ts test --env=jsdom --coverage --watch",
     "tsc": "./node_modules/typescript/bin/tsc --noEmit",
     "eject": "react-scripts-ts eject",
     "version": "node sync-manifest-version.js",

@@ -1,4 +1,4 @@
-import { ChromeAPI } from 'chrome-api/PromisingChromeAPI';
+import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
 import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
 
 export async function initialiseFchrome(windowTabs: number[], focusIndex: number): Promise<FakePromisingChromeAPI> {
@@ -11,7 +11,6 @@ export async function initialiseFchrome(windowTabs: number[], focusIndex: number
 	});
 	return fchrome;
 }
-
 
 interface ChromeEvent {
 	addListener: Function;
@@ -35,7 +34,7 @@ interface ChromeEventWithCallback {
 
 //  mockFn.mockReset() ?
 
-export function getAllCallbacks(fchrome: ChromeAPI) {
+export function getAllCallbacks(fchrome: PromisingChromeAPI) {
 
 	const allCallbacks: AllCallbacks = [
 		{ id: 'chrome.windows.onCreated', event: fchrome.windows.onCreated, callback: jest.fn() },

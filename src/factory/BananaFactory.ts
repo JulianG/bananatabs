@@ -1,3 +1,5 @@
+import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
+
 import BrowserController from '../model/mutators/BrowserController';
 import ChromeBrowserController from '../chrome/ChromeBrowserController';
 
@@ -17,14 +19,14 @@ export default class BananaFactory {
 	private sessionMutator: SessionMutator;
 	private browserController: BrowserController;
 
-	constructor() {
+	constructor(private chromeAPI: PromisingChromeAPI) {
 		this.persistence = new LocalStorageSessionPersistence();
 		this.liveSessionMerger = new DefaultLiveSessionMerger();
 	}
 
 	getBrowserController(): BrowserController {
 		if (!this.browserController) {
-			this.browserController = new ChromeBrowserController();
+			this.browserController = new ChromeBrowserController(this.chromeAPI);
 		}
 		return this.browserController;
 	}

@@ -1,8 +1,5 @@
 
-import FakePromisingChromeAPI from './FakePromisingChromeAPI';
-import RealPromisingChromeAPI from './RealPromisingChromeAPI';
-
-export interface ChromeAPI {
+export interface PromisingChromeAPI {
 	windows: ChromeWindowsAPI;
 	tabs: ChromeTabsAPI;
 	system: ChromeSystemAPI;
@@ -45,13 +42,3 @@ export interface ChromeSystemDisplayAPI {
 export interface ChromeExtensionAPI {
 	getURL(path: string): string;
 }
-
-let PromisingChromeAPI: ChromeAPI;
-
-if (chrome && chrome.windows) {
-	PromisingChromeAPI = new RealPromisingChromeAPI();
-} else {
-	PromisingChromeAPI = new FakePromisingChromeAPI();
-}
-
-export default PromisingChromeAPI;

@@ -1,5 +1,5 @@
 import * as BT from '../model/CoreTypes';
-import PromisingChromeAPI from '../chrome-api/PromisingChromeAPI';
+import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
 import BrowserController, { SystemDisplayInfo } from '../model/mutators/BrowserController';
 import BrowserEventDispatcher from 'model/mutators/BrowserEventDispatcher';
 import ChromeEventDispatcher from './ChromeEventDispatcher';
@@ -10,15 +10,15 @@ export default class ChromeBrowserController implements BrowserController {
 
 	private browserEventDispatcher: BrowserEventDispatcher;
 
-	constructor() {
-		this.browserEventDispatcher = new ChromeEventDispatcher();
+	constructor(private chromeAPI: PromisingChromeAPI) {
+		this.browserEventDispatcher = new ChromeEventDispatcher(chromeAPI);
 	}
 
 	public async closeWindow(id: number) {
 		console.log(`ChromeBrowserController.closeWindow(${id}) ...`);
 		this.browserEventDispatcher.disable();
 		try {
-			await PromisingChromeAPI.windows.remove(id);
+			await this.chromeAPI.windows.remove(id);
 		} catch (e) {
 			console.warn(`Could not delete window for real... ${id}`);
 			console.warn(e);
@@ -29,14 +29,14 @@ export default class ChromeBrowserController implements BrowserController {
 	public async closeTab(id: number) {
 		console.log(`ChromeBrowserController.closeTab(${id}) ...`);
 		this.browserEventDispatcher.disable();
-		await PromisingChromeAPI.tabs.remove(id);
+		await this.chromeAPI.tabs.remove(id);
 		this.browserEventDispatcher.enable();
 	}
 
 	public async selectTab(windowId: number, tabId: number) {
 		console.log(`ChromeBrowserController.selectTab(${tabId}) ...`);
-		const windowPromise = PromisingChromeAPI.windows.update(windowId, { focused: true });
-		const tabPromise = PromisingChromeAPI.tabs.update(tabId, { active: true });
+		const windowPromise = this.chromeAPI.windows.update(windowId, { focused: true });
+		const tabPromise = this.chromeAPI.tabs.update(tabId, { active: true });
 		await Promise.all([windowPromise, tabPromise]);
 	}
 
@@ -49,14 +49,14 @@ export default class ChromeBrowserController implements BrowserController {
 			url: tab.url,
 			active: tab.active
 		};
-		const newTab = await PromisingChromeAPI.tabs.create(props);
+		const newTab = await this.chromeAPI.tabs.create(props);
 		tab.id = newTab.id || -1;
 		this.browserEventDispatcher.enable();
 	}
 
 	public async showWindow(window: BT.Window) {
 		this.browserEventDispatcher.disable();
-		const liveWindows = await PromisingChromeAPI.windows.getAll({});
+		const liveWindows = await this.chromeAPI.windows.getAll({});
 		const asFirst = liveWindows.length <= 1;
 		console.log(`ChromeBrowserController.showWindow(...) ...`);
 		if (asFirst) {
@@ -69,7 +69,7 @@ export default class ChromeBrowserController implements BrowserController {
 
 	public async getAllWindows(): Promise<BT.Window[]> {
 		this.browserEventDispatcher.disable();
-		const wins = await PromisingChromeAPI.windows.getAll({ populate: true });
+		const wins = await this.chromeAPI.windows.getAll({ populate: true });
 		this.browserEventDispatcher.enable();
 		return wins.map(convertWindow);
 	}
@@ -85,14 +85,14 @@ export default class ChromeBrowserController implements BrowserController {
 	}
 
 	public async getDisplayInfo(): Promise<SystemDisplayInfo[]> {
-		const chromeDisplays = await PromisingChromeAPI.system.display.getInfo({});
+		const chromeDisplays = await this.chromeAPI.system.display.getInfo({});
 		return chromeDisplays.map(d => {
 			return { id: d.id, bounds: d.bounds };
 		});
 	}
 
 	public getAppURL(): string {
-		return PromisingChromeAPI.extension.getURL('index.html');
+		return this.chromeAPI.extension.getURL('index.html');
 	}
 
 	/////
@@ -120,7 +120,7 @@ export default class ChromeBrowserController implements BrowserController {
 	}
 
 	private _createMinimisedWindow() {
-		return PromisingChromeAPI.windows.create({
+		return this.chromeAPI.windows.create({
 			type: 'normal',
 			state: 'minimized',
 			url: 'chrome://version/?bananatabs-ignore'
@@ -139,7 +139,7 @@ export default class ChromeBrowserController implements BrowserController {
 			url: window.tabs.filter(t => t.visible).map(t => t.url)
 		};
 
-		const newWindow = await PromisingChromeAPI.windows.create(createData);
+		const newWindow = await this.chromeAPI.windows.create(createData);
 
 		if (newWindow) {
 			window.visible = true;
