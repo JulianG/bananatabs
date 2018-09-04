@@ -8,9 +8,11 @@ import console from '../utils/MutedConsole';
 
 export default class ChromeBrowserController implements BrowserController {
 
+	private chromeAPI: PromisingChromeAPI
 	private browserEventDispatcher: BrowserEventDispatcher;
 
-	constructor(private chromeAPI: PromisingChromeAPI) {
+	constructor(chromeAPI: PromisingChromeAPI) {
+		this.chromeAPI = chromeAPI;
 		this.browserEventDispatcher = new ChromeEventDispatcher(chromeAPI);
 	}
 
