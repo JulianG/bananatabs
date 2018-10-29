@@ -1,5 +1,5 @@
 import * as BT from '../../model/CoreTypes';
-import * as TestUtils from '../TestUtils';
+import * as TestUtils from '../../utils/test-utils/TestUtils';
 
 import { DefaultLiveSessionMerger } from '../../model/mergers/LiveSessionMerger';
 

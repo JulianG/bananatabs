@@ -50,7 +50,7 @@ class App extends React.Component<{}, State> {
     this.sessionProvider.initialiseSession('componentDidMount');
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
     window.removeEventListener('resize', this.handleResizeEvent);
   }
 

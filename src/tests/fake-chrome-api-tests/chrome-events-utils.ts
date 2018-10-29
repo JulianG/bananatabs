@@ -2,12 +2,14 @@ import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
 import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
 
 export async function initialiseFchrome(windowTabs: number[], focusIndex: number): Promise<FakePromisingChromeAPI> {
-	const fchrome = new FakePromisingChromeAPI([]);
-	windowTabs.forEach(async (tabs, i) => {
-		const focused = (i === focusIndex);
+	const fchrome = new FakePromisingChromeAPI();
+	windowTabs.forEach(async (numberOfTabs, index) => {
+		const focused = (index === focusIndex);
 		const win = await fchrome.windows.create({ focused });
 		const windowId = win!.id;
-		await fchrome.tabs.create({ windowId });
+		for (let u = 0; u < numberOfTabs - 1; ++u) {
+			await fchrome.tabs.create({ windowId });
+		}
 	});
 	return fchrome;
 }
@@ -97,88 +99,3 @@ function confirmExpectations(allCallbacks: AllCallbacks, expectations: Expectati
 	};
 
 }
-
-
-// export default class ChromeAPIEventCallbackInitialiser {
-
-// 	private allCallbacks: { event: ChromeEvent, callback: Callback }[];
-
-// 	constructor(chrome: ChromeAPI) {
-
-// 		const allEvents: ChromeEvent[] = [
-// 			chrome.windows.onCreated,
-// 			chrome.windows.onFocusChanged,
-// 			chrome.windows.onRemoved,
-// 			chrome.tabs.onCreated,
-// 			chrome.tabs.onActivated,
-// 			chrome.tabs.onAttached,
-// 			chrome.tabs.onMoved,
-// 			chrome.tabs.onRemoved,
-// 			chrome.tabs.onUpdated
-// 		];
-
-// 		this.allCallbacks = allEvents.map(event => {
-// 			const callback = jest.fn();
-// 			event.addListener(callback);
-// 			return { event, callback };
-// 		});
-// 	}
-
-// 	public confirmExpectations(expectations: Expectation[]) {
-// 		this.allCallbacks.forEach(pair => {
-// 			const expectation = expectations.find(ex => ex.event == pair.event);
-// 			const times = (expectation) ? expectation.times : 0;
-// 			expect(pair.callback).toHaveBeenCalledTimes(times);
-// 		});
-
-// 	}
-
-// 	public getCallback(event: ChromeEvent): Callback {
-// 		const pair = this.allCallbacks.find(pair => pair.event === event);
-// 		return (pair) ? pair.callback : jest.fn();
-// 	}
-
-
-
-
-// }
-
-// export function setExpectations(chrome: FakePromisingChromeAPI) {
-
-// 	const eventLists = [
-// 		chrome.windows.onCreated,
-// 		chrome.windows.onFocusChanged,
-// 		chrome.windows.onRemoved,
-// 		chrome.tabs.onCreated,
-// 		chrome.tabs.onActivated,
-// 		chrome.tabs.onAttached,
-// 		chrome.tabs.onMoved,
-// 		chrome.tabs.onRemoved,
-// 		chrome.tabs.onUpdated
-// 	];
-
-// 	const events = eventLists.map(event => {
-// 		return { event, fn: jest.fn() };
-// 	});
-
-// 	events.forEach(event => {
-// 		event.event.addListener(event.fn);
-// 	});
-
-// 	return events;
-// }
-
-// interface Expectation {
-// 	event: any;
-// 	times: number;
-// }
-
-// export function checkExpectations(events: any[], expectations: Expectation[]) {
-// 	events.forEach(event => {
-// 		const times = (expectations.find(ex => ex.event == event.event) || { times: 0 }).times;
-// 		expect(event.fn).toHaveBeenCalledTimes(times);
-// 	});
-// }
-
-
-
