@@ -4,7 +4,7 @@ import * as TestUtils from './test-utils/TestUtils';
 import { convertLegacySession } from './JSONSerialisation';
 
 test('converted session is valid', () => {
-	const legacySession = require('../tests/json-serialisation-tests/legacy-session.json');
+	const legacySession = require('../utils/test-utils/legacy-session.json');
 	const convertedSession: BT.Session = convertLegacySession(legacySession);
 	expect(TestUtils.compareSessions(convertedSession, legacySession)).toBeTruthy();
 });
@@ -15,7 +15,7 @@ test('conversion of legacy session ', () => {
 	the converted session has bounds for all windows 
 	matching the "geometry" property from the legacy session windows
 	*/
-	const legacySession = require('../tests/json-serialisation-tests/legacy-session.json');
+	const legacySession = require('../utils/test-utils/legacy-session.json');
 	const convertedSession: BT.Session = convertLegacySession(legacySession);
 	expect(convertedSession.panelWindow.bounds).toEqual(legacySession.panelWindow.geometry);
 	convertedSession.windows.forEach((convertedWindow, i) => {
@@ -29,7 +29,7 @@ test('conversion of current session', () => {
 	the converted session has bounds for all windows 
 	matching the "bounds" property from the given session windows
 	*/
-	const currentSession = require('../tests/json-serialisation-tests/current-session.json');
+	const currentSession = require('../utils/test-utils/current-session.json');
 	const convertedSession: BT.Session = convertLegacySession(currentSession);
 	expect(convertedSession.panelWindow.bounds).toEqual(currentSession.panelWindow.bounds);
 	convertedSession.windows.forEach((convertedWindow, i) => {

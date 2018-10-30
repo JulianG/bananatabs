@@ -1,7 +1,7 @@
 import * as BT from '../../model/CoreTypes';
 import * as TestUtils from '../../utils/test-utils/TestUtils';
 
-import { DefaultLiveSessionMerger } from '../../model/mergers/LiveSessionMerger';
+import { DefaultLiveSessionMerger } from './LiveSessionMerger';
 
 test('when no windows visible. merged session is same as stored session', () => {
 	testSessionsMatch('no-windows');
@@ -62,9 +62,11 @@ function testSessionsMatch(name: string) {
 	}
 }
 
+const pathToJSONfiles = '../../utils/test-utils/session-merger-test-files/';
+
 function getSessions(name: string): { live: BT.Session, stored: BT.Session, expected: BT.Session } {
-	const live: BT.Session = require(`./${name}/live-session.json`);
-	const stored: BT.Session = require(`./${name}/stored-session.json`);
-	const expected: BT.Session = require(`./${name}/expected-session.json`);
+	const live: BT.Session = require(`${pathToJSONfiles}${name}/live-session.json`);
+	const stored: BT.Session = require(`${pathToJSONfiles}${name}/stored-session.json`);
+	const expected: BT.Session = require(`${pathToJSONfiles}${name}/expected-session.json`);
 	return { live, stored, expected };
 }

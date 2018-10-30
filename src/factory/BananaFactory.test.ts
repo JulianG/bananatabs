@@ -1,4 +1,4 @@
-import BananaFactory from '../factory/BananaFactory';
+import BananaFactory from './BananaFactory';
 import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
 
 describe('banana factory', async () => {
