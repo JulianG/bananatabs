@@ -1,5 +1,5 @@
 import * as BT from '../../model/CoreTypes';
-import * as TestUtils from '../../utils/test-utils/TestUtils';
+import { compareSessions } from '../../utils/test-utils/TestUtils';
 
 import { DefaultLiveSessionMerger } from './LiveSessionMerger';
 
@@ -54,7 +54,7 @@ function testSessionsMatch(name: string) {
 	const merger = new DefaultLiveSessionMerger();
 	const mergedSession = merger.merge(live, stored);
 	try {
-		expect(TestUtils.compareSessions(mergedSession, expected)).toBeTruthy();
+		expect(compareSessions(mergedSession, expected)).toBeTruthy();
 	} catch (e) {
 		console.error(e);
 		// console.log(JSON.stringify(mergedSession));
@@ -62,11 +62,11 @@ function testSessionsMatch(name: string) {
 	}
 }
 
-const pathToJSONfiles = '../../utils/test-utils/session-merger-test-files/';
+const testingFiles = '../../utils/test-utils/session-merger-test-files/';
 
 function getSessions(name: string): { live: BT.Session, stored: BT.Session, expected: BT.Session } {
-	const live: BT.Session = require(`${pathToJSONfiles}${name}/live-session.json`);
-	const stored: BT.Session = require(`${pathToJSONfiles}${name}/stored-session.json`);
-	const expected: BT.Session = require(`${pathToJSONfiles}${name}/expected-session.json`);
+	const live: BT.Session = require(`${testingFiles}${name}/live-session.json`);
+	const stored: BT.Session = require(`${testingFiles}${name}/stored-session.json`);
+	const expected: BT.Session = require(`${testingFiles}${name}/expected-session.json`);
 	return { live, stored, expected };
 }
