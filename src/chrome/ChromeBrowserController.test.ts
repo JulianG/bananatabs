@@ -1,15 +1,14 @@
 import * as BT from '../model/CoreTypes';
 import ChromeBrowserController from './ChromeBrowserController';
-import * as Utils from '../utils/test-utils/chrome-events-utils';
-
+import { initialiseFchrome } from '../utils/test-utils/chrome-events-utils';
 
 describe('ChromeEventController', async () => {
 
 	test('getAllWindows', async () => {
 
 		// given a controller with two windows
-		const chromeAPI = await Utils.initialiseFchrome([2, 3], -1);
-		const controller = new ChromeBrowserController(chromeAPI);
+		const fchrome = await initialiseFchrome([2, 3], -1);
+		const controller = new ChromeBrowserController(fchrome);
 
 		// when calling showWindow
 		const wins = await controller.getAllWindows();
@@ -23,8 +22,8 @@ describe('ChromeEventController', async () => {
 	test('showWindow', async () => {
 
 		// given a controller with no windows
-		const chromeAPI = await Utils.initialiseFchrome([], -1);
-		const controller = new ChromeBrowserController(chromeAPI);
+		const fchrome = await initialiseFchrome([], -1);
+		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
 
@@ -43,8 +42,8 @@ describe('ChromeEventController', async () => {
 	test('closeWindow', async () => {
 
 		// given a controller with one visible window and one visible tab
-		const chromeAPI = await Utils.initialiseFchrome([1], 0);
-		const controller = new ChromeBrowserController(chromeAPI);
+		const fchrome = await initialiseFchrome([1], 0);
+		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
 		const initialWindows = await controller.getAllWindows();
@@ -63,8 +62,8 @@ describe('ChromeEventController', async () => {
 	test('createTab in window with one tab', async () => {
 
 		// given a controller with one visible window and one visible tab
-		const chromeAPI = await Utils.initialiseFchrome([1], 0);
-		const controller = new ChromeBrowserController(chromeAPI);
+		const fchrome = await initialiseFchrome([1], 0);
+		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
 		const initialWindows = await controller.getAllWindows();
@@ -91,8 +90,8 @@ describe('ChromeEventController', async () => {
 	test('closeTab in window with two tabs', async () => {
 
 		// given a controller with one visible window and one hidden tab
-		const chromeAPI = await Utils.initialiseFchrome([2], 0);
-		const controller = new ChromeBrowserController(chromeAPI);
+		const fchrome = await initialiseFchrome([2], 0);
+		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
 		const initialWindows = await controller.getAllWindows();
@@ -114,8 +113,8 @@ describe('ChromeEventController', async () => {
 	test('closeWindow', async () => {
 
 		// given a controller with one visible window and one hidden tab
-		const chromeAPI = await Utils.initialiseFchrome([2], 0);
-		const controller = new ChromeBrowserController(chromeAPI);
+		const fchrome = await initialiseFchrome([2], 0);
+		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
 		const initialWindows = await controller.getAllWindows();
@@ -136,8 +135,8 @@ describe('ChromeEventController', async () => {
 	test('selectTab', async () => {
 
 		// given a controller with two windows
-		const chromeAPI = await Utils.initialiseFchrome([2, 3], -1);
-		const controller = new ChromeBrowserController(chromeAPI);
+		const fchrome = await initialiseFchrome([2, 3], -1);
+		const controller = new ChromeBrowserController(fchrome);
 		const wins = await controller.getAllWindows();
 
 		// when calling selectTab
@@ -157,8 +156,8 @@ describe('ChromeEventController', async () => {
 	test('getDisplayInfo', async () => {
 
 		// given a controller with two windows
-		const chromeAPI = await Utils.initialiseFchrome([2, 3], -1);
-		const controller = new ChromeBrowserController(chromeAPI);
+		const fchrome = await initialiseFchrome([2, 3], -1);
+		const controller = new ChromeBrowserController(fchrome);
 
 		// when calling getDisplayInfo
 		const displayInfoList = await controller.getDisplayInfo();
@@ -173,8 +172,8 @@ describe('ChromeEventController', async () => {
 	test('getAppURL', async () => {
 
 		// given a controller
-		const chromeAPI = await Utils.initialiseFchrome([], -1);
-		const controller = new ChromeBrowserController(chromeAPI);
+		const fchrome = await initialiseFchrome([], -1);
+		const controller = new ChromeBrowserController(fchrome);
 
 		// when calling getAppURL
 		const appURL = await controller.getAppURL();

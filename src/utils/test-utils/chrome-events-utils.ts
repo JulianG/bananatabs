@@ -99,3 +99,36 @@ function confirmExpectations(allCallbacks: AllCallbacks, expectations: Expectati
 	};
 
 }
+
+// this extension is here because `toHaveBeenNthCalledWith` seems to have disappeared
+expect.extend({
+	toHaveBeenCalledNthTimeWith: (fn: jest.Mock<{}>, nthCall: number, expected: {}) => {
+
+		if (fn.mock.calls.length < nthCall) {
+			return {
+				message: () => {
+					return `expected function to have been called at least ${nthCall} times,
+but it was instead called ${fn.mock.calls.length} times`;
+				},
+				pass: false
+			};
+		}
+
+		const args = fn.mock.calls[nthCall - 1];
+
+		if (JSON.stringify(args) !== JSON.stringify(expected)) {
+			return {
+				message: () => {
+					return `expected function to have been called with ${JSON.stringify(expected)} on the ${nthCall} time,
+but instead it was called with ${JSON.stringify(args)}`;
+				},
+				pass: false
+			};
+		} else {
+			return {
+				message: () => `all the expectations where correct`,
+				pass: true
+			};
+		}
+	}
+});

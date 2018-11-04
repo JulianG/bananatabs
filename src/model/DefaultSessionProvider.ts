@@ -9,8 +9,8 @@ import console from '../utils/MutedConsole';
 export default class DefaultSessionProvider implements SessionProvider {
 
 	public session: BT.Session;
-	public onSessionChanged: (session: BT.Session) => void;
 	private busy: boolean;
+	public onSessionChanged: (session: BT.Session) => void = () => {/**/ };
 
 	constructor(
 		private browserController: BrowserController,
@@ -34,7 +34,7 @@ export default class DefaultSessionProvider implements SessionProvider {
 		const tab = win.tabs.find(t => t.id === id);
 		console.assert(tab !== undefined, `Could not find a tab with id ${id} in the current session.`);
 		return tab || { ...BT.getNullTab(), id };
-	} 
+	}
 
 	async initialiseSession(reason?: string) {
 		if (!this.busy) {
@@ -49,8 +49,9 @@ export default class DefaultSessionProvider implements SessionProvider {
 			console.log(`  done. now storing session`);
 			await this.storeSession(this.session);
 			console.log(`  done. now...`);
-			console.log(`SessionProvider.initialiseSession calling onSessionChanged beacuse: ${reason}`);
+			console.log(`SessionProvider.initialiseSession calling onSessionChanged because: ${reason}`);
 			this.onSessionChanged(this.session);
+			console.log(`SessionProvider.initialiseSession CALLED onSessionChanged because: ${reason}`);
 			this.busy = false;
 		} else {
 			console.warn('SessionProvider.initialiseSession -- skipping because busy');
@@ -58,10 +59,11 @@ export default class DefaultSessionProvider implements SessionProvider {
 	}
 
 	async updateSession(reason?: string) {
-		console.log(`SessionProvider.updateSession ... beacuse: ${reason}`);
+		console.log(`SessionProvider.updateSession ... because: ${reason}`);
 		await this._updateSession(reason);
-		console.log(`SessionProvider.updateSession calling onSessionChanged beacuse: ${reason}`);
+		console.log(`SessionProvider.updateSession calling onSessionChanged because: ${reason}`);
 		this.onSessionChanged(this.session);
+		console.log(`SessionProvider.updateSession CALLED onSessionChanged because: ${reason}`);
 	}
 
 	async storeSession(session: BT.Session) {
@@ -84,7 +86,7 @@ export default class DefaultSessionProvider implements SessionProvider {
 			await this.storeSession(this.session);
 			this.busy = false;
 		} else {
-			console.warn('SessionProvider._updateSession -- skipping because busy');
+			console.warn('SessionProvider._updateSession -- skipping because busy // reason:' + reason);
 		}
 	}
 

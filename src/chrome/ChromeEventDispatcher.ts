@@ -29,7 +29,7 @@ export default class ChromeEventDispatcher implements BrowserEventDispatcher {
 		chromeAPI.tabs.onMoved.addListener((_) => this.dispatchEvent('onTabsMoved'));
 		chromeAPI.tabs.onAttached.addListener((id, info) => this.dispatchEvent('onTabsAttached'));
 		chromeAPI.tabs.onRemoved.addListener(this.onTabsRemoved.bind(this));
-		chromeAPI.tabs.onActivated.addListener((_) => this.dispatchEvent('onActivated'));
+		chromeAPI.tabs.onActivated.addListener((tab) => this.dispatchEvent('onActivated', `onActivated tabId:${tab.tabId}`));
 		// chromeAPI.tabs.onHighlighted.addListener((_) => this.updateSessionSilently('onHighlighted'));
 		// chromeAPI.tabs.onDetached.addListener((_) => this.updateSessionSilently('onDetached'));
 		// chromeAPI.tabs.onReplaced.addListener((_) => this.updateSessionSilently('onReplaced'));
