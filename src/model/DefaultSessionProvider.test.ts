@@ -47,7 +47,7 @@ async function createInitilisedProvider(windowTabs: number[], focusIndex: number
 
 describe('initialisation', () => {
 
-	test('initialiseSession results in 1 call to onSessionChanged', async () => {
+	test('initialiseSession results in a call to onSessionChanged', async () => {
 
 		// given an empty provider
 		const { provider, onSessionChanged } = await createProvider([], -1);
@@ -60,13 +60,12 @@ describe('initialisation', () => {
 		expect(onSessionChanged.mock.calls[0][0]).toMatchObject(provider.session);
 		expect(provider.session.windows).toBeDefined();
 		expect(provider.session.panelWindow).toBeDefined();
-
 	});
 
 	test('chromeAPI: create window results in a session with 1 window', async () => {
 
 		// given an initialised provider
-		const { provider, fchrome } = await createInitilisedProvider([], -1);
+		const { provider , onSessionChanged,fchrome } = await createInitilisedProvider([], -1);
 
 		// when a window is created via the Chrome API
 		await fchrome.windows.create({});
@@ -75,18 +74,7 @@ describe('initialisation', () => {
 		await wait();
 		expect(provider.session.windows).toHaveLength(1);
 		expect(provider.session.windows[0].tabs).toHaveLength(1);
-	});
-
-	test('chromeAPI: create window results in onSessionChanged being called once', async () => {
-
-		// given an initialised provider
-		const { onSessionChanged, fchrome } = await createInitilisedProvider([], -1);
-
-		// when a window is created via the Chrome API
-		await fchrome.windows.create({});
-		
-		// expect the onSessionChanged callback is triggered at least once
-		await wait();
+		// and callback is triggered
 		expect(onSessionChanged).toHaveBeenCalled();
 	});
 
@@ -105,24 +93,10 @@ describe('initialisation', () => {
 		await wait();
 		expect(onSessionChanged.mock.calls[0][0]).toMatchObject(provider.session);
 		expect(provider.getWindow(windowId).tabs).toHaveLength(previousTabs + 1);
-
-	});
-
-	test('chromeAPI: create tab dispatches onSessionChanged two times', async () => {
-
-		// given an initialised provider with 1 window
-		const { onSessionChanged, fchrome } = await createInitilisedProvider([1], 0);
-		const existingWindow = (await fchrome.windows.getAll({}))[0];
-		const windowId = existingWindow.id;
-
-		// when a tab is created via the Chrome API
-		await fchrome.tabs.create({ windowId });
-
-		// expect the onSessionChanged callback is called at least once
-		await wait();
+		// and callback is triggered
 		expect(onSessionChanged).toHaveBeenCalled();
-
 	});
+
 
 });
 
