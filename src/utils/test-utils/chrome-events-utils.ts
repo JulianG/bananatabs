@@ -1,4 +1,3 @@
-import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
 
 interface ChromeEvent {
 	addListener: Function;

@@ -66,19 +66,19 @@ describe('closing tabs', () => {
 		const { provider, onSessionChanged, fchrome } = await createInitilisedProvider(initialWindows, focusIndex);
 		const existingWindows = (await fchrome.windows.getAll({}));
 		const windowId = existingWindows[windowIndex].id;
-		const tabIds = (existingWindows[windowIndex].tabs || []).map((t, i) => t.id || 0);
+		const initialTabIds = (existingWindows[windowIndex].tabs || []).map((t, i) => t.id || 0);
 
 		// when a tab is closed/removed via the Chrome API
-		await fchrome.tabs.remove(tabIds[tabIndex]);
+		await fchrome.tabs.remove(initialTabIds[tabIndex]);
 
 		// also expect the session to contain 1 window with one fewer tab
 		await wait();
-		expect(provider.getWindow(windowId).tabs).toHaveLength(tabIds.length - 1);
+		expect(provider.getWindow(windowId).tabs).toHaveLength(initialTabIds.length - 1);
 		// and the speficied tab not to be present.
-		expect(provider.getWindow(windowId).tabs.filter(t => t.id === tabIds[tabIndex])).toHaveLength(0);
+		expect(provider.getWindow(windowId).tabs.filter(t => t.id === initialTabIds[tabIndex])).toHaveLength(0);
 
 		// expect the window to be invisible if the closed tab was the only tab in he window
-		if (tabIds.length == 1) {
+		if (initialTabIds.length === 1) {
 			expect(provider.getWindow(windowId).visible).toBeFalsy();	
 		}
 		// and callback is triggered

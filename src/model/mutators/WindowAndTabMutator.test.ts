@@ -1,5 +1,5 @@
 import WindowAndTabMutator from '../../model/mutators/WindowAndTabMutator';
-import { createProvider, createInitilisedProvider, wait } from '../../utils/test-utils/provider-test-factory';
+import { createInitilisedProvider, wait } from '../../utils/test-utils/provider-test-factory';
 
 describe('WindowAndTabMutator tests', () => {
 

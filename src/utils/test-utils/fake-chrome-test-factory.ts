@@ -9,7 +9,7 @@ export async function createFakeChromeApi(windowTabs: number[] = [], focusIndex:
 		allCallbacks: getAllCallbacks(fchrome),
 		hookAllCallbacks,
 		resetAllCallbacks
-	}
+	};
 }
 
 export async function initialiseFchrome(windowTabs: number[], focusIndex: number): Promise<FakePromisingChromeAPI> {
