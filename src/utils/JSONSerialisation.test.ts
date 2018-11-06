@@ -1,5 +1,5 @@
 import * as BT from '../model/CoreTypes';
-import * as TestUtils from './test-utils/TestUtils';
+import * as TestUtils from './test-utils/session-compare-functions';
 
 import { convertLegacySession } from './JSONSerialisation';
 

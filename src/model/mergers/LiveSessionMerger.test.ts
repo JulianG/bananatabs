@@ -1,5 +1,5 @@
 import * as BT from '../../model/CoreTypes';
-import { compareSessions } from '../../utils/test-utils/TestUtils';
+import { compareSessions } from '../../utils/test-utils/session-compare-functions';
 
 import { DefaultLiveSessionMerger } from './LiveSessionMerger';
 

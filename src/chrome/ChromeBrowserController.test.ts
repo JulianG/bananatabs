@@ -1,6 +1,6 @@
 import * as BT from '../model/CoreTypes';
 import ChromeBrowserController from './ChromeBrowserController';
-import { initialiseFchrome } from '../utils/test-utils/chrome-events-utils';
+import { initialiseFchrome } from '../utils/test-utils/test-factory';
 
 describe('ChromeEventController', async () => {
 

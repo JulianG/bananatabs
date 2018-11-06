@@ -1,5 +1,6 @@
 import FakePromisingChromeAPI from './FakePromisingChromeAPI';
-import * as Utils from '../utils/test-utils/chrome-events-utils';
+import '../utils/test-utils/chrome-events-utils';
+import { initialiseFchrome, getAllCallbacks } from '../utils/test-utils/test-factory';
 
 describe('FakePromisingChromeAPI closing windows and tabs', async () => {
 
@@ -9,7 +10,7 @@ describe('FakePromisingChromeAPI closing windows and tabs', async () => {
 		const fchrome = new FakePromisingChromeAPI([]);
 		await fchrome.windows.create({ focused: true });
 		const windowId = (await fchrome.windows.getAll({}))[0].id;
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when the window is closed
 		await fchrome.windows.remove(windowId);
@@ -33,7 +34,7 @@ describe('FakePromisingChromeAPI closing windows and tabs', async () => {
 		const fchrome = new FakePromisingChromeAPI([]);
 		await fchrome.windows.create({ focused: false });
 		const windowId = (await fchrome.windows.getAll({}))[0].id;
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when the window is closed
 		await fchrome.windows.remove(windowId);
@@ -55,11 +56,11 @@ describe('FakePromisingChromeAPI closing windows and tabs', async () => {
 
 		// given 1 window
 		const fchrome = new FakePromisingChromeAPI([]);
-		await fchrome.windows.create({focused: true});
+		await fchrome.windows.create({ focused: true });
 		const windowId = (await fchrome.windows.getAll({}))[0].id;
 
 		await fchrome.tabs.create({ windowId });
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when the window is closed
 		await fchrome.windows.remove(windowId);
@@ -102,7 +103,7 @@ describe('creating tabs', async () => {
 		// given one window with a default tab
 		const fchrome = new FakePromisingChromeAPI([]);
 		const window0 = await fchrome.windows.create({ focused: true });
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a second tab is created
 		const windowId = window0!.id;
@@ -126,7 +127,7 @@ describe('creating tabs', async () => {
 		// given one window with a default tab
 		const fchrome = new FakePromisingChromeAPI([]);
 		const window0 = await fchrome.windows.create({ focused: true });
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a second tab is created
 		const windowId = window0!.id;
@@ -153,7 +154,7 @@ describe('creating tabs', async () => {
 		const fchrome = new FakePromisingChromeAPI([]);
 		const window0 = await fchrome.windows.create({ focused: true });
 		await fchrome.windows.create({});
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a tab is created on the first window
 		const windowId = window0!.id;
@@ -188,7 +189,7 @@ describe('creating windows', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a window is created		
 		await fchrome.windows.create({});
@@ -212,7 +213,7 @@ describe('creating windows', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a widow is created with focused: true		
 		await fchrome.windows.create({ focused: true });
@@ -224,7 +225,7 @@ describe('creating windows', async () => {
 		// expect only these events
 		expect(allCallbacks).toHaveBeenCalledLike([
 			{ event: fchrome.windows.onCreated, times: 1 },
-			{ event: fchrome.windows.onFocusChanged, times: 1},
+			{ event: fchrome.windows.onFocusChanged, times: 1 },
 			{ event: fchrome.tabs.onCreated, times: 1 },
 			{ event: fchrome.tabs.onActivated, times: 1 },
 			{ event: fchrome.tabs.onHighlighted, times: 1 }
@@ -236,7 +237,7 @@ describe('creating windows', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a widow is created with focused: false		
 		await fchrome.windows.create({ focused: false });
@@ -259,7 +260,7 @@ describe('creating windows', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a widow is created without specifying focus
 		await fchrome.windows.create({});
@@ -283,7 +284,7 @@ describe('creating windows', async () => {
 		// given one focused window
 		const fchrome = new FakePromisingChromeAPI([]);
 		await fchrome.windows.create({ focused: true });
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a second widow is created without specifying focus
 		await fchrome.windows.create({});
@@ -309,7 +310,7 @@ describe('creating windows', async () => {
 		// given one focused window
 		const fchrome = new FakePromisingChromeAPI([]);
 		await fchrome.windows.create({ focused: true });
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a second widow is created with focused: true
 		await fchrome.windows.create({ focused: true });
@@ -323,7 +324,7 @@ describe('creating windows', async () => {
 		// expect only these events
 		expect(allCallbacks).toHaveBeenCalledLike([
 			{ event: fchrome.windows.onCreated, times: 1 },
-			{ event: fchrome.windows.onFocusChanged, times: 1},
+			{ event: fchrome.windows.onFocusChanged, times: 1 },
 			{ event: fchrome.tabs.onCreated, times: 1 },
 			{ event: fchrome.tabs.onActivated, times: 1 },
 			{ event: fchrome.tabs.onHighlighted, times: 1 }
@@ -335,7 +336,7 @@ describe('creating windows', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when a widow is created with 3 urls		
 		const urls = ['url0', 'url1', ''];
@@ -369,7 +370,7 @@ describe('creating windows', async () => {
 		const fchrome = new FakePromisingChromeAPI([]);
 
 		// when
-		await fchrome.windows.create({url: 'http://foo.bar'});
+		await fchrome.windows.create({ url: 'http://foo.bar' });
 
 		// expect
 		const wins = await fchrome.windows.getAll({});
@@ -383,7 +384,7 @@ describe('creating windows', async () => {
 		const fchrome = new FakePromisingChromeAPI([]);
 
 		// when
-		await fchrome.windows.create({url: ''});
+		await fchrome.windows.create({ url: '' });
 
 		// expect
 		const wins = await fchrome.windows.getAll({});
@@ -396,7 +397,7 @@ describe('creating windows', async () => {
 		const fchrome = new FakePromisingChromeAPI([]);
 
 		// when
-		await fchrome.windows.create({url: []});
+		await fchrome.windows.create({ url: [] });
 
 		// expect
 		const wins = await fchrome.windows.getAll({});
@@ -410,7 +411,7 @@ describe('creating windows', async () => {
 		const fchrome = new FakePromisingChromeAPI([]);
 
 		// when
-		await fchrome.windows.create({url: undefined});
+		await fchrome.windows.create({ url: undefined });
 
 		// expect
 		const wins = await fchrome.windows.getAll({});
@@ -427,11 +428,11 @@ describe('updating windows', async () => {
 	test('resizing a window', async () => {
 
 		// given 1 window
-		const fchrome = await Utils.initialiseFchrome([1], 0);
+		const fchrome = await initialiseFchrome([1], 0);
 		// const fchrome = new FakePromisingChromeAPI([]);
 		await fchrome.windows.create({ focused: true });
 		const windowId = (await fchrome.windows.getAll({}))[0].id;
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 		await fchrome.windows.getAll({});
 
 		// when the window is resized
@@ -462,10 +463,10 @@ describe('updating tabs', async () => {
 
 		// given 1 focused window with a two tabs
 		// const focused = true;
-		const fchrome = await Utils.initialiseFchrome([2], 0);
+		const fchrome = await initialiseFchrome([2], 0);
 		const initialWins = await fchrome.windows.getAll({});
 		const firstTabId = initialWins[0].tabs![0].id!;
-		const allCallbacks = Utils.getAllCallbacks(fchrome);
+		const allCallbacks = getAllCallbacks(fchrome);
 
 		// when the first true is set to active
 		const updateProps: chrome.tabs.UpdateProperties = {
