@@ -1,50 +1,4 @@
-import * as BT from '../model/CoreTypes';
-import DefaultSessionProvider from './DefaultSessionProvider';
-import ChromeBrowserController from '../chrome/ChromeBrowserController';
-import LiveSessionMerger, { DefaultLiveSessionMerger } from './mergers/LiveSessionMerger';
-import SessionPersistence from './SessionPersistence';
-
-import { initialiseFchrome } from '../utils/test-utils/test-factory';
-import WindowAndTabMutator from './mutators/WindowAndTabMutator';
-
-class RAMSessionPersistence implements SessionPersistence {
-	private session: BT.Session;
-	async storeSession(session: BT.Session): Promise<{}> {
-		this.session = { ...session };
-		return {};
-	}
-	async retrieveSession(): Promise<BT.Session> {
-		return this.session || { ...BT.EmptySession };
-	}
-}
-
-function wait() {
-	return new Promise((resolve, reject) => {
-		setTimeout(resolve, 1);
-	});
-}
-
-async function createProvider(windowTabs: number[] = [], focusIndex: number = -1) {
-
-	const fchrome = await initialiseFchrome(windowTabs, focusIndex);
-	const browserController = new ChromeBrowserController(fchrome);
-	const merger: LiveSessionMerger = new DefaultLiveSessionMerger();
-	const pers: SessionPersistence = new RAMSessionPersistence();
-	const provider = new DefaultSessionProvider(browserController, merger, pers);
-	const onSessionChanged = jest.fn();
-	provider.onSessionChanged = onSessionChanged;
-	return { provider, onSessionChanged, fchrome, browserController };
-}
-
-async function createInitilisedProvider(windowTabs: number[], focusIndex: number) {
-	const { provider, onSessionChanged, fchrome, browserController } = await createProvider(windowTabs, focusIndex);
-	provider.onSessionChanged = onSessionChanged;
-	await provider.initialiseSession('jest');
-	onSessionChanged.mockReset();
-	return { provider, onSessionChanged, fchrome, browserController };
-}
-
-//////
+import { createProvider, createInitilisedProvider, wait } from '../utils/test-utils/provider-test-factory';
 
 describe('initialisation', () => {
 
@@ -62,6 +16,10 @@ describe('initialisation', () => {
 		expect(provider.session.windows).toBeDefined();
 		expect(provider.session.panelWindow).toBeDefined();
 	});
+
+});
+
+describe('creating windows and tabs', () => {
 
 	test('chromeAPI: create window', async () => {
 
@@ -98,75 +56,80 @@ describe('initialisation', () => {
 		expect(onSessionChanged).toHaveBeenCalled();
 	});
 
-	test('chromeAPI: close tab', async () => {
+});
 
-		// given an initialised provider with 1 window and 2 tabs
-		const { provider, onSessionChanged, fchrome } = await createInitilisedProvider([2], 0);
-		const existingWindow = (await fchrome.windows.getAll({}))[0];
-		const windowId = existingWindow.id;
-		const tabIds = (existingWindow.tabs || []).map(t => t.id || 0);
+describe('closing tabs', () => {
 
-		// when a tab is created via the Chrome API
-		await fchrome.tabs.remove(tabIds[1]);
+	const closeTabTest = async (initialWindows: number[], focusIndex: number, windowIndex: number, tabIndex: number) => {
+
+		// given an initialised provider
+		const { provider, onSessionChanged, fchrome } = await createInitilisedProvider(initialWindows, focusIndex);
+		const existingWindows = (await fchrome.windows.getAll({}));
+		const windowId = existingWindows[windowIndex].id;
+		const tabIds = (existingWindows[windowIndex].tabs || []).map((t, i) => t.id || 0);
+
+		// when a tab is closed/removed via the Chrome API
+		await fchrome.tabs.remove(tabIds[tabIndex]);
 
 		// also expect the session to contain 1 window with one fewer tab
 		await wait();
 		expect(provider.getWindow(windowId).tabs).toHaveLength(tabIds.length - 1);
 		// and the speficied tab not to be present.
-		expect(provider.getWindow(windowId).tabs.filter(t => t.id === tabIds[1])).toHaveLength(0);
+		expect(provider.getWindow(windowId).tabs.filter(t => t.id === tabIds[tabIndex])).toHaveLength(0);
+
+		// expect the window to be invisible if the closed tab was the only tab in he window
+		if (tabIds.length == 1) {
+			expect(provider.getWindow(windowId).visible).toBeFalsy();	
+		}
 		// and callback is triggered
 		expect(onSessionChanged).toHaveBeenCalled();
+
+	};
+
+	test('chromeAPI: close tab in a window with more tabs', async () => {
+		await closeTabTest([2], 0, 0, 1);
 	});
 
-	test('chromeAPI: close last tab', async () => {
-
-		// given an initialised provider with 1 window and 1 tab
-		const { provider, onSessionChanged, fchrome } = await createInitilisedProvider([1], 0);
-		const existingWindow = (await fchrome.windows.getAll({}))[0];
-		const windowId = existingWindow.id;
-		const tabIds = (existingWindow.tabs || []).map(t => t.id || 0);
-
-		// when a tab is created via the Chrome API
-		await fchrome.tabs.remove(tabIds[0]);
-		
-		// also expect the session to contain 1 window with one fewer tab
-		await wait();
-		expect(provider.getWindow(windowId).tabs).toHaveLength(tabIds.length - 1);
-		// and the speficied tab not to be present.
-		expect(provider.getWindow(windowId).tabs.filter(t => t.id === tabIds[0])).toHaveLength(0);
-		// and callback is triggered
-		expect(onSessionChanged).toHaveBeenCalled();
+	test('chromeAPI: close the only in a window', async () => {
+		await closeTabTest([1], 0, 0, 0);
 	});
-
-	test('chromeAPI: hide tab via Mutator', async () => {
-
-		// given an initialised provider with 1 window and 1 tab
-		const { provider, onSessionChanged, fchrome, browserController } = await createInitilisedProvider([2], 0);
-		const existingWindow = (await fchrome.windows.getAll({}))[0];
-		const windowId = existingWindow.id;
-		const tabIds = (existingWindow.tabs || []).map(t => t.id || 0);
-
-		// when a tab is hidden via BananaTabs! (fix other comments)
-		// await fchrome.tabs.remove(tabIds[0]);
-		const mutator = new WindowAndTabMutator(provider, browserController);
-		await mutator.hideTab(windowId, tabIds[1]);
-		
-		// also expect the session to contain 1 window with one fewer tab
-		await wait();
-		expect(provider.getWindow(windowId).tabs).toHaveLength(tabIds.length);
-		// and the speficied tab not to be present.
-		expect(provider.getTab(tabIds[1]).visible).toBeFalsy();
-		// and callback is triggered
-		expect(onSessionChanged).toHaveBeenCalled();
-	});
-	// MOVE TO MUTATOR TESTS?
 
 });
 
-// what to test?
-// SessionProvider should call its callback every time something changes the session data
-// for instance?
-// when a window or tab is opened or closed via chrome api
-// when a window or tab is hidden/shown via BananaTabs (mutators?)
-// anything else?
+describe('closing windows', () => {
 
+	const closeWindowTest = async (initialWindows: number[], focusIndex: number, closingWindowIndex: number) => {
+
+		// preconditions
+		expect(initialWindows.length).toBeGreaterThan(0);
+		expect(focusIndex >= 0 && focusIndex < initialWindows.length).toBeTruthy();
+		expect(closingWindowIndex >= 0 && closingWindowIndex < initialWindows.length).toBeTruthy();
+
+		// given an initialised provider
+		const { provider, onSessionChanged, fchrome } = await createInitilisedProvider(initialWindows, focusIndex);
+		const existingWindows = (await fchrome.windows.getAll({}));
+		const windowId = existingWindows[closingWindowIndex].id;
+
+		// when the last tab in a window is closed via the Chrome API
+		await fchrome.windows.remove(windowId);
+
+		// also expect the session to contain zero windows
+		await wait();
+		expect(provider.session.windows).toHaveLength(initialWindows.length - 1);
+		// and callback is triggered
+		expect(onSessionChanged).toHaveBeenCalled();
+	};
+
+	test('chromeAPI: close the only window [1],0,0', async () => {
+		await closeWindowTest([1], 0, 0);
+	});
+	test('chromeAPI: close focused window [1,2],1,1', async () => {
+		await closeWindowTest([1, 2], 1, 1);
+	});
+	test('chromeAPI: close non-focused window [1,2,3],1,2', async () => {
+		await closeWindowTest([1, 2, 3], 1, 2);
+	});
+
+	// TODO: test difference when closing a named window and an unnamed window!
+
+});
