@@ -7,7 +7,7 @@ import TabMutator from '../model/mutators/TabMutator';
 
 import ClickCounter from './ClickCounter';
 
-import { stringToWindows, windowsToString } from '../utils/MarkdownSerialisation';
+import { stringToWindows, windowsToString } from '../serialisation/MarkdownSerialisation';
 
 import Title from './Title';
 import WindowListView from './WindowListView';

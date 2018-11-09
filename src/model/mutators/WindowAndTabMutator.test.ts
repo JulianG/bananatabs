@@ -52,4 +52,4 @@ describe('WindowAndTabMutator tests', () => {
 
 });
 
-import { parseSessionString } from '../../utils/test-utils/WhateverThisIs';
+import { parseSessionString } from '../../utils/test-utils/session-string-parser';

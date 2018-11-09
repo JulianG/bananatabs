@@ -1,7 +1,7 @@
 import * as BT from '../model/CoreTypes';
 import SessionPersistence from '../model/SessionPersistence';
 
-import { convertLegacySession } from '../utils/JSONSerialisation';
+import { convertLegacySession } from '../serialisation/JSONSerialisation';
 
 export default class LocalStorageSessionPersistence implements SessionPersistence {
 
