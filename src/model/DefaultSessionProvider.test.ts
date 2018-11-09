@@ -1,4 +1,4 @@
-import { createProvider, createInitilisedProvider, wait } from '../utils/test-utils/provider-test-factory';
+import { createProvider, createIniatilisedProvider, wait } from '../utils/test-utils/provider-test-factory';
 
 describe('initialisation', () => {
 
@@ -24,7 +24,7 @@ describe('creating windows and tabs', () => {
 	test('chromeAPI: create window', async () => {
 
 		// given an initialised provider
-		const { provider, onSessionChanged, fchrome } = await createInitilisedProvider([], -1);
+		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider([], -1);
 
 		// when a window is created via the Chrome API
 		await fchrome.windows.create({});
@@ -40,7 +40,7 @@ describe('creating windows and tabs', () => {
 	test('chromeAPI: create tab', async () => {
 
 		// given an initialised provider with 1 window
-		const { provider, onSessionChanged, fchrome } = await createInitilisedProvider([1], 0);
+		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider([1], 0);
 		const existingWindow = (await fchrome.windows.getAll({}))[0];
 		const windowId = existingWindow.id;
 		const tabIds = (existingWindow.tabs || []).map(t => t.id || 0);
@@ -63,7 +63,7 @@ describe('closing tabs', () => {
 	const closeTabTest = async (initialWindows: number[], focusIndex: number, windowIndex: number, tabIndex: number) => {
 
 		// given an initialised provider
-		const { provider, onSessionChanged, fchrome } = await createInitilisedProvider(initialWindows, focusIndex);
+		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider(initialWindows, focusIndex);
 		const existingWindows = (await fchrome.windows.getAll({}));
 		const windowId = existingWindows[windowIndex].id;
 		const initialTabIds = (existingWindows[windowIndex].tabs || []).map((t, i) => t.id || 0);
@@ -106,7 +106,7 @@ describe('closing windows', () => {
 		expect(closingWindowIndex >= 0 && closingWindowIndex < initialWindows.length).toBeTruthy();
 
 		// given an initialised provider
-		const { provider, onSessionChanged, fchrome } = await createInitilisedProvider(initialWindows, focusIndex);
+		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider(initialWindows, focusIndex);
 		const existingWindows = (await fchrome.windows.getAll({}));
 		const windowId = existingWindows[closingWindowIndex].id;
 
