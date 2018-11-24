@@ -1,4 +1,4 @@
-import * as BT from '../../model/CoreTypes';
+// import * as BT from '../../model/CoreTypes';
 import WindowAndTabMutator from '../../model/mutators/WindowAndTabMutator';
 import { createIniatilisedProvider, wait } from '../../utils/test-utils/provider-test-factory';
 
@@ -26,30 +26,5 @@ describe('WindowAndTabMutator tests', () => {
 		expect(onSessionChanged).toHaveBeenCalled();
 	});
 
-	test('show tab', async () => {
-
-		const initialSession = { ...BT.EmptySession };
-		// const { provider, onSessionChanged, fchrome, browserController } = await createInitialisedProviderFromSession(initialSession);
-
-		/*
-		I want to be able to express an initial session like this:
-		 */
-		const session = parseSessionString('[!vf(va,!v,v)],[v(,,)]');
-
-		expect(session.windows).toHaveLength(2);
-		expect(session.windows[0].focused).toBeTruthy();
-		expect(session.windows[1].focused).toBeFalsy();
-		expect(session.windows[0].visible).toBeFalsy();
-		expect(session.windows[1].visible).toBeTruthy();
-		expect(session.windows[0].tabs).toHaveLength(3);
-		expect(session.windows[1].tabs).toHaveLength(3);
-		expect(session.windows[0].tabs[0].active).toBeTruthy();
-		expect(session.windows[0].tabs[0].visible).toBeTruthy();
-		expect(session.windows[0].tabs[1].visible).toBeFalsy();
-		expect(session.windows[0].tabs[2].visible).toBeTruthy();
-
-	});
-
 });
 
-import { parseSessionString } from '../../utils/test-utils/session-string-parser';

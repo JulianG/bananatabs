@@ -24,7 +24,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 	public readonly system: ChromeSystemAPI;
 	public readonly extension: ChromeExtensionAPI;
 
-	private fakeWindows: chrome.windows.Window[];
+	public fakeWindows: chrome.windows.Window[];
 	private fakeIdCount: number;
 
 	private currentTab: chrome.tabs.Tab;

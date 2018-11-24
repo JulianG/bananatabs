@@ -1,15 +1,35 @@
+import * as BT from '../../model/CoreTypes';
 import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
 import { AllCallbacks } from './chrome-events-utils';
 
-export async function createFakeChromeApi(windowTabs: number[] = [], focusIndex: number = -1) {
-	const fchrome = await initialiseFchrome(windowTabs, focusIndex);
+export async function initialiseFchromeFromSession(session: BT.Session) {
 
-	return {
-		fchrome,
-		allCallbacks: getAllCallbacks(fchrome),
-		hookAllCallbacks,
-		resetAllCallbacks
-	};
+	const fchrome = new FakePromisingChromeAPI();
+	const visibleWindows = session.windows.filter(w => w.visible);
+	const newWindowPromises = visibleWindows.map(async (w: BT.Window, i) => {
+		return new Promise(async (wResolve) => {
+			const win = await fchrome.windows.create({ focused: w.focused });
+			win!.tabs!.splice(0, 1); // removing first tab because it's chrome://newtab/
+			const windowId = win!.id;
+			const visibleTabs = w.tabs.filter(t => t.visible);
+			const newTabPromises = visibleTabs.map(vt => {
+				return new Promise(async (tResolve) => {
+					const newTab = await fchrome.tabs.create({
+						windowId,
+						active: vt.active,
+						url: vt.url
+					});
+					newTab.highlighted = vt.highlighted;
+					vt.title = vt.title;
+					tResolve(newTab);
+				});
+			});
+			await Promise.all(newTabPromises);
+			wResolve(win);
+		});
+	});
+	await Promise.all(newWindowPromises);
+	return fchrome;
 }
 
 export async function initialiseFchrome(windowTabs: number[], focusIndex: number): Promise<FakePromisingChromeAPI> {

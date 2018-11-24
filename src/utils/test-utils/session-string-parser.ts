@@ -1,54 +1,38 @@
-
+import * as faker from 'faker';
 import * as BT from '../../model/CoreTypes';
 
-/*
-
-we want to return an object
-then with that object we want ot be able to both
-create a BT.Session and initialise fchrome
-
-hang on! we can initialise fchrome from a BT.Session
-
-
-HERE!!
-we need to make sure the active tab is correct when initialising fchrome
-
-THE CURENT SYNTAX OF [4],1 allows to spefici the focused window,
-but not the active tab on each window
-
-HMMMMMM we could change that to use this new syntax!
-
- */
 export function parseSessionString(ss: string): BT.Session {
 
 	let lastId = 1000;
-
 	const windows = _parseSessionString(ss).map(w => {
 		w.tabs = w.tabs.map((t, i) => {
 			const tab = Object.assign({}, t, { index: i, listIndex: i });
-			return Object.assign(BT.getNullTab(), tab, { id: ++lastId });
+			return Object.assign(BT.getNullTab(), tab, { id: ++lastId, url: getRandomURL(), title: getRandomTitle()} );
 		});
 		return Object.assign(BT.getNullWindow(), w, { id: ++lastId });
 	});
-	return { ...BT.EmptySession, windows };
+	const fixedWindows = ensureOneFocusedWindow(windows);
+	return { ...BT.EmptySession, windows: fixedWindows };
 }
 
-export function _parseSessionString(ss: string) {
+function _parseSessionString(ss: string) {
 	const windowsRegEx = /\[([^\]]+)\]/g;
 	const windows = ss.match(windowsRegEx) || [];
-	return windows.map(parseWindowString).filter(s => s != null);
+	const validWindows = windows.map(parseWindowString).filter(s => s != null);
+	if (validWindows.length < 1) {
+		throw (new Error('Error! Invalid input string.'));
+	}
+	return validWindows;
 }
 
 function parseWindowString(ws: string) {
 
 	ws = ws.replace('[', '').replace(']', '');
-	const tabsRegExp = /\(([^)]+)\)/g;
+	const tabsRegExp = /\(([^)]*)\)/g;
 	const matchedTabs = ws.match(tabsRegExp);
-
-	if (!matchedTabs || matchedTabs.length < 1) { // invalid input string
-		throw (new Error('invalid input string'));
+	if (!matchedTabs || matchedTabs.length !== 1) {
+		throw (new Error('Error! Invalid input string.'));
 	}
-
 	const windowDefinition = ws.replace(tabsRegExp, '');
 	const tabsString = matchedTabs[0];
 	const tabs = tabsString.replace('(', '').replace(')', '').split(',').map(parseProps);
@@ -83,4 +67,39 @@ function translatePropName(n: string): string {
 function convertPropArrayToObject(propList: {}[]): {} {
 	return propList.reduce<{}>((acc: {}, p: {}) => Object.assign(acc, p), {});
 
+}
+
+////
+
+function ensureOneFocusedWindow(windows: BT.Window[]): BT.Window[] {
+	const fixedWindows = [...windows];
+	const visibleWindows = fixedWindows.filter(w => w.visible);
+	if (visibleWindows.length > 0) {
+		const focusedWindow = fixedWindows.find(w => w.focused) || visibleWindows[0];
+		visibleWindows.forEach(vw => {
+			vw.focused = vw.id === focusedWindow.id;
+			vw.tabs = ensureOneActiveTab(vw.tabs);
+		});
+	}
+	return fixedWindows;
+}
+
+function ensureOneActiveTab(tabs: BT.Tab[]): BT.Tab[] {
+	const fixedTabs = [...tabs];
+	const visibleTabs = fixedTabs.filter(t => t.visible);
+	if (visibleTabs.length > 0) {
+		const activeTab = visibleTabs.find(t => t.active) || visibleTabs[0];
+		visibleTabs.forEach(vt => {
+			vt.active = vt.id === activeTab.id;
+		});
+	}
+	return fixedTabs;
+}
+
+function getRandomURL(): string {
+	return faker.internet.url();
+}
+
+function getRandomTitle(): string {
+	return faker.lorem.sentence();
 }

@@ -1,4 +1,11 @@
-import { createProvider, createIniatilisedProvider, wait } from '../utils/test-utils/provider-test-factory';
+import {
+	createProvider,
+	createIniatilisedProvider,
+	createInitialisedProviderWFC,
+	wait
+} from '../utils/test-utils/provider-test-factory';
+import { initialiseFchromeFromSession } from '../utils/test-utils/fake-chrome-test-factory';
+import { parseSessionString } from '../utils/test-utils/session-string-parser';
 
 describe('initialisation', () => {
 
@@ -60,10 +67,21 @@ describe('creating windows and tabs', () => {
 
 describe('closing tabs', () => {
 
-	const closeTabTest = async (initialWindows: number[], focusIndex: number, windowIndex: number, tabIndex: number) => {
+	test('chromeAPI: close tab in a window with more tabs', async () => {
+		await closeTabTest('[v(va,v)]', 0, 1);
+	});
+
+	test('chromeAPI: close the only in a window', async () => {
+		await closeTabTest('[v(va)]', 0, 0);
+	});
+
+	async function closeTabTest(sessionString: string, windowIndex: number, tabIndex: number) {
+
+		const session = parseSessionString(sessionString);
+		const fchrome = await initialiseFchromeFromSession(session);
 
 		// given an initialised provider
-		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider(initialWindows, focusIndex);
+		const { provider, onSessionChanged } = await createInitialisedProviderWFC(fchrome);
 		const existingWindows = (await fchrome.windows.getAll({}));
 		const windowId = existingWindows[windowIndex].id;
 		const initialTabIds = (existingWindows[windowIndex].tabs || []).map((t, i) => t.id || 0);
@@ -79,57 +97,47 @@ describe('closing tabs', () => {
 
 		// expect the window to be invisible if the closed tab was the only tab in he window
 		if (initialTabIds.length === 1) {
-			expect(provider.getWindow(windowId).visible).toBeFalsy();	
+			expect(provider.getWindow(windowId).visible).toBeFalsy();
 		}
 		// and callback is triggered
 		expect(onSessionChanged).toHaveBeenCalled();
-
-	};
-
-	test('chromeAPI: close tab in a window with more tabs', async () => {
-		await closeTabTest([2], 0, 0, 1);
-	});
-
-	test('chromeAPI: close the only in a window', async () => {
-		await closeTabTest([1], 0, 0, 0);
-	});
+	}
 
 });
 
 describe('closing windows', () => {
 
-	const closeWindowTest = async (initialWindows: number[], focusIndex: number, closingWindowIndex: number) => {
+	test('chromeAPI: close the only window [1],0,0', async () => {
+		await closeWindowTest('[v(v)]', 0);
+	});
+	test('chromeAPI: close focused window [1,2],1,1', async () => {
+		await closeWindowTest('[v(v)],[vf(v,v)]', 1);
+	});
+	test('chromeAPI: close non-focused window [1,2,3],1,2', async () => {
+		await closeWindowTest('[v(v)],[vf(v,v)],[v(v,v,v)]', 2); // [1, 2, 3], 1
+	});
+	// TODO: test difference when closing a named window and an unnamed window!
 
-		// preconditions
-		expect(initialWindows.length).toBeGreaterThan(0);
-		expect(focusIndex >= 0 && focusIndex < initialWindows.length).toBeTruthy();
-		expect(closingWindowIndex >= 0 && closingWindowIndex < initialWindows.length).toBeTruthy();
+	// 
+	async function closeWindowTest(sessionString: string, closingWindowIndex: number) {
+
+		const session = parseSessionString(sessionString);
+		const fchrome = await initialiseFchromeFromSession(session);
 
 		// given an initialised provider
-		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider(initialWindows, focusIndex);
+		const { provider, onSessionChanged } = await createInitialisedProviderWFC(fchrome);
 		const existingWindows = (await fchrome.windows.getAll({}));
 		const windowId = existingWindows[closingWindowIndex].id;
+		const initialWindowCount = session.windows.length;
 
 		// when the last tab in a window is closed via the Chrome API
 		await fchrome.windows.remove(windowId);
 
-		// also expect the session to contain zero windows
+		// expect the session to contain one less window
 		await wait();
-		expect(provider.session.windows).toHaveLength(initialWindows.length - 1);
+		expect(provider.session.windows).toHaveLength(initialWindowCount - 1);
 		// and callback is triggered
 		expect(onSessionChanged).toHaveBeenCalled();
-	};
-
-	test('chromeAPI: close the only window [1],0,0', async () => {
-		await closeWindowTest([1], 0, 0);
-	});
-	test('chromeAPI: close focused window [1,2],1,1', async () => {
-		await closeWindowTest([1, 2], 1, 1);
-	});
-	test('chromeAPI: close non-focused window [1,2,3],1,2', async () => {
-		await closeWindowTest([1, 2, 3], 1, 2);
-	});
-
-	// TODO: test difference when closing a named window and an unnamed window!
+	}
 
 });
