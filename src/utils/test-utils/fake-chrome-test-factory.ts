@@ -1,6 +1,6 @@
 import * as BT from '../../model/CoreTypes';
 import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
-import { AllCallbacks } from './chrome-events-utils';
+import { AllCallbacks } from './expect-extend-functions';
 import { parseSessionString } from './session-string-parser';
 
 export async function initialiseFchrome(session: string | BT.Session) {

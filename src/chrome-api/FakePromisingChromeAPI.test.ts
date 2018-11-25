@@ -1,5 +1,5 @@
 import FakePromisingChromeAPI from './FakePromisingChromeAPI';
-import '../utils/test-utils/chrome-events-utils';
+import '../utils/test-utils/expect-extend-functions';
 import { initialiseFchrome, getAllCallbacks } from '../utils/test-utils/fake-chrome-test-factory';
 
 describe('FakePromisingChromeAPI closing windows and tabs', async () => {
