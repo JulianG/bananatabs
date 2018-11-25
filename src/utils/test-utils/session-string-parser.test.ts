@@ -2,7 +2,35 @@ import { parseSessionString } from './session-string-parser';
 
 describe('testing the tests: session parser function', () => {
 
-	test('valid input string', async () => {
+
+	test('valid empty input string', async () => {
+
+		// given an invalid input string
+		const inputString = '';
+
+		// when it's parsed into a Session
+		const session = parseSessionString(inputString);
+
+		// expect it to have zero windows
+		expect(session.windows).toHaveLength(0);
+
+	});
+
+	test('valid input string: one window with 1 tab', async () => {
+
+		// given an invalid input string
+		const inputString = '[()]';
+
+		// when it's parsed into a Session
+		const session = parseSessionString(inputString);
+
+		// expect it to throw an error
+		expect(session.windows).toHaveLength(1);
+		expect(session.windows[0].tabs).toHaveLength(1);
+
+	});
+
+	test('valid input string: a bit more complex', async () => {
 
 		// given a valid input string
 		const inputString = '[!vf(va,!v,v)],[v(,,)]';
@@ -52,20 +80,6 @@ describe('testing the tests: session parser function', () => {
 
 		// expect it to throw an error
 		expect(f).toThrowError();
-
-	});
-
-	test('minimum valid input string: one window with 1 tab', async () => {
-
-		// given an invalid input string
-		const inputString = '[()]';
-
-		// when it's parsed into a Session
-		const session = parseSessionString(inputString);
-
-		// expect it to throw an error
-		expect(session.windows).toHaveLength(1);
-		expect(session.windows[0].tabs).toHaveLength(1);
 
 	});
 

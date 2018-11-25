@@ -4,7 +4,7 @@ import {
 	createInitialisedProviderWFC,
 	wait
 } from '../utils/test-utils/provider-test-factory';
-import { initialiseFchromeFromSession } from '../utils/test-utils/fake-chrome-test-factory';
+import { initialiseFchrome } from '../utils/test-utils/fake-chrome-test-factory';
 import { parseSessionString } from '../utils/test-utils/session-string-parser';
 
 describe('initialisation', () => {
@@ -12,7 +12,7 @@ describe('initialisation', () => {
 	test('initialiseSession results in a call to onSessionChanged', async () => {
 
 		// given an empty provider
-		const { provider, onSessionChanged } = await createProvider([], -1);
+		const { provider, onSessionChanged } = await createProvider('');
 
 		// when it's initialised
 		await provider.initialiseSession('jest');
@@ -31,7 +31,7 @@ describe('creating windows and tabs', () => {
 	test('chromeAPI: create window', async () => {
 
 		// given an initialised provider
-		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider([], -1);
+		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider('');
 
 		// when a window is created via the Chrome API
 		await fchrome.windows.create({});
@@ -47,7 +47,7 @@ describe('creating windows and tabs', () => {
 	test('chromeAPI: create tab', async () => {
 
 		// given an initialised provider with 1 window
-		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider([1], 0);
+		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider('[v(v)]');
 		const existingWindow = (await fchrome.windows.getAll({}))[0];
 		const windowId = existingWindow.id;
 		const tabIds = (existingWindow.tabs || []).map(t => t.id || 0);
@@ -78,7 +78,7 @@ describe('closing tabs', () => {
 	async function closeTabTest(sessionString: string, windowIndex: number, tabIndex: number) {
 
 		const session = parseSessionString(sessionString);
-		const fchrome = await initialiseFchromeFromSession(session);
+		const fchrome = await initialiseFchrome(session);
 
 		// given an initialised provider
 		const { provider, onSessionChanged } = await createInitialisedProviderWFC(fchrome);
@@ -122,7 +122,7 @@ describe('closing windows', () => {
 	async function closeWindowTest(sessionString: string, closingWindowIndex: number) {
 
 		const session = parseSessionString(sessionString);
-		const fchrome = await initialiseFchromeFromSession(session);
+		const fchrome = await initialiseFchrome(session);
 
 		// given an initialised provider
 		const { provider, onSessionChanged } = await createInitialisedProviderWFC(fchrome);

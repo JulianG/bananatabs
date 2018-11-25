@@ -7,7 +7,7 @@ describe('WindowAndTabMutator tests', () => {
 	test('hide tab', async () => {
 
 		// given an initialised provider with 1 window and 1 tab
-		const { provider, onSessionChanged, fchrome, browserController } = await createIniatilisedProvider([2], 0);
+		const { provider, onSessionChanged, fchrome, browserController } = await createIniatilisedProvider('[v(v,v)]');
 		const existingWindow = (await fchrome.windows.getAll({}))[0];
 		const windowId = existingWindow.id;
 		const tabIds = (existingWindow.tabs || []).map(t => t.id || 0);

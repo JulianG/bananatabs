@@ -21,9 +21,8 @@ function createProviderWFC(fchrome: FakePromisingChromeAPI) {
 	return { provider, onSessionChanged, browserController };
 }
 
-export async function createProvider(windowTabs: number[], focusIndex: number) {
-
-	const fchrome = await initialiseFchrome(windowTabs, focusIndex);
+export async function createProvider(session: string) {
+	const fchrome = await initialiseFchrome(session);
 	return { fchrome, ...createProviderWFC(fchrome) };
 }
 
@@ -35,13 +34,14 @@ export async function createInitialisedProviderWFC(fchrome: FakePromisingChromeA
 	return { provider, onSessionChanged, fchrome, browserController };
 }
 
-export async function createIniatilisedProvider(windowTabs: number[], focusIndex: number) {
-	const { provider, onSessionChanged, fchrome, browserController } = await createProvider(windowTabs, focusIndex);
+export async function createIniatilisedProvider(session: string) {
+	const { provider, onSessionChanged, fchrome, browserController } = await createProvider(session);
 	provider.onSessionChanged = onSessionChanged;
 	await provider.initialiseSession('jest');
 	onSessionChanged.mockReset();
 	return { provider, onSessionChanged, fchrome, browserController };
 }
+
 
 // async function createProviderFromSession(session: BT.Session) {
 

@@ -5,23 +5,23 @@ export function parseSessionString(ss: string): BT.Session {
 
 	let lastId = 1000;
 	const windows = _parseSessionString(ss).map(w => {
-		w.tabs = w.tabs.map((t, i) => {
+		w.tabs = ensureOneActiveTab(w.tabs.map((t, i) => {
 			const tab = Object.assign({}, t, { index: i, listIndex: i });
-			return Object.assign(BT.getNullTab(), tab, { id: ++lastId, url: getRandomURL(), title: getRandomTitle()} );
-		});
+			return Object.assign(BT.getNullTab(), tab, { id: ++lastId, url: getRandomURL(), title: getRandomTitle() });
+		}));
 		return Object.assign(BT.getNullWindow(), w, { id: ++lastId });
 	});
-	const fixedWindows = ensureOneFocusedWindow(windows);
-	return { ...BT.EmptySession, windows: fixedWindows };
+
+	if (windows.length < 1 && ss !== '') {
+		throw (new Error('Error! Invalid input string.'));
+	}
+	return { ...BT.EmptySession, windows };
 }
 
 function _parseSessionString(ss: string) {
 	const windowsRegEx = /\[([^\]]+)\]/g;
 	const windows = ss.match(windowsRegEx) || [];
 	const validWindows = windows.map(parseWindowString).filter(s => s != null);
-	if (validWindows.length < 1) {
-		throw (new Error('Error! Invalid input string.'));
-	}
 	return validWindows;
 }
 
@@ -70,19 +70,6 @@ function convertPropArrayToObject(propList: {}[]): {} {
 }
 
 ////
-
-function ensureOneFocusedWindow(windows: BT.Window[]): BT.Window[] {
-	const fixedWindows = [...windows];
-	const visibleWindows = fixedWindows.filter(w => w.visible);
-	if (visibleWindows.length > 0) {
-		const focusedWindow = fixedWindows.find(w => w.focused) || visibleWindows[0];
-		visibleWindows.forEach(vw => {
-			vw.focused = vw.id === focusedWindow.id;
-			vw.tabs = ensureOneActiveTab(vw.tabs);
-		});
-	}
-	return fixedWindows;
-}
 
 function ensureOneActiveTab(tabs: BT.Tab[]): BT.Tab[] {
 	const fixedTabs = [...tabs];

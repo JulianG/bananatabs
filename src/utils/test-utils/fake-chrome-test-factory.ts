@@ -1,8 +1,14 @@
 import * as BT from '../../model/CoreTypes';
 import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
 import { AllCallbacks } from './chrome-events-utils';
+import { parseSessionString } from './session-string-parser';
 
-export async function initialiseFchromeFromSession(session: BT.Session) {
+export async function initialiseFchrome(session: string | BT.Session) {
+	const btSession: BT.Session = (typeof (session) === 'string') ? parseSessionString(session) : session;
+	return initialiseFchromeFromSession(btSession);
+}
+
+async function initialiseFchromeFromSession(session: BT.Session) {
 
 	const fchrome = new FakePromisingChromeAPI();
 	const visibleWindows = session.windows.filter(w => w.visible);
@@ -29,19 +35,6 @@ export async function initialiseFchromeFromSession(session: BT.Session) {
 		});
 	});
 	await Promise.all(newWindowPromises);
-	return fchrome;
-}
-
-export async function initialiseFchrome(windowTabs: number[], focusIndex: number): Promise<FakePromisingChromeAPI> {
-	const fchrome = new FakePromisingChromeAPI();
-	windowTabs.forEach(async (numberOfTabs, index) => {
-		const focused = (index === focusIndex);
-		const win = await fchrome.windows.create({ focused });
-		const windowId = win!.id;
-		for (let u = 0; u < numberOfTabs - 1; ++u) {
-			await fchrome.tabs.create({ windowId });
-		}
-	});
 	return fchrome;
 }
 
