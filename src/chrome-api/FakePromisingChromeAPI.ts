@@ -25,6 +25,20 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 	public readonly extension: ChromeExtensionAPI;
 
 	public fakeWindows: chrome.windows.Window[];
+
+	public fake = {
+		windows: {
+			create: this.createWindow.bind(this),
+			update: this.updateWindow.bind(this),
+			remove: this.removeWindow.bind(this)
+		},
+		tabs: {
+			create: this.createTab.bind(this),
+			update: this.updateTab.bind(this),
+			remove: this.removeTab.bind(this),
+		}
+	};
+
 	private fakeIdCount: number;
 
 	private currentTab: chrome.tabs.Tab;
@@ -87,7 +101,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 
 	}
 
-	private async createWindow(createData: chrome.windows.CreateData) {
+	private createWindow(createData: chrome.windows.CreateData) {
 		const newWindow = this._createWindow(createData);
 		this.fakeWindows.push(newWindow);
 		if (createData.focused) {
@@ -111,7 +125,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 		return newWindow;
 	}
 
-	private async updateWindow(id: number, updateInfo: chrome.windows.UpdateInfo) {
+	private updateWindow(id: number, updateInfo: chrome.windows.UpdateInfo) {
 		const existingWindow = this._getWindow(id);
 		const prevFocused = existingWindow.focused;
 		this._updateWindow(existingWindow, updateInfo);
@@ -121,7 +135,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 		return existingWindow;
 	}
 
-	private async removeWindow(id: number) {
+	private removeWindow(id: number) {
 
 		const index = this.fakeWindows.findIndex(w => w.id === id);
 		if (index > -1) {
@@ -149,13 +163,12 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 		try {
 			const winId = this._removeTab(id);
 			(this.tabs.onRemoved as FCE.TabRemovedEvent).fakeDispatch(id, { windowId: winId, isWindowClosing: true });
-			return;
 		} catch (e) {
-			return Promise.reject(`failed to remove tab with id: ${id}`);
+			throw (new Error(`failed to remove tab with id: ${id}`));
 		}
 	}
 
-	private async createTab(props: chrome.tabs.CreateProperties): Promise<chrome.tabs.Tab> {
+	private createTab(props: chrome.tabs.CreateProperties) {
 		const newTab = this._createTab(props);
 		const win = this._getWindow(newTab.windowId);
 		this._addTabToWindow(win, newTab);
@@ -167,7 +180,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 		return newTab;
 	}
 
-	private async updateTab(id: number, props: chrome.tabs.UpdateProperties) {
+	private updateTab(id: number, props: chrome.tabs.UpdateProperties) {
 		const tab = this._getTab(id);
 		if (tab) {
 
@@ -197,13 +210,12 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 		return tab;
 	}
 
-	private async removeTab(id: number): Promise<void> {
+	private removeTab(id: number) {
 		try {
 			const winId = this._removeTab(id);
 			(this.tabs.onRemoved as FCE.TabRemovedEvent).fakeDispatch(id, { windowId: winId, isWindowClosing: false });
-			return;
 		} catch (e) {
-			return Promise.reject(`failed to remove tab with id: ${id}`);
+			throw (new Error(`failed to remove tab with id: ${id}`));
 		}
 	}
 
@@ -241,7 +253,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 			return [this._createTab({ windowId })];
 		}
 		if (Array.isArray(urls)) {
-			return (urls.length > 0) ? 
+			return (urls.length > 0) ?
 				urls.map(url => this._createTab({ windowId, url })) :
 				[this._createTab({ windowId })];
 		} else {

@@ -12,7 +12,7 @@ describe('testing the tests utils: fake chrome initialiser', async () => {
 		const session = parseSessionString(ss);
 
 		// when fchrome is initialised
-		const fchrome = await initialiseFakeChromeAPI(session);
+		const fchrome = initialiseFakeChromeAPI(session);
 		const fchws = await fchrome.windows.getAll({});
 
 		// expect the fchrome to contain the same number of visible windows and tabs as the session
@@ -36,7 +36,7 @@ describe('testing the tests utils: fake chrome initialiser', async () => {
 		const session = parseSessionString(ss);
 
 		// when fchrome is initialised
-		const fchrome = await initialiseFakeChromeAPI(session);
+		const fchrome = initialiseFakeChromeAPI(session);
 		const fchws = await fchrome.windows.getAll({});
 
 		// expect the correct window to be focused

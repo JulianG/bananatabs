@@ -429,7 +429,7 @@ describe('updating windows', async () => {
 	test('resizing a window', async () => {
 
 		// given 1 window
-		const fchrome = await initialiseFakeChromeAPI('[v(v)]');
+		const fchrome = initialiseFakeChromeAPI('[v(v)]');
 		await fchrome.windows.create({ focused: true });
 		const windowId = (await fchrome.windows.getAll({}))[0].id;
 		const allCallbacks = getAllCallbacks(fchrome);
@@ -462,7 +462,7 @@ describe('updating tabs', async () => {
 	test('selecting an inactive tab in a focused window', async () => {
 
 		// given 1 focused window with a two tabs
-		const fchrome = await initialiseFakeChromeAPI('[v(v,v)]');
+		const fchrome = initialiseFakeChromeAPI('[v(v,v)]');
 		const initialWins = await fchrome.windows.getAll({});
 		const firstTabId = initialWins[0].tabs![0].id!;
 		const allCallbacks = getAllCallbacks(fchrome);

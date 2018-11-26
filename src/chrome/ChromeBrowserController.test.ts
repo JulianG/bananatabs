@@ -7,7 +7,7 @@ describe('ChromeEventController', async () => {
 	test('getAllWindows', async () => {
 
 		// given a controller with two windows, containing 2 and 3 tabs each
-		const fchrome = await initialiseFakeChromeAPI('[v(v,v)][v(v,v,v)]');
+		const fchrome = initialiseFakeChromeAPI('[v(v,v)][v(v,v,v)]');
 		const controller = new ChromeBrowserController(fchrome);
 
 		// when calling getAllWindows
@@ -22,7 +22,7 @@ describe('ChromeEventController', async () => {
 	test('showWindow', async () => {
 
 		// given a controller with no windows
-		const fchrome = await initialiseFakeChromeAPI('');
+		const fchrome = initialiseFakeChromeAPI('');
 		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
@@ -42,7 +42,7 @@ describe('ChromeEventController', async () => {
 	test('closeWindow', async () => {
 
 		// given a controller with one visible window and one visible tab
-		const fchrome = await initialiseFakeChromeAPI('[vf(v)]');
+		const fchrome = initialiseFakeChromeAPI('[vf(v)]');
 		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
@@ -62,7 +62,7 @@ describe('ChromeEventController', async () => {
 	test('createTab in window with one tab', async () => {
 
 		// given a controller with one visible window and one visible tab
-		const fchrome = await initialiseFakeChromeAPI('[vf(v)]');
+		const fchrome = initialiseFakeChromeAPI('[vf(v)]');
 		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
@@ -90,7 +90,7 @@ describe('ChromeEventController', async () => {
 	test('closeTab in window with two tabs', async () => {
 
 		// given a controller with one visible window and one hidden tab
-		const fchrome = await initialiseFakeChromeAPI('[vf(v,v)]');
+		const fchrome = initialiseFakeChromeAPI('[vf(v,v)]');
 		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
@@ -113,7 +113,7 @@ describe('ChromeEventController', async () => {
 	test('closeWindow', async () => {
 
 		// given a controller with one visible window and one hidden tab
-		const fchrome = await initialiseFakeChromeAPI('[vf(v,v)]');
+		const fchrome = initialiseFakeChromeAPI('[vf(v,v)]');
 		const controller = new ChromeBrowserController(fchrome);
 		const callback = jest.fn();
 		controller.addEventListener(callback);
@@ -135,7 +135,7 @@ describe('ChromeEventController', async () => {
 	test('selectTab', async () => {
 
 		// given a controller with two windows
-		const fchrome = await initialiseFakeChromeAPI('[v(v,v)],[v(v,v,v)]');
+		const fchrome = initialiseFakeChromeAPI('[v(v,v)],[v(v,v,v)]');
 		const controller = new ChromeBrowserController(fchrome);
 		const wins = await controller.getAllWindows();
 
@@ -156,7 +156,7 @@ describe('ChromeEventController', async () => {
 	test('getDisplayInfo', async () => {
 
 		// given a controller with two windows
-		const fchrome = await initialiseFakeChromeAPI('[v(v,v)],[v(v,v,v)]'); // [2, 3], -1
+		const fchrome = initialiseFakeChromeAPI('[v(v,v)],[v(v,v,v)]'); // [2, 3], -1
 		const controller = new ChromeBrowserController(fchrome);
 
 		// when calling getDisplayInfo
@@ -172,7 +172,7 @@ describe('ChromeEventController', async () => {
 	test('getAppURL', async () => {
 
 		// given a controller
-		const fchrome = await initialiseFakeChromeAPI(''); // [], -1
+		const fchrome = initialiseFakeChromeAPI(''); // [], -1
 		const controller = new ChromeBrowserController(fchrome);
 
 		// when calling getAppURL

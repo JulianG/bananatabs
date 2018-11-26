@@ -12,12 +12,12 @@ export function wait() {
 }
 
 export async function createProvider(session: string) {
-	const fchrome = await initialiseFakeChromeAPI(session);
+	const fchrome = initialiseFakeChromeAPI(session);
 	return { fchrome, ...createProviderWFC(fchrome) };
 }
 
 export async function createIniatilisedProvider(session: string) {
-	const fchrome = await initialiseFakeChromeAPI(session);
+	const fchrome = initialiseFakeChromeAPI(session);
 	return createInitialisedProviderWFC(fchrome);
 }
 
