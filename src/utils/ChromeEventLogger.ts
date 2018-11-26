@@ -1,5 +1,6 @@
-
-
+/*
+This script can be used to understand the order of events triggered by the chrome API.
+*/
 export default class ChromeEventLogger {
 
 	constructor() {

@@ -1,11 +1,7 @@
 import {
-	createProvider,
-	createIniatilisedProvider,
-	createInitialisedProviderWFC,
-	wait
+	createProvider, createIniatilisedProvider, wait
 } from '../utils/test-utils/provider-test-factory';
-import { initialiseFchrome } from '../utils/test-utils/fake-chrome-test-factory';
-import { parseSessionString } from '../utils/test-utils/session-string-parser';
+import { parseSessionString } from '../utils/session-string-parser';
 
 describe('initialisation', () => {
 
@@ -77,11 +73,8 @@ describe('closing tabs', () => {
 
 	async function closeTabTest(sessionString: string, windowIndex: number, tabIndex: number) {
 
-		const session = parseSessionString(sessionString);
-		const fchrome = await initialiseFchrome(session);
-
 		// given an initialised provider
-		const { provider, onSessionChanged } = await createInitialisedProviderWFC(fchrome);
+		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider(sessionString);
 		const existingWindows = (await fchrome.windows.getAll({}));
 		const windowId = existingWindows[windowIndex].id;
 		const initialTabIds = (existingWindows[windowIndex].tabs || []).map((t, i) => t.id || 0);
@@ -122,10 +115,9 @@ describe('closing windows', () => {
 	async function closeWindowTest(sessionString: string, closingWindowIndex: number) {
 
 		const session = parseSessionString(sessionString);
-		const fchrome = await initialiseFchrome(session);
 
 		// given an initialised provider
-		const { provider, onSessionChanged } = await createInitialisedProviderWFC(fchrome);
+		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider(sessionString);
 		const existingWindows = (await fchrome.windows.getAll({}));
 		const windowId = existingWindows[closingWindowIndex].id;
 		const initialWindowCount = session.windows.length;
