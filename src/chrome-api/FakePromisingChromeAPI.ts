@@ -296,7 +296,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 			pinned: props.pinned || false,
 			highlighted: false,
 			windowId,
-			active: props.active || true,
+			active: props.active !== undefined ? props.active : true,
 			incognito: false,
 			selected: props.selected || false,
 			discarded: false,
@@ -304,7 +304,6 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 			url: props.url || 'chrome://newtab/',
 			openerTabId: props.openerTabId
 		};
-
 		return tab;
 	}
 

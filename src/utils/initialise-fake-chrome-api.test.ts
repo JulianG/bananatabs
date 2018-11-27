@@ -45,4 +45,28 @@ describe('testing the tests utils: fake chrome initialiser', async () => {
 		expect(fchws.find(w => w.focused)!).toBeEquivalentToBTWindow(session.windows.find(w => w.focused)!);
 	});
 
+	test('fchrome is initialised with the correct active tab on each window', async () => {
+
+		// given a session string
+		const ss = '[vf(v,va,v)]';
+		const session = parseSessionString(ss);
+
+		// when fchrome is initialised
+		const fchrome = initialiseFakeChromeAPI(session);
+		const fchws = await fchrome.windows.getAll({});
+
+		// expect the fchrome to contain the same number of visible windows and tabs as the session
+		const sessionVisibleWindows = session.windows.filter(w => w.visible);
+		expect(fchws).toHaveLength(sessionVisibleWindows.length);
+
+		const visibleTabs = sessionVisibleWindows[0].tabs.filter(t => t.visible);
+		expect(fchws[0].tabs!).toHaveLength(visibleTabs.length);
+
+		expect(fchws[0].tabs![0].active).toBe(visibleTabs[0].active);
+		expect(fchws[0].tabs![1].active).toBe(visibleTabs[1].active);
+		expect(fchws[0].tabs![2].active).toBe(visibleTabs[2].active);
+
+	});
+
+
 });
