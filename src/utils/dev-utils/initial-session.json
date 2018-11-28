@@ -1,0 +1,195 @@
+{
+	"liveSession": "[vf(v,v,v,av)],[v(v,av,v)]",
+	"storedSession": {
+		"windows": [
+			{
+				"id": 9011,
+				"title": "Balalalas",
+				"visible": true,
+				"icon": "",
+				"tabs": [
+					{
+						"id": 9002,
+						"title": "https://linnea.biz - (Est harum )",
+						"visible": true,
+						"icon": "",
+						"index": 0,
+						"listIndex": 0,
+						"url": "https://linnea.biz",
+						"active": false,
+						"selected": false,
+						"highlighted": false,
+						"status": ""
+					},
+					{
+						"id": 9005,
+						"title": "https://lia.net - (In nam nih)",
+						"visible": true,
+						"icon": "",
+						"index": 3,
+						"listIndex": 3,
+						"url": "https://lia.net",
+						"active": true,
+						"selected": false,
+						"highlighted": false,
+						"status": ""
+					}
+				],
+				"focused": false,
+				"type": "normal",
+				"state": "normal",
+				"bounds": {
+					"top": 0,
+					"left": 0,
+					"width": 0,
+					"height": 0
+				},
+				"expanded": true
+			},
+			{
+				"id": 9006,
+				"title": "Matanga",
+				"visible": false,
+				"icon": "",
+				"tabs": [
+					{
+						"id": 9008,
+						"title": "http://katrine.biz - (Est alias )",
+						"visible": true,
+						"icon": "",
+						"index": 0,
+						"listIndex": 0,
+						"url": "http://katrine.biz",
+						"active": false,
+						"selected": false,
+						"highlighted": false,
+						"status": ""
+					},
+					{
+						"id": 9009,
+						"title": "https://ansel.com - (Sunt minim)",
+						"visible": true,
+						"icon": "",
+						"index": 1,
+						"listIndex": 1,
+						"url": "https://ansel.com",
+						"active": true,
+						"selected": false,
+						"highlighted": false,
+						"status": ""
+					},
+					{
+						"id": 9010,
+						"title": "http://toy.biz - (Praesentiu)",
+						"visible": true,
+						"icon": "",
+						"index": 2,
+						"listIndex": 2,
+						"url": "http://toy.biz",
+						"active": false,
+						"selected": false,
+						"highlighted": false,
+						"status": ""
+					}
+				],
+				"focused": false,
+				"type": "normal",
+				"state": "normal",
+				"bounds": {
+					"top": 0,
+					"left": 0,
+					"width": 0,
+					"height": 0
+				},
+				"expanded": true
+			},
+			{
+				"id": 9000,
+				"title": "",
+				"visible": true,
+				"icon": "",
+				"tabs": [
+					{
+						"id": 9002,
+						"title": "http://elmira.name - (Saepe culp)",
+						"visible": true,
+						"icon": "",
+						"index": 0,
+						"listIndex": 0,
+						"url": "http://elmira.name",
+						"active": false,
+						"selected": false,
+						"highlighted": false,
+						"status": ""
+					},
+					{
+						"id": 9003,
+						"title": "http://vincent.info - (Vel laboru)",
+						"visible": true,
+						"icon": "",
+						"index": 1,
+						"listIndex": 1,
+						"url": "http://vincent.info",
+						"active": false,
+						"selected": false,
+						"highlighted": false,
+						"status": ""
+					},
+					{
+						"id": 9004,
+						"title": "https://billy.name - (Aliquam in)",
+						"visible": true,
+						"icon": "",
+						"index": 2,
+						"listIndex": 2,
+						"url": "https://billy.name",
+						"active": false,
+						"selected": false,
+						"highlighted": false,
+						"status": ""
+					},
+					{
+						"id": 9005,
+						"title": "https://celia.net - (Qui incidu)",
+						"visible": true,
+						"icon": "",
+						"index": 3,
+						"listIndex": 3,
+						"url": "https://celia.net",
+						"active": true,
+						"selected": false,
+						"highlighted": false,
+						"status": ""
+					}
+				],
+				"focused": true,
+				"type": "normal",
+				"state": "normal",
+				"bounds": {
+					"top": 0,
+					"left": 0,
+					"width": 0,
+					"height": 0
+				},
+				"expanded": true
+			}
+		],
+		"panelWindow": {
+			"id": 0,
+			"icon": "",
+			"title": "",
+			"visible": false,
+			"focused": false,
+			"bounds": {
+				"top": 0,
+				"left": 0,
+				"width": 0,
+				"height": 0
+			},
+			"type": "normal",
+			"state": "normal",
+			"tabs": [],
+			"expanded": false
+		}
+	}
+}

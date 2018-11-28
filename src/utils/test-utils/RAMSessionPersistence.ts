@@ -4,7 +4,7 @@ import SessionPersistence from '../../model/SessionPersistence';
 export default class RAMSessionPersistence implements SessionPersistence {
 
 	constructor(private session: BT.Session = BT.EmptySession) {
-
+		this.storeSession(session);
 	}
 
 	async storeSession(session: BT.Session): Promise<{}> {

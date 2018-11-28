@@ -1,12 +1,11 @@
 import BananaFactory from './BananaFactory';
-import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
 
 describe('banana factory', async () => {
 
 	test('SessionProvider must be singleton', async () => {
 
 		// given a BananaFactory
-		const factory = new BananaFactory(new FakePromisingChromeAPI());
+		const factory = new BananaFactory(false);
 
 		// when calling getSessionProvider more than once
 		const provider0 = factory.getSessionProvider();
@@ -19,7 +18,7 @@ describe('banana factory', async () => {
 	test('BrowserController must be singleton', async () => {
 
 		// given a BananaFactory
-		const factory = new BananaFactory(new FakePromisingChromeAPI());
+		const factory = new BananaFactory(false);
 
 		// when calling getBrowserController more than once
 		const controller0 = factory.getBrowserController();
@@ -32,7 +31,7 @@ describe('banana factory', async () => {
 	test('SessionMutator must be singleton', async () => {
 
 		// given a BananaFactory
-		const factory = new BananaFactory(new FakePromisingChromeAPI());
+		const factory = new BananaFactory(false);
 
 		// when calling getSessionMutator more than once
 		const mutator0 = factory.getSessionMutator();
