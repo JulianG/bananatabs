@@ -51,17 +51,31 @@ function parseProps(sp: string): {} {
 function parseProp(p: string) {
 	const v: boolean = p[0] !== '!';
 	const n: string = translatePropName(v ? p[0] : p[1]);
-	let o = {};
-	o[n] = v;
-	return o;
+	let obj = {};
+	switch (n) {
+		case 'title':
+			obj[n] = faker.hacker.phrase();
+			break;
+		case undefined:
+			break;
+		default:
+			obj[n] = v;
+	}
+	return obj;
 }
 
 function translatePropName(n: string): string {
-	return {
+	const keys:Object = {
 		v: 'visible',
 		f: 'focused',
-		a: 'active'
-	}[n];
+		a: 'active',
+		t: 'title'
+	};
+	if(keys.hasOwnProperty(n)) {
+		return keys[n];
+	} else {
+		throw(`Error! Invalid input string. I don't know what to do with '${n}'.`);
+	}
 }
 
 function convertPropArrayToObject(propList: {}[]): {} {

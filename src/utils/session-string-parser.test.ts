@@ -2,7 +2,6 @@ import { parseSessionString } from './session-string-parser';
 
 describe('testing the tests: session parser function', () => {
 
-
 	test('valid empty input string', async () => {
 
 		// given an invalid input string
@@ -72,6 +71,35 @@ describe('testing the tests: session parser function', () => {
 
 		// given an invalid input string
 		const inputString = '[()()]';
+
+		// when it's parsed into a Session
+		const f = () => {
+			parseSessionString(inputString);
+		};
+
+		// expect it to throw an error
+		expect(f).toThrowError();
+
+	});
+
+	test('the t character can be used to specify a title for windows', async () => {
+
+		// given an valid input string including the 't' character
+		const inputString = '[v(v,v,v)],[!vt(v,v)]';
+
+		// when it's parsed into a Session
+		const session = parseSessionString(inputString);
+
+		// expect one of the windows has name and the other one doesn't.
+		expect(session.windows[0].title).toBe('');
+		expect(session.windows[1].title).not.toBe('');
+
+	});
+
+	test('other characters result in an error', async () => {
+
+		// given an invalid input string because of an invalid character...
+		const inputString = '[vn(v,v,v)],[!vt(v,v)]';
 
 		// when it's parsed into a Session
 		const f = () => {
