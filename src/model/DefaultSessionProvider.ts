@@ -42,10 +42,16 @@ export default class DefaultSessionProvider implements SessionProvider {
 			console.log(`SessionProvider.initialiseSession ... because ${reason}.`);
 			console.log(`  getting session from disk...`);
 			const retrievedSession = await this.persistence.retrieveSession();
+			console.log(`  -- windows: ${retrievedSession.windows.length}`);
+			console.log(BT.DEBUG_sessionToString(retrievedSession));
 			console.log(`  getting session from browser...`);
 			const liveSession = await this.getLiveSession();
+			console.log(`  -- windows: ${liveSession.windows.length}`);
+			console.log(BT.DEBUG_sessionToString(liveSession));
 			console.log(`  done. now merging sessions`);
 			this.session = this.mergeSessions(retrievedSession, liveSession, reason);
+			console.log(`  -- windows: ${this.session.windows.length}`);
+			console.log(BT.DEBUG_sessionToString(this.session));
 			console.log(`  done. now storing session`);
 			await this.storeSession(this.session);
 			console.log(`  done. now...`);

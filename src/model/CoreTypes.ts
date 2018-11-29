@@ -1,3 +1,4 @@
+import { isArray } from "util";
 
 export interface Session {
 	windows: Window[];
@@ -78,4 +79,48 @@ export interface DisplayInfo {
 	name: string;
 	bounds: Rectangle;
 	workArea?: Rectangle;
+}
+
+export function DEBUG_sessionToString(s: Session): string {
+
+	const f = (key: string, value: Object) => {
+		switch (key) {
+			case 'windows':
+				if (isArray(value)) {
+					return value.map(simplifyWindow);
+				}
+				return value;
+			case 'tabs':
+				if (isArray(value)) {
+					return value.map(simplifyTab);
+				}
+				return value;
+			case 'panelWindow':
+				return '';
+			default:
+				return value;
+		}
+	};
+
+	return JSON.stringify(s, f, 2);
+}
+
+// debug
+function simplifyWindow(w: Window) {
+	return {
+		id: w.id,
+		title: w.title,
+		visible: w.visible,
+		tabNum: w.tabs.length,
+		tabs: w.tabs
+	}
+}
+
+// debug
+function simplifyTab(t: Tab) {
+	return {
+		id: t.id,
+		url: t.url,
+		visible: t.visible
+	}
 }
