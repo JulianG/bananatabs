@@ -1,4 +1,3 @@
-import { isArray } from "util";
 
 export interface Session {
 	windows: Window[];
@@ -86,12 +85,12 @@ export function DEBUG_sessionToString(s: Session): string {
 	const f = (key: string, value: Object) => {
 		switch (key) {
 			case 'windows':
-				if (isArray(value)) {
+				if (Array.isArray(value)) {
 					return value.map(simplifyWindow);
 				}
 				return value;
 			case 'tabs':
-				if (isArray(value)) {
+				if (Array.isArray(value)) {
 					return value.map(simplifyTab);
 				}
 				return value;
@@ -113,7 +112,7 @@ function simplifyWindow(w: Window) {
 		visible: w.visible,
 		tabNum: w.tabs.length,
 		tabs: w.tabs
-	}
+	};
 }
 
 // debug
@@ -122,5 +121,5 @@ function simplifyTab(t: Tab) {
 		id: t.id,
 		url: t.url,
 		visible: t.visible
-	}
+	};
 }
