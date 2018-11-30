@@ -65,16 +65,16 @@ function parseProp(p: string) {
 }
 
 function translatePropName(n: string): string {
-	const keys:Object = {
+	const keys: Object = {
 		v: 'visible',
 		f: 'focused',
 		a: 'active',
 		t: 'title'
 	};
-	if(keys.hasOwnProperty(n)) {
+	if (keys.hasOwnProperty(n)) {
 		return keys[n];
 	} else {
-		throw(`Error! Invalid input string. I don't know what to do with '${n}'.`);
+		throw (`Error! Invalid input string. I don't know what to do with '${n}'.`);
 	}
 }
 
