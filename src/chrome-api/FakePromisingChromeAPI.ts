@@ -50,7 +50,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 		const self = this;
 
 		this.fakeWindows = [];
-		this.fakeIdCount = 1000;
+		this.fakeIdCount = 5000;
 
 		this.windows = {
 
@@ -120,6 +120,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 				(this.tabs.onCreated as FCE.TabCreatedEvent).fakeDispatch(tab);
 				(this.tabs.onActivated as FCE.TabActivatedEvent).fakeDispatch({ tabId: tab.id, windowId: tab.windowId });
 				(this.tabs.onHighlighted as FCE.TabHighlightedEvent).fakeDispatch({ tabIds: [tab.id], windowId: tab.windowId });
+				this.delayedCompleteTab(tab.id!, 1);
 			});
 		}
 		return newWindow;
@@ -177,7 +178,13 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 			this.dispatchTabActivated(newTab.id, newTab.windowId);
 		}
 		(this.tabs.onCreated as FCE.TabCreatedEvent).fakeDispatch(newTab);
+		this.delayedCompleteTab(newTab.id!, 1);
 		return newTab;
+	}
+
+	private delayedCompleteTab(id: number, delay: number) {
+		const event = (this.tabs.onUpdated as FCE.TabUpdatedEvent);
+		setTimeout(() => event.fakeDispatch(id, { status: 'complete' }), delay);
 	}
 
 	private updateTab(id: number, props: chrome.tabs.UpdateProperties) {
@@ -186,7 +193,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 
 			const changeInfo: chrome.tabs.TabChangeInfo = {};
 			changeInfo.pinned = props.pinned !== undefined ? props.pinned : undefined;
-
+			
 			tab.status = 'complete';
 			tab.autoDiscardable = (props.autoDiscardable !== undefined) ? props.autoDiscardable : tab.autoDiscardable;
 			tab.highlighted = (props.highlighted !== undefined) ? props.highlighted : tab.highlighted;

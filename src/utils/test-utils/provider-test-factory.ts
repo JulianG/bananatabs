@@ -1,9 +1,11 @@
+import * as BT from '../../model/CoreTypes';
 import ChromeBrowserController from '../../chrome/ChromeBrowserController';
 import LiveSessionMerger, { DefaultLiveSessionMerger } from '../../model/mergers/LiveSessionMerger';
 import RAMSessionPersistence from './RAMSessionPersistence';
 import DefaultSessionProvider from '../../model/DefaultSessionProvider';
 import { initialiseFakeChromeAPI } from '../initialise-fake-chrome-api';
 import FakePromisingChromeAPI from 'chrome-api/FakePromisingChromeAPI';
+import { parseSessionString } from '../../utils/session-string-parser';
 
 export function wait() {
 	return new Promise((resolve, reject) => {
@@ -11,51 +13,32 @@ export function wait() {
 	});
 }
 
-export async function createProvider(session: string) {
+export async function createProvider(sessionString: string) {
+	const session = parseSessionString(sessionString);
 	const fchrome = initialiseFakeChromeAPI(session);
-	return { fchrome, ...createProviderWFC(fchrome) };
+	return { fchrome, ...createProviderWFC(fchrome, session) };
 }
 
-export async function createIniatilisedProvider(session: string) {
+export async function createIniatilisedProvider(sessionString: string) {
+	const session = parseSessionString(sessionString);
 	const fchrome = initialiseFakeChromeAPI(session);
-	return createInitialisedProviderWFC(fchrome);
+	return createInitialisedProviderWFC(fchrome, session);
 }
 
-async function createInitialisedProviderWFC(fchrome: FakePromisingChromeAPI) {
-	const { provider, onSessionChanged, browserController } = await createProviderWFC(fchrome);
-
+async function createInitialisedProviderWFC(fchrome: FakePromisingChromeAPI, session: BT.Session) {
+	const { provider, onSessionChanged, browserController } = createProviderWFC(fchrome, session);
 	provider.onSessionChanged = onSessionChanged;
 	await provider.initialiseSession('jest');
 	onSessionChanged.mockReset();
 	return { provider, onSessionChanged, fchrome, browserController };
 }
 
-function createProviderWFC(fchrome: FakePromisingChromeAPI) {
+function createProviderWFC(fchrome: FakePromisingChromeAPI, session: BT.Session) {
 	const browserController = new ChromeBrowserController(fchrome);
 	const merger: LiveSessionMerger = new DefaultLiveSessionMerger();
-	const persistence = new RAMSessionPersistence();
+	const persistence = new RAMSessionPersistence(session);
 	const provider = new DefaultSessionProvider(browserController, merger, persistence);
 	const onSessionChanged = jest.fn();
 	provider.onSessionChanged = onSessionChanged;
 	return { provider, onSessionChanged, browserController };
 }
-
-// async function createProviderFromSession(session: BT.Session) {
-
-// 	const fchrome = await initialiseFchrome([], -1);
-// 	const browserController = new ChromeBrowserController(fchrome);
-// 	const merger: LiveSessionMerger = new DefaultLiveSessionMerger();
-// 	const persistence = new RAMSessionPersistence(session);
-// 	const provider = new DefaultSessionProvider(browserController, merger, persistence);
-// 	const onSessionChanged = jest.fn();
-// 	provider.onSessionChanged = onSessionChanged;
-// 	return { provider, onSessionChanged, fchrome, browserController };
-// }
-
-// export async function createInitialisedProviderFromSession(session: BT.Session) {
-// 	const { provider, onSessionChanged, fchrome, browserController } = await createProviderFromSession(session);
-// 	provider.onSessionChanged = onSessionChanged;
-// 	await provider.initialiseSession('jest');
-// 	onSessionChanged.mockReset();
-// 	return { provider, onSessionChanged, fchrome, browserController };
-// }

@@ -27,7 +27,9 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
 				console.log('found liveMatchingWindow: ' + liveMatchingWindow.id + ' ' + liveMatchingWindow.title);
 				liveMatchingWindow.title = storedWindow.title;
 				liveMatchingWindow.expanded = storedWindow.expanded;
+				console.groupCollapsed('mergeTabs:', liveMatchingWindow.id, storedWindow.id);				
 				liveMatchingWindow.tabs = this.mergeTabs(liveMatchingWindow.tabs, storedWindow.tabs);
+				console.groupEnd();
 				liveMatchingWindow.visible = true;
 				console.log('pushing live matching window: ' + liveMatchingWindow.id + ' ' + liveMatchingWindow.title);
 				this.pushUniqueWindow(mergedSessionWindows, liveMatchingWindow);
@@ -67,7 +69,6 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
 
 	private mergeTabs(liveTabs: BT.Tab[], storedTabs: BT.Tab[]): BT.Tab[] {
 
-		console.groupCollapsed('mergeTabs:');
 		console.log('storedTabs...');
 		console.table(storedTabs);
 		console.log('liveTabs...');
@@ -125,10 +126,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
 			console.warn('Using stored tabs instead of live or merged tabs.');
 			finalTabs = storedTabs;
 		}
-
-		console.groupEnd();
 		return finalTabs;
-
 	}
 
 	private compareWindows(live: BT.Window, stored: BT.Window): number {

@@ -48,7 +48,7 @@ export default class WindowView extends React.Component<Props, State> {
 		this.hideTools = this.hideTools.bind(this);
 	}
 
-	render() {		
+	render() {
 		const w = this.props.window;
 
 		const styles = [
@@ -64,7 +64,7 @@ export default class WindowView extends React.Component<Props, State> {
 				className={styles.join(' ')}
 			>
 				{this.renderHeader()}
-				{this.props.debug && createDebugInfo(w, ['id', 'bounds'])}
+				{this.props.debug && createDebugInfo(w, ['id'])}
 				{this.renderTabs()}
 			</div>
 		);
@@ -109,9 +109,10 @@ export default class WindowView extends React.Component<Props, State> {
 		const w = this.props.window;
 		return (
 			w.expanded && w.tabs.map((tab, i) => {
+				const key = `win-${w.id}/tab-${tab.id}`;
 				return (
 					<TabView
-						key={'tab-' + i}
+						key={key}
 						window={this.props.window}
 						tab={tab}
 						mutator={this.props.tabMutator}

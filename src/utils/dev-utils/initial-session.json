@@ -55,7 +55,7 @@
 					{
 						"id": 9008,
 						"title": "http://katrine.biz - (Est alias )",
-						"visible": true,
+						"visible": false,
 						"icon": "",
 						"index": 0,
 						"listIndex": 0,
@@ -68,7 +68,7 @@
 					{
 						"id": 9009,
 						"title": "https://ansel.com - (Sunt minim)",
-						"visible": true,
+						"visible": false,
 						"icon": "",
 						"index": 1,
 						"listIndex": 1,
