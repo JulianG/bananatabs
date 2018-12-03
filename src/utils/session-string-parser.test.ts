@@ -29,6 +29,23 @@ describe('testing the tests: session parser function', () => {
 
 	});
 
+	test('valid input string: one hidden tab', async () => {
+
+		// given a valid input string
+		const inputString = '[vt(v,!v)]';
+
+		// when it's parsed into a Session
+		const session = parseSessionString(inputString);
+
+		// expect the session to have the appropriate attributes
+		expect(session.windows).toHaveLength(1);
+		expect(session.windows[0].visible).toBeTruthy();
+		expect(session.windows[0].tabs).toHaveLength(2);
+		expect(session.windows[0].tabs[0].visible).toBeTruthy();
+		expect(session.windows[0].tabs[1].visible).toBeFalsy();
+
+	});
+
 	test('valid input string: a bit more complex', async () => {
 
 		// given a valid input string

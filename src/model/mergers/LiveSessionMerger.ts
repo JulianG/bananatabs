@@ -20,7 +20,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
 			console.log('looking for a live matching window...');
 
 			const liveMatchingWindow = liveWindowsWithTabs.find(liveWindow => {
-				return this.compareWindows(liveWindow, storedWindow) > 0.75 &&
+				return this.compareWindows(liveWindow, storedWindow) >= 0.75 &&
 					this.shouldAddLiveWindow(liveWindow, live);
 			});
 			if (liveMatchingWindow) {
