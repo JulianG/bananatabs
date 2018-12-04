@@ -3,7 +3,7 @@ import * as BT from '../model/CoreTypes';
 
 export function windowsToString(windows: BT.Window[]): string {
 	return windows.map(w => {
-		return `${w.title}:\n${tabsToString(w.tabs)}\n`;
+		return `${w.title || 'Window'}:\n${tabsToString(w.tabs)}\n`;
 	}).join('\n');
 }
 
@@ -30,7 +30,7 @@ export function stringToWindows(str: string): BT.Window[] {
 			win = {
 				...BT.getNullWindow(),
 				id: getId(),
-				title: 'Window',
+				title: '',
 				tabs: [],
 				expanded: true
 			};
