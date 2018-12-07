@@ -17,18 +17,7 @@ import SessionMutator, {
 
 import LocalStorageSessionPersistence from '../chrome/LocalStorageSessionPersistence';
 import RAMSessionPersistence from '../utils/test-utils/RAMSessionPersistence';
-import { stringToWindows } from '../serialisation/MarkdownSerialisation';
-import { EmptySession } from '../model/CoreTypes';
-
-import * as FakeInitialState from '../utils/dev-utils/fake-initial-state';
-
-function getInitialState() {
-  const liveSessionWindows = stringToWindows(FakeInitialState.live);
-  const storedSessionWindows = stringToWindows(FakeInitialState.stored);
-  const liveSession = { ...EmptySession, windows: liveSessionWindows };
-  const storedSession = { ...EmptySession, windows: storedSessionWindows };
-  return { liveSession, storedSession };
-}
+import { Session } from '../model/CoreTypes';
 
 export default class BananaFactory {
   private chromeAPI: PromisingChromeAPI;
@@ -38,7 +27,11 @@ export default class BananaFactory {
   private sessionMutator: SessionMutator;
   private browserController: BrowserController;
 
-  constructor(private isChromeAPIAvailable: boolean) {
+  constructor(
+    private isChromeAPIAvailable: boolean,
+    private liveSession: Session,
+    private storedSession: Session
+  ) {
     this.chromeAPI = this.getChromeAPI();
     this.persistence = this.getPersistence();
     this.liveSessionMerger = new DefaultLiveSessionMerger();
@@ -75,13 +68,13 @@ export default class BananaFactory {
     if (this.isChromeAPIAvailable) {
       return new LocalStorageSessionPersistence();
     } else {
-      return new RAMSessionPersistence(getInitialState().storedSession);
+      return new RAMSessionPersistence(this.storedSession);
     }
   }
 
   private getChromeAPI() {
     return this.isChromeAPIAvailable
       ? new RealPromisingChromeAPI()
-      : initialiseFakeChromeAPI(getInitialState().liveSession);
+      : initialiseFakeChromeAPI(this.liveSession);
   }
 }
