@@ -28,9 +28,7 @@ export default class BananaFactory {
   private browserController: BrowserController;
 
   constructor(
-    private isChromeAPIAvailable: boolean,
-    private liveSession: Session,
-    private storedSession: Session
+    private fakeInitialSessions: { live: Session; stored: Session } | null
   ) {
     this.chromeAPI = this.getChromeAPI();
     this.persistence = this.getPersistence();
@@ -65,16 +63,16 @@ export default class BananaFactory {
   }
 
   private getPersistence() {
-    if (this.isChromeAPIAvailable) {
-      return new LocalStorageSessionPersistence();
+    if (this.fakeInitialSessions) {
+      return new RAMSessionPersistence(this.fakeInitialSessions.stored);
     } else {
-      return new RAMSessionPersistence(this.storedSession);
+      return new LocalStorageSessionPersistence();
     }
   }
 
   private getChromeAPI() {
-    return this.isChromeAPIAvailable
-      ? new RealPromisingChromeAPI()
-      : initialiseFakeChromeAPI(this.liveSession);
+    return this.fakeInitialSessions
+      ? initialiseFakeChromeAPI(this.fakeInitialSessions.live)
+      : new RealPromisingChromeAPI();
   }
 }
