@@ -22,7 +22,7 @@ function initialiseFchromeFromSession(session: BT.Session) {
 				url: vt.url
 			});
 			newTab.highlighted = vt.highlighted;
-			newTab.title = `${vt.url} - (${vt.title.slice(0, 10)})`;
+			newTab.title = `${vt.url}`;
 			return newTab;
 		});
 		return win;

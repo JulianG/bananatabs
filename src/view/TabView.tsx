@@ -66,6 +66,7 @@ export default class TabView extends React.Component<Props, State> {
 			>
 				<img
 					id={'tab-visibility' + (tab.visible ? '-visible' : '-hidden')}
+					alt={'tab' + (tab.visible ? '-visible' : '-hidden')}
 					className="left-most tool icon"
 					src={visibilityIconSrc}
 					title={visibilityIconText}

@@ -12,6 +12,11 @@ function tabsToString(tabs: BT.Tab[]): string {
   return tabs.map(t => ` * ${t.url}`).join('\n');
 }
 
+export function stringToSession(str: string): BT.Session {
+  const windows = stringToWindows(str);
+  return { ...BT.EmptySession, windows };
+}
+
 export function stringToWindows(str: string): BT.Window[] {
   let _id = Math.floor(Math.random() * 99999);
   const getId = () => {

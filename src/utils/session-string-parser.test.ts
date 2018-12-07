@@ -32,7 +32,7 @@ describe('testing the tests: session parser function', () => {
 	test('valid input string: one hidden tab', async () => {
 
 		// given a valid input string
-		const inputString = '[vt(v,!v)]';
+		const inputString = '[vt(v,!v)]'; // this test seems to pass even if the window is not titled
 
 		// when it's parsed into a Session
 		const session = parseSessionString(inputString);
