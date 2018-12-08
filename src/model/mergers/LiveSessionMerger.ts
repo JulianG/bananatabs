@@ -129,7 +129,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
     const storedURLs = stored.tabs.map(tab => tab.url).sort();
     const matchesInLive = liveURLs.filter(liveURL => storedURLs.indexOf(liveURL) >= 0).length;
     const matchesInStored = storedURLs.filter(storedURL => liveURLs.indexOf(storedURL) >= 0).length;
-    const similarity = () => (((matchesInLive / liveURLs.length) * matchesInStored) / storedURLs.length);
+    const similarity = () => ((matchesInLive / liveURLs.length) * matchesInStored) / storedURLs.length;
     return liveURLs.length === matchesInLive ? 0.99 : similarity();
   }
 
