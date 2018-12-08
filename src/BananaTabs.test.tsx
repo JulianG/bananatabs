@@ -1,18 +1,24 @@
 import * as React from 'react';
+import { render } from 'react-testing-library';
 import {
-  render,
-  queryAllByAttribute,
-  queryByAltText
-} from 'react-testing-library';
-import { stringToSession } from './serialisation/MarkdownSerialisation';
+  getFactory,
+  getWindowGroups,
+  getTabsVisibilities,
+  getTabsInWindow,
+  wait
+} from './__test__/bananatabs.utils';
 
 import BananaTabs from './BananaTabs';
-import BananaFactory from './factory/BananaFactory';
+import { stringToWindows } from './serialisation/MarkdownSerialisation';
 
-describe('not sure', async () => {
+describe('BananaTabs Tests', async () => {
   //
-  test('some app test', async () => {
+  test('something at startup', async () => {
     //
+    // given an initial state with
+    // 2 live windows
+    // and 2 stored windows
+
     const live = `
 window 1:
  * http://tab-1.1/
@@ -22,6 +28,7 @@ window 1:
 window 2:
  * http://tab-2.1/
  * http://tab-2.2/
+ * http://tab-2.3/
     `;
     const stored = `
 window 1:
@@ -35,53 +42,34 @@ window 2:
  ~ http://tab-2.3/  
     `;
 
-    const { container } = render(
+    // when the app starts and is rendered
+    const { container, debug } = render(
       <BananaTabs factory={getFactory(live, stored)} />
     );
+    // and we wait
     await wait();
-    // const a = queryAllByAltText('tab-visible');
+
+    // expect 2 window groups
+    // because the live windows were matched to stored windows
     const windowGroups = getWindowGroups(container);
     expect(windowGroups).toHaveLength(2);
+
     const [window1, window2] = windowGroups;
 
+    // also expect 3 visible tabs in the first window
     expect(getTabsVisibilities(getTabsInWindow(window1))).toMatchObject([
       true,
       true,
       true
     ]);
+
+    // also expect 2 visible tabs in the second window
+    // (because the hidden tab has been found in the live session)
     expect(getTabsVisibilities(getTabsInWindow(window2))).toMatchObject([
       true,
       true,
-      false
+      true
     ]);
+    // as described in the initialisation strings
   });
 });
-
-function getFactory(live: string, stored: string) {
-  const liveSession = stringToSession(live);
-  const storedSession = stringToSession(stored);
-  const fake = { live: liveSession, stored: storedSession };
-  return new BananaFactory(fake);
-}
-
-function wait(d: number = 1) {
-  return new Promise(resolve => {
-    setTimeout(() => { resolve(); }, d);
-  });
-}
-
-function getWindowGroups(container: HTMLElement) {
-  return queryAllByAttribute('id', container, 'window-group');
-}
-
-function getTabsInWindow(windowGroup: HTMLElement) {
-  return queryAllByAttribute('id', windowGroup, 'tab');
-}
-
-function getTabsVisibilities(tabs: HTMLElement[]): boolean[] {
-  return tabs.map(t => {
-    const visible = queryByAltText(t, 'tab-visible');
-    // const hidden = queryByAltText(t, 'tab-hidden');
-    return visible !== null;
-  });
-}
