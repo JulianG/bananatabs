@@ -30,6 +30,7 @@ export function stringToWindows(str: string): BT.Window[] {
   let shouldCreateNewWindow: boolean = true;
   let shouldCreateNewWindowVisibility: boolean = true;
   lines.forEach(line => {
+    line = line.trim();
     if (shouldCreateNewWindow) {
       shouldCreateNewWindow = false;
       win = {
@@ -52,7 +53,7 @@ export function stringToWindows(str: string): BT.Window[] {
       win.visible = lastChar === ':';
     }
     if (isTab) {
-      const url = extractURL(line);
+      const url = isValidURL(line.trim()) ? line.trim() : extractURL(line.trim());
       if (isValidURL(url)) {
         win.tabs.push({
           ...BT.getNullTab(),
@@ -77,13 +78,8 @@ export function stringToWindows(str: string): BT.Window[] {
 }
 
 function isTabLine(line: string): boolean {
-  return (
-    line.substr(0, 3) === ' ~ ' ||
-    line.substr(0, 2) === '~ ' ||
-    line.substr(0, 3) === ' * ' ||
-    line.substr(0, 2) === '* ' ||
-    isValidURL(line)
-  );
+  const twoChars = line.trim().substr(0, 2);
+  return twoChars === '~ ' || twoChars === '* ' || isValidURL(line);
 }
 
 function isValidURL(str: string) {
@@ -94,18 +90,13 @@ function isValidURL(str: string) {
 }
 
 function extractURL(line: string) {
-  const lead = detectLeadOnTabLine(line);
-  return line.substr(lead).trim();
+  const lead = detectLeadOnTabLine(line.trim());
+  return line.trim().substr(lead);
 }
 
 function detectLeadOnTabLine(line: string): number {
-  if (line.substr(0, 3) === ' * ' || line.substr(0, 3) === ' ~ ') {
-    return 3;
-  }
-  if (line.substr(0, 2) === '* ' || line.substr(0, 2) === '~ ') {
-    return 2;
-  }
-  return 0;
+  const twoChars = line.trim().substr(0, 2);
+  return (twoChars === '* ' || twoChars === '~ ') ? 2 : 0;
 }
 
 function getFirstNonWhitespaceCharacter(line: string): string {
