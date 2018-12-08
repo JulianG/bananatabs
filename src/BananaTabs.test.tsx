@@ -13,11 +13,12 @@ import { stringToWindows } from './serialisation/MarkdownSerialisation';
 
 describe('BananaTabs Tests', async () => {
   //
-  test('something at startup', async () => {
+  test('identical initial states', async () => {
     //
     // given an initial state with
     // 2 live windows
     // and 2 stored windows
+    // which are identical
 
     const live = `
 window 1:
@@ -39,7 +40,7 @@ window 1:
 window 2:
  * http://tab-2.1/
  * http://tab-2.2/
- ~ http://tab-2.3/  
+ * http://tab-2.3/  
     `;
 
     // when the app starts and is rendered
@@ -63,8 +64,7 @@ window 2:
       true
     ]);
 
-    // also expect 2 visible tabs in the second window
-    // (because the hidden tab has been found in the live session)
+    // also expect 3 visible tabs in the second window
     expect(getTabsVisibilities(getTabsInWindow(window2))).toMatchObject([
       true,
       true,
