@@ -122,11 +122,15 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
   }
 
   private compareWindows(live: BT.Window, stored: BT.Window): number {
+    if (live.id === stored.id) {
+      return 1;
+    }
     const liveURLs = live.tabs.map(tab => tab.url).sort();
     const storedURLs = stored.tabs.map(tab => tab.url).sort();
     const matchesInLive = liveURLs.filter(liveURL => storedURLs.indexOf(liveURL) >= 0).length;
     const matchesInStored = storedURLs.filter(storedURL => liveURLs.indexOf(storedURL) >= 0).length;
-    return live.id === stored.id ? 1 : ((matchesInLive / liveURLs.length) * matchesInStored) / storedURLs.length;
+    const similarity = () => (((matchesInLive / liveURLs.length) * matchesInStored) / storedURLs.length);
+    return liveURLs.length === matchesInLive ? 0.99 : similarity();
   }
 
   private pushUniqueWindow(array: BT.Window[], window: BT.Window) {
