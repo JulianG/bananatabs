@@ -62,6 +62,12 @@ export default class BananaFactory {
     return this.sessionMutator;
   }
 
+  getChromeAPI() {
+    return this.fakeInitialSessions
+      ? initialiseFakeChromeAPI(this.fakeInitialSessions.live)
+      : new RealPromisingChromeAPI();
+  }
+
   private getPersistence() {
     if (this.fakeInitialSessions) {
       return new RAMSessionPersistence(this.fakeInitialSessions.stored);
@@ -70,9 +76,4 @@ export default class BananaFactory {
     }
   }
 
-  private getChromeAPI() {
-    return this.fakeInitialSessions
-      ? initialiseFakeChromeAPI(this.fakeInitialSessions.live)
-      : new RealPromisingChromeAPI();
-  }
 }

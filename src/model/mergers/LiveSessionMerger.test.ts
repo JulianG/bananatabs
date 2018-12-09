@@ -15,7 +15,7 @@ function mergeSessions(live: string, stored: string): { live: BT.Session; stored
 describe('LiveSessionMerger', () => {
   test('merging identical window groups', () => {
     // given identical live an stored sessions (with different ids)
-    const { live, stored, merged } = mergeSessions(
+    const { stored, merged } = mergeSessions(
       `
 		window 1:
 		 * http://tab-1.1/

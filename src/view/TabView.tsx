@@ -65,6 +65,7 @@ export default class TabView extends React.Component<Props, State> {
 				onMouseLeave={this.hideTools}
 			>
 				<img
+					data-testid="visibility-toggle"
 					id={'tab-visibility' + (tab.visible ? '-visible' : '-hidden')}
 					alt={'tab' + (tab.visible ? '-visible' : '-hidden')}
 					className="left-most tool icon"
