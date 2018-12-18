@@ -26,15 +26,18 @@ describe('creating windows and tabs', () => {
 
 	test('chromeAPI: create window', async () => {
 
+		console.log('chromeAPI: create window');
+
 		// given an initialised provider
 		const { provider, onSessionChanged, fchrome } = await createIniatilisedProvider('');
+		console.log('chromeAPI: create window - after init');
 
 		// when a window is created via the Chrome API
 		await fchrome.windows.create({});
-
-		// expect the provider session to contain 1 window with 1 tab
 		await wait();
-		expect(provider.session.windows).toHaveLength(1);
+		console.log('chromeAPI: create window - after waiting');
+		// expect the provider session to contain 1 window with 1 tab
+		expect(provider.session.windows).toHaveLength(1); // is zero in travis ci!
 		expect(provider.session.windows[0].tabs).toHaveLength(1);
 		// and callback is triggered
 		expect(onSessionChanged).toHaveBeenCalled();
