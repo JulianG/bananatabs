@@ -19,6 +19,7 @@ export default class ChromeEventDispatcher implements BrowserEventDispatcher {
 		this.eventListeners = [];
 
 		chromeAPI.windows.onRemoved.addListener((id) => {
+			console.warn('onRemoved', id);
 			this.dispatchEvent('onRemoved', `onWindowRemoved ${id}`);
 		});
 		chromeAPI.windows.onFocusChanged.addListener((_) => this.dispatchEvent('onFocusChanged'));
@@ -85,6 +86,7 @@ export default class ChromeEventDispatcher implements BrowserEventDispatcher {
 	}
 
 	private onTabsRemoved(id: number, removedInfo: chrome.tabs.TabRemoveInfo) {
+		console.warn('onTabsRemoved!', id);
 		if (this.isPanelTab(id) === false && removedInfo.isWindowClosing === false) {
 			this.dispatchEvent('onTabsRemoved', `onTabsRemoved - ${id} - ${JSON.stringify(removedInfo)}`);
 		}

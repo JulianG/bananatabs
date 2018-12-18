@@ -20,7 +20,6 @@ interface State {
 }
 
 export default class BananaTabs extends React.Component<Props, State> {
-
   readonly state: State = { session: BT.EmptySession };
   private version: string;
   private buildString: string;
@@ -54,6 +53,9 @@ export default class BananaTabs extends React.Component<Props, State> {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResizeEvent);
+    this.sessionProvider.onSessionChanged = session => {
+      console.warn('BananaTabs.componentWillUnmount -> sessionProvider.onSessionChanged');
+    };
   }
 
   render() {
@@ -72,6 +74,4 @@ export default class BananaTabs extends React.Component<Props, State> {
   private handleResizeEvent(e: UIEvent) {
     this.sessionProvider.updateSession('handleResizeEvent');
   }
-
 }
-

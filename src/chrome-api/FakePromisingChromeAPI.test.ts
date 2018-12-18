@@ -3,7 +3,7 @@ import '../utils/test-utils/expect-extend-functions';
 import { getAllCallbacks } from '../utils/test-utils/fake-chrome-test-utils';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 
-describe('FakePromisingChromeAPI closing windows and tabs', async () => {
+describe.skip('FakePromisingChromeAPI closing windows and tabs', async () => {
 
 	test('closing a focused window with 1 tab', async () => {
 
@@ -83,7 +83,7 @@ describe('FakePromisingChromeAPI closing windows and tabs', async () => {
 
 ////
 
-describe('creating tabs', async () => {
+describe.skip('creating tabs', async () => {
 
 	test('creating a tab: active when only tab in window', async () => {
 
@@ -184,7 +184,7 @@ describe('creating tabs', async () => {
 
 ////
 
-describe('creating windows', async () => {
+describe.skip('creating windows', async () => {
 
 	test('creating a window: content and events', async () => {
 
@@ -424,7 +424,7 @@ describe('creating windows', async () => {
 
 ////
 
-describe('updating windows', async () => {
+describe.skip('updating windows', async () => {
 
 	test('resizing a window', async () => {
 
@@ -457,7 +457,7 @@ describe('updating windows', async () => {
 	});
 });
 
-describe('updating tabs', async () => {
+describe.skip('updating tabs', async () => {
 
 	test('selecting an inactive tab in a focused window', async () => {
 

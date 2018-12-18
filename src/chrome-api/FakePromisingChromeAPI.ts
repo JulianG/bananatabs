@@ -79,6 +79,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 			create: self.createTab.bind(this),
 			update: self.updateTab.bind(this),
 			remove: self.removeTab.bind(this),
+			
 			async getCurrent() {
 				return self.currentTab;
 			}
@@ -219,7 +220,8 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 
 	private removeTab(id: number) {
 		try {
-			const winId = this._removeTab(id);
+			const winId = this._removeTab(id); 
+			// here the window has only 2 tabs. it's ok. so what happens next?
 			(this.tabs.onRemoved as FCE.TabRemovedEvent).fakeDispatch(id, { windowId: winId, isWindowClosing: false });
 		} catch (e) {
 			throw (new Error(`failed to remove tab with id: ${id}`));

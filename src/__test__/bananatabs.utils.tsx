@@ -1,5 +1,6 @@
+// tslint:disable no-unused-variable
 import * as React from 'react';
-import { render, queryAllByAttribute, queryByAltText } from 'react-testing-library';
+import { render, queryAllByAttribute, queryByAltText, getByTestId } from 'react-testing-library';
 import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
 import BananaFactory from '../factory/BananaFactory';
@@ -7,13 +8,30 @@ import BananaTabs from '../BananaTabs';
 
 // tslint:disable no-any
 export async function renderBananaTabs(live: string, stored: string | null = null) {
-  stored = (stored !== null) ? stored : live;
+  stored = stored !== null ? stored : live;
   const factory = getFactory(live, stored);
   const fchrome = factory.getChromeAPI() as FakePromisingChromeAPI;
-  const { container, debug } = render(<BananaTabs factory={factory} />);
+
+  const { container, debug } = render(React.createElement(BananaTabs, { factory }));
   await wait();
   const provider = factory.getSessionProvider();
-  return { container, debug, fchrome, provider };
+
+  return { container, debug, fchrome, provider, ...getFunctions(container) };
+}
+
+function getFunctions(container: HTMLElement) {
+  return {
+    getWindowGroups: () => {
+      return getWindowGroups(container);
+    },
+    getTab: (windowIndex: number, tabIndex: number) => {
+      return getTabsInWindow(getWindowGroups(container)[windowIndex])[tabIndex];
+    },
+    getTabVisibilityToggle: (windowIndex: number, tabIndex: number) => {
+      const tab = getTabsInWindow(getWindowGroups(container)[windowIndex])[tabIndex];
+      return getByTestId(tab, 'visibility-toggle');
+    }
+  };
 }
 
 export function getFactory(live: string, stored: string) {
@@ -25,9 +43,7 @@ export function getFactory(live: string, stored: string) {
 
 export function wait(d: number = 1) {
   return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, d);
+    setTimeout(resolve, d);
   });
 }
 
