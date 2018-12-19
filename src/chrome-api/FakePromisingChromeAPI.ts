@@ -46,6 +46,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 	constructor(
 		private fakeDisplayUnitInfoArray: chrome.system.display.DisplayUnitInfo[] = [FakeDisplayUnitInfo]
 	) {
+		
 		const self = this;
 
 		this.fakeWindows = [];
