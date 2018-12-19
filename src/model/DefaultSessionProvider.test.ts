@@ -32,9 +32,9 @@ describe('creating windows and tabs', () => {
 		// when a window is created via the Chrome API
 		await fchrome.windows.create({});
 		await wait();
-		expect(fchrome.fakeWindows).toHaveLength(1); // new
+
 		// expect the provider session to contain 1 window with 1 tab
-		expect(provider.session.windows).toHaveLength(1); // is zero in travis ci!
+		expect(provider.session.windows).toHaveLength(1);
 		expect(provider.session.windows[0].tabs).toHaveLength(1);
 		// and callback is triggered
 		expect(onSessionChanged).toHaveBeenCalled();
