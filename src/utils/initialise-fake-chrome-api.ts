@@ -8,7 +8,7 @@ export function initialiseFakeChromeAPI(session: string | BT.Session) {
 }
 
 function initialiseFchromeFromSession(session: BT.Session) {
-	const fchrome = new FakePromisingChromeAPI;
+	const fchrome = new FakePromisingChromeAPI();
 	const visibleWindows = session.windows.filter(w => w.visible);
 	fchrome.fakeWindows = visibleWindows.map((w: BT.Window) => {
 		const win = fchrome.fake.windows.create({ focused: w.focused });

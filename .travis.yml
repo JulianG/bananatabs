@@ -1,9 +1,9 @@
 language: node_js
 node_js:
-  - "7"
+  - "11"
 
 before_install: 
-  - dpkg --compare-versions `npm -v` ge 5.8 || npm i -g npm@^5.8
+  - dpkg --compare-versions `npm -v` ge 6.4 || npm i -g npm@^6.4
 
 install:
   - npm ci
@@ -13,4 +13,4 @@ script:
   - npm test
 
 after_success: 
-  - npm test
+  # - npm test
