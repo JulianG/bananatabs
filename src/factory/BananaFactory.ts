@@ -30,8 +30,8 @@ export default class BananaFactory {
   constructor(
     private fakeInitialSessions: { live: Session; stored: Session } | null
   ) {
-    this.chromeAPI = this.getChromeAPI();
-    this.persistence = this.getPersistence();
+    this.chromeAPI = this.createChromeAPI();
+    this.persistence = this.createPersistence();
     this.liveSessionMerger = new DefaultLiveSessionMerger();
   }
 
@@ -63,12 +63,19 @@ export default class BananaFactory {
   }
 
   getChromeAPI() {
+    if (!this.chromeAPI) {
+     this.chromeAPI = this.createChromeAPI(); 
+    }
+    return this.chromeAPI;
+  }
+
+  private createChromeAPI() {
     return this.fakeInitialSessions
       ? initialiseFakeChromeAPI(this.fakeInitialSessions.live)
       : new RealPromisingChromeAPI();
   }
 
-  private getPersistence() {
+  private createPersistence() {
     if (this.fakeInitialSessions) {
       return new RAMSessionPersistence(this.fakeInitialSessions.stored);
     } else {

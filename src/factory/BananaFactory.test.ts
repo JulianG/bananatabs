@@ -3,7 +3,7 @@ import { EmptySession } from '../model/CoreTypes';
 
 const fakeInitialSessions = { live: EmptySession, stored: EmptySession };
 
-describe('banana factory', async () => {
+describe('BananaFactory tests', async () => {
   test('SessionProvider must be singleton', async () => {
     // given a BananaFactory
     const factory = new BananaFactory(fakeInitialSessions);
@@ -38,5 +38,17 @@ describe('banana factory', async () => {
 
     // expect the same instance to be returned every time
     expect(mutator0).toBe(mutator1);
+  });
+
+  test('ChromeAPI must be singleton', async () => {
+    // given a BananaFactory
+    const factory = new BananaFactory(fakeInitialSessions);
+
+    // when calling getChromeAPI more than once
+    const api0 = factory.getChromeAPI();
+    const api1 = factory.getChromeAPI();
+
+    // expect the same instance to be returned every time
+    expect(api0).toBe(api1);
   });
 });

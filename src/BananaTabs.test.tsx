@@ -103,7 +103,7 @@ window 2:
 
     // also expect only two tabs in fchrome
     await wait(2);
-    expect(fchrome.fakeWindows[0].tabs!).toHaveLength(3); // this should be 2
+    expect(fchrome.fakeWindows[0].tabs!).toHaveLength(2);
     // ///////////////////////////
     // why is this not working!?!?
     // ///////////////////////////
