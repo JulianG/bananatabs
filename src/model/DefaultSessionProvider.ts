@@ -39,7 +39,7 @@ export default class DefaultSessionProvider implements SessionProvider {
 	async initialiseSession(reason?: string) {
 		if (!this.busy) {
 			this.busy = true;
-			console.log(`SessionProvider.initialiseSession ... because ${reason}.`);
+			console.groupCollapsed(`SessionProvider.initialiseSession ... because ${reason}.`);
 			console.log(`  getting session from disk...`);
 			const retrievedSession = await this.persistence.retrieveSession();
 			console.log(`  -- windows: ${retrievedSession.windows.length}`);
@@ -59,6 +59,7 @@ export default class DefaultSessionProvider implements SessionProvider {
 			this.onSessionChanged(this.session);
 			console.log(`SessionProvider.initialiseSession CALLED onSessionChanged because: ${reason}`);
 			this.busy = false;
+			console.groupEnd();
 		} else {
 			console.warn('SessionProvider.initialiseSession -- skipping because busy');
 		}
