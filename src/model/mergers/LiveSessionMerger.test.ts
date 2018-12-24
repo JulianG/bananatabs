@@ -2,7 +2,7 @@ import { DefaultLiveSessionMerger } from './LiveSessionMerger';
 import { stringToSession } from '../../serialisation/MarkdownSerialisation';
 
 import * as BT from '../../model/CoreTypes';
-import { compareSessions } from '../../utils/test-utils/session-compare-functions';
+import { compareSessions } from '../../utils/test-utils/';
 
 function mergeSessions(live: string, stored: string): { live: BT.Session; stored: BT.Session; merged: BT.Session } {
   const liveSession = stringToSession(live);

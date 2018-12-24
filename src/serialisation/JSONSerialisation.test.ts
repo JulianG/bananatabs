@@ -1,5 +1,5 @@
 import * as BT from '../model/CoreTypes';
-import * as TestUtils from '../utils/test-utils/session-compare-functions';
+import { compareSessions } from '../utils/test-utils/';
 
 import { convertLegacySession } from './JSONSerialisation';
 
@@ -14,7 +14,7 @@ test('converted session is valid', () => {
 	const convertedSession: BT.Session = convertLegacySession(legacySession);
 
 	// expect the converted session compares to the legacy session
-	expect(TestUtils.compareSessions(convertedSession, legacySession)).toBeTruthy();
+	expect(compareSessions(convertedSession, legacySession)).toBeTruthy();
 });
 
 test('conversion of legacy session: "geometry" => "bounds" ', () => {

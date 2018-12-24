@@ -5,6 +5,8 @@ import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
 import BananaFactory from '../factory/BananaFactory';
 import BananaTabs from '../BananaTabs';
+import { wait } from '../utils/test-utils';
+export { wait } from '../utils/test-utils';
 
 // tslint:disable no-any
 export async function renderBananaTabs(live: string, stored: string | null = null) {
@@ -39,12 +41,6 @@ export function getFactory(live: string, stored: string) {
   const storedSession = stringToSession(stored);
   const fake = { live: liveSession, stored: storedSession };
   return new BananaFactory(fake);
-}
-
-export function wait(d: number = 1) {
-  return new Promise(resolve => {
-    setTimeout(resolve, d);
-  });
 }
 
 export function getWindowGroups(container: HTMLElement) {

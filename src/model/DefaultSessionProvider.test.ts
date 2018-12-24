@@ -1,6 +1,8 @@
 import {
-	createProvider, createIniatilisedProvider, wait
-} from '../utils/test-utils/provider-test-factory';
+	wait, 
+	createProvider, 
+	createIniatilisedProvider
+} from '../utils/test-utils';
 import { parseSessionString } from '../utils/session-string-parser';
 
 describe('initialisation', () => {

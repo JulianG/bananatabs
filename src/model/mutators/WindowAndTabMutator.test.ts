@@ -1,9 +1,6 @@
 import * as BT from '../../model/CoreTypes';
 import WindowAndTabMutator from '../../model/mutators/WindowAndTabMutator';
-import {
-  createIniatilisedProvider,
-  wait
-} from '../../utils/test-utils/provider-test-factory';
+import { wait, createIniatilisedProvider } from '../../utils/test-utils/';
 
 async function initialise(sessionString: string) {
   const {

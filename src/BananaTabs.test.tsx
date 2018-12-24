@@ -6,12 +6,12 @@ import {
   getWindowGroups,
   getTabsVisibilities,
   getTabsInWindow,
-  wait,
   renderBananaTabs
 } from './__test__/bananatabs.utils';
 
+import { wait, compareSessions } from './utils/test-utils/';
+
 import { stringToSession } from './serialisation/MarkdownSerialisation';
-import { compareSessions } from './utils/test-utils/session-compare-functions';
 
 describe('BananaTabs Tests', async () => {
   //
@@ -64,7 +64,31 @@ window 2:
     // as described in the initialisation strings
   });
 
-  test('hidingtab', async () => {
+  test('some merging tests?', () => {
+    // TODO: write this
+  });
+
+  test('closing tab', () => {
+    // TODO: write this
+  });
+
+  test('closing unnamed window', () => {
+    // TODO: write this
+  });
+
+  test('closing named window', () => {
+    // TODO: write this
+  });
+
+  test('hiding unnamed window', () => {
+    // TODO: write this
+  });
+
+  test('hiding named window', () => {
+    // TODO: write this
+  });
+
+  test('hiding tab', async () => {
     //
     // given an initial rendered app
     const { container, fchrome, provider, debug, getTabVisibilityToggle } = await renderBananaTabs(`
@@ -104,6 +128,19 @@ window 2:
     // also expect only two tabs in fchrome
     await wait(2);
     expect(fchrome.fakeWindows[0].tabs!).toHaveLength(2);
-    
+
   });
+
+  test('showing hidden window', () => {
+    // TODO: write this
+  });
+
+  test('showing hidden tab in visible window', () => {
+    // TODO: write this
+  });
+
+  test('showing hidden tab in hidden window', () => {
+    // TODO: write this
+  });
+
 });

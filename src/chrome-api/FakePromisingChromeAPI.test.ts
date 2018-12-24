@@ -3,9 +3,9 @@ import '../utils/test-utils/expect-extend-functions';
 import { getAllCallbacks } from '../utils/test-utils/fake-chrome-test-utils';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 
-describe.skip('FakePromisingChromeAPI closing windows and tabs', async () => {
+describe('FakePromisingChromeAPI closing windows and tabs', async () => {
 
-	test('closing a focused window with 1 tab', async () => {
+	test.skip('closing a focused window with 1 tab', async () => {
 
 		// given 1 window
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -29,7 +29,7 @@ describe.skip('FakePromisingChromeAPI closing windows and tabs', async () => {
 
 	});
 
-	test('closing a non focused window with 1 tab', async () => {
+	test.skip('closing a non focused window with 1 tab', async () => {
 
 		// given 1 window
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -53,7 +53,7 @@ describe.skip('FakePromisingChromeAPI closing windows and tabs', async () => {
 	});
 
 
-	test('closing a focused window with 2 tabs', async () => {
+	test.skip('closing a focused window with 2 tabs', async () => {
 
 		// given 1 window
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -83,9 +83,9 @@ describe.skip('FakePromisingChromeAPI closing windows and tabs', async () => {
 
 ////
 
-describe.skip('creating tabs', async () => {
+describe('creating tabs', async () => {
 
-	test('creating a tab: active when only tab in window', async () => {
+	test.skip('creating a tab: active when only tab in window', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -99,7 +99,7 @@ describe.skip('creating tabs', async () => {
 
 	});
 
-	test('creating a tab: content', async () => {
+	test.skip('creating a tab: content', async () => {
 
 		// given one window with a default tab
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -123,7 +123,7 @@ describe.skip('creating tabs', async () => {
 
 	});
 
-	test('creating a tab: content', async () => {
+	test.skip('creating a tab: content', async () => {
 
 		// given one window with a default tab
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -149,7 +149,7 @@ describe.skip('creating tabs', async () => {
 
 	});
 
-	test('creating a tab in the first window', async () => {
+	test.skip('creating a tab in the first window', async () => {
 
 		// given two windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -184,9 +184,9 @@ describe.skip('creating tabs', async () => {
 
 ////
 
-describe.skip('creating windows', async () => {
+describe('creating windows', async () => {
 
-	test('creating a window: content and events', async () => {
+	test.skip('creating a window: content and events', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -210,7 +210,7 @@ describe.skip('creating windows', async () => {
 
 	});
 
-	test('creating a window: focused', async () => {
+	test.skip('creating a window: focused', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -234,7 +234,7 @@ describe.skip('creating windows', async () => {
 
 	});
 
-	test('creating a window: not focused', async () => {
+	test.skip('creating a window: not focused', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -257,7 +257,7 @@ describe.skip('creating windows', async () => {
 
 	});
 
-	test('creating a window: focus not specified', async () => {
+	test.skip('creating a window: focus not specified', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -280,7 +280,7 @@ describe.skip('creating windows', async () => {
 
 	});
 
-	test('creating a second window: not focused', async () => {
+	test.skip('creating a second window: not focused', async () => {
 
 		// given one focused window
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -306,7 +306,7 @@ describe.skip('creating windows', async () => {
 
 	});
 
-	test('creating a second window: focused', async () => {
+	test.skip('creating a second window: focused', async () => {
 
 		// given one focused window
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -333,7 +333,7 @@ describe.skip('creating windows', async () => {
 
 	});
 
-	test('creating a window with a list of tabs', async () => {
+	test.skip('creating a window with a list of tabs', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -365,7 +365,7 @@ describe.skip('creating windows', async () => {
 		]);
 	});
 
-	test('creating a window: url as string', async () => {
+	test.skip('creating a window: url as string', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -379,7 +379,7 @@ describe.skip('creating windows', async () => {
 
 	});
 
-	test('creating a window: url as empty string', async () => {
+	test.skip('creating a window: url as empty string', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -392,7 +392,7 @@ describe.skip('creating windows', async () => {
 		expect(wins[0].tabs![0].url).toBe('chrome://newtab/');
 
 	});
-	test('creating a window: url as empty array', async () => {
+	test.skip('creating a window: url as empty array', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -406,7 +406,7 @@ describe.skip('creating windows', async () => {
 
 	});
 
-	test('creating a window: url undefined', async () => {
+	test.skip('creating a window: url undefined', async () => {
 
 		// given no windows
 		const fchrome = new FakePromisingChromeAPI([]);
@@ -424,9 +424,9 @@ describe.skip('creating windows', async () => {
 
 ////
 
-describe.skip('updating windows', async () => {
+describe('updating windows', async () => {
 
-	test('resizing a window', async () => {
+	test.skip('resizing a window', async () => {
 
 		// given 1 window
 		const fchrome = initialiseFakeChromeAPI('[v(v)]');
@@ -457,9 +457,9 @@ describe.skip('updating windows', async () => {
 	});
 });
 
-describe.skip('updating tabs', async () => {
+describe('updating tabs', async () => {
 
-	test('selecting an inactive tab in a focused window', async () => {
+	test.skip('selecting an inactive tab in a focused window', async () => {
 
 		// given 1 focused window with a two tabs
 		const fchrome = initialiseFakeChromeAPI('[fv(v,av)]');
@@ -491,15 +491,15 @@ describe.skip('updating tabs', async () => {
 
 	});
 
-	test('selecting an inactive tab in a non-focused window', async () => {
+	test.skip('selecting an inactive tab in a non-focused window', async () => {
 		// TODO
 	});
 
-	test('selecting an tab that is already selected in a focused window', async () => {
+	test.skip('selecting an tab that is already selected in a focused window', async () => {
 		// TODO
 	});
 
-	test('selecting an tab that is already selected in a non-focused window', async () => {
+	test.skip('selecting an tab that is already selected in a non-focused window', async () => {
 		// TODO
 	});
 });

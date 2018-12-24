@@ -7,12 +7,6 @@ import { initialiseFakeChromeAPI } from '../initialise-fake-chrome-api';
 import FakePromisingChromeAPI from 'chrome-api/FakePromisingChromeAPI';
 import { parseSessionString } from '../../utils/session-string-parser';
 
-export function wait() {
-	return new Promise((resolve, reject) => {
-		setTimeout(resolve, 1);
-	});
-}
-
 export async function createProvider(sessionString: string) {
 	const session = parseSessionString(sessionString);
 	const fchrome = initialiseFakeChromeAPI(session);
