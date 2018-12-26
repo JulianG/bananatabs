@@ -1,4 +1,4 @@
-import * as BT from '../../model/CoreTypes';
+import * as BT from '../model/CoreTypes';
 
 interface ChromeEvent {
 	addListener: Function;

@@ -1,5 +1,5 @@
-import * as BT from '../../model/CoreTypes';
-import SessionPersistence from '../../model/SessionPersistence';
+import * as BT from '../model/CoreTypes';
+import SessionPersistence from '../model/SessionPersistence';
 
 export default class RAMSessionPersistence implements SessionPersistence {
 

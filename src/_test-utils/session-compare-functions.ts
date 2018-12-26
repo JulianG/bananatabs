@@ -1,4 +1,4 @@
-import * as BT from '../../model/CoreTypes';
+import * as BT from '../model/CoreTypes';
 
 export function compareSessions(s0: BT.Session, s1: BT.Session): boolean {
 	const sw0 = s0.windows;

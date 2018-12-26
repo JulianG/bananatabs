@@ -7,9 +7,9 @@ import {
   getTabsVisibilities,
   getTabsInWindow,
   renderBananaTabs
-} from './__test__/bananatabs.utils';
+} from './_test-utils/bananatabs.utils';
 
-import { wait, compareSessions } from './utils/test-utils/';
+import { wait, compareSessions } from './_test-utils';
 
 import { stringToSession } from './serialisation/MarkdownSerialisation';
 

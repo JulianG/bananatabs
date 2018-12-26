@@ -1,7 +1,7 @@
 import { initialiseFakeChromeAPI } from './initialise-fake-chrome-api';
 import { parseSessionString } from './session-string-parser';
 
-import './test-utils/expect-extend-functions';
+import '../_test-utils/expect-extend-functions';
 
 describe('testing the tests utils: fake chrome initialiser', async () => {
 

@@ -1,9 +1,9 @@
 import * as BT from '../model/CoreTypes';
-import { compareSessions } from '../utils/test-utils/';
+import { compareSessions } from '../_test-utils/';
 
 import { convertLegacySession } from './JSONSerialisation';
 
-const testFiles = '../utils/test-utils/session-merger-test-files/';
+const testFiles = '../_test-utils/session-merger-test-files/';
 
 test('converted session is valid', () => {
 

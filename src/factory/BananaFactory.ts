@@ -16,7 +16,7 @@ import SessionMutator, {
 } from '../model/mutators/SessionMutator';
 
 import LocalStorageSessionPersistence from '../chrome/LocalStorageSessionPersistence';
-import RAMSessionPersistence from '../utils/test-utils/RAMSessionPersistence';
+import RAMSessionPersistence from '../utils/RAMSessionPersistence';
 import { Session } from '../model/CoreTypes';
 
 export default class BananaFactory {

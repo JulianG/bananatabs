@@ -1,4 +1,4 @@
-import FakePromisingChromeAPI from '../../chrome-api/FakePromisingChromeAPI';
+import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
 import { AllCallbacks } from './expect-extend-functions';
 
 export function getAllCallbacks(fchrome: FakePromisingChromeAPI) {

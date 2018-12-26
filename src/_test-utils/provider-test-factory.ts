@@ -1,11 +1,11 @@
-import * as BT from '../../model/CoreTypes';
-import ChromeBrowserController from '../../chrome/ChromeBrowserController';
-import LiveSessionMerger, { DefaultLiveSessionMerger } from '../../model/mergers/LiveSessionMerger';
-import RAMSessionPersistence from './RAMSessionPersistence';
-import DefaultSessionProvider from '../../model/DefaultSessionProvider';
-import { initialiseFakeChromeAPI } from '../initialise-fake-chrome-api';
+import * as BT from '../model/CoreTypes';
+import ChromeBrowserController from '../chrome/ChromeBrowserController';
+import LiveSessionMerger, { DefaultLiveSessionMerger } from '../model/mergers/LiveSessionMerger';
+import RAMSessionPersistence from '../utils/RAMSessionPersistence';
+import DefaultSessionProvider from '../model/DefaultSessionProvider';
+import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 import FakePromisingChromeAPI from 'chrome-api/FakePromisingChromeAPI';
-import { parseSessionString } from '../../utils/session-string-parser';
+import { parseSessionString } from '../utils/session-string-parser';
 
 export async function createProvider(sessionString: string) {
 	const session = parseSessionString(sessionString);

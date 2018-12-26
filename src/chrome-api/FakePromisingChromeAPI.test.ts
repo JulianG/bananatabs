@@ -1,6 +1,6 @@
 import FakePromisingChromeAPI from './FakePromisingChromeAPI';
-import '../utils/test-utils/expect-extend-functions';
-import { getAllCallbacks } from '../utils/test-utils/fake-chrome-test-utils';
+import '../_test-utils/expect-extend-functions';
+import { getAllCallbacks } from '../_test-utils/fake-chrome-test-utils';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 
 describe('FakePromisingChromeAPI closing windows and tabs', async () => {

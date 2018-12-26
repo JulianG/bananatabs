@@ -5,8 +5,9 @@ import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
 import BananaFactory from '../factory/BananaFactory';
 import BananaTabs from '../BananaTabs';
-import { wait } from '../utils/test-utils';
-export { wait } from '../utils/test-utils';
+import { wait } from './';
+
+export { wait };
 
 // tslint:disable no-any
 export async function renderBananaTabs(live: string, stored: string | null = null) {
