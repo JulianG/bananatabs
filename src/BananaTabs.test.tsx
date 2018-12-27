@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { fireEvent, getByTestId, cleanup } from 'react-testing-library';
+import { fireEvent /*, getByTestId, cleanup*/ } from 'react-testing-library';
 import 'react-testing-library/cleanup-after-each';
 
 import {
@@ -91,7 +90,7 @@ window 2:
   test('hiding tab', async () => {
     //
     // given an initial rendered app
-    const { container, fchrome, provider, debug, getTabVisibilityToggle } = await renderBananaTabs(`
+    const { /*container, debug, */fchrome, provider, getTabVisibilityToggle } = await renderBananaTabs(`
     window 1:
      * http://tab-1.1/
      * http://tab-1.2/
