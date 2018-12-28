@@ -11,7 +11,7 @@ import { wait } from '../_test-utils';
 
 describe('BananaTabs Tests: Initial State', async () => {
   //
-  test('UI snapshot', async () => {
+  test('initial UI snapshot', async () => {
     //
     // given an initial state with 2 windows
     const windows = `
@@ -42,15 +42,15 @@ describe('BananaTabs Tests: Initial State', async () => {
     // which are identical
 
     const live = `
-window 1:
- * http://tab-1.1/
- * http://tab-1.2/
- * http://tab-1.3/
+      window 1:
+      * http://tab-1.1/
+      * http://tab-1.2/
+      * http://tab-1.3/
 
-window 2:
- * http://tab-2.1/
- * http://tab-2.2/
- * http://tab-2.3/
+      window 2:
+      * http://tab-2.1/
+      * http://tab-2.2/
+      * http://tab-2.3/
     `;
     const stored = live;
 
