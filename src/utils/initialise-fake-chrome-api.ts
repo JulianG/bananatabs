@@ -10,7 +10,6 @@ export function initialiseFakeChromeAPI(session: string | BT.Session) {
 function initialiseFchromeFromSession(session: BT.Session) {
 	const fchrome = new FakePromisingChromeAPI();
 	const visibleWindows = session.windows.filter(w => w.visible);
-	fchrome.dispatchEnabled = false;
 	fchrome.fakeWindows = visibleWindows.map((w: BT.Window) => {
 		const win = fchrome.fake.windows.create({ focused: w.focused });
 		win!.tabs!.splice(0, 1); // removing first tab because it's chrome://newtab/
@@ -28,6 +27,5 @@ function initialiseFchromeFromSession(session: BT.Session) {
 		});
 		return win;
 	});
-	fchrome.dispatchEnabled = true;
-	return fchrome;
+	return FakePromisingChromeAPI.clone(fchrome);
 }
