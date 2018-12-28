@@ -1,0 +1,288 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BananaTabs snapshot tests basic ui markup 1`] = `
+<div>
+  <div>
+    <div>
+      <h3>
+        <img
+          class="app-icon"
+          src="/icons/app-icon.png"
+        />
+         
+        <span>
+          Banana Tabs!
+        </span>
+         
+        <div
+          class="credits"
+          style="display: inline;"
+        >
+          BETA
+        </div>
+      </h3>
+    </div>
+    <div>
+      <div
+        class="session dl-list"
+        style="display: block;"
+      >
+        <div
+          class="dl-item   "
+        >
+          <div
+            class="window-group   visible"
+            id="window-group"
+          >
+            <div
+              class="item-row"
+            >
+              <img
+                class="tool icon "
+                id="disclosure"
+                src="[object Object]"
+                title="Collapse"
+              />
+              <img
+                class="tool icon"
+                id="visibility-visible"
+                src="[object Object]"
+                title="Hide Window"
+              />
+              <span
+                class="window-title"
+              >
+                window 1
+                 
+                <span />
+                 
+                <span />
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
+            >
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-1.1/
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
+            >
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-1.2/
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
+            >
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-1.3/
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="dl-item   "
+        >
+          <div
+            class="window-group   visible"
+            id="window-group"
+          >
+            <div
+              class="item-row"
+            >
+              <img
+                class="tool icon "
+                id="disclosure"
+                src="[object Object]"
+                title="Collapse"
+              />
+              <img
+                class="tool icon"
+                id="visibility-visible"
+                src="[object Object]"
+                title="Hide Window"
+              />
+              <span
+                class="window-title"
+              >
+                window 2
+                 
+                <span />
+                 
+                <span />
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
+            >
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-2.1/
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
+            >
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-2.2/
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
+            >
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-2.3/
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="dl-item floating"
+          style="pointer-events: none; position: absolute; left: 0px; top: 0px; width: 0px; height: 0px;"
+        />
+      </div>
+      <div
+        class="command-buttons"
+      >
+        <button
+          class="ok"
+        >
+          Add links
+        </button>
+        <span />
+        <button
+          class="cancel"
+        >
+          Share all windows
+        </button>
+      </div>
+    </div>
+    <div
+      class="credits"
+    >
+      <p>
+        <strong>
+          BananaTabs! 
+          <a
+            class="version"
+            href="#"
+            title=""
+          >
+            v
+            0.27.3
+          </a>
+        </strong>
+        <br />
+        Developed by Julian Garamendy.
+        <br />
+        Icons designed by Dave Gandy from 
+        <a
+          href="https://www.flaticon.com/packs/font-awesome"
+          target="_blank"
+        >
+          FlatIcon
+        </a>
+        . - Banana icon by Freepik from 
+        <a
+          href="https://www.flaticon.com/free-icon/banana_688828"
+          target="_blank"
+        >
+          FlatIcon
+        </a>
+        .
+      </p>
+    </div>
+  </div>
+</div>
+`;
