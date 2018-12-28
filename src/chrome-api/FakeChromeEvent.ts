@@ -14,15 +14,9 @@ export class FakeChromeEvent<S extends T> implements chrome.events.Event<T> {
 
   fakeDispatch(...args: any[]) {
     const list = this.list;
-    // list.forEach(cb => {
-    // 	cb(...args);
-    // });
-    const f = () => {
-      list.forEach(cb => {
-        cb(...args);
-      });
-    };
-    setTimeout(f, 1);
+    list.forEach(cb => {
+    	cb(...args);
+    });
   }
 
 	getRules() {
