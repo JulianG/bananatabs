@@ -15,42 +15,48 @@ import { stringToSession } from '../serialisation/MarkdownSerialisation';
 describe('BananaTabs Tests: Toggling Visibility', async () => {
   //
   describe('Hiding and Showing Tabs', async () => {
+    //
+
+    const renderInitialBananaTabs = async () => {
+      return renderBananaTabs(`
+        window 1:
+        * http://tab-1.1/
+        * http://tab-1.2/
+        * http://tab-1.3/
+
+        window 2:
+        * http://tab-2.1/
+        * http://tab-2.2/
+        * http://tab-2.3/
+      `);
+    };
+
     test('hiding tab', async () => {
       //
       // given an initial rendered app
-      const { /*container, debug, */ fchrome, provider, getTabVisibilityToggle } = await renderBananaTabs(`
-    window 1:
-     * http://tab-1.1/
-     * http://tab-1.2/
-     * http://tab-1.3/
-    
-    window 2:
-     * http://tab-2.1/
-     * http://tab-2.2/
-     * http://tab-2.3/
-        `);
-
-      // tslint:disable no-debugger
-      debugger;
+      const {
+        /*container, debug, */
+        fchrome,
+        provider,
+        getTabVisibilityToggle
+      } = await renderInitialBananaTabs();
 
       // when the button to hide a tab is clicked
       const btn = getTabVisibilityToggle(0, 2);
       fireEvent.click(btn);
 
       // expect the tab to be hidden!
-      const expectedSession = stringToSession(`
-window 1:
- * http://tab-1.1/
- * http://tab-1.2/
- ~ http://tab-1.3/
+      expect(compareSessions(provider.session, stringToSession(`
+      window 1:
+      * http://tab-1.1/
+      * http://tab-1.2/
+      ~ http://tab-1.3/
 
-window 2:
- * http://tab-2.1/
- * http://tab-2.2/
- * http://tab-2.3/  
-    `);
-
-      expect(compareSessions(expectedSession, provider.session)).toBeTruthy();
+      window 2:
+      * http://tab-2.1/
+      * http://tab-2.2/
+      * http://tab-2.3/   
+      `))).toBe(true);
 
       // also expect only two tabs in fchrome
       await wait(2);
