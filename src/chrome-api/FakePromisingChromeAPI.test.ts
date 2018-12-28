@@ -1,6 +1,6 @@
 import FakePromisingChromeAPI from './FakePromisingChromeAPI';
 import '../_test-utils/expect-extend-functions';
-import { getAllCallbacks, resetAllCallbacks, countCalls } from '../_test-utils/fake-chrome-test-utils';
+import { getAllCallbacks } from '../_test-utils/fake-chrome-test-utils';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 import { wait } from '../_test-utils';
 
