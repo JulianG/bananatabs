@@ -22,6 +22,8 @@ export default class ChromeAPIView extends React.Component<Props, State> {
 
   componentDidMount() {
     this.browserEventDispatcher.addListener(this.browserEventHandler);
+    //
+    this.browserEventHandler();
   }
 
   componentWillUnmount() {
