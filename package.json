@@ -13,6 +13,7 @@
     "start": "react-scripts-ts start",
     "build-qa": "node _build-and-qa.js",
     "test": "react-scripts-ts test --env=jsdom",
+    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config=jest.config.js",
     "test:coverage": "react-scripts-ts test --env=jsdom --coverage --watch",
     "tsc": "./node_modules/typescript/bin/tsc --noEmit",
     "eject": "react-scripts-ts eject",
