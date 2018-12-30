@@ -5,7 +5,7 @@ import {
   /*getWindowGroups,
   getTabsVisibilities,
   getTabsInWindow,*/
-  renderBananaTabs
+  renderBananaTabs,
 } from '../_test-utils/bananatabs.utils';
 
 import { wait, compareSessions } from '../_test-utils';
@@ -38,7 +38,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
         /*container, debug, */
         fchrome,
         provider,
-        getTabVisibilityToggle
+        getTabVisibilityToggle,
       } = await renderInitialBananaTabs();
 
       // when the button to hide a tab is clicked
@@ -46,7 +46,10 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       fireEvent.click(btn);
 
       // expect the tab to be hidden!
-      expect(compareSessions(provider.session, stringToSession(`
+      expect(
+        compareSessions(
+          provider.session,
+          stringToSession(`
       window 1:
       * http://tab-1.1/
       * http://tab-1.2/
@@ -56,7 +59,9 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       * http://tab-2.1/
       * http://tab-2.2/
       * http://tab-2.3/   
-      `))).toBe(true);
+      `)
+        )
+      ).toBe(true);
 
       // also expect only two tabs in fchrome
       await wait(2);

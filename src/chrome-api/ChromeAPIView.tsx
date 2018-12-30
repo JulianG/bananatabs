@@ -42,7 +42,7 @@ export default class ChromeAPIView extends React.Component<Props, State> {
   browserEventHandler = async () => {
     const windows = await this.props.chromeAPI.windows.getAll({});
     this.setState({ windows });
-  }
+  };
 }
 
 function stateToString(windows: chrome.windows.Window[]): string {
@@ -50,10 +50,15 @@ function stateToString(windows: chrome.windows.Window[]): string {
 }
 
 function windowToString(w: chrome.windows.Window): string {
-  return `${w.id} (window):\n` + (w.tabs || []).map(tabToString).join('\n') + '\n';
+  return (
+    `${w.id} (window):\n` + (w.tabs || []).map(tabToString).join('\n') + '\n'
+  );
 }
 
 function tabToString(t: chrome.tabs.Tab): string {
-  const title = t.title !== t.url && t.title !== '' && t.title !== undefined ? t.title + ' ' : '';
+  const title =
+    t.title !== t.url && t.title !== '' && t.title !== undefined
+      ? t.title + ' '
+      : '';
   return `- ${t.id} - ${title}${t.url || ''} ${t.status || ''}`;
 }

@@ -39,4 +39,3 @@ export const live: string = `:
 * https://orlo.org
 * https://randall.net
 `;
-

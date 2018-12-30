@@ -1,6 +1,11 @@
 // tslint:disable no-unused-variable
 import * as React from 'react';
-import { render, queryAllByAttribute, queryByAltText, getByTestId } from 'react-testing-library';
+import {
+  render,
+  queryAllByAttribute,
+  queryByAltText,
+  getByTestId,
+} from 'react-testing-library';
 import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
 import BananaFactory from '../factory/BananaFactory';
@@ -10,12 +15,17 @@ import { wait } from '.';
 export { wait };
 
 // tslint:disable no-any
-export async function renderBananaTabs(live: string, stored: string | null = null) {
+export async function renderBananaTabs(
+  live: string,
+  stored: string | null = null
+) {
   stored = stored !== null ? stored : live;
   const factory = getFactory(live, stored);
   const fchrome = factory.getChromeAPI() as FakePromisingChromeAPI;
 
-  const { container, debug } = render(React.createElement(BananaTabs, { factory }));
+  const { container, debug } = render(
+    React.createElement(BananaTabs, { factory })
+  );
   await wait();
   const provider = factory.getSessionProvider();
 
@@ -31,9 +41,11 @@ function getFunctions(container: HTMLElement) {
       return getTabsInWindow(getWindowGroups(container)[windowIndex])[tabIndex];
     },
     getTabVisibilityToggle: (windowIndex: number, tabIndex: number) => {
-      const tab = getTabsInWindow(getWindowGroups(container)[windowIndex])[tabIndex];
+      const tab = getTabsInWindow(getWindowGroups(container)[windowIndex])[
+        tabIndex
+      ];
       return getByTestId(tab, 'visibility-toggle');
-    }
+    },
   };
 }
 
