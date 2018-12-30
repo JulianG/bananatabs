@@ -67,49 +67,51 @@ describe('LiveSessionMerger', () => {
     expect(mws[0].tabs[0].visible).toBeTruthy();
     expect(mws[0].tabs[1].visible).toBeFalsy();
   });
+});
 
+describe('Interaction tests', () => {
   test('when no windows visible. merged session is same as stored session', () => {
-    testSessionsMatch('no-windows');
+    testSessionsMatch('no-windows'); // TODO: remove
   });
 
   test('when no windows visible. after opening a new window.', () => {
-    testSessionsMatch('new-tab');
+    testSessionsMatch('new-tab'); // TODO: remove
   });
 
   test('when there is only one tab and it is empty. onTabsUpdated status:"complete".', () => {
-    testSessionsMatch('on-tab-status-complete');
+    testSessionsMatch('on-tab-status-complete'); // TODO: remove
   });
 
   test('when closing or deleting a tab', () => {
-    testSessionsMatch('on-tabs-removed');
+    testSessionsMatch('on-tabs-removed'); // TODO: remove
   });
 
   test('when hiding a tab', () => {
-    testSessionsMatch('when-hiding-tab');
+    testSessionsMatch('when-hiding-tab'); // TODO: remove
   });
 
   test('when hiding a window', () => {
-    testSessionsMatch('when-hiding-window');
+    testSessionsMatch('when-hiding-window'); // TODO: remove
   });
 
   test('when dragging a tab to a new window', () => {
-    testSessionsMatch('when-dragging-tab-out');
+    testSessionsMatch('when-dragging-tab-out'); // TODO: remove
   });
 
   test('when dropping a tab to an existing window', () => {
-    testSessionsMatch('when-dropping-tab-in');
+    testSessionsMatch('when-dropping-tab-in'); // TODO: remove
   });
 
   test('when reopening browser with no changes', () => {
-    testSessionsMatch('restoring-session-no-changes');
+    testSessionsMatch('restoring-session-no-changes'); // TODO: remove
   });
 
   test('when reopening browser after having added 1 tab to a window with 2 tabs', () => {
-    testSessionsMatch('restoring-session-adding-1-to-2');
+    testSessionsMatch('restoring-session-adding-1-to-2'); // TODO: remove
   });
 
   test('when reopening browser after having added 1 tab to a window with 4 tabs', () => {
-    testSessionsMatch('restoring-session-adding-1-to-4');
+    testSessionsMatch('restoring-session-adding-1-to-4'); // TODO: remove
   });
 
   ///

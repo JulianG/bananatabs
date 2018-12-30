@@ -62,7 +62,8 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
             'pushing a hidden window: ' +
               storedWindow.id +
               ' ' +
-              storedWindow.title
+              storedWindow.title +
+              (storedWindow.tabs.map(t => t.id).join(','))
           );
           storedWindow.focused = false;
           storedWindow.visible = false;
@@ -84,7 +85,9 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
       );
     });
 
-    console.group('adding nonMatchedWindows...');
+    console.group(
+      `adding nonMatchedWindows... (${nonMatchedWindows.map(nmw => nmw.id)})`
+    );
     const newSessionWindows = [...mergedSessionWindows, ...nonMatchedWindows];
     console.table(nonMatchedWindows);
     console.groupEnd();
@@ -93,7 +96,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
 
     return {
       windows: newSessionWindows,
-      panelWindow: live.panelWindow,
+      panelWindow: live.panelWindow
     };
   }
 
