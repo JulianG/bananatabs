@@ -3,11 +3,9 @@ import { compareSessions } from '../_test-utils/';
 
 import { convertLegacySession } from './JSONSerialisation';
 
-const testFiles = '../_test-utils/session-merger-test-files/';
-
 test('converted session is valid', () => {
   // given a legacy session
-  const legacySession = require(testFiles + 'legacy-session.json');
+  const legacySession = require('./_test-files/legacy-session.json');
 
   // when converting it
   const convertedSession: BT.Session = convertLegacySession(legacySession);
@@ -18,7 +16,7 @@ test('converted session is valid', () => {
 
 test('conversion of legacy session: "geometry" => "bounds" ', () => {
   // given a legacy session
-  const legacySession = require(testFiles + 'legacy-session.json');
+  const legacySession = require('./_test-files/legacy-session.json');
 
   // when converting it
   const convertedSession: BT.Session = convertLegacySession(legacySession);
@@ -35,7 +33,7 @@ test('conversion of legacy session: "geometry" => "bounds" ', () => {
 
 test('conversion of current session: "bounds" => "bounds"', () => {
   // given a legacy session
-  const currentSession = require(testFiles + 'current-session.json');
+  const currentSession = require('./_test-files/current-session.json');
 
   // when converting it
   const convertedSession: BT.Session = convertLegacySession(currentSession);

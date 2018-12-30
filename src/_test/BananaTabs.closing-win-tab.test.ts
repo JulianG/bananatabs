@@ -109,3 +109,15 @@ describe('BananaTabs Tests: Interaction from browser', async () => {
     expect(provider.session.windows[0].visible).toBe(false);
   });
 });
+
+
+
+// TODO: drag and drop of tabs over different windows?
+
+test.skip('when dragging a tab to a new window', () => {
+// 
+});
+
+test.skip('when dropping a tab to an existing window', () => {
+// 
+});
