@@ -22,7 +22,10 @@ if (hasChrome) {
 } else {
   App = () => {
     const chromeAPI = factory.getChromeAPI();
-
+    
+    // tslint:disable-next-line no-string-literal
+    window['chromeAPI'] = chromeAPI;
+    
     return (
       <div className="split">
         <div className="split-bananatabs">
