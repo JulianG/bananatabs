@@ -26,5 +26,5 @@ function convertToWindow(w: LegacyWindow | BT.Window): BT.Window {
 }
 
 function isLegacyWindow(w: LegacyWindow | BT.Window): w is LegacyWindow {
-  return (<LegacyWindow>w).geometry !== undefined;
+  return (<LegacyWindow> w).geometry !== undefined;
 }
