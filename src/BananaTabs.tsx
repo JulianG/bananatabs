@@ -31,7 +31,10 @@ export default class BananaTabs extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    console.assert(MANIFEST.version !== undefined, 'manifest.json must contain a "version" key.');
+    console.assert(
+      MANIFEST.version !== undefined,
+      'manifest.json must contain a "version" key.'
+    );
     this.version = MANIFEST.version || '0.0';
     this.buildString = '';
 
@@ -39,7 +42,10 @@ export default class BananaTabs extends React.Component<Props, State> {
 
     this.sessionMutator = factory.getSessionMutator();
     this.sessionProvider = factory.getSessionProvider();
-    const mutator = new WindowAndTabMutator(this.sessionProvider, factory.getBrowserController());
+    const mutator = new WindowAndTabMutator(
+      this.sessionProvider,
+      factory.getBrowserController()
+    );
     this.tabMutator = this.windowMutator = mutator;
   }
 
@@ -54,7 +60,9 @@ export default class BananaTabs extends React.Component<Props, State> {
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResizeEvent);
     this.sessionProvider.onSessionChanged = session => {
-      console.warn('BananaTabs.componentWillUnmount -> sessionProvider.onSessionChanged');
+      console.warn(
+        'BananaTabs.componentWillUnmount -> sessionProvider.onSessionChanged'
+      );
     };
   }
 

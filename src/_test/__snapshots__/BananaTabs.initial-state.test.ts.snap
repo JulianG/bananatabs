@@ -253,7 +253,8 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
     >
       <p>
         <strong>
-          BananaTabs! 
+          BananaTabs!
+           
           <a
             class="version"
             href="#"

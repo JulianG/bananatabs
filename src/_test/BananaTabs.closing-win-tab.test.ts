@@ -26,6 +26,4 @@ describe('BananaTabs Tests: Interaction from browser', async () => {
   test('closing named window from the browser', () => {
     // TODO: write this
   });
-
-
 });

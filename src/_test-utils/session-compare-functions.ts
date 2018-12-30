@@ -34,7 +34,8 @@ function compareWindows(w0: BT.Window, w1: BT.Window): boolean {
 }
 
 function compareTabLists(tl0: BT.Tab[], tl1: BT.Tab[]): boolean {
-  const rsp = tl0.length === tl1.length && tl0.every((t0, i) => compareTab(t0, tl1[i]));
+  const rsp =
+    tl0.length === tl1.length && tl0.every((t0, i) => compareTab(t0, tl1[i]));
   if (!rsp) {
     const l0: string = JSON.stringify(tl0, null, 2);
     const l1: string = JSON.stringify(tl1, null, 2);

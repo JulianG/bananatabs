@@ -4,7 +4,10 @@ import { stringToSession } from '../../serialisation/MarkdownSerialisation';
 import * as BT from '../../model/CoreTypes';
 import { compareSessions } from '../../_test-utils/';
 
-function mergeSessions(live: string, stored: string): { live: BT.Session; stored: BT.Session; merged: BT.Session } {
+function mergeSessions(
+  live: string,
+  stored: string
+): { live: BT.Session; stored: BT.Session; merged: BT.Session } {
   const liveSession = stringToSession(live);
   const storedSession = stringToSession(stored);
   const merger = new DefaultLiveSessionMerger();
@@ -126,7 +129,9 @@ describe('LiveSessionMerger', () => {
 
   const testingFiles = '../../_test-utils/session-merger-test-files/';
 
-  function getSessions(name: string): { live: BT.Session; stored: BT.Session; expected: BT.Session } {
+  function getSessions(
+    name: string
+  ): { live: BT.Session; stored: BT.Session; expected: BT.Session } {
     const live: BT.Session = require(`${testingFiles}${name}/live-session.json`);
     const stored: BT.Session = require(`${testingFiles}${name}/stored-session.json`);
     const expected: BT.Session = require(`${testingFiles}${name}/expected-session.json`);

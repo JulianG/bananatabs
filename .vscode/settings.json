@@ -6,5 +6,9 @@
         "statusBar.background" : "#ffcc00",
         "statusBar.foreground" : "#000",
         "sideBar.background": "#221b00"
-    }
+    },
+    "prettier.semi": false,
+    "prettier.singleQuote": true,
+    "prettier.trailingComma": "es5",
+    "prettier.tslintIntegration": true
 }

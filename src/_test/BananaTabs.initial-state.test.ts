@@ -4,7 +4,7 @@ import {
   getWindowGroups,
   getTabsVisibilities,
   getTabsInWindow,
-  renderBananaTabs
+  renderBananaTabs,
 } from '../_test-utils/bananatabs.utils';
 
 import { wait } from '../_test-utils';
@@ -67,11 +67,18 @@ describe('BananaTabs Tests: Initial State', async () => {
     const [window1, window2] = windowGroups;
 
     // also expect 3 visible tabs in the first window
-    expect(getTabsVisibilities(getTabsInWindow(window1))).toMatchObject([true, true, true]);
+    expect(getTabsVisibilities(getTabsInWindow(window1))).toMatchObject([
+      true,
+      true,
+      true,
+    ]);
 
     // also expect 3 visible tabs in the second window
-    expect(getTabsVisibilities(getTabsInWindow(window2))).toMatchObject([true, true, true]);
+    expect(getTabsVisibilities(getTabsInWindow(window2))).toMatchObject([
+      true,
+      true,
+      true,
+    ]);
     // as described in the initialisation strings
   });
-
 });

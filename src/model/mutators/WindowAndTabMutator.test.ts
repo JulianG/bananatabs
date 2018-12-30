@@ -7,7 +7,7 @@ async function initialise(sessionString: string) {
     provider,
     fchrome,
     browserController,
-    onSessionChanged
+    onSessionChanged,
   } = await createIniatilisedProvider(sessionString);
   const mutator = new WindowAndTabMutator(provider, browserController);
   return { provider, fchrome, browserController, mutator, onSessionChanged };

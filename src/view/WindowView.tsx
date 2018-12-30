@@ -9,221 +9,214 @@ import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
 
 const Icons = {
-	Edit: require('./icons/edit.svg'),
-	On: require('./icons/on.svg'),
-	Off: require('./icons/off.svg'),
-	Delete: require('./icons/delete.svg'),
-	ArrowDown: require('./icons/arrow-down.svg'),
-	ArrowRight: require('./icons/arrow-right.svg')
+  Edit: require('./icons/edit.svg'),
+  On: require('./icons/on.svg'),
+  Off: require('./icons/off.svg'),
+  Delete: require('./icons/delete.svg'),
+  ArrowDown: require('./icons/arrow-down.svg'),
+  ArrowRight: require('./icons/arrow-right.svg'),
 };
 
 interface Props {
-	window: BT.Window;
-	windowMutator: WindowMutator;
-	tabMutator: TabMutator;
-	debug?: boolean;
-	onCopy(windowId: number): void;
+  window: BT.Window;
+  windowMutator: WindowMutator;
+  tabMutator: TabMutator;
+  debug?: boolean;
+  onCopy(windowId: number): void;
 }
 
 interface State {
-	toolsVisible: boolean;
-	renaming: boolean;
+  toolsVisible: boolean;
+  renaming: boolean;
 }
 
 export default class WindowView extends React.Component<Props, State> {
+  readonly state: State = { toolsVisible: false, renaming: false };
 
-	readonly state: State = { toolsVisible: false, renaming: false };
+  constructor(props: Props) {
+    super(props);
 
-	constructor(props: Props) {
-		super(props);
+    this.handleStartRename = this.handleStartRename.bind(this);
+    this.handleCancelRename = this.handleCancelRename.bind(this);
+    this.handleSubmitRename = this.handleSubmitRename.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleCopy = this.handleCopy.bind(this);
+    this.handleToggleVisibility = this.handleToggleVisibility.bind(this);
+    this.handleToggleCollapse = this.handleToggleCollapse.bind(this);
+    this.showTools = this.showTools.bind(this);
+    this.hideTools = this.hideTools.bind(this);
+  }
 
-		this.handleStartRename = this.handleStartRename.bind(this);
-		this.handleCancelRename = this.handleCancelRename.bind(this);
-		this.handleSubmitRename = this.handleSubmitRename.bind(this);
-		this.handleDelete = this.handleDelete.bind(this);
-		this.handleCopy = this.handleCopy.bind(this);
-		this.handleToggleVisibility = this.handleToggleVisibility.bind(this);
-		this.handleToggleCollapse = this.handleToggleCollapse.bind(this);
-		this.showTools = this.showTools.bind(this);
-		this.hideTools = this.hideTools.bind(this);
-	}
+  render() {
+    const w = this.props.window;
 
-	render() {
-		const w = this.props.window;
+    const styles = [
+      'window-group',
+      w.focused ? 'focused' : '',
+      this.state.toolsVisible ? 'highlight' : '',
+      w.visible ? 'visible' : 'hidden',
+    ];
 
-		const styles = [
-			'window-group',
-			w.focused ? 'focused' : '',
-			this.state.toolsVisible ? 'highlight' : '',
-			w.visible ? 'visible' : 'hidden'
-		];
+    return (
+      <div id={'window-group'} className={styles.join(' ')}>
+        {this.renderHeader()}
+        {this.props.debug && createDebugInfo(w, ['id'])}
+        {this.renderTabs()}
+      </div>
+    );
+  }
 
-		return (
-			<div
-				id={'window-group'}
-				className={styles.join(' ')}
-			>
-				{this.renderHeader()}
-				{this.props.debug && createDebugInfo(w, ['id'])}
-				{this.renderTabs()}
-			</div>
-		);
-	}
+  private renderHeader() {
+    const w = this.props.window;
+    return (
+      <div
+        className="item-row"
+        onMouseEnter={this.showTools}
+        onMouseLeave={this.hideTools}
+      >
+        {this.renderDisclosureButton()}
+        {this.renderVisibilityIcon()}
+        {!this.state.renaming && this.renderTools()}
+        {this.state.renaming
+          ? this.renderInputTitle(w)
+          : this.renderStaticTitle(w)}
+        {this.state.renaming && (
+          <div className="hint">&nbsp;Enter to save&nbsp;</div>
+        )}
+      </div>
+    );
+  }
 
-	private renderHeader() {
-		const w = this.props.window;
-		return (
-			<div
-				className="item-row"
-				onMouseEnter={this.showTools}
-				onMouseLeave={this.hideTools}
-			>
-				{this.renderDisclosureButton()}
-				{this.renderVisibilityIcon()}
-				{!this.state.renaming && this.renderTools()}
-				{this.state.renaming ?
-					this.renderInputTitle(w) :
-					this.renderStaticTitle(w)}
-				{this.state.renaming && <div className="hint">&nbsp;Enter to save&nbsp;</div>}
-			</div>
-		);
-	}
+  private renderVisibilityIcon() {
+    const w = this.props.window;
+    const visibilityIconSrc = w.visible ? Icons.On : Icons.Off;
+    const visibilityIconText = w.visible ? 'Hide Window' : 'Show Window';
+    const imgId = 'visibility' + (w.visible ? '-visible' : '-hidden');
+    return (
+      <img
+        id={imgId}
+        className="tool icon"
+        src={visibilityIconSrc}
+        title={visibilityIconText}
+        onClick={this.handleToggleVisibility}
+      />
+    );
+  }
 
-	private renderVisibilityIcon() {
-		const w = this.props.window;
-		const visibilityIconSrc = w.visible ? Icons.On : Icons.Off;
-		const visibilityIconText = w.visible ? 'Hide Window' : 'Show Window';
-		const imgId = 'visibility' + (w.visible ? '-visible' : '-hidden');
-		return (
-			<img
-				id={imgId}
-				className="tool icon"
-				src={visibilityIconSrc}
-				title={visibilityIconText}
-				onClick={this.handleToggleVisibility}
-			/>
-		);
-	}
+  private renderTabs() {
+    const w = this.props.window;
+    return (
+      w.expanded &&
+      w.tabs.map((tab, i) => {
+        const key = `win-${w.id}/tab-${tab.id}`;
+        return (
+          <TabView
+            key={key}
+            window={this.props.window}
+            tab={tab}
+            mutator={this.props.tabMutator}
+            debug={this.props.debug}
+          />
+        );
+      })
+    );
+  }
 
-	private renderTabs() {
-		const w = this.props.window;
-		return (
-			w.expanded && w.tabs.map((tab, i) => {
-				const key = `win-${w.id}/tab-${tab.id}`;
-				return (
-					<TabView
-						key={key}
-						window={this.props.window}
-						tab={tab}
-						mutator={this.props.tabMutator}
-						debug={this.props.debug}
-					/>
-				);
-			})
-		);
-	}
+  private renderDisclosureButton() {
+    const w = this.props.window;
+    const iconSrc = w.expanded ? Icons.ArrowDown : Icons.ArrowRight;
+    const iconText = w.expanded ? 'Collapse' : 'Expand';
+    const iconStyles = ['tool', 'icon', w.visible ? '' : 'hidden'];
+    return (
+      <img
+        id="disclosure"
+        className={iconStyles.join(' ')}
+        src={iconSrc}
+        title={iconText}
+        onClick={this.handleToggleCollapse}
+      />
+    );
+  }
 
-	private renderDisclosureButton() {
-		const w = this.props.window;
-		const iconSrc = w.expanded ? Icons.ArrowDown : Icons.ArrowRight;
-		const iconText = w.expanded ? 'Collapse' : 'Expand';
-		const iconStyles = ['tool', 'icon', w.visible ? '' : 'hidden'];
-		return (
-			<img
-				id="disclosure"
-				className={iconStyles.join(' ')}
-				src={iconSrc}
-				title={iconText}
-				onClick={this.handleToggleCollapse}
-			/>
-		);
-	}
+  private renderInputTitle(window: BT.Window): JSX.Element {
+    const title = window.title;
 
-	private renderInputTitle(window: BT.Window): JSX.Element {
+    return (
+      <InputForm
+        className="window-title"
+        text={title}
+        onSubmit={this.handleSubmitRename}
+        onCancel={this.handleCancelRename}
+      />
+    );
+  }
 
-		const title = window.title;
+  private renderStaticTitle(window: BT.Window): JSX.Element {
+    const tabsStr = window.expanded ? '' : ' (' + window.tabs.length + ' tabs)';
+    const title = window.title || 'Window';
+    const fullscreen = window.state === 'fullscreen' ? '(fullscreen)' : '';
 
-		return (
-			<InputForm
-				className="window-title"
-				text={title}
-				onSubmit={this.handleSubmitRename}
-				onCancel={this.handleCancelRename}
-			/>
-		);
-	}
+    return (
+      <span className="window-title" onClick={this.handleStartRename}>
+        {title} <span>{tabsStr}</span> <span>{fullscreen}</span>
+      </span>
+    );
+  }
 
-	private renderStaticTitle(window: BT.Window): JSX.Element {
+  private renderTools() {
+    if (this.state.toolsVisible) {
+      return (
+        <TabToolsView
+          actionIconVisibility={{ rename: true, delete: true, copy: true }}
+          onRenameAction={this.handleStartRename}
+          onDeleteAction={this.handleDelete}
+          onCopyAction={this.handleCopy}
+        />
+      );
+    } else {
+      return null;
+    }
+  }
 
-		const tabsStr = window.expanded ? '' : ' (' + window.tabs.length + ' tabs)';
-		const title = window.title || 'Window';
-		const fullscreen = window.state === 'fullscreen' ? '(fullscreen)' : '';
+  ////
 
-		return (
-			<span
-				className="window-title"
-				onClick={this.handleStartRename}
-			>
-				{title} <span>{tabsStr}</span> <span>{fullscreen}</span>
-			</span>
-		);
-	}
+  private handleCopy() {
+    this.props.onCopy(this.props.window.id);
+  }
 
-	private renderTools() {
-		if (this.state.toolsVisible) {
-			return (
-				<TabToolsView
-					actionIconVisibility={{ rename: true, delete: true, copy: true }}
-					onRenameAction={this.handleStartRename}
-					onDeleteAction={this.handleDelete}
-					onCopyAction={this.handleCopy}
-				/>
-			);
-		} else {
-			return null;
-		}
-	}
+  private handleToggleVisibility() {
+    this.props.windowMutator.toggleWindowVisibility(this.props.window.id);
+  }
 
-	////
+  private handleDelete() {
+    this.props.windowMutator.deleteWindow(this.props.window.id);
+  }
 
-	private handleCopy() {
-		this.props.onCopy(this.props.window.id);
-	}
+  private handleStartRename() {
+    this.setState({ renaming: true });
+  }
 
-	private handleToggleVisibility() {
-		this.props.windowMutator.toggleWindowVisibility(this.props.window.id);
-	}
+  private handleCancelRename() {
+    this.setState({ renaming: false });
+  }
 
-	private handleDelete() {
-		this.props.windowMutator.deleteWindow(this.props.window.id);
-	}
+  private handleSubmitRename(text: string) {
+    this.props.windowMutator.renameWindow(this.props.window.id, text);
+    this.setState({ renaming: false });
+  }
 
-	private handleStartRename() {
-		this.setState({ renaming: true });
-	}
+  private handleToggleCollapse() {
+    if (this.props.window.expanded) {
+      this.props.windowMutator.collapseWindow(this.props.window.id);
+    } else {
+      this.props.windowMutator.expandWindow(this.props.window.id);
+    }
+  }
 
-	private handleCancelRename() {
-		this.setState({ renaming: false });
-	}
-
-	private handleSubmitRename(text: string) {
-		this.props.windowMutator.renameWindow(this.props.window.id, text);
-		this.setState({ renaming: false });
-	}
-
-	private handleToggleCollapse() {
-		if (this.props.window.expanded) {
-			this.props.windowMutator.collapseWindow(this.props.window.id);
-		} else {
-			this.props.windowMutator.expandWindow(this.props.window.id);
-		}
-	}
-
-	private showTools() {
-		this.setState({ toolsVisible: true });
-	}
-	private hideTools() {
-		this.setState({ toolsVisible: false });
-	}
-
+  private showTools() {
+    this.setState({ toolsVisible: true });
+  }
+  private hideTools() {
+    this.setState({ toolsVisible: false });
+  }
 }

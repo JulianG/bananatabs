@@ -39,7 +39,7 @@ export function stringToWindows(str: string): BT.Window[] {
         title: '',
         tabs: [],
         expanded: true,
-        visible: shouldCreateNewWindowVisibility
+        visible: shouldCreateNewWindowVisibility,
       };
       wins.push(win);
     }
@@ -53,14 +53,16 @@ export function stringToWindows(str: string): BT.Window[] {
       win.visible = lastChar === ':';
     }
     if (isTab) {
-      const url = isValidURL(line.trim()) ? line.trim() : extractURL(line.trim());
+      const url = isValidURL(line.trim())
+        ? line.trim()
+        : extractURL(line.trim());
       if (isValidURL(url)) {
         win.tabs.push({
           ...BT.getNullTab(),
           visible: getFirstNonWhitespaceCharacter(line) !== '~',
           url,
           title: url,
-          id: getId()
+          id: getId(),
         });
       }
     }
@@ -96,7 +98,7 @@ function extractURL(line: string) {
 
 function detectLeadOnTabLine(line: string): number {
   const twoChars = line.trim().substr(0, 2);
-  return (twoChars === '* ' || twoChars === '~ ') ? 2 : 0;
+  return twoChars === '* ' || twoChars === '~ ' ? 2 : 0;
 }
 
 function getFirstNonWhitespaceCharacter(line: string): string {

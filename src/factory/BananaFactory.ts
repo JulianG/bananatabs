@@ -8,11 +8,11 @@ import ChromeBrowserController from '../chrome/ChromeBrowserController';
 import SessionProvider from '../model/SessionProvider';
 import DefaultSessionProvider from '../model/DefaultSessionProvider';
 import LiveSessionMerger, {
-  DefaultLiveSessionMerger
+  DefaultLiveSessionMerger,
 } from '../model/mergers/LiveSessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 import SessionMutator, {
-  DefaultSessionMutator
+  DefaultSessionMutator,
 } from '../model/mutators/SessionMutator';
 
 import LocalStorageSessionPersistence from '../chrome/LocalStorageSessionPersistence';
@@ -64,7 +64,7 @@ export default class BananaFactory {
 
   getChromeAPI() {
     if (!this.chromeAPI) {
-     this.chromeAPI = this.createChromeAPI(); 
+      this.chromeAPI = this.createChromeAPI();
     }
     return this.chromeAPI;
   }
@@ -82,5 +82,4 @@ export default class BananaFactory {
       return new LocalStorageSessionPersistence();
     }
   }
-
 }

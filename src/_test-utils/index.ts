@@ -4,5 +4,8 @@ export function wait(d: number = 1) {
   });
 }
 
-export { createProvider, createIniatilisedProvider,  } from './provider-test-factory';
+export {
+  createProvider,
+  createIniatilisedProvider,
+} from './provider-test-factory';
 export { compareSessions } from './session-compare-functions';

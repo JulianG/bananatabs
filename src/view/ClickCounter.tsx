@@ -1,29 +1,30 @@
 import * as React from 'react';
 
 interface Props {
-	onClick(count: number): void;
+  onClick(count: number): void;
 }
 
 interface State {
-	count: number;
+  count: number;
 }
 
 export default class ClickCounter extends React.Component<Props, State> {
+  readonly state: State = { count: 0 };
 
-	readonly state: State = { count: 0 };
+  constructor(props: Props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
-	constructor(props: Props) {
-		super(props);
-		this.handleClick = this.handleClick.bind(this);
-	}
+  render() {
+    return <div onClick={this.handleClick}>{this.props.children}</div>;
+  }
 
-	render() {
-		return <div onClick={this.handleClick}>{this.props.children}</div>;
-	}
-
-	private handleClick() {
-		const updater = (prev: State) => { return { count: prev.count + 1 }; };
-		const afterUpdate = () => this.props.onClick(this.state.count);
-		this.setState(updater, afterUpdate);
-	}
+  private handleClick() {
+    const updater = (prev: State) => {
+      return { count: prev.count + 1 };
+    };
+    const afterUpdate = () => this.props.onClick(this.state.count);
+    this.setState(updater, afterUpdate);
+  }
 }
