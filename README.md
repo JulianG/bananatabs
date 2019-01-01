@@ -13,6 +13,7 @@ https://chrome.google.com/webstore/detail/banana-tabs-by-jg/hphakbojjadmnhhkflbg
 ```sh
 $ npm install
 $ npm start
+$ npm test
 ```
 
 ## Build
