@@ -111,7 +111,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
     );
     const extraLiveTabs = liveTabs.filter(liveTab => {
       return (
-        storedTabs.find(storedTab => storedTab.id === liveTab.id) === undefined
+        storedTabs.find(storedTab => storedTab.url === liveTab.url) === undefined
       );
     });
     console.table(extraLiveTabs);
@@ -122,7 +122,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
       return (
         storedTab.visible === false ||
         (storedTab.visible &&
-          liveTabs.find(liveTab => liveTab.id === storedTab.id))
+          liveTabs.find(liveTab => liveTab.url === storedTab.url))
       );
     });
     console.table(filteredTabs);
@@ -140,7 +140,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
     );
     let highestLiveTabIndex = -1;
     const mergedLiveTabs = mergedTabs.map((tab, i) => {
-      const liveTab = liveTabs.find(lt => lt.id === tab.id);
+      const liveTab = liveTabs.find(lt => lt.url === tab.url);
       highestLiveTabIndex = liveTab ? liveTab.index + 1 : highestLiveTabIndex;
       const newTab = { ...(liveTab || tab) };
       newTab.title = newTab.title || tab.title;

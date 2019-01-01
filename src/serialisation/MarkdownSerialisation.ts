@@ -27,6 +27,7 @@ export function stringToWindows(str: string): BT.Window[] {
   const lines = str.split('\n');
 
   let win: BT.Window;
+  let tabIndex: number;
   let shouldCreateNewWindow: boolean = true;
   let shouldCreateNewWindowVisibility: boolean = true;
   lines.forEach(line => {
@@ -39,8 +40,9 @@ export function stringToWindows(str: string): BT.Window[] {
         title: '',
         tabs: [],
         expanded: true,
-        visible: shouldCreateNewWindowVisibility,
+        visible: shouldCreateNewWindowVisibility
       };
+      tabIndex = 0;
       wins.push(win);
     }
     const isTab = isTabLine(line);
@@ -57,13 +59,17 @@ export function stringToWindows(str: string): BT.Window[] {
         ? line.trim()
         : extractURL(line.trim());
       if (isValidURL(url)) {
+        const visible = getFirstNonWhitespaceCharacter(line) !== '~';
         win.tabs.push({
           ...BT.getNullTab(),
-          visible: getFirstNonWhitespaceCharacter(line) !== '~',
+          visible: visible,
           url,
           title: url,
           id: getId(),
+          listIndex: win.tabs.length,
+          index: tabIndex
         });
+        tabIndex += visible ? 1 : 0;
       }
     }
     if (isEmpty) {
