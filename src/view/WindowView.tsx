@@ -94,6 +94,7 @@ export default class WindowView extends React.Component<Props, State> {
     const imgId = 'visibility' + (w.visible ? '-visible' : '-hidden');
     return (
       <img
+        data-testid="visibility-toggle"
         id={imgId}
         className="tool icon"
         src={visibilityIconSrc}

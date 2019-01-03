@@ -10,13 +10,15 @@ import {
 
 import { wait, compareSessions } from '../_test-utils';
 
-import { stringToSession, windowsToString } from '../serialisation/MarkdownSerialisation';
+import {
+  stringToSession
+  /*windowsToString*/
+} from '../serialisation/MarkdownSerialisation';
 
 describe('BananaTabs Tests: Toggling Visibility', async () => {
   //
   describe('Hiding and Showing Tabs', async () => {
     //
-
     test('hiding tab', async () => {
       //
       // given an initial rendered app
@@ -64,8 +66,51 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       expect(fchrome.fakeWindows[0].tabs!).toHaveLength(2);
     });
 
-    test.skip('showing hidden tab in visible window', async () => {
-       //
+    test('hiding the only tab in a window', async () => {
+      //
+      // given an initial rendered app
+      const {
+        /*container, debug, */
+        fchrome,
+        provider,
+        getTabVisibilityToggle
+      } = await renderBananaTabs(`
+        window 1:
+        * http://tab-1.1/
+
+        window 2:
+        * http://tab-2.1/
+        * http://tab-2.2/
+        * http://tab-2.3/
+      `);
+
+      // when the button to hide a tab is clicked
+      const btn = getTabVisibilityToggle(0, 0);
+      fireEvent.click(btn);
+
+      // expect the tab to be hidden!
+      expect(
+        compareSessions(
+          provider.session,
+          stringToSession(`
+      window 1:
+      ~ http://tab-1.1/
+
+      window 2:
+      * http://tab-2.1/
+      * http://tab-2.2/
+      * http://tab-2.3/   
+      `)
+        )
+      ).toBe(true);
+
+      // also expect only two tabs in fchrome
+      await wait();
+      expect(fchrome.fakeWindows).toHaveLength(1);
+    });
+
+    test('showing hidden tab in visible window', async () => {
+      //
       // given an initial rendered app
       const {
         /*container, debug, */
@@ -88,14 +133,6 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       const btn = getTabVisibilityToggle(0, 1);
       fireEvent.click(btn);
 
-
-      console.log(windowsToString(provider.session.windows));
-      console.log('...');
-      console.log('...');
-      console.log('...');
-      console.log('...');
-      
-
       // expect the tab to be visible!
       expect(
         compareSessions(
@@ -117,25 +154,198 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       // also expect three tabs in fchrome
       await wait(2);
       expect(fchrome.fakeWindows[0].tabs!).toHaveLength(3);
-     
     });
 
-    test.skip('showing hidden tab in hidden window', () => {
-      // TODO: write this
+    test('showing hidden tab in hidden window', async () => {
+      //
+      // given an initial rendered app
+      const {
+        /*container, debug, */
+        fchrome,
+        provider,
+        getTabVisibilityToggle
+      } = await renderBananaTabs(`
+        window 1~
+        * http://tab-1.1/
+        ~ http://tab-1.2/
+        * http://tab-1.3/
+
+        window 2:
+        * http://tab-2.1/
+      `);
+
+      // when the button to show a tab is clicked
+      const btn = getTabVisibilityToggle(0, 1);
+      fireEvent.click(btn);
+
+      await wait();
+
+      // expect the tab to be visible and the window to become visible
+      expect(
+        compareSessions(
+          provider.session,
+          stringToSession(`
+      window 1:
+      * http://tab-1.1/
+      * http://tab-1.2/
+      * http://tab-1.3/
+
+      window 2:
+      * http://tab-2.1/
+      `)
+        )
+      ).toBe(true);
+
+      // also expect two tabs in fchrome (one more than before)
+      await wait();
+      expect(fchrome.fakeWindows).toHaveLength(2);
     });
   });
-  
+
   describe('Hiding and Showing Windows', async () => {
-    test.skip('hiding unnamed window', () => {
-      // TODO: write this
+    //
+    test('hiding unnamed window', async () => {
+      //
+      // given an initial rendered app
+      const {
+        /*container, debug, */
+        fchrome,
+        provider,
+        getWindowVisibilityToggle
+      } = await renderBananaTabs(`
+        :
+        * http://tab-1.1/
+        * http://tab-1.2/
+        * http://tab-1.3/
+
+        window 2:
+        * http://tab-2.1/
+        * http://tab-2.2/
+        * http://tab-2.3/
+      `);
+
+      // when the button to hide a window is clicked
+      const btn = getWindowVisibilityToggle(0);
+      fireEvent.click(btn);
+      await wait();
+
+      // expect the window to be hidden!
+      expect(
+        compareSessions(
+          provider.session,
+          stringToSession(`
+      My Window~
+      * http://tab-1.1/
+      * http://tab-1.2/
+      * http://tab-1.3/
+
+      window 2:
+      * http://tab-2.1/
+      * http://tab-2.2/
+      * http://tab-2.3/   
+      `)
+        )
+      ).toBe(true);
+
+      // also expect only one window in fchrome
+      expect(fchrome.fakeWindows).toHaveLength(1);
+      await wait();
     });
 
-    test.skip('hiding named window', () => {
-      // TODO: write this
+    test('hiding named window', async () => {
+      //
+      // given an initial rendered app
+      const {
+        /*container, debug, */
+        fchrome,
+        provider,
+        getWindowVisibilityToggle
+      } = await renderBananaTabs(`
+        This window has a name:
+        * http://tab-1.1/
+        * http://tab-1.2/
+        * http://tab-1.3/
+
+        window 2:
+        * http://tab-2.1/
+        * http://tab-2.2/
+        * http://tab-2.3/
+      `);
+
+      // when the button to hide a window is clicked
+      const btn = getWindowVisibilityToggle(0);
+      fireEvent.click(btn);
+      await wait();
+
+      // expect the window to be hidden!
+      expect(
+        compareSessions(
+          provider.session,
+          stringToSession(`
+      This window has a name~
+      * http://tab-1.1/
+      * http://tab-1.2/
+      * http://tab-1.3/
+
+      window 2:
+      * http://tab-2.1/
+      * http://tab-2.2/
+      * http://tab-2.3/   
+      `)
+        )
+      ).toBe(true);
+
+      // also expect only one window in fchrome
+      expect(fchrome.fakeWindows).toHaveLength(1);
+      await wait();
     });
 
-    test.skip('showing hidden window', () => {
-      // TODO: write this
+    test('showing hidden window', async () => {
+      //
+      // given an initial rendered app
+      const {
+        /*container, debug, */
+        fchrome,
+        provider,
+        getWindowVisibilityToggle
+      } = await renderBananaTabs(`
+        My Hidden Window~
+        * http://tab-1.1/
+        * http://tab-1.2/
+        * http://tab-1.3/
+
+        My Visible Window:
+        * http://tab-2.1/
+        * http://tab-2.2/
+        * http://tab-2.3/
+      `);
+
+      // when the button to show a hidden window
+      const btn = getWindowVisibilityToggle(0);
+      fireEvent.click(btn);
+      await wait();
+
+      // expect the tab to be hidden!
+      expect(
+        compareSessions(
+          provider.session,
+          stringToSession(`
+      My Hidden Window:
+      * http://tab-1.1/
+      * http://tab-1.2/
+      * http://tab-1.3/
+
+      My Visible Window:
+      * http://tab-2.1/
+      * http://tab-2.2/
+      * http://tab-2.3/   
+      `)
+        )
+      ).toBe(true);
+
+      // also expect two windows in fchrome
+      expect(fchrome.fakeWindows).toHaveLength(2);
+      await wait();
     });
   });
 });

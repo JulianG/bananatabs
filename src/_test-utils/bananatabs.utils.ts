@@ -46,6 +46,10 @@ function getFunctions(container: HTMLElement) {
       ];
       return getByTestId(tab, 'visibility-toggle');
     },
+    getWindowVisibilityToggle: (windowIndex: number) => {
+      const win = getWindowGroups(container)[windowIndex];
+      return getByTestId(win, 'visibility-toggle');
+    }
   };
 }
 

@@ -45,6 +45,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               />
               <img
                 class="tool icon"
+                data-testid="visibility-toggle"
                 id="visibility-visible"
                 src="[object Object]"
                 title="Hide Window"
@@ -145,6 +146,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               />
               <img
                 class="tool icon"
+                data-testid="visibility-toggle"
                 id="visibility-visible"
                 src="[object Object]"
                 title="Hide Window"
