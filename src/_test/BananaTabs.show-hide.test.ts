@@ -19,7 +19,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
   //
   describe('Hiding and Showing Tabs', async () => {
     //
-    test('hiding tab', async () => {
+    test('hiding a tab in a window with multiple tabs', async () => {
       //
       // given an initial rendered app
       const {
@@ -345,6 +345,81 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
 
       // also expect two windows in fchrome
       expect(fchrome.fakeWindows).toHaveLength(2);
+      await wait();
+    });
+
+    test('showing a hidden window then hiding it again', async () => {
+      //
+      // given an initial rendered app
+      const {
+        /*container, debug, */
+        fchrome,
+        provider,
+        getWindowVisibilityToggle
+      } = await renderBananaTabs(`
+        My Hidden Window~
+        * http://tab-1.1/
+        * http://tab-1.2/
+        * http://tab-1.3/
+
+        My Visible Window:
+        * http://tab-2.1/
+        * http://tab-2.2/
+        * http://tab-2.3/
+      `);
+
+      // when the button to show a hidden window
+      fireEvent.click(getWindowVisibilityToggle(0));
+      await wait();
+
+      // expect the tab to be hidden!
+      expect(
+        compareSessions(
+          provider.session,
+          stringToSession(`
+      My Hidden Window:
+      * http://tab-1.1/
+      * http://tab-1.2/
+      * http://tab-1.3/
+
+      My Visible Window:
+      * http://tab-2.1/
+      * http://tab-2.2/
+      * http://tab-2.3/   
+      `)
+        )
+      ).toBe(true);
+
+      // also expect two windows in fchrome
+      expect(fchrome.fakeWindows).toHaveLength(2);
+      await wait();
+
+      // then we'll show the window again
+
+      // when the button to hide the same window is clicked
+      fireEvent.click(getWindowVisibilityToggle(0));
+      await wait();
+
+      // expect the tab to be hidden!
+      expect(
+        compareSessions(
+          provider.session,
+          stringToSession(`
+            My Hidden Window~
+            * http://tab-1.1/
+            * http://tab-1.2/
+            * http://tab-1.3/
+      
+            My Visible Window:
+            * http://tab-2.1/
+            * http://tab-2.2/
+            * http://tab-2.3/   
+            `)
+        )
+      ).toBe(true);
+
+      // also expect two windows in fchrome
+      expect(fchrome.fakeWindows).toHaveLength(1);
       await wait();
     });
   });
