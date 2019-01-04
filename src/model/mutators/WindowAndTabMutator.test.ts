@@ -1,4 +1,3 @@
-import * as BT from '../../model/CoreTypes';
 import WindowAndTabMutator from '../../model/mutators/WindowAndTabMutator';
 import { wait, createIniatilisedProvider } from '../../_test-utils/';
 
@@ -7,7 +6,7 @@ async function initialise(sessionString: string) {
     provider,
     fchrome,
     browserController,
-    onSessionChanged,
+    onSessionChanged
   } = await createIniatilisedProvider(sessionString);
   const mutator = new WindowAndTabMutator(provider, browserController);
   return { provider, fchrome, browserController, mutator, onSessionChanged };
@@ -62,29 +61,33 @@ describe('WindowAndTabMutator tests', () => {
   });
 
   test('show window', async () => {
-    // given an initialised provider with 2 windows, one of them hidden
+    // GIVEN an initialised provider with 2 windows, one of them hidden
     const { provider, mutator, fchrome } = await initialise(
       '[v(v,v)],[!vt(v,v)]'
     );
 
-    // when a hidden window is show via BananaTabs!
+    // WHEN the hidden window is shown via BananaTabs!
     await mutator.showWindow(provider.session.windows[1].id);
     await wait();
 
-    // expect two windows in the fchrome api
+    // EXPECT two windows in the fchrome api
     const fchws = await fchrome.windows.getAll({});
     expect(fchws).toHaveLength(2);
-    // also expect the second window to be visible
+
+    // also EXPECT the second window to be visible
     const recentlyOpenedWindow = provider.session.windows[1];
     expect(recentlyOpenedWindow.visible).toBeTruthy();
 
-    // also expect the ids of the visible tabs in the provider session
+    // also EXPECT the ids of the visible tabs in the provider session
     // to match the ids of the tabs from the fchrome window
-    const findByURL = (tabs: BT.Tab[], url: string) =>
-      tabs.find(t => t.url === url);
-    fchws[1].tabs!.forEach((realTab, i) => {
-      const providerTab = findByURL(recentlyOpenedWindow.tabs, realTab.url!);
-      expect(providerTab!.id).toBe(realTab.id);
-    });
+    await wait(2);
+
+    const getIdsList = (tabs: Array<{ id?: number }>): number[] => {
+      return tabs.map(t => t.id!).sort((a, b) => a - b);
+    };
+
+    expect(getIdsList(fchws[1].tabs!)).toMatchObject(
+      getIdsList(recentlyOpenedWindow.tabs)
+    );
   });
 });
