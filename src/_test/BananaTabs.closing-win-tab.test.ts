@@ -113,21 +113,79 @@ describe('BananaTabs Tests: Interaction from browser', () => {
 
   describe('Creating new windows and tabs from browser', () => {
     //
-    test.skip('Creating a new window', async () => {
-      //
+    test('Creating a new window', async () => {
+      // GIVEN an initial state with 1 window and 3 tabs
+      const { fchrome, provider } = await renderBananaTabs(`
+      window 1:
+      * http://tab-1.1/
+      * http://tab-1.2/
+      * http://tab-1.3/
+    `);
+
+      // WHEN creating a window from the (fake) browser
+      fchrome.windows.create({});
+      await wait();
+
+      // EXPECT 2 windows in the session
+      expect(provider.session.windows).toHaveLength(2);
+
+      // also EXPECT 2 windows in fchrome
+      expect(fchrome.fakeWindows).toHaveLength(2);
+      await wait();
     });
 
-    test.skip('Creating a new tab in an existing window', async () => {
-      //
-    });
+    test('Creating a new tab in an existing window', async () => {
+      // GIVEN an initial state with 1 window and 3 tabs
+      const { fchrome, provider } = await renderBananaTabs(`
+      window 1:
+      * http://tab-1.1/
+    `);
 
+      const windowId = fchrome.fakeWindows[0].id;
+
+      // WHEN creating a new tab from the (fake) browser
+      fchrome.tabs.create({windowId});
+      await wait();
+
+      // EXPECT the following tabs in the window:
+      expect(provider.session.windows[0].tabs.map(t => t.url)).toMatchObject([
+        'http://tab-1.1/',
+        'chrome://newtab/',
+      ]);
+
+    });
   });
 
   describe('Drag and drop tabs from browser', () => {
     //
-
-    test.skip('Rearranging tab order within the same window', async () => {
+    test('Rearranging tab order within the same window', async () => {
       //
+      // given an initial state with 1 window and 5 tabs
+      const { fchrome, provider } = await renderBananaTabs(`
+           window 1:
+           * http://tab-1.1/
+           * http://tab-1.2/
+           * http://tab-1.3/moving-tab
+           * http://tab-1.4/
+           * http://tab-1.5/
+         `);
+
+      const tabId = fchrome.fakeWindows[0].tabs![2].id!;
+
+      // when moving a tab from the 3rd position to the last position
+      await fchrome.tabs.move(tabId, { index: 4 });
+      await wait();
+
+      // expect the tabs to be re-arranged as expected
+      expect(provider.session.windows[0].tabs.map(t => t.url)).toMatchObject([
+        'http://tab-1.1/',
+        'http://tab-1.2/',
+        'http://tab-1.4/',
+        'http://tab-1.5/',
+        'http://tab-1.3/moving-tab',
+      ]);
+
+      // TODO: should we expect an event? or something?
     });
 
     test.skip('when dragging a tab to a new window', () => {

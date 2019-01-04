@@ -39,6 +39,7 @@ export default class RealPromisingChromeAPI implements PromisingChromeAPI {
       create: promisify<chrome.tabs.Tab>(chrome.tabs.create),
       update: promisify<chrome.tabs.Tab | undefined>(chrome.tabs.update),
       remove: promisify<void>(chrome.tabs.remove),
+      move: promisify<chrome.tabs.Tab | chrome.tabs.Tab[]>(chrome.tabs.move),
       getCurrent: promisify<chrome.tabs.Tab>(chrome.tabs.getCurrent),
     };
 

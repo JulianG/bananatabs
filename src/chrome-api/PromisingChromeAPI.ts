@@ -34,6 +34,10 @@ export interface ChromeTabsAPI {
     props: chrome.tabs.UpdateProperties
   ): Promise<chrome.tabs.Tab | undefined>;
   remove(id: number): Promise<void>;
+  move(
+    tabIds: number,
+    moveProperties: chrome.tabs.MoveProperties
+  ): Promise<chrome.tabs.Tab | chrome.tabs.Tab[]>;
   getCurrent(): Promise<chrome.tabs.Tab>;
 }
 

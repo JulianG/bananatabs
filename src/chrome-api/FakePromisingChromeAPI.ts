@@ -36,7 +36,8 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
     tabs: {
       create: this.createTab.bind(this),
       update: this.updateTab.bind(this),
-      remove: this.removeTab.bind(this)
+      remove: this.removeTab.bind(this),
+      move: this.moveTabs.bind(this)
     }
   };
 
@@ -87,6 +88,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
       create: self.createTab.bind(this),
       update: self.updateTab.bind(this),
       remove: self.removeTab.bind(this),
+      move: self.moveTabs.bind(this),
 
       async getCurrent() {
         return self.currentTab;
@@ -253,7 +255,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
         );
       }
     } else {
-      throw 'Failed to update tab id: ' + id;
+      throw new Error('Failed to update tab id: ' + id);
     }
     return tab;
   }
@@ -276,6 +278,38 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
     } catch (e) {
       throw new Error(`failed to remove tab with id: ${id}`);
     }
+  }
+
+  private moveTabs(tabId: number, moveProperties: chrome.tabs.MoveProperties) {
+    //
+    const sourceWindow = this._getWindowForTab(tabId);
+    const sourceTabs = sourceWindow.tabs!;
+    const fromIndex = sourceTabs.findIndex(t => t.id === tabId);
+
+    const windowId = moveProperties.windowId || sourceWindow.id;
+    const toIndex = moveProperties.index;
+
+    const targetWindow = this._getWindow(windowId);
+    const targetTabs = targetWindow.tabs || [];
+
+    const [tab] = sourceTabs.splice(fromIndex, 1);
+
+    targetTabs.splice(toIndex, 0, tab);
+    targetTabs.forEach((t, i) => (t.index = i));
+
+    if (sourceWindow !== targetWindow) {
+      console.warn(
+        'FakePromisingChromeAPI not currently dispatching ' +
+          'the proper onDetach and onAttach events ' +
+          'when a tab is moved from one window to the other'
+      );
+    }
+    consoleLogFakeDispatch(`tabs.onMoved`);
+    (this.tabs.onMoved as FCE.TabMovedEvent).fakeDispatch(tabId, {
+      toIndex,
+      fromIndex,
+      windowId
+    });
   }
 
   private dispatchTabActivated(tabId: number, windowId: number) {
@@ -415,7 +449,9 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
     const window = this._getWindowForTab(id);
     const tab = window.tabs!.find(t => t.id === id);
     if (!tab) {
-      throw `Failed to find tab with id: ${id} in window ${window.id}`;
+      throw new Error(
+        `Failed to find tab with id: ${id} in window ${window.id}`
+      );
     }
     return tab;
   }
@@ -429,7 +465,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
       );
     });
     if (!win) {
-      throw `Failed to find window for tab with id: ${tabId}`;
+      throw new Error(`Failed to find window for tab with id: ${tabId}`);
     }
     return win;
   }
