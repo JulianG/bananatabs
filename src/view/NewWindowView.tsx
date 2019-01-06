@@ -28,12 +28,13 @@ export default class TextWindowView extends React.Component<Props, State> {
     const text = this.state.text;
     const rows = Math.max(this.props.minimumLines, text.split('\n').length);
     return (
-      <div className="textsession">
+      <div className="textsession" data-testid="new-window-view">
         <p>
           You can paste a list of links to be added to Banana Tabs in a new
           window.
         </p>
         <textarea
+          role="input"
           rows={rows}
           autoComplete="off"
           wrap="off"
@@ -66,6 +67,7 @@ export default class TextWindowView extends React.Component<Props, State> {
 
   private save() {
     const windows = this.props.stringToWindows(this.state.text);
+    windows.forEach(w => (w.visible = false));
     this.props.onSave(windows);
   }
 }

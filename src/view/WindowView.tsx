@@ -58,7 +58,7 @@ export default class WindowView extends React.Component<Props, State> {
     ];
 
     return (
-      <div id={'window-group'} className={styles.join(' ')}>
+      <div id="window-group" data-testid="window-group" className={styles.join(' ')}>
         {this.renderHeader()}
         {this.props.debug && createDebugInfo(w, ['id'])}
         {this.renderTabs()}
@@ -91,11 +91,13 @@ export default class WindowView extends React.Component<Props, State> {
     const w = this.props.window;
     const visibilityIconSrc = w.visible ? Icons.On : Icons.Off;
     const visibilityIconText = w.visible ? 'Hide Window' : 'Show Window';
-    const imgId = 'visibility' + (w.visible ? '-visible' : '-hidden');
+    const imgId = 'win-visibility' + (w.visible ? '-visible' : '-hidden');
+
     return (
       <img
         data-testid="visibility-toggle"
         id={imgId}
+        alt={'win' + (w.visible ? '-visible' : '-hidden')}
         className="tool icon"
         src={visibilityIconSrc}
         title={visibilityIconText}

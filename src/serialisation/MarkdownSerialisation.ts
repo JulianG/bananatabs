@@ -29,7 +29,7 @@ export function stringToWindows(str: string): BT.Window[] {
   let win: BT.Window;
   let tabIndex: number;
   let shouldCreateNewWindow: boolean = true;
-  let shouldCreateNewWindowVisibility: boolean = true;
+  let newWindowVisibility: boolean = true;
   lines.forEach(line => {
     line = line.trim();
     if (shouldCreateNewWindow) {
@@ -40,7 +40,7 @@ export function stringToWindows(str: string): BT.Window[] {
         title: '',
         tabs: [],
         expanded: true,
-        visible: shouldCreateNewWindowVisibility
+        visible: newWindowVisibility
       };
       tabIndex = 0;
       wins.push(win);
@@ -75,9 +75,9 @@ export function stringToWindows(str: string): BT.Window[] {
     if (isEmpty) {
       shouldCreateNewWindow = true;
       if (line.length === 1) {
-        shouldCreateNewWindowVisibility = line === ':';
+        newWindowVisibility = line === ':';
       } else {
-        shouldCreateNewWindowVisibility = true;
+        newWindowVisibility = true;
       }
     }
   });

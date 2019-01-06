@@ -32,6 +32,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
         >
           <div
             class="window-group   visible"
+            data-testid="window-group"
             id="window-group"
           >
             <div
@@ -44,9 +45,10 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
                 title="Collapse"
               />
               <img
+                alt="win-visible"
                 class="tool icon"
                 data-testid="visibility-toggle"
-                id="visibility-visible"
+                id="win-visibility-visible"
                 src="[object Object]"
                 title="Hide Window"
               />
@@ -133,6 +135,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
         >
           <div
             class="window-group   visible"
+            data-testid="window-group"
             id="window-group"
           >
             <div
@@ -145,9 +148,10 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
                 title="Collapse"
               />
               <img
+                alt="win-visible"
                 class="tool icon"
                 data-testid="visibility-toggle"
-                id="visibility-visible"
+                id="win-visibility-visible"
                 src="[object Object]"
                 title="Hide Window"
               />

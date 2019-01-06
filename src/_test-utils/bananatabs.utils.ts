@@ -4,7 +4,7 @@ import {
   render,
   queryAllByAttribute,
   queryByAltText,
-  getByTestId,
+  getByTestId
 } from 'react-testing-library';
 import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
@@ -23,13 +23,20 @@ export async function renderBananaTabs(
   const factory = getFactory(live, stored);
   const fchrome = factory.getChromeAPI() as FakePromisingChromeAPI;
 
-  const { container, debug } = render(
+  const { container, debug, ...renderResult } = render(
     React.createElement(BananaTabs, { factory })
   );
   await wait();
   const provider = factory.getSessionProvider();
 
-  return { container, debug, fchrome, provider, ...getFunctions(container) };
+  return {
+    container,
+    debug,
+    fchrome,
+    provider,
+    ...getFunctions(container),
+    ...renderResult
+  };
 }
 
 function getFunctions(container: HTMLElement) {
@@ -72,6 +79,13 @@ export function getTabsVisibilities(tabs: HTMLElement[]): boolean[] {
   return tabs.map(t => {
     const visible = queryByAltText(t, 'tab-visible');
     // const hidden = queryByAltText(t, 'tab-hidden');
+    return visible !== null;
+  });
+}
+
+export function getWindowsVisibilities(windows: HTMLElement[]): boolean[] {
+  return windows.map( w => {
+    const visible = queryByAltText(w, 'win-visible');
     return visible !== null;
   });
 }
