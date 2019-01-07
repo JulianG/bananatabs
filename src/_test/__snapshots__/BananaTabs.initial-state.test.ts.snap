@@ -39,6 +39,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               class="item-row"
             >
               <img
+                alt="window-disclosure-expanded"
                 class="tool icon "
                 id="disclosure"
                 src="[object Object]"
@@ -142,6 +143,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               class="item-row"
             >
               <img
+                alt="window-disclosure-expanded"
                 class="tool icon "
                 id="disclosure"
                 src="[object Object]"

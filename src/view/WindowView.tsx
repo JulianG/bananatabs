@@ -133,6 +133,7 @@ export default class WindowView extends React.Component<Props, State> {
     return (
       <img
         id="disclosure"
+        alt={`window-disclosure-${w.expanded ? 'expanded' : 'collapsed'}`}
         className={iconStyles.join(' ')}
         src={iconSrc}
         title={iconText}
