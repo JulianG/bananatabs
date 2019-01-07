@@ -56,6 +56,28 @@ function getFunctions(container: HTMLElement) {
     getWindowVisibilityToggle: (windowIndex: number) => {
       const win = getWindowGroups(container)[windowIndex];
       return getByTestId(win, 'visibility-toggle');
+    },
+    getWindowDisclosureButton: (windowIndex: number) => {
+      const win = getWindowGroups(container)[windowIndex];
+      const expanded = queryByAltText(win, 'window-disclosure-expanded');
+      const collapsed = queryByAltText(win, 'window-disclosure-collapsed');
+      if (!expanded && !collapsed) {
+        throw new Error(
+          'Could not find alt="window-disclosure-expanded" nor alt="window-disclosure-collapsed"'
+        );
+      }
+      return expanded || collapsed!;
+    },
+    isWindowExpanded: (windowIndex: number) => {
+      const win = getWindowGroups(container)[windowIndex];
+      const expanded = queryByAltText(win, 'window-disclosure-expanded');
+      const collapsed = queryByAltText(win, 'window-disclosure-collapsed');
+      if (!expanded && !collapsed) {
+        throw new Error(
+          'Could not find alt="window-disclosure-expanded" nor alt="window-disclosure-collapsed"'
+        );
+      }
+      return expanded !== null;
     }
   };
 }
@@ -84,7 +106,7 @@ export function getTabsVisibilities(tabs: HTMLElement[]): boolean[] {
 }
 
 export function getWindowsVisibilities(windows: HTMLElement[]): boolean[] {
-  return windows.map( w => {
+  return windows.map(w => {
     const visible = queryByAltText(w, 'win-visible');
     return visible !== null;
   });
