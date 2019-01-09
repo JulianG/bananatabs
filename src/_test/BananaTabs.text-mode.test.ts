@@ -13,6 +13,14 @@ import { fireEvent } from 'react-testing-library';
 
 describe('BananaTabs Tests: Text Mode', async () => {
   //
+
+  const trimLines = (text: string) =>
+    text
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0)
+      .join('\n');
+
   test('NewWindowView', async () => {
     //
     // GIVEN an initially rendered app
@@ -56,7 +64,7 @@ describe('BananaTabs Tests: Text Mode', async () => {
     const okButton = getByText(/add links/i);
     fireEvent.click(okButton);
     await wait();
-    
+
     // EXPECT the new window group to be in the bananatabs list
     getByText('Typed In Window');
     getByText('http://pasted-tab-1/');
@@ -66,15 +74,10 @@ describe('BananaTabs Tests: Text Mode', async () => {
     // also EXPECT the DOM elements to displat the window group with the hidden icon
     // and the tabs with the visible icon
     const windowGroups = getWindowGroups(container);
-    expect(getWindowsVisibilities(windowGroups)).toMatchObject([
-      true,
-      false
-    ]);
-    expect(getTabsVisibilities(getTabsInWindow(windowGroups[1]))).toMatchObject([
-      true,
-      true,
-      true
-    ]);
+    expect(getWindowsVisibilities(windowGroups)).toMatchObject([true, false]);
+    expect(getTabsVisibilities(getTabsInWindow(windowGroups[1]))).toMatchObject(
+      [true, true, true]
+    );
 
     // EXPECT the session to be consistent with the above DOM elements
     expect(provider.session.windows).toHaveLength(2);
@@ -82,5 +85,58 @@ describe('BananaTabs Tests: Text Mode', async () => {
     expect(provider.session.windows[1].visible).toBe(false);
 
     await wait();
+  });
+
+  test('TextWindowView', async () => {
+    //
+    // GIVEN an initially rendered app with some hidden tabs and windows
+    const windows = `
+			window 1:
+      * http://tab-1.1/
+      * http://tab-1.2/
+      
+      window 2~
+      ~ http://tab-2.1/
+      * http://tab-2.2/
+    `;
+    const { getByText, getByTestId, getByRole } = await renderBananaTabs(
+      windows
+    );
+    await wait();
+
+    // assert we have some window groups
+    getByTestId('window-group');
+
+    // WHEN clicking the share all windows button
+    fireEvent.click(getByText(/share all windows/i));
+    await wait();
+
+    // THEN the text window screen appears
+    getByTestId('text-window-view');
+
+    const input = getByRole('input') as HTMLTextAreaElement;
+
+    // EXPECT the content of the input/textarea to match the initial session
+    // but ignoringthe visibility of each window and tab. they should all look "visible"
+    expect(trimLines(input.textContent!)).toBe(
+      trimLines(`
+        window 1:
+        * http://tab-1.1/
+        * http://tab-1.2/
+        
+        window 2:
+        * http://tab-2.1/
+        * http://tab-2.2/
+      `)
+    );
+    await wait();
+
+    // WHEN clicking the "go back" button
+    fireEvent.click(getByText(/go back/i));
+    await wait();
+    
+    // EXPECT we have some window groups
+    getByTestId('window-group');
+
   });
 });

@@ -77,7 +77,7 @@ function getFunctions(container: HTMLElement) {
           'Could not find alt="window-disclosure-expanded" nor alt="window-disclosure-collapsed"'
         );
       }
-      return expanded !== null;
+      return !!expanded;
     }
   };
 }

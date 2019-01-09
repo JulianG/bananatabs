@@ -20,8 +20,9 @@ export default class TextWindowView extends React.Component<Props> {
     const text = this.props.windowsToString(this.props.windows);
     const rows = text.split('\n').length;
     return (
-      <div className="textsession">
+      <div className="textsession" data-testid="text-window-view">
         <textarea
+          role="input"
           ref={ref => (this.textAreaRef = ref)}
           readOnly={true}
           rows={rows}

@@ -36,6 +36,7 @@ describe('BananaTabs Tests: Expand/Collapse Disclosure Button', async () => {
 
     // WHEN the button to collapse w window group  is clicked
     fireEvent.click(getWindowDisclosureButton(0));
+    await wait();
 
     // EXPECT the first window to be collapsed:
     expect(isWindowExpanded(0)).toBe(false);
@@ -43,7 +44,8 @@ describe('BananaTabs Tests: Expand/Collapse Disclosure Button', async () => {
 
     // WHEN the button to collapse w window group  is clicked
     fireEvent.click(getWindowDisclosureButton(0));
-
+    await wait();
+    
     // EXPECT all windows to the expanded again
     expect(isWindowExpanded(0)).toBe(true);
     expect(isWindowExpanded(1)).toBe(true);

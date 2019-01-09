@@ -107,18 +107,18 @@ export default class WindowView extends React.Component<Props, State> {
   }
 
   private renderTabs() {
-    const w = this.props.window;
+    const { window, tabMutator, debug } = this.props;
     return (
-      w.expanded &&
-      w.tabs.map((tab, i) => {
-        const key = `win-${w.id}/tab-${tab.id}`;
+      window.expanded &&
+      window.tabs.map((tab, i) => {
+        const key = `win-${window.id}/tab-${tab.id}`;
         return (
           <TabView
             key={key}
-            window={this.props.window}
+            window={window}
             tab={tab}
-            mutator={this.props.tabMutator}
-            debug={this.props.debug}
+            mutator={tabMutator}
+            debug={debug}
           />
         );
       })
