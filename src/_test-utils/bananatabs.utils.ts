@@ -23,7 +23,7 @@ export async function renderBananaTabs(
   const factory = getFactory(live, stored);
   const fchrome = factory.getChromeAPI() as FakePromisingChromeAPI;
 
-  const { container, debug, ...renderResult } = render(
+  const { container, ...renderResult } = render(
     React.createElement(BananaTabs, { factory })
   );
   await wait();
@@ -31,15 +31,14 @@ export async function renderBananaTabs(
 
   return {
     container,
-    debug,
     fchrome,
     provider,
-    ...getFunctions(container),
-    ...renderResult
+    ...renderResult,
+    ...createFunctions(container)
   };
 }
 
-function getFunctions(container: HTMLElement) {
+function createFunctions(container: HTMLElement) {
   return {
     getWindowGroups: () => {
       return getWindowGroups(container);

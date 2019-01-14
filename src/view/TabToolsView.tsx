@@ -7,7 +7,7 @@ const doNothing = () => {
 const Icons = {
   Share: require('./icons/share.svg'),
   Edit: require('./icons/edit.svg'),
-  Delete: require('./icons/delete.svg'),
+  Delete: require('./icons/delete.svg')
 };
 
 interface Props {
@@ -42,30 +42,24 @@ export default class TabToolsView extends React.Component<Props, State> {
       <div className="tab-tools" onMouseOut={this.resetToolTip}>
         <span className="tooltip">{this.state.tooltip}</span>&nbsp;
         {this.props.actionIconVisibility.copy && (
-          <img
-            id={'share'}
-            title="share"
-            className="icon"
+          <ToolButton
+            id="share"
             src={Icons.Share}
             onClick={this.handleCopyAction}
             onMouseOver={this.handleMouseOver}
           />
         )}
         {this.props.actionIconVisibility.rename && (
-          <img
-            id={'rename'}
-            title="rename"
-            className="icon"
+          <ToolButton
+            id="rename"
             src={Icons.Edit}
             onClick={this.handleRenameAction}
             onMouseOver={this.handleMouseOver}
           />
         )}
         {this.props.actionIconVisibility.delete && (
-          <img
-            id={'delete'}
-            title="delete"
-            className="icon"
+          <ToolButton
+            id="delete"
             src={Icons.Delete}
             onClick={this.handleDeleteAction}
             onMouseOver={this.handleMouseOver}
@@ -94,4 +88,23 @@ export default class TabToolsView extends React.Component<Props, State> {
   private resetToolTip() {
     this.setState({ tooltip: '' });
   }
+}
+
+function ToolButton(props: {
+  id: string;
+  src: string;
+  onClick: (e: React.MouseEvent) => void;
+  onMouseOver: (e: React.MouseEvent) => void;
+}) {
+  return (
+    <img
+      id={props.id}
+      title={props.id}
+      alt={props.id}
+      className="icon"
+      src={props.src}
+      onClick={props.onClick}
+      onMouseOver={props.onMouseOver}
+    />
+  );
 }
