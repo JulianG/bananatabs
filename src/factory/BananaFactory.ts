@@ -8,11 +8,11 @@ import ChromeBrowserController from '../chrome/ChromeBrowserController';
 import SessionProvider from '../model/SessionProvider';
 import DefaultSessionProvider from '../model/DefaultSessionProvider';
 import LiveSessionMerger, {
-  DefaultLiveSessionMerger,
+  DefaultLiveSessionMerger
 } from '../model/mergers/LiveSessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 import SessionMutator, {
-  DefaultSessionMutator,
+  DefaultSessionMutator
 } from '../model/mutators/SessionMutator';
 
 import LocalStorageSessionPersistence from '../chrome/LocalStorageSessionPersistence';
@@ -23,9 +23,9 @@ export default class BananaFactory {
   private chromeAPI: PromisingChromeAPI;
   private persistence: SessionPersistence;
   private liveSessionMerger: LiveSessionMerger;
-  private sessionProvider: SessionProvider;
-  private sessionMutator: SessionMutator;
-  private browserController: BrowserController;
+  private sessionProvider: SessionProvider | undefined;
+  private sessionMutator: SessionMutator | undefined;
+  private browserController: BrowserController | undefined;
 
   constructor(
     private fakeInitialSessions: { live: Session; stored: Session } | null

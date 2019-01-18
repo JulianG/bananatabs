@@ -5,7 +5,7 @@ tslint:disable no-empty
 
 class MutedConsole implements Console {
   memory: any;
-  Console: NodeJS.ConsoleConstructor;
+  Console!: NodeJS.ConsoleConstructor;
   assert(test?: boolean, message?: string, ...optionalParams: any[]): void {}
   clear(): void {}
   countReset(): void {}

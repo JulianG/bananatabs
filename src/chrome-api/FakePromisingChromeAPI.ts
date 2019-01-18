@@ -42,7 +42,17 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
   };
 
   private fakeIdCount: number;
-  private currentTab: chrome.tabs.Tab;
+  private currentTab: chrome.tabs.Tab = {
+    index: 0,
+    pinned: false,
+    highlighted: false,
+    windowId: -1,
+    active: false,
+    selected: false,
+    incognito: false,
+    discarded: false,
+    autoDiscardable: false
+  };
 
   static clone(that: FakePromisingChromeAPI) {
     const fchrome = new FakePromisingChromeAPI();
