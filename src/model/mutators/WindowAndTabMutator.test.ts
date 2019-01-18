@@ -63,12 +63,13 @@ describe('WindowAndTabMutator tests', () => {
   test('show window', async () => {
     // GIVEN an initialised provider with 2 windows, one of them hidden
     const { provider, mutator, fchrome } = await initialise(
-      '[v(v,v)],[!vt(v,v)]'
+      '[v(v,v,v)],[!vt(v,v)]'
     );
 
     // WHEN the hidden window is shown via BananaTabs!
     await mutator.showWindow(provider.session.windows[1].id);
-    await wait();
+    await wait(); // for some reason we need to wait one more time
+    await wait(); // to guarantee the sessions will be merged.
 
     // EXPECT two windows in the fchrome api
     const fchws = await fchrome.windows.getAll({});
@@ -80,7 +81,7 @@ describe('WindowAndTabMutator tests', () => {
 
     // also EXPECT the ids of the visible tabs in the provider session
     // to match the ids of the tabs from the fchrome window
-    await wait(2);
+    await wait();
 
     const getIdsList = (tabs: Array<{ id?: number }>): number[] => {
       return tabs.map(t => t.id!).sort((a, b) => a - b);
