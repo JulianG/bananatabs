@@ -260,17 +260,10 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
       class="credits"
     >
       <p>
-        <strong>
+        <strong
+          title="click for version"
+        >
           BananaTabs!
-           
-          <a
-            class="version"
-            href="#"
-            title=""
-          >
-            v
-            0.28.0
-          </a>
         </strong>
         <br />
         Developed by Julian Garamendy.

@@ -5,15 +5,15 @@ interface Props {
   buildString: string;
 }
 const Footer = ({ version, buildString }: Props) => {
+  const showCredits = () => {
+    window.alert(`BananaTabs! version ${version} ${buildString}
+    `);
+  };
+
   return (
     <div className="credits">
       <p>
-        <strong>
-          BananaTabs!{' '}
-          <a href="#" className="version" title={buildString}>
-            v{version}
-          </a>
-        </strong>
+        <strong onClick={showCredits} title="click for version">BananaTabs!</strong>
         <br />
         Developed by Julian Garamendy.
         <br />
