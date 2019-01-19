@@ -46,14 +46,14 @@ describe('LiveSessionMerger', () => {
     // one matching and the other hidden.
     const { stored, merged } = mergeSessions(
       `
-		window 1:
-		* http://tab-1.1/
-				`,
+      window 1:
+      * http://tab-1.1/
+      `,
       `
-		window 1:
-		* http://tab-1.1/
-		~ http://tab-1.3/  
-			`
+      window 1:
+      * http://tab-1.1/
+      ~ http://tab-1.3/  
+      `
     );
 
     // when merging
@@ -91,7 +91,4 @@ test('order of merged visible tabs should be as expected', () => {
   expect(merged.windows[0].tabs[2].visible).toBe(false);
   expect(merged.windows[0].tabs[3].url).toBe('http://tab-4');
   expect(merged.windows[0].tabs[3].visible).toBe(true);
-
 });
-
-// TODO: express merging tests with session strings like the ones above, but also the expected session, maybe?

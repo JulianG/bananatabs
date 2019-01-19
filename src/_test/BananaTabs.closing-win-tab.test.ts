@@ -185,7 +185,6 @@ describe('BananaTabs Tests: Interaction from browser', () => {
         'http://tab-1.3/moving-tab',
       ]);
 
-      // TODO: should we expect an event? or something?
     });
 
     test.skip('when dragging a tab to a new window', () => {
