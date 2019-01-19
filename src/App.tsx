@@ -15,28 +15,27 @@ const fakeSessions = hasChrome
 
 const factory = new BananaFactory(fakeSessions);
 
-let App: () => JSX.Element;
+const ProductionApp = () => {
+  return <BananaTabs factory={factory} />;
+};
 
-if (hasChrome) {
-  App = () => <BananaTabs factory={factory} />;
-} else {
-  App = () => {
-    const chromeAPI = factory.getChromeAPI();
-    
-    // tslint:disable-next-line no-string-literal
-    window['chromeAPI'] = chromeAPI;
-    
-    return (
-      <div className="split">
-        <div className="split-bananatabs">
-          <BananaTabs factory={factory} />
-        </div>
-        <div className="split-browser">
-          <ChromeAPIView chromeAPI={chromeAPI} />
-        </div>
+const DevelopmentApp = () => {
+  const chromeAPI = factory.getChromeAPI();
+  // tslint:disable-next-line no-string-literal
+  window['chromeAPI'] = chromeAPI;
+
+  return (
+    <div className="split">
+      <div className="split-bananatabs">
+        <BananaTabs factory={factory} />
       </div>
-    );
-  };
-}
+      <div className="split-browser">
+        <ChromeAPIView chromeAPI={chromeAPI} />
+      </div>
+    </div>
+  );
+};
+
+const App = hasChrome ? ProductionApp : DevelopmentApp;
 
 export default App;
