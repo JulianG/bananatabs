@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { CONFIG } from '../config';
+
 import * as BT from '../model/CoreTypes';
 import TabView from './TabView';
 import TabToolsView from './TabToolsView';
@@ -21,7 +23,6 @@ interface Props {
   window: BT.Window;
   windowMutator: WindowMutator;
   tabMutator: TabMutator;
-  debug?: boolean;
   onCopy(windowId: number): void;
 }
 
@@ -60,7 +61,7 @@ export default class WindowView extends React.Component<Props, State> {
     return (
       <div id="window-group" data-testid="window-group" className={styles.join(' ')}>
         {this.renderHeader()}
-        {this.props.debug && createDebugInfo(w, ['id'])}
+        {CONFIG.debug && createDebugInfo(w, ['id'])}
         {this.renderTabs()}
       </div>
     );
@@ -107,7 +108,7 @@ export default class WindowView extends React.Component<Props, State> {
   }
 
   private renderTabs() {
-    const { window, tabMutator, debug } = this.props;
+    const { window, tabMutator } = this.props;
     return (
       window.expanded &&
       window.tabs.map((tab, i) => {
@@ -118,7 +119,6 @@ export default class WindowView extends React.Component<Props, State> {
             window={window}
             tab={tab}
             mutator={tabMutator}
-            debug={debug}
           />
         );
       })

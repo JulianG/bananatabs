@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { CONFIG } from '../config';
 import * as BT from '../model/CoreTypes';
 import TabToolsView from './TabToolsView';
 import TabMutator from '../model/mutators/TabMutator';
@@ -15,7 +16,6 @@ interface Props {
   window: BT.Window;
   tab: BT.Tab;
   mutator: TabMutator;
-  debug?: boolean;
 }
 
 interface State {
@@ -86,7 +86,7 @@ export default class TabView extends React.Component<Props, State> {
           />
         )}
         <span className="tab-title" onClick={this.onSelectAction}>
-          {this.props.debug && <span className="debug-info">{tab.id}</span>}
+          {CONFIG.debug && <span className="debug-info">{tab.id}</span>}
           {tab.title || tab.url}
         </span>
       </div>

@@ -5,11 +5,9 @@ import SessionMutator from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
 
-import ClickCounter from './ClickCounter';
-
 import {
   stringToWindows,
-  windowsToString,
+  windowsToString
 } from '../serialisation/MarkdownSerialisation';
 
 import Title from './Title';
@@ -31,11 +29,10 @@ interface Props {
 interface State {
   mode: 'list' | 'read' | 'write';
   windowId: number;
-  debug: boolean;
 }
 
 export default class MainView extends React.Component<Props, State> {
-  readonly state: State = { mode: 'list', windowId: 0, debug: false };
+  readonly state: State = { mode: 'list', windowId: 0 };
 
   constructor(props: Props) {
     super(props);
@@ -45,9 +42,7 @@ export default class MainView extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <ClickCounter onClick={this.handleClickCount}>
-          <Title />
-        </ClickCounter>
+        <Title />
         {this.renderSession()}
         <Footer
           version={this.props.version}
@@ -68,7 +63,6 @@ export default class MainView extends React.Component<Props, State> {
             sessionMutator={this.props.sessionMutator}
             windowMutator={this.props.windowMutator}
             tabMutator={this.props.tabMutator}
-            debug={this.state.debug}
             onWindowCopied={this.changeToReadMode}
           />
         )}
@@ -120,10 +114,6 @@ export default class MainView extends React.Component<Props, State> {
     this.changeToReadMode(-1);
   }
 
-  private handleClickCount(count: number) {
-    this.setState({ debug: count % 5 === 0 });
-  }
-
   private bindFunctions() {
     // code-smell: too many bind(s)
     this.changeToListMode = this.changeToListMode.bind(this);
@@ -133,6 +123,5 @@ export default class MainView extends React.Component<Props, State> {
       this
     );
     this.addWindowGroup = this.addWindowGroup.bind(this);
-    this.handleClickCount = this.handleClickCount.bind(this);
   }
 }
