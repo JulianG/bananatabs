@@ -13,9 +13,6 @@ const Title = (props: Props) => {
         onClick={props.onClick}
       />
       &nbsp;<span>Banana Tabs!</span>&nbsp;
-      <div style={{ display: 'inline' }} className="credits">
-        BETA
-      </div>
     </h3>
   );
 };

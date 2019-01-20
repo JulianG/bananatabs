@@ -14,12 +14,6 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
           Banana Tabs!
         </span>
          
-        <div
-          class="credits"
-          style="display: inline;"
-        >
-          BETA
-        </div>
       </h3>
     </div>
     <div>
