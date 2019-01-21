@@ -1,7 +1,7 @@
 import * as BT from '../model/CoreTypes';
 import BrowserController from '../model/mutators/BrowserController';
 import SessionProvider from '../model/SessionProvider';
-import LiveSessionMerger from '../model/mergers/LiveSessionMerger';
+import SessionMerger from './mergers/SessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 
 import console from '../utils/MutedConsole';
@@ -15,7 +15,7 @@ export default class DefaultSessionProvider implements SessionProvider {
 
   constructor(
     private browserController: BrowserController,
-    private sessionMerger: LiveSessionMerger,
+    private sessionMerger: SessionMerger,
     private persistence: SessionPersistence
   ) {
     this.session = BT.EmptySession;

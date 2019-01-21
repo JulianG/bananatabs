@@ -7,9 +7,9 @@ import ChromeBrowserController from '../chrome/ChromeBrowserController';
 
 import SessionProvider from '../model/SessionProvider';
 import DefaultSessionProvider from '../model/DefaultSessionProvider';
-import LiveSessionMerger, {
-  DefaultLiveSessionMerger
-} from '../model/mergers/LiveSessionMerger';
+import SessionMerger, {
+  DefaultSessionMerger
+} from '../model/mergers/SessionMerger';
 import SessionPersistence from '../model/SessionPersistence';
 import SessionMutator, {
   DefaultSessionMutator
@@ -22,7 +22,7 @@ import { Session } from '../model/CoreTypes';
 export default class BananaFactory {
   private chromeAPI: PromisingChromeAPI;
   private persistence: SessionPersistence;
-  private liveSessionMerger: LiveSessionMerger;
+  private liveSessionMerger: SessionMerger;
   private sessionProvider: SessionProvider | undefined;
   private sessionMutator: SessionMutator | undefined;
   private browserController: BrowserController | undefined;
@@ -32,7 +32,7 @@ export default class BananaFactory {
   ) {
     this.chromeAPI = this.createChromeAPI();
     this.persistence = this.createPersistence();
-    this.liveSessionMerger = new DefaultLiveSessionMerger();
+    this.liveSessionMerger = new DefaultSessionMerger();
   }
 
   getBrowserController(): BrowserController {

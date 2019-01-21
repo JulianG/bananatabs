@@ -2,11 +2,11 @@ import * as BT from '../CoreTypes';
 
 import console from '../../utils/MutedConsole';
 
-export default interface LiveSessionMerger {
+export default interface SessionMerger {
   merge(live: BT.Session, stored: BT.Session): BT.Session;
 }
 
-export class DefaultLiveSessionMerger implements LiveSessionMerger {
+export class DefaultSessionMerger implements SessionMerger {
   merge(live: BT.Session, stored: BT.Session): BT.Session {
     console.group('SessionMerger.mergeSessions');
     const mergedSessionWindows: BT.Window[] = [];
@@ -63,7 +63,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
               storedWindow.id +
               ' ' +
               storedWindow.title +
-              (storedWindow.tabs.map(t => t.id).join(','))
+              storedWindow.tabs.map(t => t.id).join(',')
           );
           storedWindow.focused = false;
           storedWindow.visible = false;
@@ -110,9 +110,7 @@ export class DefaultLiveSessionMerger implements LiveSessionMerger {
       'extraLiveTabs... (tabs in liveTabs not present in storedTabs)'
     );
     const extraLiveTabs = liveTabs.filter(liveTab => {
-      return (
-        storedTabs.find(storedTab => storedTab.url === liveTab.url) === undefined
-      );
+      return storedTabs.find(tab => tab.url === liveTab.url) === undefined;
     });
     console.table(extraLiveTabs);
 

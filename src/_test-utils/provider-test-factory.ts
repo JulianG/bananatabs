@@ -1,8 +1,8 @@
 import * as BT from '../model/CoreTypes';
 import ChromeBrowserController from '../chrome/ChromeBrowserController';
-import LiveSessionMerger, {
-  DefaultLiveSessionMerger,
-} from '../model/mergers/LiveSessionMerger';
+import SessionMerger, {
+  DefaultSessionMerger
+} from '../model/mergers/SessionMerger';
 import RAMSessionPersistence from '../utils/RAMSessionPersistence';
 import DefaultSessionProvider from '../model/DefaultSessionProvider';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
@@ -40,7 +40,7 @@ function createProviderWFC(
   session: BT.Session
 ) {
   const browserController = new ChromeBrowserController(fchrome);
-  const merger: LiveSessionMerger = new DefaultLiveSessionMerger();
+  const merger: SessionMerger = new DefaultSessionMerger();
   const persistence = new RAMSessionPersistence(session);
   const provider = new DefaultSessionProvider(
     browserController,
