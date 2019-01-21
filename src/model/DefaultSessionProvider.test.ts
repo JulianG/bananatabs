@@ -11,7 +11,7 @@ describe('initialisation', () => {
     const { provider, onSessionChanged } = await createProvider('');
 
     // when it's initialised
-    await provider.initialiseSession('jest');
+    await provider.initialiseSession();
 
     // expect the onSessionChanged callback is triggered at least once, with a valid session
     expect(onSessionChanged).toHaveBeenCalled();

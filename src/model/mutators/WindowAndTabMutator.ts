@@ -4,8 +4,6 @@ import TabMutator from './TabMutator';
 import WindowMutator from './WindowMutator';
 import BrowserController from './BrowserController';
 
-import console from '../../utils/MutedConsole';
-
 export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   constructor(
     private provider: SessionProvider,

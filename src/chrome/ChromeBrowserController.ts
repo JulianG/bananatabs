@@ -6,8 +6,6 @@ import BrowserController, {
 import BrowserEventDispatcher from 'model/mutators/BrowserEventDispatcher';
 import ChromeEventDispatcher from './ChromeEventDispatcher';
 
-import console from '../utils/MutedConsole';
-
 export default class ChromeBrowserController implements BrowserController {
   private chromeAPI: PromisingChromeAPI;
   private browserEventDispatcher: BrowserEventDispatcher;
@@ -18,7 +16,6 @@ export default class ChromeBrowserController implements BrowserController {
   }
 
   public async closeWindow(id: number) {
-    console.log(`ChromeBrowserController.closeWindow(${id}) ...`);
     this.browserEventDispatcher.disable();
     try {
       await this.chromeAPI.windows.remove(id);
@@ -30,14 +27,12 @@ export default class ChromeBrowserController implements BrowserController {
   }
 
   public async closeTab(id: number) {
-    console.log(`ChromeBrowserController.closeTab(${id}) ...`);
     this.browserEventDispatcher.disable();
     await this.chromeAPI.tabs.remove(id);
     this.browserEventDispatcher.enable();
   }
 
   public async selectTab(windowId: number, tabId: number) {
-    console.log(`ChromeBrowserController.selectTab(${tabId}) ...`);
     const windowPromise = this.chromeAPI.windows.update(windowId, {
       focused: true,
     });
@@ -46,7 +41,6 @@ export default class ChromeBrowserController implements BrowserController {
   }
 
   public async createTab(window: BT.Window, tab: BT.Tab) {
-    console.log(`ChromeBrowserController.createTab(...) ...`);
     this.browserEventDispatcher.disable();
     const props: chrome.tabs.CreateProperties = {
       windowId: window.visible ? window.id : 0,
@@ -63,7 +57,6 @@ export default class ChromeBrowserController implements BrowserController {
     this.browserEventDispatcher.disable();
     const liveWindows = await this.chromeAPI.windows.getAll({});
     const asFirst = liveWindows.length <= 1;
-    console.log(`ChromeBrowserController.showWindow(...) ...`);
     if (asFirst) {
       await this._showWindowAsFirst(window);
     } else {
@@ -136,9 +129,6 @@ export default class ChromeBrowserController implements BrowserController {
 
   private async _showWindow(window: BT.Window): Promise<BT.Window> {
     const bounds = window.bounds;
-
-    console.warn(`Creating Window with bounds: ${JSON.stringify(bounds)}`);
-
     const createData: chrome.windows.CreateData = {
       ...bounds,
       focused: window.focused,

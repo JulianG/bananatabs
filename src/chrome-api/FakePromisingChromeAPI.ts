@@ -1,5 +1,3 @@
-import console from '../utils/MutedConsole';
-
 import {
   PromisingChromeAPI,
   ChromeWindowsAPI,
@@ -276,7 +274,6 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
 
       const win = this._getWindow(winId);
       if (win && win.tabs!.length === 0) {
-        console.warn('also removing window!' + winId);
         this.removeWindow(winId);
       } else {
         consoleLogFakeDispatch(`tabs.onRemoved`);

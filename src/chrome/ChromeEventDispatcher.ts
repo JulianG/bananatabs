@@ -1,8 +1,6 @@
 import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
 import BrowserEventDispatcher from '../model/mutators/BrowserEventDispatcher';
 
-import console from '../utils/MutedConsole';
-
 interface EventListener {
   (event: string, reason?: string): void;
 }
@@ -17,7 +15,6 @@ export default class ChromeEventDispatcher implements BrowserEventDispatcher {
     this.eventListeners = [];
 
     chromeAPI.windows.onRemoved.addListener(id => {
-      console.warn('onRemoved', id);
       this.dispatchEvent('onRemoved', `onWindowRemoved ${id}`);
     });
     chromeAPI.windows.onFocusChanged.addListener(_ =>
@@ -71,10 +68,7 @@ export default class ChromeEventDispatcher implements BrowserEventDispatcher {
 
   private dispatchEvent(event: string, reason?: string) {
     if (this.enabled) {
-      console.log(`${event} event dispatched`);
       this.eventListeners.forEach(listener => listener(event, reason || event));
-    } else {
-      console.log(`${event} event not dispatched`);
     }
   }
 
@@ -92,7 +86,6 @@ export default class ChromeEventDispatcher implements BrowserEventDispatcher {
   }
 
   private onTabsRemoved(id: number, removedInfo: chrome.tabs.TabRemoveInfo) {
-    console.warn('onTabsRemoved!', id);
     if (
       this.isPanelTab(id) === false &&
       removedInfo.isWindowClosing === false

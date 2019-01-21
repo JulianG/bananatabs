@@ -54,7 +54,7 @@ export default class BananaTabs extends React.Component<Props, State> {
     this.sessionProvider.onSessionChanged = session => {
       this.setState({ session });
     };
-    this.sessionProvider.initialiseSession('componentDidMount');
+    this.sessionProvider.initialiseSession();
   }
 
   componentWillUnmount() {
@@ -80,6 +80,6 @@ export default class BananaTabs extends React.Component<Props, State> {
   }
 
   private handleResizeEvent(e: UIEvent) {
-    this.sessionProvider.updateSession('handleResizeEvent');
+    this.sessionProvider.updateSession();
   }
 }

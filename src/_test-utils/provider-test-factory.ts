@@ -30,7 +30,7 @@ async function createInitialisedProviderWFC(
     session
   );
   provider.onSessionChanged = onSessionChanged;
-  await provider.initialiseSession('jest');
+  await provider.initialiseSession();
   onSessionChanged.mockReset();
   return { provider, onSessionChanged, fchrome, browserController };
 }
