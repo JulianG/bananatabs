@@ -7,11 +7,12 @@ import ChromeAPIView from './chrome-api/ChromeAPIView';
 
 const hasChrome = !!(chrome && chrome.windows);
 
-const liveSession = stringToSession(FakeInitialState.live);
-const storedSession = stringToSession(FakeInitialState.stored);
-const fakeSessions = hasChrome
-  ? null
-  : { live: liveSession, stored: storedSession };
+const fakeSessions = !hasChrome
+  ? {
+      live: stringToSession(FakeInitialState.live),
+      stored: stringToSession(FakeInitialState.stored)
+    }
+  : null;
 
 const factory = new BananaFactory(fakeSessions);
 
