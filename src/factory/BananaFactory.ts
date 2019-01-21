@@ -23,9 +23,9 @@ export default class BananaFactory {
   private chromeAPI: PromisingChromeAPI;
   private persistence: SessionPersistence;
   private liveSessionMerger: SessionMerger;
-  private sessionProvider: SessionProvider | undefined;
-  private sessionMutator: SessionMutator | undefined;
-  private browserController: BrowserController | undefined;
+  private sessionProvider: SessionProvider;
+  private sessionMutator: SessionMutator;
+  private browserController: BrowserController;
 
   constructor(
     private fakeInitialSessions: { live: Session; stored: Session } | null
@@ -33,39 +33,28 @@ export default class BananaFactory {
     this.chromeAPI = this.createChromeAPI();
     this.persistence = this.createPersistence();
     this.liveSessionMerger = new DefaultSessionMerger();
+    this.browserController = new ChromeBrowserController(this.chromeAPI);
+    this.sessionProvider = new DefaultSessionProvider(
+      this.browserController,
+      this.liveSessionMerger,
+      this.persistence
+    );
+    this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
   }
 
   getBrowserController(): BrowserController {
-    if (!this.browserController) {
-      this.browserController = new ChromeBrowserController(this.chromeAPI);
-    }
     return this.browserController;
   }
 
   getSessionProvider(): SessionProvider {
-    if (!this.sessionProvider) {
-      this.sessionProvider = new DefaultSessionProvider(
-        this.getBrowserController(),
-        this.liveSessionMerger,
-        this.persistence
-      );
-    }
     return this.sessionProvider;
   }
 
   getSessionMutator(): SessionMutator {
-    if (!this.sessionMutator) {
-      this.sessionMutator = new DefaultSessionMutator(
-        this.getSessionProvider()
-      );
-    }
     return this.sessionMutator;
   }
 
   getChromeAPI() {
-    if (!this.chromeAPI) {
-      this.chromeAPI = this.createChromeAPI();
-    }
     return this.chromeAPI;
   }
 
