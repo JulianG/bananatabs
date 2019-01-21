@@ -1,10 +1,10 @@
 import * as React from 'react';
-import * as BT from '../model/CoreTypes';
+import { stringToWindows } from '../serialisation/MarkdownSerialisation';
+import SessionMutator from '../model/mutators/SessionMutator';
 
 interface Props {
   minimumLines: number;
-  stringToWindows(str: string): BT.Window[];
-  onSave(windows: BT.Window[]): void;
+  sessionMutator: SessionMutator;
   onClose(): void;
 }
 
@@ -66,8 +66,9 @@ export default class TextWindowView extends React.Component<Props, State> {
   }
 
   private save() {
-    const windows = this.props.stringToWindows(this.state.text);
+    const windows = stringToWindows(this.state.text);
     windows.forEach(w => (w.visible = false));
-    this.props.onSave(windows);
+    this.props.sessionMutator.addWindows(windows);
+    this.props.onClose();
   }
 }

@@ -3,252 +3,248 @@
 exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
 <div>
   <div>
-    <div>
-      <h3>
-        <img
-          class="app-icon"
-          src="/icons/app-icon.png"
-        />
-         
-        <span>
-          Banana Tabs!
-        </span>
-         
-      </h3>
+    <h3>
+      <img
+        class="app-icon"
+        src="/icons/app-icon.png"
+      />
+       
+      <span>
+        Banana Tabs!
+      </span>
+       
+    </h3>
+    <div
+      class="session dl-list"
+      style="display: block;"
+    >
+      <div
+        class="dl-item   "
+      >
+        <div
+          class="window-group   visible"
+          data-testid="window-group"
+          id="window-group"
+        >
+          <div
+            class="item-row"
+          >
+            <img
+              alt="window-disclosure-expanded"
+              class="tool icon "
+              id="disclosure"
+              src="[object Object]"
+              title="Collapse"
+            />
+            <img
+              alt="win-visible"
+              class="tool icon"
+              data-testid="visibility-toggle"
+              id="win-visibility-visible"
+              src="[object Object]"
+              title="Hide Window"
+            />
+            <span
+              class="window-title"
+            >
+              window 1
+               
+              <span />
+               
+              <span />
+            </span>
+          </div>
+          <div
+            class="item-row tab   visible"
+            id="tab"
+          >
+            <img
+              alt="tab-visible"
+              class="left-most tool icon"
+              data-testid="visibility-toggle"
+              id="tab-visibility-visible"
+              src="[object Object]"
+              title="Hide Tab"
+            />
+            <img
+              class="icon "
+              src="[object Object]"
+            />
+            <span
+              class="tab-title"
+            >
+              http://tab-1.1/
+            </span>
+          </div>
+          <div
+            class="item-row tab   visible"
+            id="tab"
+          >
+            <img
+              alt="tab-visible"
+              class="left-most tool icon"
+              data-testid="visibility-toggle"
+              id="tab-visibility-visible"
+              src="[object Object]"
+              title="Hide Tab"
+            />
+            <img
+              class="icon "
+              src="[object Object]"
+            />
+            <span
+              class="tab-title"
+            >
+              http://tab-1.2/
+            </span>
+          </div>
+          <div
+            class="item-row tab   visible"
+            id="tab"
+          >
+            <img
+              alt="tab-visible"
+              class="left-most tool icon"
+              data-testid="visibility-toggle"
+              id="tab-visibility-visible"
+              src="[object Object]"
+              title="Hide Tab"
+            />
+            <img
+              class="icon "
+              src="[object Object]"
+            />
+            <span
+              class="tab-title"
+            >
+              http://tab-1.3/
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="dl-item   "
+      >
+        <div
+          class="window-group   visible"
+          data-testid="window-group"
+          id="window-group"
+        >
+          <div
+            class="item-row"
+          >
+            <img
+              alt="window-disclosure-expanded"
+              class="tool icon "
+              id="disclosure"
+              src="[object Object]"
+              title="Collapse"
+            />
+            <img
+              alt="win-visible"
+              class="tool icon"
+              data-testid="visibility-toggle"
+              id="win-visibility-visible"
+              src="[object Object]"
+              title="Hide Window"
+            />
+            <span
+              class="window-title"
+            >
+              window 2
+               
+              <span />
+               
+              <span />
+            </span>
+          </div>
+          <div
+            class="item-row tab   visible"
+            id="tab"
+          >
+            <img
+              alt="tab-visible"
+              class="left-most tool icon"
+              data-testid="visibility-toggle"
+              id="tab-visibility-visible"
+              src="[object Object]"
+              title="Hide Tab"
+            />
+            <img
+              class="icon "
+              src="[object Object]"
+            />
+            <span
+              class="tab-title"
+            >
+              http://tab-2.1/
+            </span>
+          </div>
+          <div
+            class="item-row tab   visible"
+            id="tab"
+          >
+            <img
+              alt="tab-visible"
+              class="left-most tool icon"
+              data-testid="visibility-toggle"
+              id="tab-visibility-visible"
+              src="[object Object]"
+              title="Hide Tab"
+            />
+            <img
+              class="icon "
+              src="[object Object]"
+            />
+            <span
+              class="tab-title"
+            >
+              http://tab-2.2/
+            </span>
+          </div>
+          <div
+            class="item-row tab   visible"
+            id="tab"
+          >
+            <img
+              alt="tab-visible"
+              class="left-most tool icon"
+              data-testid="visibility-toggle"
+              id="tab-visibility-visible"
+              src="[object Object]"
+              title="Hide Tab"
+            />
+            <img
+              class="icon "
+              src="[object Object]"
+            />
+            <span
+              class="tab-title"
+            >
+              http://tab-2.3/
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="dl-item floating"
+        style="pointer-events: none; position: absolute; left: 0px; top: 0px; width: 0px; height: 0px;"
+      />
     </div>
-    <div>
-      <div
-        class="session dl-list"
-        style="display: block;"
+    <div
+      class="command-buttons"
+    >
+      <button
+        class="ok"
       >
-        <div
-          class="dl-item   "
-        >
-          <div
-            class="window-group   visible"
-            data-testid="window-group"
-            id="window-group"
-          >
-            <div
-              class="item-row"
-            >
-              <img
-                alt="window-disclosure-expanded"
-                class="tool icon "
-                id="disclosure"
-                src="[object Object]"
-                title="Collapse"
-              />
-              <img
-                alt="win-visible"
-                class="tool icon"
-                data-testid="visibility-toggle"
-                id="win-visibility-visible"
-                src="[object Object]"
-                title="Hide Window"
-              />
-              <span
-                class="window-title"
-              >
-                window 1
-                 
-                <span />
-                 
-                <span />
-              </span>
-            </div>
-            <div
-              class="item-row tab   visible"
-              id="tab"
-            >
-              <img
-                alt="tab-visible"
-                class="left-most tool icon"
-                data-testid="visibility-toggle"
-                id="tab-visibility-visible"
-                src="[object Object]"
-                title="Hide Tab"
-              />
-              <img
-                class="icon "
-                src="[object Object]"
-              />
-              <span
-                class="tab-title"
-              >
-                http://tab-1.1/
-              </span>
-            </div>
-            <div
-              class="item-row tab   visible"
-              id="tab"
-            >
-              <img
-                alt="tab-visible"
-                class="left-most tool icon"
-                data-testid="visibility-toggle"
-                id="tab-visibility-visible"
-                src="[object Object]"
-                title="Hide Tab"
-              />
-              <img
-                class="icon "
-                src="[object Object]"
-              />
-              <span
-                class="tab-title"
-              >
-                http://tab-1.2/
-              </span>
-            </div>
-            <div
-              class="item-row tab   visible"
-              id="tab"
-            >
-              <img
-                alt="tab-visible"
-                class="left-most tool icon"
-                data-testid="visibility-toggle"
-                id="tab-visibility-visible"
-                src="[object Object]"
-                title="Hide Tab"
-              />
-              <img
-                class="icon "
-                src="[object Object]"
-              />
-              <span
-                class="tab-title"
-              >
-                http://tab-1.3/
-              </span>
-            </div>
-          </div>
-        </div>
-        <div
-          class="dl-item   "
-        >
-          <div
-            class="window-group   visible"
-            data-testid="window-group"
-            id="window-group"
-          >
-            <div
-              class="item-row"
-            >
-              <img
-                alt="window-disclosure-expanded"
-                class="tool icon "
-                id="disclosure"
-                src="[object Object]"
-                title="Collapse"
-              />
-              <img
-                alt="win-visible"
-                class="tool icon"
-                data-testid="visibility-toggle"
-                id="win-visibility-visible"
-                src="[object Object]"
-                title="Hide Window"
-              />
-              <span
-                class="window-title"
-              >
-                window 2
-                 
-                <span />
-                 
-                <span />
-              </span>
-            </div>
-            <div
-              class="item-row tab   visible"
-              id="tab"
-            >
-              <img
-                alt="tab-visible"
-                class="left-most tool icon"
-                data-testid="visibility-toggle"
-                id="tab-visibility-visible"
-                src="[object Object]"
-                title="Hide Tab"
-              />
-              <img
-                class="icon "
-                src="[object Object]"
-              />
-              <span
-                class="tab-title"
-              >
-                http://tab-2.1/
-              </span>
-            </div>
-            <div
-              class="item-row tab   visible"
-              id="tab"
-            >
-              <img
-                alt="tab-visible"
-                class="left-most tool icon"
-                data-testid="visibility-toggle"
-                id="tab-visibility-visible"
-                src="[object Object]"
-                title="Hide Tab"
-              />
-              <img
-                class="icon "
-                src="[object Object]"
-              />
-              <span
-                class="tab-title"
-              >
-                http://tab-2.2/
-              </span>
-            </div>
-            <div
-              class="item-row tab   visible"
-              id="tab"
-            >
-              <img
-                alt="tab-visible"
-                class="left-most tool icon"
-                data-testid="visibility-toggle"
-                id="tab-visibility-visible"
-                src="[object Object]"
-                title="Hide Tab"
-              />
-              <img
-                class="icon "
-                src="[object Object]"
-              />
-              <span
-                class="tab-title"
-              >
-                http://tab-2.3/
-              </span>
-            </div>
-          </div>
-        </div>
-        <div
-          class="dl-item floating"
-          style="pointer-events: none; position: absolute; left: 0px; top: 0px; width: 0px; height: 0px;"
-        />
-      </div>
-      <div
-        class="command-buttons"
+        Add links
+      </button>
+      <span />
+      <button
+        class="cancel"
       >
-        <button
-          class="ok"
-        >
-          Add links
-        </button>
-        <span />
-        <button
-          class="cancel"
-        >
-          Share all windows
-        </button>
-      </div>
+        Share all windows
+      </button>
     </div>
     <div
       class="credits"

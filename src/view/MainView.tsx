@@ -5,11 +5,6 @@ import SessionMutator from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
 
-import {
-  stringToWindows,
-  windowsToString
-} from '../serialisation/MarkdownSerialisation';
-
 import Title from './Title';
 import WindowListView from './WindowListView';
 import MainViewCmdButtons from './MainViewCmdButtons';
@@ -36,14 +31,14 @@ export default class MainView extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.bindFunctions();
+    this.changeMode = this.changeMode.bind(this);
   }
 
   render() {
     return (
       <div>
         <Title />
-        {this.renderSession()}
+        {this.renderBody()}
         <Footer
           version={this.props.version}
           buildString={this.props.buildString}
@@ -52,76 +47,62 @@ export default class MainView extends React.Component<Props, State> {
     );
   }
 
-  renderSession() {
-    const windows = this.props.session.windows;
-    const mode = this.state.mode;
+  private renderBody() {
+    switch (this.state.mode) {
+      case 'list':
+        return this.renderListMode();
+      case 'read':
+        return this.renderReadMode();
+      case 'write':
+        return this.renderWriteMode();
+      default:
+        return null;
+    }
+  }
+
+  private renderListMode() {
+    const { session, sessionMutator, windowMutator, tabMutator } = this.props;
     return (
-      <div>
-        {mode === 'list' && (
-          <WindowListView
-            windows={windows}
-            sessionMutator={this.props.sessionMutator}
-            windowMutator={this.props.windowMutator}
-            tabMutator={this.props.tabMutator}
-            onWindowCopied={this.changeToReadMode}
-          />
-        )}
-        {mode === 'list' && (
-          <MainViewCmdButtons
-            onPaste={this.changeToWriteMode}
-            onCopyAll={this.changeToReadModeAllWindows}
-          />
-        )}
-        {mode === 'read' && (
-          <TextWindowView
-            windows={windows.filter(w => {
-              return this.state.windowId === -1 || w.id === this.state.windowId;
-            })}
-            windowsToString={windowsToString}
-            onClose={this.changeToListMode}
-          />
-        )}
-        {mode === 'write' && (
-          <NewWindowView
-            minimumLines={10}
-            stringToWindows={stringToWindows}
-            onSave={this.addWindowGroup}
-            onClose={this.changeToListMode}
-          />
-        )}
-      </div>
+      <>
+        <WindowListView
+          windows={session.windows}
+          sessionMutator={sessionMutator}
+          windowMutator={windowMutator}
+          tabMutator={tabMutator}
+          onWindowCopied={windowId => this.changeMode('read', windowId)}
+        />
+        <MainViewCmdButtons
+          onPaste={this.changeMode('write')}
+          onCopyAll={this.changeMode('read')}
+        />
+      </>
     );
   }
 
-  private changeToListMode() {
-    this.setState({ mode: 'list' });
-  }
-
-  private changeToReadMode(windowId: number) {
-    this.setState({ mode: 'read', windowId });
-  }
-
-  private changeToWriteMode() {
-    this.setState({ mode: 'write' });
-  }
-
-  private addWindowGroup(windows: BT.Window[]) {
-    this.props.sessionMutator.addWindows(windows);
-    this.changeToListMode();
-  }
-
-  private changeToReadModeAllWindows() {
-    this.changeToReadMode(-1);
-  }
-
-  private bindFunctions() {
-    // code-smell: too many bind(s)
-    this.changeToListMode = this.changeToListMode.bind(this);
-    this.changeToReadMode = this.changeToReadMode.bind(this);
-    this.changeToWriteMode = this.changeToWriteMode.bind(this);
-    this.changeToReadModeAllWindows = this.changeToReadModeAllWindows.bind(
-      this
+  private renderReadMode() {
+    const windows = this.props.session.windows;
+    const { windowId } = this.state;
+    return (
+      <TextWindowView
+        windows={windows.filter(w => {
+          return windowId === -1 || w.id === windowId;
+        })}
+        onClose={this.changeMode('list')}
+      />
     );
-    this.addWindowGroup = this.addWindowGroup.bind(this);
+  }
+
+  private renderWriteMode() {
+    return (
+      <NewWindowView
+        minimumLines={10}
+        sessionMutator={this.props.sessionMutator}
+        onClose={this.changeMode('list')}
+      />
+    );
+  }
+
+  private changeMode(mode: State['mode'], windowId: number = -1) {
+    return () => this.setState({ mode, windowId });
   }
 }
