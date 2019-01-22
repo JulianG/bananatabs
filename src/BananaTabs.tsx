@@ -40,11 +40,11 @@ export default class BananaTabs extends React.Component<Props, State> {
 
     const factory = props.factory;
 
-    this.sessionMutator = factory.getSessionMutator();
-    this.sessionProvider = factory.getSessionProvider();
+    this.sessionMutator = factory.sessionMutator;
+    this.sessionProvider = factory.sessionProvider;
     const mutator = new WindowAndTabMutator(
       this.sessionProvider,
-      factory.getBrowserController()
+      factory.browserController
     );
     this.tabMutator = this.windowMutator = mutator;
   }

@@ -21,7 +21,7 @@ const ProductionApp = () => {
 };
 
 const DevelopmentApp = () => {
-  const chromeAPI = factory.getChromeAPI();
+  const chromeAPI = factory.chromeAPI;
   // tslint:disable-next-line no-string-literal
   window['chromeAPI'] = chromeAPI;
 

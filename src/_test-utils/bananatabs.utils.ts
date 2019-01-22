@@ -21,13 +21,13 @@ export async function renderBananaTabs(
 ) {
   stored = stored !== null ? stored : live;
   const factory = getFactory(live, stored);
-  const fchrome = factory.getChromeAPI() as FakePromisingChromeAPI;
+  const fchrome = factory.chromeAPI as FakePromisingChromeAPI;
 
   const { container, ...renderResult } = render(
     React.createElement(BananaTabs, { factory })
   );
   await wait();
-  const provider = factory.getSessionProvider();
+  const provider = factory.sessionProvider;
 
   return {
     container,
