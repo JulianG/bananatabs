@@ -21,7 +21,9 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   toggleTabVisibility(winId: number, tabId: number) {
     const tab = this.provider.getTab(tabId);
-    tab.visible ? this.hideTab(winId, tabId) : this.showTab(winId, tabId);
+    return tab.visible
+      ? this.hideTab(winId, tabId)
+      : this.showTab(winId, tabId);
   }
 
   async hideTab(winId: number, tabId: number) {
@@ -44,10 +46,10 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     await this.storeSession();
     if (win.visible) {
       await this.browser.showTab(win, tab);
+      this.dispatchSessionChange();
     } else {
-      await this._showWindow(win);
+      await this.showWindow(winId);
     }
-    this.dispatchSessionChange();
   }
 
   async deleteTab(winId: number, tabId: number) {
@@ -90,19 +92,23 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async toggleWindowVisibility(id: number) {
     const win = this.provider.getWindow(id);
-    win.visible ? await this._hideWindow(win) : await this._showWindow(win);
-    this.dispatchSessionChange();
+    return win.visible ? this.hideWindow(id) : this.showWindow(id);
   }
 
   async hideWindow(id: number) {
     const win = this.provider.getWindow(id);
-    await this._hideWindow(win);
+    this.safeRenameWindow(win);
+    win.visible = false;
+    await this.storeSession();
+    await this.browser.closeWindow(win.id);
     this.dispatchSessionChange();
   }
 
   async showWindow(id: number) {
     const win = this.provider.getWindow(id);
-    await this._showWindow(win);
+    win.visible = true;
+    await this.storeSession();
+    await this.browser.showWindow(win);
     this.dispatchSessionChange();
   }
 
@@ -118,21 +124,6 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
       await this.browser.closeWindow(win.id);
     }
     this.dispatchSessionChange();
-  }
-
-  ///
-
-  private async _hideWindow(window: BT.Window) {
-    this.safeRenameWindow(window);
-    window.visible = false;
-    await this.storeSession();
-    await this.browser.closeWindow(window.id);
-  }
-
-  private async _showWindow(window: BT.Window) {
-    window.visible = true;
-    await this.storeSession();
-    await this.browser.showWindow(window);
   }
 
   ///
