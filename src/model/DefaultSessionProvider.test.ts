@@ -66,18 +66,11 @@ describe('creating windows and tabs', () => {
 
 describe('closing tabs', () => {
   test('chromeAPI: close tab in a window with more tabs', async () => {
-    await closeTabTest('[v(va,v)]', 0, 1);
-  });
 
-  test('chromeAPI: close the only in a window', async () => {
-    await closeTabTest('[v(va)]', 0, 0);
-  });
+    const sessionString = '[v(va,v)]';
+    const windowIndex = 0;
+    const tabIndex = 1;
 
-  async function closeTabTest(
-    sessionString: string,
-    windowIndex: number,
-    tabIndex: number
-  ) {
     // given an initialised provider
     const {
       provider,
@@ -111,6 +104,38 @@ describe('closing tabs', () => {
     }
     // and callback is triggered
     expect(onSessionChanged).toHaveBeenCalled();
+  });
+
+  test('chromeAPI: close the only tab in a window', async () => {
+
+    const sessionString = '[vt(va)]';
+    const windowIndex = 0;
+    const tabIndex = 0;
+
+    // given an initialised provider
+    const {
+      provider,
+      onSessionChanged,
+      fchrome
+    } = await createIniatilisedProvider(sessionString);
+    const existingWindows = await fchrome.windows.getAll({});
+    const windowId = existingWindows[windowIndex].id;
+    const initialTabIds = (existingWindows[windowIndex].tabs || []).map(
+      (t, i) => t.id || 0
+    );
+
+    // when a tab is closed/removed via the Chrome API
+    await fchrome.tabs.remove(initialTabIds[tabIndex]);
+    await wait(2);
+
+    // expect the window to be invisible if the closed tab was the only tab in he window
+    if (initialTabIds.length === 1) {
+      expect(provider.getWindow(windowId).visible).toBeFalsy();
+    }
+    // and callback is triggered
+    expect(onSessionChanged).toHaveBeenCalled();
+  });
+
   }
 });
 
@@ -151,7 +176,7 @@ describe('closing windows', () => {
     await fchrome.windows.remove(windowId);
 
     // expect the session to contain one less window
-    await wait();
+    await wait(2);
     expect(provider.session.windows).toHaveLength(initialWindowCount - 1);
     // and callback is triggered
     expect(onSessionChanged).toHaveBeenCalled();
