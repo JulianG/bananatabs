@@ -19,7 +19,7 @@ import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 export default class BananaFactory {
   public readonly chromeAPI: PromisingChromeAPI;
   public readonly persistence: SessionPersistence;
-  public readonly liveSessionMerger: SessionMerger;
+  public readonly sessionMerger: SessionMerger;
   public readonly sessionProvider: SessionProvider;
   public readonly sessionMutator: SessionMutator;
   public readonly browserController: BrowserController;
@@ -33,13 +33,13 @@ export default class BananaFactory {
       ? new RAMSessionPersistence(fakeInitialSessions.stored)
       : new LocalStorageSessionPersistence();
 
-    this.liveSessionMerger = new DefaultSessionMerger();
+    this.sessionMerger = new DefaultSessionMerger();
 
     this.browserController = new ChromeBrowserController(this.chromeAPI);
 
     this.sessionProvider = new DefaultSessionProvider(
       this.browserController,
-      this.liveSessionMerger,
+      this.sessionMerger,
       this.persistence
     );
 

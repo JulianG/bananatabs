@@ -64,7 +64,7 @@ describe('ChromeEventController', async () => {
 
     // when calling createTab
     const t = { ...BT.getNullTab(), id: 1001 };
-    await controller.createTab(initialWindows[0], t);
+    await controller.showTab(initialWindows[0], t);
 
     // expect the list of tabs to have 2 visible tabs
     const wins = await controller.getAllWindows();

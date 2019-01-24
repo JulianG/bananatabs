@@ -40,7 +40,7 @@ export default class ChromeBrowserController implements BrowserController {
     await Promise.all([windowPromise, tabPromise]);
   }
 
-  public async createTab(window: BT.Window, tab: BT.Tab) {
+  public async showTab(window: BT.Window, tab: BT.Tab) {
     this.browserEventDispatcher.disable();
     const props: chrome.tabs.CreateProperties = {
       windowId: window.visible ? window.id : 0,

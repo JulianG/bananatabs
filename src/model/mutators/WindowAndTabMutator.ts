@@ -43,7 +43,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     tab.visible = true;
     await this.storeSession();
     if (win.visible) {
-      await this.browser.createTab(win, tab);
+      await this.browser.showTab(win, tab);
     } else {
       await this._showWindow(win);
     }
