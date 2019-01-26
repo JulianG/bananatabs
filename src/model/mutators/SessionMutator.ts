@@ -19,25 +19,20 @@ export class DefaultSessionMutator {
   sortWindows(f: WindowSortingFunction): void {
     const session = this.provider.session;
     session.windows = session.windows.sort(f);
-    this.updateSession();
+    this.provider.updateSession(session);
   }
 
   updateWindows(windows: BT.Window[]): void {
     const session = this.provider.session;
     session.windows = windows;
-    this.updateSession();
+    this.provider.updateSession(session);
   }
 
   addWindows(windows: BT.Window[]): void {
     const session = this.provider.session;
     session.windows = [...session.windows, ...windows];
-    this.updateSession();
+    this.provider.updateSession(session);
   }
 
   ///
-
-  private updateSession() {
-    this.provider.storeSession(this.provider.session);
-    this.provider.onSessionChanged(this.provider.session);
-  }
 }

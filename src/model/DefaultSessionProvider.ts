@@ -28,19 +28,19 @@ export default class DefaultSessionProvider implements SessionProvider {
       const retrievedSession = await this.persistence.retrieveSession();
       const liveSession = await this.getLiveSession();
       this.session = this.mergeSessions(retrievedSession, liveSession);
-      await this.storeSession(this.session);
-      this.onSessionChanged(this.session);
+      await this.updateSession(this.session);
       this.busy = false;
     }
   }
 
-  async updateSession() {
-    await this._updateSession();
+  async updateSession(session?: BT.Session) {
+    if (session) {
+      await this.persistence.storeSession(session);
+    } else {
+      await this._updateSession();
+      await this.persistence.storeSession(this.session);
+    }
     this.onSessionChanged(this.session);
-  }
-
-  async storeSession(session: BT.Session) {
-    await this.persistence.storeSession(session);
   }
 
   getWindow(id: number): BT.Window {
@@ -75,7 +75,6 @@ export default class DefaultSessionProvider implements SessionProvider {
       this.busy = true;
       const liveSession = await this.getLiveSession();
       this.session = this.mergeSessions(this.session, liveSession);
-      await this.storeSession(this.session);
       this.busy = false;
     }
   }
