@@ -87,7 +87,7 @@ describe('BananaTabs Tests: Text Mode', async () => {
     await wait();
   });
 
-  test('TextWindowView', async () => {
+  test('TextWindowView - sharing all windows', async () => {
     //
     // GIVEN an initially rendered app with some hidden tabs and windows
     const windows = `
@@ -124,6 +124,57 @@ describe('BananaTabs Tests: Text Mode', async () => {
         * http://tab-1.1/
         * http://tab-1.2/
         
+        window 2:
+        * http://tab-2.1/
+        * http://tab-2.2/
+      `)
+    );
+    await wait();
+
+    // WHEN clicking the "go back" button
+    fireEvent.click(getByText(/go back/i));
+    await wait();
+    
+    // EXPECT we have some window groups
+    getByTestId('window-group');
+
+  });
+
+  test('TextWindowView - sharing one window', async () => {
+    //
+    // GIVEN an initially rendered app with some hidden tabs and windows
+    const windows = `
+			window 1:
+      * http://tab-1.1/
+      * http://tab-1.2/
+      
+      window 2~
+      ~ http://tab-2.1/
+      * http://tab-2.2/
+    `;
+    const { getByText, getByTestId, getByRole, getAllByAltText } = await renderBananaTabs(
+      windows
+    );
+    await wait();
+
+    // assert we have some window groups
+    getByTestId('window-group');
+
+    // WHEN hovering the title for the second window group
+    fireEvent.mouseEnter(getByText(/window 2/i));
+    // and clicking the share button on in
+    fireEvent.click(getAllByAltText(/share/i)[0]);
+    await wait();
+
+    // THEN the text window screen appears
+    getByTestId('text-window-view');
+
+    const input = getByRole('input') as HTMLTextAreaElement;
+
+    // EXPECT the content of the input/textarea to match the selected window group
+    // but ignoringthe visibility of each window and tab. they should all look "visible"
+    expect(trimLines(input.textContent!)).toBe(
+      trimLines(`
         window 2:
         * http://tab-2.1/
         * http://tab-2.2/

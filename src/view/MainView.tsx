@@ -69,7 +69,7 @@ export default class MainView extends React.Component<Props, State> {
           sessionMutator={sessionMutator}
           windowMutator={windowMutator}
           tabMutator={tabMutator}
-          onWindowCopied={windowId => this.changeMode('read', windowId)}
+          onWindowCopied={windowId => this.changeMode('read', windowId)()}
         />
         <MainViewCmdButtons
           onPaste={this.changeMode('write')}
