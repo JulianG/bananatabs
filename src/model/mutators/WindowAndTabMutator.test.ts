@@ -30,9 +30,9 @@ describe('WindowAndTabMutator tests', () => {
     const fchws = await fchrome.windows.getAll({});
     expect(fchws[0].tabs).toHaveLength(tabIds.length - 1);
     // also expect the session window to contain the same amount of tabs as before
-    expect(provider.getWindow(windowId).tabs).toHaveLength(tabIds.length);
+    expect(provider.session.getWindow(windowId).tabs).toHaveLength(tabIds.length);
     // but the affected tab is not visible any more
-    expect(provider.getTab(tabIds[1]).visible).toBeFalsy();
+    expect(provider.session.getTab(tabIds[1]).visible).toBeFalsy();
     // and callback is triggered
     expect(onSessionChanged).toHaveBeenCalled();
   });

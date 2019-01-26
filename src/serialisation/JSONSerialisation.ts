@@ -10,9 +10,10 @@ interface LegacySession extends BT.Session {
 }
 
 export function convertLegacySession(session: LegacySession): BT.Session {
-  const windows = session.windows.map(convertToWindow);
-  const panelWindow = convertToWindow(session.panelWindow);
-  return { ...session, windows, panelWindow };
+  return new BT.Session(
+    session.windows.map(convertToWindow),
+    convertToWindow(session.panelWindow)
+  );
 }
 
 function convertToWindow(w: LegacyWindow | BT.Window): BT.Window {

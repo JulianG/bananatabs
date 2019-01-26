@@ -58,7 +58,9 @@ describe('creating windows and tabs', () => {
     // also expect the session to contain 1 window with one extra tab
     await wait();
     expect(onSessionChanged.mock.calls[0][0]).toMatchObject(provider.session);
-    expect(provider.getWindow(windowId).tabs).toHaveLength(tabIds.length + 1);
+    expect(provider.session.getWindow(windowId).tabs).toHaveLength(
+      tabIds.length + 1
+    );
     // and callback is triggered
     expect(onSessionChanged).toHaveBeenCalled();
   });
@@ -66,7 +68,6 @@ describe('creating windows and tabs', () => {
 
 describe('closing tabs', () => {
   test('chromeAPI: close tab in a window with more tabs', async () => {
-
     const sessionString = '[v(va,v)]';
     const windowIndex = 0;
     const tabIndex = 1;
@@ -88,26 +89,25 @@ describe('closing tabs', () => {
 
     // also expect the session to contain 1 window with one fewer tab
     await wait();
-    expect(provider.getWindow(windowId).tabs).toHaveLength(
+    expect(provider.session.getWindow(windowId).tabs).toHaveLength(
       initialTabIds.length - 1
     );
     // and the speficied tab not to be present.
     expect(
-      provider
+      provider.session
         .getWindow(windowId)
         .tabs.filter(t => t.id === initialTabIds[tabIndex])
     ).toHaveLength(0);
 
     // expect the window to be invisible if the closed tab was the only tab in he window
     if (initialTabIds.length === 1) {
-      expect(provider.getWindow(windowId).visible).toBeFalsy();
+      expect(provider.session.getWindow(windowId).visible).toBeFalsy();
     }
     // and callback is triggered
     expect(onSessionChanged).toHaveBeenCalled();
   });
 
   test('chromeAPI: close the only tab in a window', async () => {
-
     const sessionString = '[vt(va)]';
     const windowIndex = 0;
     const tabIndex = 0;
@@ -130,13 +130,11 @@ describe('closing tabs', () => {
 
     // expect the window to be invisible if the closed tab was the only tab in he window
     if (initialTabIds.length === 1) {
-      expect(provider.getWindow(windowId).visible).toBeFalsy();
+      expect(provider.session.getWindow(windowId).visible).toBeFalsy();
     }
     // and callback is triggered
     expect(onSessionChanged).toHaveBeenCalled();
   });
-
-  }
 });
 
 describe('closing windows', () => {

@@ -20,7 +20,7 @@ export function parseSessionString(ss: string): BT.Session {
   if (windows.length < 1 && ss !== '') {
     throw new Error('Error! Invalid input string.');
   }
-  return { ...BT.EmptySession, windows };
+  return new BT.Session(windows, BT.getNullWindow());
 }
 
 function _parseSessionString(ss: string) {

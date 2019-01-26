@@ -14,14 +14,14 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async selectTab(winId: number, tabId: number) {
     const session = this.provider.session;
-    const win = this.provider.getWindow(winId);
+    const win = this.provider.session.getWindow(winId);
     win.tabs.forEach(t => (t.active = t.id === tabId));
     await this.browser.selectTab(win.id, tabId);
     await this.updateSession(session);
   }
 
   toggleTabVisibility(winId: number, tabId: number) {
-    const tab = this.provider.getTab(tabId);
+    const tab = this.provider.session.getTab(tabId);
     return tab.visible
       ? this.hideTab(winId, tabId)
       : this.showTab(winId, tabId);
@@ -29,8 +29,8 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async hideTab(winId: number, tabId: number) {
     const session = this.provider.session;
-    const win = this.provider.getWindow(winId);
-    const tab = this.provider.getTab(tabId);
+    const win = this.provider.session.getWindow(winId);
+    const tab = this.provider.session.getTab(tabId);
     tab.visible = false;
     if (win.visible) {
       this.safeRenameWindow(win);
@@ -41,8 +41,8 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async showTab(winId: number, tabId: number) {
     const session = this.provider.session;
-    const win = this.provider.getWindow(winId);
-    const tab = this.provider.getTab(tabId);
+    const win = this.provider.session.getWindow(winId);
+    const tab = this.provider.session.getTab(tabId);
     tab.visible = true;
     if (win.visible) {
       await this.browser.showTab(win, tab);
@@ -54,8 +54,8 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async deleteTab(winId: number, tabId: number) {
     const session = this.provider.session;
-    const win = this.provider.getWindow(winId);
-    const tab = this.provider.getTab(tabId);
+    const win = this.provider.session.getWindow(winId);
+    const tab = this.provider.session.getTab(tabId);
     const tabIndex = win.tabs.indexOf(tab);
     console.assert(tabIndex >= 0);
     if (tabIndex >= 0) {
@@ -72,33 +72,33 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async renameWindow(id: number, title: string) {
     const session = this.provider.session;
-    const win = this.provider.getWindow(id) || BT.getNullWindow();
+    const win = this.provider.session.getWindow(id) || BT.getNullWindow();
     win.title = title;
     await this.updateSession(session);
   }
 
   async collapseWindow(id: number) {
     const session = this.provider.session;
-    const win = this.provider.getWindow(id);
+    const win = this.provider.session.getWindow(id);
     win.expanded = false;
     await this.updateSession(session);
   }
 
   async expandWindow(id: number) {
     const session = this.provider.session;
-    const win = this.provider.getWindow(id);
+    const win = this.provider.session.getWindow(id);
     win.expanded = true;
     await this.updateSession(session);
   }
 
   async toggleWindowVisibility(id: number) {
-    const win = this.provider.getWindow(id);
+    const win = this.provider.session.getWindow(id);
     return win.visible ? this.hideWindow(id) : this.showWindow(id);
   }
 
   async hideWindow(id: number) {
     const session = this.provider.session;
-    const win = this.provider.getWindow(id);
+    const win = this.provider.session.getWindow(id);
     this.safeRenameWindow(win);
     win.visible = false;
     await this.browser.closeWindow(win.id);
@@ -107,14 +107,14 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async showWindow(id: number) {
     const session = this.provider.session;
-    const win = this.provider.getWindow(id);
+    const win = this.provider.session.getWindow(id);
     win.visible = true;
     await this.browser.showWindow(win);
     await this.updateSession(session);
   }
 
   async deleteWindow(id: number) {
-    const win = this.provider.getWindow(id);
+    const win = this.provider.session.getWindow(id);
     const index = this.provider.session.windows.indexOf(win);
     console.assert(index >= 0);
     if (index >= 0) {

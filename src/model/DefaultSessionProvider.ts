@@ -35,33 +35,13 @@ export default class DefaultSessionProvider implements SessionProvider {
 
   async updateSession(session?: BT.Session) {
     if (session) {
+      this.session = session;
       await this.persistence.storeSession(session);
     } else {
       await this._updateSession();
       await this.persistence.storeSession(this.session);
     }
     this.onSessionChanged(this.session);
-  }
-
-  getWindow(id: number): BT.Window {
-    const win = this.session.windows.find(w => w.id === id);
-    console.assert(
-      win,
-      `Could not find a window with id ${id} in the current session.`
-    );
-    return win || { ...BT.getNullWindow(), id };
-  }
-
-  getTab(id: number): BT.Tab {
-    const win =
-      this.session.windows.find(w => w.tabs.some(t => t.id === id)) ||
-      BT.getNullWindow();
-    const tab = win.tabs.find(t => t.id === id);
-    console.assert(
-      tab,
-      `Could not find a tab with id ${id} in the current session.`
-    );
-    return tab || { ...BT.getNullTab(), id };
   }
 
   //////////////////////////
@@ -86,7 +66,7 @@ export default class DefaultSessionProvider implements SessionProvider {
     const filteredSessionWindows = sessionWindows.filter(
       w => w !== panelWindow
     );
-    return { windows: filteredSessionWindows, panelWindow };
+    return new BT.Session(filteredSessionWindows, panelWindow);
   }
 
   private mergeSessions(retrievedSession: BT.Session, liveSession: BT.Session) {

@@ -5,7 +5,4 @@ export default interface SessionProvider {
   onSessionChanged(session: BT.Session): void;
   initialiseSession(): Promise<void>;
   updateSession(session?: BT.Session): Promise<void>;
-
-  getWindow(id: number): BT.Window;
-  getTab(id: number): BT.Tab;
 }

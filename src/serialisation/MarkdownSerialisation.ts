@@ -14,7 +14,7 @@ function tabsToString(tabs: BT.Tab[]): string {
 
 export function stringToSession(str: string): BT.Session {
   const windows = stringToWindows(str);
-  return { ...BT.EmptySession, windows };
+  return new BT.Session(windows, BT.getNullWindow());
 }
 
 export function stringToWindows(str: string): BT.Window[] {

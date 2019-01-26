@@ -91,13 +91,8 @@ export class DefaultSessionMerger implements SessionMerger {
     const newSessionWindows = [...mergedSessionWindows, ...nonMatchedWindows];
     console.table(nonMatchedWindows);
     console.groupEnd();
-
     console.groupEnd();
-
-    return {
-      windows: newSessionWindows,
-      panelWindow: live.panelWindow
-    };
+    return new BT.Session(newSessionWindows, live.panelWindow);
   }
 
   private mergeTabs(liveTabs: BT.Tab[], storedTabs: BT.Tab[]): BT.Tab[] {
