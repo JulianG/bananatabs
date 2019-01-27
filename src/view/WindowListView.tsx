@@ -9,7 +9,7 @@ import WindowView from './WindowView';
 import RLDD from 'react-list-drag-and-drop/lib/RLDD';
 
 interface Props {
-  windows: BT.Window[];
+  windows: ReadonlyArray<BT.Window>;
   sessionMutator: SessionMutator;
   windowMutator: WindowMutator;
   tabMutator: TabMutator;
@@ -28,7 +28,7 @@ export default class WindowListView extends React.Component<Props, {}> {
     return (
       <RLDD
         cssClasses="session"
-        items={windows}
+        items={[...windows]}
         layout={'vertical'}
         threshold={25}
         dragDelay={250}

@@ -1,11 +1,9 @@
 export class Session {
-  // readonly windows: Window[] = [];
-  // readonly panelWindow: Window = getNullWindow();
 
   static clone(session: Session): Session {
     return new Session(session.windows, session.panelWindow);
   }
-  constructor(public readonly windows: Window[], public panelWindow: Window) {}
+  constructor(public readonly windows: ReadonlyArray<Window>, public readonly panelWindow: Window) {}
 
   getWindow(id: number): Window {
     const win = this.windows.find(w => w.id === id);

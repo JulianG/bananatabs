@@ -19,7 +19,7 @@ export class DefaultSessionMutator {
   sortWindows(f: WindowSortingFunction): void {
     const session = this.provider.session;
     const newSession = new BT.Session(
-      session.windows.sort(f),
+      [...session.windows].sort(f),
       session.panelWindow
     );
     this.provider.updateSession(newSession);
