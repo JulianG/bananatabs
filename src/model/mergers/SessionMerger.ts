@@ -95,7 +95,7 @@ export class DefaultSessionMerger implements SessionMerger {
     return new BT.Session(newSessionWindows, live.panelWindow);
   }
 
-  private mergeTabs(liveTabs: BT.Tab[], storedTabs: BT.Tab[]): BT.Tab[] {
+  private mergeTabs(liveTabs: ReadonlyArray<BT.Tab>, storedTabs: ReadonlyArray<BT.Tab>): ReadonlyArray<BT.Tab> {
     console.log('storedTabs...');
     console.table(storedTabs);
     console.log('liveTabs...');
@@ -159,7 +159,7 @@ export class DefaultSessionMerger implements SessionMerger {
 					stored tabs : ${storedTabs.length}
 					final tabs  : ${finalTabs.length}`);
       console.warn('Using stored tabs instead of live or merged tabs.');
-      finalTabs = storedTabs;
+      return storedTabs;
     }
     return finalTabs;
   }

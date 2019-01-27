@@ -33,7 +33,7 @@ function compareWindows(w0: BT.Window, w1: BT.Window): boolean {
   return true;
 }
 
-function compareTabLists(tl0: BT.Tab[], tl1: BT.Tab[]): boolean {
+function compareTabLists(tl0: ReadonlyArray<BT.Tab>, tl1: ReadonlyArray<BT.Tab>): boolean {
   const rsp =
     tl0.length === tl1.length && tl0.every((t0, i) => compareTab(t0, tl1[i]));
   if (!rsp) {

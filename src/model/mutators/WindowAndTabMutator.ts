@@ -59,7 +59,7 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     const tabIndex = win.tabs.indexOf(tab);
     console.assert(tabIndex >= 0);
     if (tabIndex >= 0) {
-      win.tabs.splice(tabIndex, 1);
+      win.tabs = [...win.tabs.slice(0, tabIndex), ...win.tabs.slice(tabIndex + 1)];
     }
     if (win.visible && tab.visible) {
       this.safeRenameWindow(win);

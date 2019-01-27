@@ -1,6 +1,6 @@
 import * as BT from '../model/CoreTypes';
 
-export function windowsToString(windows: BT.Window[]): string {
+export function windowsToString(windows: ReadonlyArray<BT.Window>): string {
   return windows
     .map(w => {
       return `${w.title || 'Window'}:\n${tabsToString(w.tabs)}\n`;
@@ -8,7 +8,7 @@ export function windowsToString(windows: BT.Window[]): string {
     .join('\n');
 }
 
-function tabsToString(tabs: BT.Tab[]): string {
+function tabsToString(tabs: ReadonlyArray<BT.Tab>): string {
   return tabs.map(t => ` * ${t.url}`).join('\n');
 }
 
@@ -60,7 +60,7 @@ export function stringToWindows(str: string): BT.Window[] {
         : extractURL(line.trim());
       if (isValidURL(url)) {
         const visible = getFirstNonWhitespaceCharacter(line) !== '~';
-        win.tabs.push({
+        win.tabs = [...win.tabs, {
           ...BT.getNullTab(),
           visible: visible,
           url,
@@ -68,7 +68,8 @@ export function stringToWindows(str: string): BT.Window[] {
           id: getId(),
           listIndex: win.tabs.length,
           index: tabIndex
-        });
+        }];
+
         tabIndex += visible ? 1 : 0;
       }
     }

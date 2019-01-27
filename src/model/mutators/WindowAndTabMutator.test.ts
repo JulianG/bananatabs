@@ -83,7 +83,7 @@ describe('WindowAndTabMutator tests', () => {
     // to match the ids of the tabs from the fchrome window
     await wait();
 
-    const getIdsList = (tabs: Array<{ id?: number }>): number[] => {
+    const getIdsList = (tabs: ReadonlyArray<{ id?: number }>): number[] => {
       return tabs.map(t => t.id!).sort((a, b) => a - b);
     };
 
