@@ -1,7 +1,7 @@
 import * as BT from '../model/CoreTypes';
 import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
 import BrowserController, {
-  SystemDisplayInfo,
+  SystemDisplayInfo
 } from '../model/mutators/BrowserController';
 import BrowserEventDispatcher from 'model/mutators/BrowserEventDispatcher';
 import ChromeEventDispatcher from './ChromeEventDispatcher';
@@ -34,7 +34,7 @@ export default class ChromeBrowserController implements BrowserController {
 
   public async selectTab(windowId: number, tabId: number) {
     const windowPromise = this.chromeAPI.windows.update(windowId, {
-      focused: true,
+      focused: true
     });
     const tabPromise = this.chromeAPI.tabs.update(tabId, { active: true });
     await Promise.all([windowPromise, tabPromise]);
@@ -46,10 +46,10 @@ export default class ChromeBrowserController implements BrowserController {
       windowId: window.visible ? window.id : 0,
       index: Math.max(tab.index, 0),
       url: tab.url,
-      active: tab.active,
+      active: tab.active
     };
     const newTab = await this.chromeAPI.tabs.create(props);
-    tab.id = newTab.id || -1;
+    tab = { ...tab, id: newTab.id || -1 };
     this.browserEventDispatcher.enable();
   }
 
@@ -123,7 +123,7 @@ export default class ChromeBrowserController implements BrowserController {
     return this.chromeAPI.windows.create({
       type: 'normal',
       state: 'minimized',
-      url: 'chrome://version/?bananatabs-ignore',
+      url: 'chrome://version/?bananatabs-ignore'
     });
   }
 
@@ -133,15 +133,12 @@ export default class ChromeBrowserController implements BrowserController {
       ...bounds,
       focused: window.focused,
       type: window.type,
-      url: window.tabs.filter(t => t.visible).map(t => t.url),
+      url: window.tabs.filter(t => t.visible).map(t => t.url)
     };
 
     const newWindow = await this.chromeAPI.windows.create(createData);
-
     if (newWindow) {
-      window.visible = true;
-      window.id = newWindow.id;
-      return window;
+      return { ...window, id: newWindow.id, visible: true };
     } else {
       throw new Error('Error. Failed to create window.');
     }
@@ -159,7 +156,7 @@ function convertWindow(w: chrome.windows.Window): BT.Window {
     type: w.type,
     state: w.state,
     bounds: getWindowBounds(w),
-    expanded: true,
+    expanded: true
   };
 }
 
@@ -175,7 +172,7 @@ function convertTab(t: chrome.tabs.Tab, i: number): BT.Tab {
     active: t.active,
     selected: t.selected,
     highlighted: t.highlighted,
-    status: t.status || '',
+    status: t.status || ''
   };
 }
 
@@ -184,6 +181,6 @@ function getWindowBounds(w: chrome.windows.Window): BT.Rectangle {
     top: w.top || 0,
     left: w.left || 0,
     width: w.width || 0,
-    height: w.height || 0,
+    height: w.height || 0
   };
 }

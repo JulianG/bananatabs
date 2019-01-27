@@ -27,36 +27,36 @@ export class Session {
 }
 
 export interface ListItem {
-  id: number;
+  readonly id: number;
   title: string;
   visible: boolean;
-  icon: string;
+  readonly icon: string;
 }
 
 export interface Window extends ListItem {
   focused: boolean;
-  bounds: Rectangle;
-  type: string;
-  state: string;
+  readonly bounds: Rectangle;
+  readonly type: string;
+  readonly state: string;
   tabs: ReadonlyArray<Tab>;
   expanded: boolean;
 }
 
 export interface Tab extends ListItem {
-  index: number;
-  listIndex: number;
-  url: string;
+  readonly index: number;
+  readonly listIndex: number;
+  readonly url: string;
   active: boolean;
-  selected: boolean;
-  highlighted: boolean;
-  status: string;
+  readonly selected: boolean;
+  readonly highlighted: boolean;
+  readonly status: string;
 }
 
 export interface Rectangle {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
+  readonly top: number;
+  readonly left: number;
+  readonly width: number;
+  readonly height: number;
 }
 
 export function getNullWindow(): Window {
