@@ -33,11 +33,15 @@ export default class ChromeBrowserController implements BrowserController {
   }
 
   public async selectTab(windowId: number, tabId: number) {
-    const windowPromise = this.chromeAPI.windows.update(windowId, {
+    await this.chromeAPI.windows.update(windowId, {
       focused: true
     });
-    const tabPromise = this.chromeAPI.tabs.update(tabId, { active: true });
-    await Promise.all([windowPromise, tabPromise]);
+    try {
+      await this.chromeAPI.tabs.update(tabId, { active: true });
+    } catch (e) {
+      console.error(e);
+    }
+    // await Promise.all([windowPromise, tabPromise]);
   }
 
   public async showTab(window: BT.Window, tab: BT.Tab) {

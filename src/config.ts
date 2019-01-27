@@ -1,5 +1,5 @@
 interface Config {
-  readonly debug: false;
+  readonly debug: boolean;
 }
 
 export const CONFIG: Config = {
