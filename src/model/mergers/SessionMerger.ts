@@ -39,10 +39,10 @@ export class DefaultSessionMerger implements SessionMerger {
           liveMatchingWindow.tabs,
           storedWindow.tabs
         );
-        liveMatchingWindow.visible = true;
         console.log('pushing live matching window: ');
         const pushingWindow = {
           ...liveMatchingWindow,
+          visible: true,
           title: storedWindow.title
         };
         this.pushUniqueWindow(mergedSessionWindows, pushingWindow);

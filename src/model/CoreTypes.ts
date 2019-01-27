@@ -29,7 +29,7 @@ export class Session {
 export interface ListItem {
   readonly id: number;
   readonly title: string;
-  visible: boolean;
+  readonly visible: boolean;
   readonly icon: string;
 }
 

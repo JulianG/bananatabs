@@ -66,8 +66,9 @@ export default class TextWindowView extends React.Component<Props, State> {
   }
 
   private save() {
-    const windows = stringToWindows(this.state.text);
-    windows.forEach(w => (w.visible = false));
+    const windows = stringToWindows(this.state.text).map(w => {
+      return { ...w, visible: false };
+    });
     this.props.sessionMutator.addWindows(windows);
     this.props.onClose();
   }

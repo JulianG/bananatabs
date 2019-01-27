@@ -32,11 +32,12 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     const win: BT.Mutable<BT.Window> = this.provider.session.getWindow(winId);
     const windows = session.windows.map(w => {
       return w.id === winId
-        ? { ...this.safeRenameWindow(w), tabs: w.tabs.map(t => {
-          return t.id === tabId
-          ? {...t, visible: false }
-          : {...t };
-        }) }
+        ? {
+            ...this.safeRenameWindow(w),
+            tabs: w.tabs.map(t => {
+              return t.id === tabId ? { ...t, visible: false } : { ...t };
+            })
+          }
         : { ...w };
     });
     await this.updateSession(new BT.Session(windows, session.panelWindow));
@@ -48,13 +49,26 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   async showTab(winId: number, tabId: number) {
     const session = this.provider.session;
     const win = this.provider.session.getWindow(winId);
-    const tab = this.provider.session.getTab(tabId);
-    tab.visible = true;
-    if (win.visible) {
-      await this.browser.showTab(win, tab);
-      await this.updateSession(session);
+    const windowWasVisible = win.visible;
+    const windows = session.windows.map(w => {
+      return w.id === winId
+        ? {
+            ...w,
+            visible: true,
+            tabs: w.tabs.map(t => {
+              return t.id === tabId ? { ...t, visible: true } : { ...t };
+            })
+          }
+        : { ...w };
+    });
+    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    if (windowWasVisible) {
+      await this.browser.showTab(
+        this.provider.session.getWindow(winId),
+        this.provider.session.getTab(tabId)
+      );
     } else {
-      await this.showWindow(winId); // !!!
+      await this.browser.showWindow(this.provider.session.getWindow(winId));
     }
   }
 
@@ -122,10 +136,11 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async showWindow(id: number) {
     const session = this.provider.session;
-    const win = this.provider.session.getWindow(id);
-    win.visible = true;
-    await this.browser.showWindow(win);
-    await this.updateSession(session);
+    const windows = session.windows.map(w => {
+      return w.id === id ? { ...w, visible: true } : { ...w };
+    });
+    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    await this.browser.showWindow(this.provider.session.getWindow(id));
   }
 
   async deleteWindow(id: number) {
