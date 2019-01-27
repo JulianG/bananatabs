@@ -46,7 +46,7 @@ export interface Tab extends ListItem {
   readonly index: number;
   readonly listIndex: number;
   readonly url: string;
-  active: boolean;
+  readonly active: boolean;
   readonly selected: boolean;
   readonly highlighted: boolean;
   readonly status: string;

@@ -10,7 +10,7 @@ export function parseSessionString(ss: string): BT.Session {
         return Object.assign(BT.getNullTab(), tab, {
           id: ++lastId,
           url: getRandomURL(),
-          title: getRandomTitle(),
+          title: getRandomTitle()
         });
       })
     );
@@ -77,7 +77,7 @@ function translatePropName(n: string): string {
     v: 'visible',
     f: 'focused',
     a: 'active',
-    t: 'title',
+    t: 'title'
   };
   if (keys.hasOwnProperty(n)) {
     return keys[n];
@@ -93,15 +93,15 @@ function convertPropArrayToObject(propList: {}[]): {} {
 ////
 
 function ensureOneActiveTab(tabs: BT.Tab[]): BT.Tab[] {
-  const fixedTabs = [...tabs];
-  const visibleTabs = fixedTabs.filter(t => t.visible);
+  let visibleTabs = tabs.filter(t => t.visible);
   if (visibleTabs.length > 0) {
     const activeTab = visibleTabs.find(t => t.active) || visibleTabs[0];
-    visibleTabs.forEach(vt => {
-      vt.active = vt.id === activeTab.id;
+    return tabs.map(t => {
+      return { ...t, active: t.id === activeTab.id };
     });
+  } else {
+    return tabs;
   }
-  return fixedTabs;
 }
 
 function getRandomURL(): string {

@@ -15,7 +15,9 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   async selectTab(winId: number, tabId: number) {
     const session = this.provider.session;
     const win = this.provider.session.getWindow(winId);
-    win.tabs.forEach(t => (t.active = t.id === tabId));
+    win.tabs = win.tabs.map(t => {
+      return { ...t, active: t.id === tabId };
+    });
     await this.browser.selectTab(win.id, tabId);
     await this.updateSession(session);
   }
