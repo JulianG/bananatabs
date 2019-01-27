@@ -15,11 +15,18 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   async selectTab(winId: number, tabId: number) {
     const session = this.provider.session;
     const win = this.provider.session.getWindow(winId);
-    win.tabs = win.tabs.map(t => {
-      return { ...t, active: t.id === tabId };
+    const windows = session.windows.map(w => {
+      return winId === w.id
+        ? {
+            ...w,
+            tabs: w.tabs.map(t => {
+              return { ...t, active: t.id === tabId };
+            })
+          }
+        : { ...w };
     });
+    await this.updateSession(new BT.Session(windows, session.panelWindow));
     await this.browser.selectTab(win.id, tabId);
-    await this.updateSession(session);
   }
 
   toggleTabVisibility(winId: number, tabId: number) {
@@ -80,19 +87,20 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     const tab = this.provider.session.getTab(tabId);
     const tabIndex = win.tabs.indexOf(tab);
     console.assert(tabIndex >= 0);
-    if (tabIndex >= 0) {
-      win.tabs = [
-        ...win.tabs.slice(0, tabIndex),
-        ...win.tabs.slice(tabIndex + 1)
-      ];
-    }
     if (win.visible && tab.visible) {
       await this.browser.closeTab(tab.id);
     }
     const windows = session.windows.map(w => {
-      return w.id === winId ? { ...this.safeRenameWindow(w) } : { ...w };
+      return w.id === winId
+        ? {
+            ...this.safeRenameWindow(w),
+            tabs: [
+              ...win.tabs.slice(0, tabIndex),
+              ...win.tabs.slice(tabIndex + 1)
+            ]
+          }
+        : { ...w };
     });
-
     await this.updateSession(new BT.Session(windows, session.panelWindow));
   }
 

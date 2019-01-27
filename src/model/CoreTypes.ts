@@ -38,7 +38,7 @@ export interface Window extends ListItem {
   readonly bounds: Rectangle;
   readonly type: string;
   readonly state: string;
-  tabs: ReadonlyArray<Tab>;
+  readonly tabs: ReadonlyArray<Tab>;
   readonly expanded: boolean;
 }
 

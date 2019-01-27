@@ -34,16 +34,16 @@ export class DefaultSessionMerger implements SessionMerger {
             ' ' +
             liveMatchingWindow.title
         );
-        liveMatchingWindow.tabs = this.mergeTabs(
-          liveMatchingWindow.tabs,
-          storedWindow.tabs
-        );
         console.log('pushing live matching window: ');
         const pushingWindow = {
           ...liveMatchingWindow,
           visible: true,
           title: storedWindow.title,
-          expanded: storedWindow.expanded
+          expanded: storedWindow.expanded,
+          tabs: this.mergeTabs(
+            liveMatchingWindow.tabs,
+            storedWindow.tabs
+          )
         };
         this.pushUniqueWindow(mergedSessionWindows, pushingWindow);
       } else {
