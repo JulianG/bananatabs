@@ -34,7 +34,6 @@ export class DefaultSessionMerger implements SessionMerger {
             ' ' +
             liveMatchingWindow.title
         );
-        liveMatchingWindow.expanded = storedWindow.expanded;
         liveMatchingWindow.tabs = this.mergeTabs(
           liveMatchingWindow.tabs,
           storedWindow.tabs
@@ -43,7 +42,8 @@ export class DefaultSessionMerger implements SessionMerger {
         const pushingWindow = {
           ...liveMatchingWindow,
           visible: true,
-          title: storedWindow.title
+          title: storedWindow.title,
+          expanded: storedWindow.expanded
         };
         this.pushUniqueWindow(mergedSessionWindows, pushingWindow);
       } else {

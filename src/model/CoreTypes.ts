@@ -39,7 +39,7 @@ export interface Window extends ListItem {
   readonly type: string;
   readonly state: string;
   tabs: ReadonlyArray<Tab>;
-  expanded: boolean;
+  readonly expanded: boolean;
 }
 
 export interface Tab extends ListItem {

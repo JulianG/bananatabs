@@ -106,16 +106,18 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async collapseWindow(id: number) {
     const session = this.provider.session;
-    const win = this.provider.session.getWindow(id);
-    win.expanded = false;
-    await this.updateSession(session);
+    const windows = session.windows.map(w => {
+      return w.id === id ? { ...w, expanded: false } : { ...w };
+    });
+    await this.updateSession(new BT.Session(windows, session.panelWindow));
   }
 
   async expandWindow(id: number) {
     const session = this.provider.session;
-    const win = this.provider.session.getWindow(id);
-    win.expanded = true;
-    await this.updateSession(session);
+    const windows = session.windows.map(w => {
+      return w.id === id ? { ...w, expanded: true } : { ...w };
+    });
+    await this.updateSession(new BT.Session(windows, session.panelWindow));
   }
 
   async toggleWindowVisibility(id: number) {
