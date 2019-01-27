@@ -26,7 +26,7 @@ export function stringToWindows(str: string): BT.Window[] {
   const wins: BT.Window[] = [];
   const lines = str.split('\n');
 
-  let win: BT.Window;
+  let win: BT.Mutable<BT.Window>;
   let tabIndex: number;
   let shouldCreateNewWindow: boolean = true;
   let newWindowVisibility: boolean = true;

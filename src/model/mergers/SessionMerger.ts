@@ -34,40 +34,28 @@ export class DefaultSessionMerger implements SessionMerger {
             ' ' +
             liveMatchingWindow.title
         );
-        liveMatchingWindow.title = storedWindow.title;
         liveMatchingWindow.expanded = storedWindow.expanded;
-        console.groupCollapsed(
-          'mergeTabs:',
-          liveMatchingWindow.id,
-          storedWindow.id
-        );
         liveMatchingWindow.tabs = this.mergeTabs(
           liveMatchingWindow.tabs,
           storedWindow.tabs
         );
-        console.groupEnd();
         liveMatchingWindow.visible = true;
-        console.log(
-          'pushing live matching window: ' +
-            liveMatchingWindow.id +
-            ' ' +
-            liveMatchingWindow.title
-        );
-        this.pushUniqueWindow(mergedSessionWindows, liveMatchingWindow);
+        console.log('pushing live matching window: ');
+        const pushingWindow = {
+          ...liveMatchingWindow,
+          title: storedWindow.title
+        };
+        this.pushUniqueWindow(mergedSessionWindows, pushingWindow);
       } else {
         console.log('could not find a live matching window');
-
         if (storedWindow.title !== '') {
-          console.log(
-            'pushing a hidden window: ' +
-              storedWindow.id +
-              ' ' +
-              storedWindow.title +
-              storedWindow.tabs.map(t => t.id).join(',')
-          );
-          storedWindow.focused = false;
-          storedWindow.visible = false;
-          this.pushUniqueWindow(mergedSessionWindows, storedWindow);
+          console.log('pushing a hidden window: ');
+          const pushingWindow = {
+            ...storedWindow,
+            focused: false,
+            visible: false
+          };
+          this.pushUniqueWindow(mergedSessionWindows, pushingWindow);
         } else {
           console.log(
             'NOT pushing stored window because title was empty string.'
@@ -95,7 +83,10 @@ export class DefaultSessionMerger implements SessionMerger {
     return new BT.Session(newSessionWindows, live.panelWindow);
   }
 
-  private mergeTabs(liveTabs: ReadonlyArray<BT.Tab>, storedTabs: ReadonlyArray<BT.Tab>): ReadonlyArray<BT.Tab> {
+  private mergeTabs(
+    liveTabs: ReadonlyArray<BT.Tab>,
+    storedTabs: ReadonlyArray<BT.Tab>
+  ): ReadonlyArray<BT.Tab> {
     console.log('storedTabs...');
     console.table(storedTabs);
     console.log('liveTabs...');

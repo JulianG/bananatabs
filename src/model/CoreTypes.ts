@@ -28,13 +28,13 @@ export class Session {
 
 export interface ListItem {
   readonly id: number;
-  title: string;
+  readonly title: string;
   visible: boolean;
   readonly icon: string;
 }
 
 export interface Window extends ListItem {
-  focused: boolean;
+  readonly focused: boolean;
   readonly bounds: Rectangle;
   readonly type: string;
   readonly state: string;
@@ -121,6 +121,10 @@ export function DEBUG_sessionToString(s: Session): string {
 
   return JSON.stringify(s, f, 2);
 }
+
+export type Mutable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
 
 // debug
 function simplifyWindow(w: Window) {

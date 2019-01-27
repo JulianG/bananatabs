@@ -29,11 +29,11 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async hideTab(winId: number, tabId: number) {
     const session = this.provider.session;
-    const win = this.provider.session.getWindow(winId);
+    const win: BT.Mutable<BT.Window> = this.provider.session.getWindow(winId);
     const tab = this.provider.session.getTab(tabId);
     tab.visible = false;
     if (win.visible) {
-      this.safeRenameWindow(win);
+      this.mutableSafeRenameWindow(win);
       await this.browser.closeTab(tab.id);
     }
     await this.updateSession(session);
@@ -59,22 +59,29 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     const tabIndex = win.tabs.indexOf(tab);
     console.assert(tabIndex >= 0);
     if (tabIndex >= 0) {
-      win.tabs = [...win.tabs.slice(0, tabIndex), ...win.tabs.slice(tabIndex + 1)];
+      win.tabs = [
+        ...win.tabs.slice(0, tabIndex),
+        ...win.tabs.slice(tabIndex + 1)
+      ];
     }
     if (win.visible && tab.visible) {
-      this.safeRenameWindow(win);
       await this.browser.closeTab(tab.id);
     }
-    await this.updateSession(session);
+    const windows = session.windows.map(w => {
+      return w.id === winId ? { ...this.safeRenameWindow(w) } : { ...w };
+    });
+
+    await this.updateSession(new BT.Session(windows, session.panelWindow));
   }
 
   /// WindowMutator
 
   async renameWindow(id: number, title: string) {
     const session = this.provider.session;
-    const win = this.provider.session.getWindow(id) || BT.getNullWindow();
-    win.title = title;
-    await this.updateSession(session);
+    const windows = session.windows.map(w => {
+      return w.id === id ? { ...w, title } : { ...w };
+    });
+    await this.updateSession(new BT.Session(windows, session.panelWindow));
   }
 
   async collapseWindow(id: number) {
@@ -98,11 +105,13 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async hideWindow(id: number) {
     const session = this.provider.session;
-    const win = this.provider.session.getWindow(id);
-    this.safeRenameWindow(win);
-    win.visible = false;
-    await this.browser.closeWindow(win.id);
-    await this.updateSession(session);
+    const windows = session.windows.map(w => {
+      return w.id === id
+        ? { ...this.safeRenameWindow(w), visible: false }
+        : { ...w };
+    });
+    await this.browser.closeWindow(id);
+    await this.updateSession(new BT.Session(windows, session.panelWindow));
   }
 
   async showWindow(id: number) {
@@ -133,8 +142,13 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   ///
 
-  private safeRenameWindow(window: BT.Window) {
-    window.title = window.title.length > 0 ? window.title : 'My Window';
+  private safeRenameWindow(window: BT.Window): BT.Window {
+    return { ...window, title: window.title || 'My Window' }; /// AAAAAHHHH!
+  }
+
+  private mutableSafeRenameWindow(win: BT.Mutable<BT.Window>): void {
+    console.warn('mutableSafeRenameWindow');
+    win.title = win.title || 'My Window';
   }
 
   private async updateSession(session: BT.Session) {
