@@ -27,13 +27,13 @@ export class Session {
 }
 
 export interface ListItem {
+  id: number;
   title: string;
   visible: boolean;
   icon: string;
 }
 
 export interface Window extends ListItem {
-  id: number;
   focused: boolean;
   bounds: Rectangle;
   type: string;
@@ -43,7 +43,6 @@ export interface Window extends ListItem {
 }
 
 export interface Tab extends ListItem {
-  id: number;
   index: number;
   listIndex: number;
   url: string;
