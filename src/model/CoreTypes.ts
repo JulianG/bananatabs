@@ -1,9 +1,8 @@
 export class Session {
-
-  static clone(session: Session): Session {
-    return new Session(session.windows, session.panelWindow);
-  }
-  constructor(public readonly windows: ReadonlyArray<Window>, public readonly panelWindow: Window) {}
+  constructor(
+    readonly windows: ReadonlyArray<Window>,
+    readonly panelWindow: Window
+  ) {}
 
   getWindow(id: number): Window {
     const win = this.windows.find(w => w.id === id);
@@ -26,6 +25,13 @@ export class Session {
   }
 }
 
+export function cloneSession(session: Session): Session {
+  return new Session(
+    session.windows.map(cloneWindow),
+    cloneWindow(session.panelWindow)
+  );
+}
+
 export interface ListItem {
   readonly id: number;
   readonly title: string;
@@ -42,6 +48,10 @@ export interface Window extends ListItem {
   readonly expanded: boolean;
 }
 
+export function cloneWindow(window: Window): Window {
+  return { ...window, tabs: window.tabs.map(cloneTab) };
+}
+
 export interface Tab extends ListItem {
   readonly index: number;
   readonly listIndex: number;
@@ -50,6 +60,9 @@ export interface Tab extends ListItem {
   readonly selected: boolean;
   readonly highlighted: boolean;
   readonly status: string;
+}
+export function cloneTab(tab: Tab): Tab {
+  return { ...tab };
 }
 
 export interface Rectangle {
@@ -122,9 +135,7 @@ export function DEBUG_sessionToString(s: Session): string {
   return JSON.stringify(s, f, 2);
 }
 
-export type Mutable<T> = {
-  -readonly [P in keyof T]: T[P];
-};
+export type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 
 // debug
 function simplifyWindow(w: Window) {

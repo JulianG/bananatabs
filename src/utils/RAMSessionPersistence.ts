@@ -6,9 +6,8 @@ export default class RAMSessionPersistence implements SessionPersistence {
     this.storeSession(session);
   }
 
-  async storeSession(session: BT.Session): Promise<{}> {
-    this.session = BT.Session.clone(session);
-    return {};
+  async storeSession(session: BT.Session) {
+    this.session = BT.cloneSession(session);
   }
 
   async retrieveSession(): Promise<BT.Session> {

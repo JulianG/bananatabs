@@ -8,7 +8,7 @@ export default class LocalStorageSessionPersistence
   storeSession(session: BT.Session) {
     const serialisedSession = JSON.stringify(session);
     localStorage.setItem('session', serialisedSession);
-    return Promise.resolve({});
+    return Promise.resolve();
   }
 
   retrieveSession(): Promise<BT.Session> {
