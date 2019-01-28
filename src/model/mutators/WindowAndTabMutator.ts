@@ -17,13 +17,9 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     const win = this.provider.session.getWindow(winId);
     const windows = session.windows.map(w => {
       return winId === w.id
-        ? {
-            ...w,
-            tabs: w.tabs.map(t => {
-              return { ...t, active: t.id === tabId };
-            })
-          }
-        : { ...w };
+        ? BT.cloneWindow(w, {
+          tabs: w.tabs.map(t => ({ ...t, active: t.id === tabId }))})
+        : BT.cloneWindow(w);
     });
     await this.updateSession(new BT.Session(windows, session.panelWindow));
     await this.browser.selectTab(win.id, tabId);

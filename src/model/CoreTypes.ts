@@ -10,7 +10,7 @@ export class Session {
       win,
       `Could not find a window with id ${id} in the current session.`
     );
-    return win || getNewWindow({id});
+    return win || getNewWindow({ id });
   }
 
   getTab(id: number): Tab {
@@ -21,13 +21,13 @@ export class Session {
       tab,
       `Could not find a tab with id ${id} in the current session.`
     );
-    return tab || getNewTab({id});
+    return tab || getNewTab({ id });
   }
 }
 
 export function cloneSession(session: Session): Session {
   return new Session(
-    session.windows.map(cloneWindow),
+    session.windows.map(w => cloneWindow(w)),
     cloneWindow(session.panelWindow)
   );
 }
@@ -48,8 +48,11 @@ export interface Window extends ListItem {
   readonly expanded: boolean;
 }
 
-export function cloneWindow(window: Window): Window {
-  return { ...window, tabs: window.tabs.map(cloneTab) };
+export function cloneWindow(
+  window: Window,
+  overrides: Partial<Window> = {}
+): Window {
+  return { ...window, tabs: window.tabs.map(t => cloneTab(t)), ...overrides };
 }
 
 export interface Tab extends ListItem {
@@ -61,8 +64,8 @@ export interface Tab extends ListItem {
   readonly highlighted: boolean;
   readonly status: string;
 }
-export function cloneTab(tab: Tab): Tab {
-  return { ...tab };
+export function cloneTab(tab: Tab, overrides: Partial<Tab> = {}): Tab {
+  return { ...tab, ...overrides };
 }
 
 export interface Rectangle {
