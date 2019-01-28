@@ -25,7 +25,7 @@ describe('ChromeEventController', async () => {
     controller.addEventListener(callback);
 
     // when calling showWindow
-    await controller.showWindow(BT.getNullWindow());
+    await controller.showWindow(BT.getNewWindow());
 
     // expect the list of windows to have 1 element
     const wins = await controller.getAllWindows();
@@ -63,7 +63,7 @@ describe('ChromeEventController', async () => {
     const initialWindows = await controller.getAllWindows();
 
     // when calling createTab
-    const t = { ...BT.getNullTab(), id: 1001 };
+    const t = { ...BT.getNewTab(), id: 1001 };
     await controller.showTab(initialWindows[0], t);
 
     // expect the list of tabs to have 2 visible tabs

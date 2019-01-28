@@ -7,20 +7,20 @@ export function parseSessionString(ss: string): BT.Session {
     w.tabs = ensureOneActiveTab(
       w.tabs.map((t, i) => {
         const tab = Object.assign({}, t, { index: i, listIndex: i });
-        return Object.assign(BT.getNullTab(), tab, {
+        return Object.assign(BT.getNewTab(), tab, {
           id: ++lastId,
           url: getRandomURL(),
           title: getRandomTitle()
         });
       })
     );
-    return Object.assign(BT.getNullWindow(), w, { id: ++lastId });
+    return Object.assign(BT.getNewWindow(), w, { id: ++lastId });
   });
 
   if (windows.length < 1 && ss !== '') {
     throw new Error('Error! Invalid input string.');
   }
-  return new BT.Session(windows, BT.getNullWindow());
+  return new BT.Session(windows, BT.getNewWindow());
 }
 
 function _parseSessionString(ss: string) {

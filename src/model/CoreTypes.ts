@@ -10,18 +10,18 @@ export class Session {
       win,
       `Could not find a window with id ${id} in the current session.`
     );
-    return win || { ...getNullWindow(), id };
+    return win || getNewWindow({id});
   }
 
   getTab(id: number): Tab {
     const win =
-      this.windows.find(w => w.tabs.some(t => t.id === id)) || getNullWindow();
+      this.windows.find(w => w.tabs.some(t => t.id === id)) || getNewWindow();
     const tab = win.tabs.find(t => t.id === id);
     console.assert(
       tab,
       `Could not find a tab with id ${id} in the current session.`
     );
-    return tab || { ...getNullTab(), id };
+    return tab || getNewTab({id});
   }
 }
 
@@ -72,38 +72,44 @@ export interface Rectangle {
   readonly height: number;
 }
 
-export function getNullWindow(): Window {
-  return {
-    id: 0,
-    icon: '',
-    title: '',
-    visible: false,
-    focused: false,
-    bounds: { top: 0, left: 0, width: 0, height: 0 },
-    type: 'normal',
-    state: 'normal',
-    tabs: [],
-    expanded: false
-  };
+export function getNewWindow(overrides: Partial<Window> = {}): Window {
+  return Object.assign(
+    {
+      id: 0,
+      icon: '',
+      title: '',
+      visible: false,
+      focused: false,
+      bounds: { top: 0, left: 0, width: 0, height: 0 },
+      type: 'normal',
+      state: 'normal',
+      tabs: [],
+      expanded: false
+    },
+    overrides
+  );
 }
 
-export function getNullTab(): Tab {
-  return {
-    id: 0,
-    title: 'Null Tab',
-    icon: '',
-    visible: false,
-    url: '',
-    listIndex: 0,
-    index: 0,
-    active: false,
-    selected: false,
-    highlighted: false,
-    status: ''
-  };
+export function getNewTab(overrides: Partial<Tab> = {}): Tab {
+  return Object.assign(
+    {
+      id: 0,
+      title: 'Null Tab',
+      icon: '',
+      visible: false,
+      url: '',
+      listIndex: 0,
+      index: 0,
+      active: false,
+      selected: false,
+      highlighted: false,
+      status: ''
+    },
+    overrides
+  );
 }
 
-export const EmptySession: Session = new Session([], getNullWindow());
+export const EmptySession: Session = new Session([], getNewWindow());
 
 export interface DisplayInfo {
   id: string;

@@ -14,7 +14,7 @@ function tabsToString(tabs: ReadonlyArray<BT.Tab>): string {
 
 export function stringToSession(str: string): BT.Session {
   const windows = stringToWindows(str);
-  return new BT.Session(windows, BT.getNullWindow());
+  return new BT.Session(windows, BT.getNewWindow());
 }
 
 export function stringToWindows(str: string): BT.Window[] {
@@ -34,14 +34,13 @@ export function stringToWindows(str: string): BT.Window[] {
     line = line.trim();
     if (shouldCreateNewWindow) {
       shouldCreateNewWindow = false;
-      win = {
-        ...BT.getNullWindow(),
+      win = BT.getNewWindow({
         id: getId(),
         title: '',
         tabs: [],
         expanded: true,
         visible: newWindowVisibility
-      };
+      });
       tabIndex = 0;
       wins.push(win);
     }
@@ -60,15 +59,18 @@ export function stringToWindows(str: string): BT.Window[] {
         : extractURL(line.trim());
       if (isValidURL(url)) {
         const visible = getFirstNonWhitespaceCharacter(line) !== '~';
-        win.tabs = [...win.tabs, {
-          ...BT.getNullTab(),
-          visible: visible,
-          url,
-          title: url,
-          id: getId(),
-          listIndex: win.tabs.length,
-          index: tabIndex
-        }];
+        win.tabs = [
+          ...win.tabs,
+          {
+            ...BT.getNewTab(),
+            visible: visible,
+            url,
+            title: url,
+            id: getId(),
+            listIndex: win.tabs.length,
+            index: tabIndex
+          }
+        ];
 
         tabIndex += visible ? 1 : 0;
       }
