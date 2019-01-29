@@ -13,16 +13,9 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   // TabMutator interface
 
   async selectTab(winId: number, tabId: number) {
-    const session = this.provider.session;
-    const win = this.provider.session.getWindow(winId);
-    const windows = session.windows.map(w => {
-      return winId === w.id
-        ? BT.cloneWindow(w, {
-          tabs: w.tabs.map(t => ({ ...t, active: t.id === tabId }))})
-        : BT.cloneWindow(w);
-    });
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
-    await this.browser.selectTab(win.id, tabId);
+    const newSession = selectTab(this.provider.session, winId, tabId);
+    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
+    await this.browser.selectTab(winId, tabId);
   }
 
   toggleTabVisibility(winId: number, tabId: number) {
@@ -33,19 +26,11 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   }
 
   async hideTab(winId: number, tabId: number) {
-    const session = this.provider.session;
-    const win: BT.Mutable<BT.Window> = this.provider.session.getWindow(winId);
-    const windows = session.windows.map(w => {
-      return w.id === winId
-        ? {
-            ...this.safeRenameWindow(w),
-            tabs: w.tabs.map(t => {
-              return t.id === tabId ? { ...t, visible: false } : { ...t };
-            })
-          }
-        : { ...w };
+    const newSession = mutateTab(this.provider.session, winId, tabId, {
+      visible: false
     });
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
+    const win: BT.Mutable<BT.Window> = newSession.getWindow(winId);
     if (win.visible) {
       await this.browser.closeTab(tabId);
     }
@@ -53,77 +38,47 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async showTab(winId: number, tabId: number) {
     const session = this.provider.session;
-    const win = this.provider.session.getWindow(winId);
-    const windowWasVisible = win.visible;
-    const windows = session.windows.map(w => {
-      return w.id === winId
-        ? {
-            ...w,
-            visible: true,
-            tabs: w.tabs.map(t => {
-              return t.id === tabId ? { ...t, visible: true } : { ...t };
-            })
-          }
-        : { ...w };
-    });
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    const windowWasVisible = session.getWindow(winId).visible;
+    const newSession = mutateTab(session, winId, tabId, { visible: true });
+    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
     if (windowWasVisible) {
       await this.browser.showTab(
-        this.provider.session.getWindow(winId),
-        this.provider.session.getTab(tabId)
+        newSession.getWindow(winId),
+        newSession.getTab(tabId)
       );
     } else {
-      await this.browser.showWindow(this.provider.session.getWindow(winId));
+      await this.browser.showWindow(newSession.getWindow(winId));
     }
   }
 
   async deleteTab(winId: number, tabId: number) {
     const session = this.provider.session;
-    const win = this.provider.session.getWindow(winId);
-    const tab = this.provider.session.getTab(tabId);
-    const tabIndex = win.tabs.indexOf(tab);
-    console.assert(tabIndex >= 0);
-    if (win.visible && tab.visible) {
-      await this.browser.closeTab(tab.id);
+    const tabWasVisible =
+      session.getWindow(winId).visible && session.getTab(tabId).visible;
+    if (tabWasVisible) {
+      await this.browser.closeTab(tabId);
     }
-    const windows = session.windows.map(w => {
-      return w.id === winId
-        ? {
-            ...this.safeRenameWindow(w),
-            tabs: [
-              ...win.tabs.slice(0, tabIndex),
-              ...win.tabs.slice(tabIndex + 1)
-            ]
-          }
-        : { ...w };
-    });
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    const newSession = deleteTab(session, winId, tabId);
+    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
   }
 
   /// WindowMutator
 
   async renameWindow(id: number, title: string) {
-    const session = this.provider.session;
-    const windows = session.windows.map(w => {
-      return w.id === id ? { ...w, title } : { ...w };
-    });
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    const newSession = mutateWindow(this.provider.session, id, { title });
+    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
   }
 
   async collapseWindow(id: number) {
-    const session = this.provider.session;
-    const windows = session.windows.map(w => {
-      return w.id === id ? { ...w, expanded: false } : { ...w };
-    });
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    await this.provider.updateSession(
+      mutateWindow(this.provider.session, id, { expanded: false })
+    );
   }
 
   async expandWindow(id: number) {
-    const session = this.provider.session;
-    const windows = session.windows.map(w => {
-      return w.id === id ? { ...w, expanded: true } : { ...w };
-    });
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    await this.provider.updateSession(
+      mutateWindow(this.provider.session, id, { expanded: true })
+    );
   }
 
   async toggleWindowVisibility(id: number) {
@@ -132,50 +87,120 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   }
 
   async hideWindow(id: number) {
-    const session = this.provider.session;
-    const windows = session.windows.map(w => {
-      return w.id === id
-        ? { ...this.safeRenameWindow(w), visible: false }
-        : { ...w };
+    const newSession = mutateWindow(this.provider.session, id, {
+      visible: false
     });
     await this.browser.closeWindow(id);
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
   }
 
   async showWindow(id: number) {
-    const session = this.provider.session;
-    const windows = session.windows.map(w => {
-      return w.id === id ? { ...w, visible: true } : { ...w };
+    const newSession = mutateWindow(this.provider.session, id, {
+      visible: true
     });
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
     await this.browser.showWindow(this.provider.session.getWindow(id));
   }
 
   async deleteWindow(id: number) {
-    const session = this.provider.session;
-    const win = session.getWindow(id);
-    const index = session.windows.indexOf(win);
-    console.assert(index >= 0);
-    const windows =
-      index >= 0
-        ? [
-            ...session.windows.slice(0, index),
-            ...session.windows.slice(index + 1)
-          ]
-        : [...session.windows];
-    if (win.visible) {
-      await this.browser.closeWindow(win.id);
+    const wasWindowVisible = this.provider.session.getWindow(id).visible;
+    const newSession = deleteWindow(this.provider.session, id);
+    if (wasWindowVisible) {
+      await this.browser.closeWindow(id);
     }
-    await this.updateSession(new BT.Session(windows, session.panelWindow));
+    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
   }
+}
 
-  ///
+////////////
+////////////
+////////////
+////////////
 
-  private safeRenameWindow(window: BT.Window): BT.Window {
-    return { ...window, title: window.title || 'My Window' };
-  }
+function selectTab(
+  session: BT.Session,
+  winId: number,
+  tabId: number
+): BT.Session {
+  const windows = session.windows.map(w => {
+    return winId === w.id
+      ? BT.cloneWindow(w, {
+          tabs: w.tabs.map(t => ({ ...t, active: t.id === tabId }))
+        })
+      : BT.cloneWindow(w);
+  });
+  return new BT.Session(windows, session.panelWindow);
+}
 
-  private async updateSession(session: BT.Session) {
-    await this.provider.updateSession(session);
-  }
+function mutateTab(
+  session: BT.Session,
+  winId: number,
+  tabId: number,
+  props: Partial<BT.Tab>
+): BT.Session {
+  const windows = session.windows.map(w => {
+    return w.id === winId
+      ? {
+          ...safeRenameWindow(w),
+          tabs: w.tabs.map(t => {
+            return t.id === tabId ? BT.cloneTab(t, props) : BT.cloneTab(t);
+          })
+        }
+      : { ...w };
+  });
+  return new BT.Session(windows, session.panelWindow);
+}
+
+function safeRenameWindow(window: BT.Window): BT.Window {
+  return { ...window, title: window.title || 'My Window' };
+}
+
+function deleteTab(
+  session: BT.Session,
+  winId: number,
+  tabId: number
+): BT.Session {
+  const windows = session.windows.map(w => {
+    if (w.id === winId) {
+      const tabIndex = w.tabs.findIndex(t => t.id === tabId);
+      console.assert(tabIndex >= 0);
+      const tabs =
+        tabIndex >= 0
+          ? [...w.tabs.slice(0, tabIndex), ...w.tabs.slice(tabIndex + 1)]
+          : w.tabs.map(t => t);
+      return {
+        ...safeRenameWindow(w),
+        tabs: tabs
+      };
+    } else {
+      return BT.cloneWindow(w);
+    }
+  });
+  return new BT.Session(windows, session.panelWindow);
+}
+
+function mutateWindow(
+  session: BT.Session,
+  id: number,
+  props: Partial<BT.Window>
+): BT.Session {
+  const windows = session.windows.map(w => {
+    return w.id === id
+      ? BT.cloneWindow(safeRenameWindow(w), props)
+      : BT.cloneWindow(w);
+  });
+  return new BT.Session(windows, session.panelWindow);
+}
+
+function deleteWindow(session: BT.Session, id: number): BT.Session {
+  const index = session.windows.findIndex(w => w.id === id);
+  console.assert(index >= 0);
+  const windows =
+    index >= 0
+      ? [
+          ...session.windows.slice(0, index),
+          ...session.windows.slice(index + 1)
+        ]
+      : [...session.windows];
+  return new BT.Session(windows, session.panelWindow);
 }
