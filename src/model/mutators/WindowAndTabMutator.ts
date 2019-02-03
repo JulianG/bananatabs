@@ -14,17 +14,14 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async selectTab(winId: number, tabId: number) {
     await this.browser.selectTab(winId, tabId);
-    
+
     await this.provider.setSession(
       CoreMutations.selectTab(this.provider.session, winId, tabId)
     );
   }
 
   async hideTab(winId: number, tabId: number) {
-    const win = this.provider.session.getWindow(winId);
-    if (win.visible) {
-      await this.browser.closeTab(tabId);
-    }
+    await this.browser.closeTab(tabId);
 
     await this.provider.setSession(
       CoreMutations.mutateTab(this.provider.session, winId, tabId, {
