@@ -14,8 +14,10 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async selectTab(winId: number, tabId: number) {
     await this.browser.selectTab(winId, tabId);
-    const newSession = CoreMutations.selectTab(this.provider.session, winId, tabId);
-    await this.provider.setSession(newSession);
+    
+    await this.provider.setSession(
+      CoreMutations.selectTab(this.provider.session, winId, tabId)
+    );
   }
 
   async hideTab(winId: number, tabId: number) {
@@ -34,7 +36,9 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   async showTab(winId: number, tabId: number) {
     const session = this.provider.session;
     const wasWindowVisible = session.getWindow(winId).visible;
-    const newSession = CoreMutations.mutateTab(session, winId, tabId, { visible: true });
+    const newSession = CoreMutations.mutateTab(session, winId, tabId, {
+      visible: true
+    });
 
     if (wasWindowVisible) {
       await this.browser.showTab(
@@ -98,6 +102,8 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   async deleteWindow(id: number) {
     await this.browser.closeWindow(id);
 
-    await this.provider.setSession(CoreMutations.deleteWindow(this.provider.session, id));
+    await this.provider.setSession(
+      CoreMutations.deleteWindow(this.provider.session, id)
+    );
   }
 }

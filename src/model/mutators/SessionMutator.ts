@@ -1,13 +1,11 @@
 import * as BT from '../core/CoreTypes';
+import * as CoreMutations from '../core/CoreMutations';
+
 import SessionProvider from '../SessionProvider';
 
-interface WindowSortingFunction {
-  (a: BT.Window, b: BT.Window): number;
-}
-
 interface SessionMutator {
-  sortWindows(f: WindowSortingFunction): void;
-  updateWindows(windows: BT.Window[]): void;
+  sortWindows(f: (a: BT.Window, b: BT.Window) => number): void;
+  setWindows(windows: BT.Window[]): void;
   addWindows(windows: BT.Window[]): void;
 }
 
@@ -16,27 +14,19 @@ export default SessionMutator;
 export class DefaultSessionMutator {
   constructor(private provider: SessionProvider) {}
 
-  sortWindows(f: WindowSortingFunction): void {
-    const session = this.provider.session;
-    const newSession = new BT.Session(
-      [...session.windows].sort(f),
-      session.panelWindow
-    );
-    this.provider.setSession(newSession);
+  sortWindows(f: (a: BT.Window, b: BT.Window) => number): void {
+    this.provider.setSession(CoreMutations.sortWindows(this.provider.session, f));
   }
 
-  updateWindows(windows: BT.Window[]): void {
-    const session = this.provider.session;
-    const newSession = new BT.Session(windows, session.panelWindow);
-    this.provider.setSession(newSession);
+  setWindows(windows: ReadonlyArray<BT.Window>): void {
+    this.provider.setSession(
+      new BT.Session(windows, this.provider.session.panelWindow)
+    );
   }
 
-  addWindows(windows: BT.Window[]): void {
-    const session = this.provider.session;
-    const newSession = new BT.Session(
-      [...session.windows, ...windows],
-      session.panelWindow
+  addWindows(windows: ReadonlyArray<BT.Window>): void {
+    this.provider.setSession(
+      CoreMutations.addWindows(this.provider.session, windows)
     );
-    this.provider.setSession(newSession);
   }
 }

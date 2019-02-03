@@ -52,6 +52,6 @@ export default class WindowListView extends React.Component<Props, {}> {
   }
 
   private onListUpdated(items: BT.Window[]) {
-    this.props.sessionMutator.updateWindows(items);
+    this.props.sessionMutator.setWindows(items);
   }
 }

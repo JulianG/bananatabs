@@ -1,10 +1,6 @@
 import * as BT from './CoreTypes';
 
-export function selectTab(
-  session: BT.Session,
-  winId: number,
-  tabId: number
-): BT.Session {
+export function selectTab(session: BT.Session, winId: number, tabId: number) {
   const windows = session.windows.map(w => {
     return winId === w.id
       ? BT.cloneWindow(w, {
@@ -20,7 +16,7 @@ export function mutateTab(
   winId: number,
   tabId: number,
   props: Partial<BT.Tab>
-): BT.Session {
+) {
   const windows = session.windows.map(w => {
     return w.id === winId
       ? {
@@ -38,11 +34,7 @@ export function safeRenameWindow(window: BT.Window): BT.Window {
   return { ...window, title: window.title || 'My Window' };
 }
 
-export function deleteTab(
-  session: BT.Session,
-  winId: number,
-  tabId: number
-): BT.Session {
+export function deleteTab(session: BT.Session, winId: number, tabId: number) {
   const windows = session.windows.map(w => {
     if (w.id === winId) {
       const tabIndex = w.tabs.findIndex(t => t.id === tabId);
@@ -75,7 +67,7 @@ export function mutateWindow(
   return new BT.Session(windows, session.panelWindow);
 }
 
-export function deleteWindow(session: BT.Session, id: number): BT.Session {
+export function deleteWindow(session: BT.Session, id: number) {
   const index = session.windows.findIndex(w => w.id === id);
   console.assert(index >= 0);
   const windows =
@@ -86,4 +78,21 @@ export function deleteWindow(session: BT.Session, id: number): BT.Session {
         ]
       : [...session.windows];
   return new BT.Session(windows, session.panelWindow);
+}
+
+export function addWindows(
+  session: BT.Session,
+  windows: ReadonlyArray<BT.Window>
+) {
+  return new BT.Session([...session.windows, ...windows], session.panelWindow);
+}
+
+export function sortWindows(
+  session: BT.Session,
+  sortFunction: (a: BT.Window, b: BT.Window) => number
+) {
+  return new BT.Session(
+    [...session.windows].sort(sortFunction),
+    session.panelWindow
+  );
 }
