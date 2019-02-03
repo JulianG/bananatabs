@@ -28,20 +28,26 @@ export default class DefaultSessionProvider implements SessionProvider {
       const retrievedSession = await this.persistence.retrieveSession();
       const liveSession = await this.getLiveSession();
       this.session = this.mergeSessions(retrievedSession, liveSession);
-      await this.updateSession(this.session);
+      await this.setSession(this.session);
       this.busy = false;
     }
   }
 
-  async updateSession(session?: BT.Session) {
-    if (session) {
-      this.session = session;
-      await this.persistence.storeSession(session);
-    } else {
-      await this._updateSession();
-      await this.persistence.storeSession(this.session);
-    }
+  async updateSession() {
+    await this._updateSession();
+    await this.persistence.storeSession(this.session);
     this.onSessionChanged(this.session);
+  }
+
+  async setSession(session: BT.Session) {
+    this.session = session;
+    await this.persistence.storeSession(this.session);
+    this.onSessionChanged(this.session);
+  }
+
+  async setSessionNoDispatch(session: BT.Session) {
+    this.session = session;
+    await this.persistence.storeSession(this.session);
   }
 
   //////////////////////////

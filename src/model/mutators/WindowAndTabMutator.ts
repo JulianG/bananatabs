@@ -13,9 +13,9 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   // TabMutator interface
 
   async selectTab(winId: number, tabId: number) {
-    const newSession = selectTab(this.provider.session, winId, tabId);
-    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
     await this.browser.selectTab(winId, tabId);
+    const newSession = selectTab(this.provider.session, winId, tabId);
+    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
   }
 
   toggleTabVisibility(winId: number, tabId: number) {
@@ -26,22 +26,21 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
   }
 
   async hideTab(winId: number, tabId: number) {
-    const newSession = mutateTab(this.provider.session, winId, tabId, {
-      visible: false
-    });
-    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
-
-    const win = newSession.getWindow(winId);
+    const win = this.provider.session.getWindow(winId);
     if (win.visible) {
       await this.browser.closeTab(tabId);
     }
+
+    const newSession = mutateTab(this.provider.session, winId, tabId, {
+      visible: false
+    });
+    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
   }
 
   async showTab(winId: number, tabId: number) {
     const session = this.provider.session;
     const windowWasVisible = session.getWindow(winId).visible;
     const newSession = mutateTab(session, winId, tabId, { visible: true });
-    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
 
     if (windowWasVisible) {
       await this.browser.showTab(
@@ -51,35 +50,36 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     } else {
       await this.browser.showWindow(newSession.getWindow(winId));
     }
+    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
   }
-
+  
   async deleteTab(winId: number, tabId: number) {
     const session = this.provider.session;
     const newSession = deleteTab(session, winId, tabId);
-    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
-
+    
     const tabWasVisible =
-      session.getWindow(winId).visible && session.getTab(tabId).visible;
+    session.getWindow(winId).visible && session.getTab(tabId).visible;
     if (tabWasVisible) {
       await this.browser.closeTab(tabId);
     }
+    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
   }
 
   /// WindowMutator
 
   async renameWindow(id: number, title: string) {
     const newSession = mutateWindow(this.provider.session, id, { title });
-    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
+    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
   }
 
   async collapseWindow(id: number) {
-    await this.provider.updateSession(
+    await this.provider.setSession(
       mutateWindow(this.provider.session, id, { expanded: false })
     );
   }
 
   async expandWindow(id: number) {
-    await this.provider.updateSession(
+    await this.provider.setSession(
       mutateWindow(this.provider.session, id, { expanded: true })
     );
   }
@@ -93,27 +93,25 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     const newSession = mutateWindow(this.provider.session, id, {
       visible: false
     });
-    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
     await this.browser.closeWindow(id);
+    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
   }
 
   async showWindow(id: number) {
     const newSession = mutateWindow(this.provider.session, id, {
       visible: true
     });
-    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
-    
     await this.browser.showWindow(newSession.getWindow(id));
+    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
   }
 
   async deleteWindow(id: number) {
     const wasWindowVisible = this.provider.session.getWindow(id).visible;
     const newSession = deleteWindow(this.provider.session, id);
-    await this.provider.updateSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
-
     if (wasWindowVisible) {
       await this.browser.closeWindow(id);
     }
+    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
   }
 }
 

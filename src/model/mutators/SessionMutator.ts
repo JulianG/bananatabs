@@ -22,13 +22,13 @@ export class DefaultSessionMutator {
       [...session.windows].sort(f),
       session.panelWindow
     );
-    this.provider.updateSession(newSession);
+    this.provider.setSession(newSession);
   }
 
   updateWindows(windows: BT.Window[]): void {
     const session = this.provider.session;
     const newSession = new BT.Session(windows, session.panelWindow);
-    this.provider.updateSession(newSession);
+    this.provider.setSession(newSession);
   }
 
   addWindows(windows: BT.Window[]): void {
@@ -37,6 +37,6 @@ export class DefaultSessionMutator {
       [...session.windows, ...windows],
       session.panelWindow
     );
-    this.provider.updateSession(newSession);
+    this.provider.setSession(newSession);
   }
 }

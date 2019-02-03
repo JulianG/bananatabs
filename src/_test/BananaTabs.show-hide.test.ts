@@ -5,10 +5,11 @@ import {
   /*getWindowGroups,
   getTabsVisibilities,
   getTabsInWindow,*/
-  renderBananaTabs
+  renderBananaTabs, getTabsVisibilities
 } from '../_test-utils/bananatabs.utils';
 
 import { wait, compareSessions } from '../_test-utils';
+import {  getTabsInWindow } from '../_test-utils/bananatabs.utils';
 
 import {
   stringToSession
@@ -19,13 +20,13 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
   //
   describe('Hiding and Showing Tabs', async () => {
     //
-    test('hiding a tab in a window with multiple tabs', async () => {
+    test.only('hiding a tab in a window with multiple tabs', async () => {
       //
       // given an initial rendered app
       const {
-        /*container, debug, */
         fchrome,
         provider,
+        getWindowGroups,
         getTabVisibilityToggle
       } = await renderBananaTabs(`
         window 1:
@@ -42,7 +43,11 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       // when the button to hide a tab is clicked
       const btn = getTabVisibilityToggle(0, 1);
       fireEvent.click(btn);
-
+      await wait();
+      
+      const tabs0 = getTabsInWindow(getWindowGroups()[0]);
+      expect(getTabsVisibilities(tabs0)).toMatchObject([true, false, true]);
+      
       // expect the tab to be hidden!
       expect(
         compareSessions(
@@ -87,6 +92,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       // when the button to hide a tab is clicked
       const btn = getTabVisibilityToggle(0, 0);
       fireEvent.click(btn);
+      await wait();
 
       // expect the tab to be hidden!
       expect(
@@ -132,6 +138,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       // when the button to show a tab is clicked
       const btn = getTabVisibilityToggle(0, 1);
       fireEvent.click(btn);
+      await wait();
 
       // expect the tab to be visible!
       expect(
@@ -178,6 +185,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       const btn = getTabVisibilityToggle(0, 1);
       fireEvent.click(btn);
 
+      await wait();
       await wait();
 
       // expect the tab to be visible and the window to become visible
@@ -370,7 +378,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
 
       // when the button to show a hidden window
       fireEvent.click(getWindowVisibilityToggle(0));
-      await wait();
+      await wait(2);
 
       // expect the tab to be hidden!
       expect(

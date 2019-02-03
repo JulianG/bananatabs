@@ -20,7 +20,7 @@ export default class ChromeBrowserController implements BrowserController {
     try {
       await this.chromeAPI.windows.remove(id);
     } catch (e) {
-      console.warn(`Could not delete window for real... ${id}`);
+      console.warn(`Could not remove window from chromeAPI... ${id}`);
       console.warn(e);
     }
     this.browserEventDispatcher.enable();
@@ -28,7 +28,12 @@ export default class ChromeBrowserController implements BrowserController {
 
   public async closeTab(id: number) {
     this.browserEventDispatcher.disable();
-    await this.chromeAPI.tabs.remove(id);
+    try {
+      await this.chromeAPI.tabs.remove(id);
+    } catch (e) {
+      console.warn(`Could not remove tab from chromeAPI ... ${id}`);
+      console.warn(e);
+    }
     this.browserEventDispatcher.enable();
   }
 
