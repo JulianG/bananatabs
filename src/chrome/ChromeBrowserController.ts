@@ -16,25 +16,21 @@ export default class ChromeBrowserController implements BrowserController {
   }
 
   public async closeWindow(id: number) {
-    this.browserEventDispatcher.disable();
     try {
       await this.chromeAPI.windows.remove(id);
     } catch (e) {
       console.warn(`Could not remove window from chromeAPI... ${id}`);
       console.warn(e);
     }
-    this.browserEventDispatcher.enable();
   }
 
   public async closeTab(id: number) {
-    this.browserEventDispatcher.disable();
     try {
       await this.chromeAPI.tabs.remove(id);
     } catch (e) {
       console.warn(`Could not remove tab from chromeAPI ... ${id}`);
       console.warn(e);
     }
-    this.browserEventDispatcher.enable();
   }
 
   public async selectTab(windowId: number, tabId: number) {
@@ -46,11 +42,9 @@ export default class ChromeBrowserController implements BrowserController {
     } catch (e) {
       console.error(e);
     }
-    // await Promise.all([windowPromise, tabPromise]);
   }
 
   public async showTab(window: BT.Window, tab: BT.Tab) {
-    this.browserEventDispatcher.disable();
     const props: chrome.tabs.CreateProperties = {
       windowId: window.visible ? window.id : 0,
       index: Math.max(tab.index, 0),
@@ -59,11 +53,9 @@ export default class ChromeBrowserController implements BrowserController {
     };
     const newTab = await this.chromeAPI.tabs.create(props);
     tab = { ...tab, id: newTab.id || -1 };
-    this.browserEventDispatcher.enable();
   }
 
   public async showWindow(window: BT.Window) {
-    this.browserEventDispatcher.disable();
     const liveWindows = await this.chromeAPI.windows.getAll({});
     const asFirst = liveWindows.length <= 1;
     if (asFirst) {
@@ -71,13 +63,10 @@ export default class ChromeBrowserController implements BrowserController {
     } else {
       await this._showWindow(window);
     }
-    this.browserEventDispatcher.enable();
   }
 
   public async getAllWindows(): Promise<BT.Window[]> {
-    this.browserEventDispatcher.disable();
     const wins = await this.chromeAPI.windows.getAll({ populate: true });
-    this.browserEventDispatcher.enable();
     return wins.map(convertWindow);
   }
 

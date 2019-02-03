@@ -18,7 +18,8 @@ export default class DefaultSessionProvider implements SessionProvider {
   ) {
     this.session = BT.EmptySession;
     this._updateSession = this._updateSession.bind(this);
-    this.browserController.addEventListener(this.handleBrowserEvent.bind(this));
+    this.handleBrowserEvent = this.handleBrowserEvent.bind(this);
+    this.enableBrowserEvents();
     this.busy = false;
   }
 
@@ -34,15 +35,19 @@ export default class DefaultSessionProvider implements SessionProvider {
   }
 
   async updateSession() {
+    this.disableBrowserEvents();
     await this._updateSession();
     await this.persistence.storeSession(this.session);
     this.onSessionChanged(this.session);
+    this.enableBrowserEvents();
   }
 
   async setSession(session: BT.Session) {
     this.session = session;
+    this.disableBrowserEvents();
     await this.persistence.storeSession(this.session);
     this.onSessionChanged(this.session);
+    this.enableBrowserEvents();
   }
 
   async setSessionNoDispatch(session: BT.Session) {
@@ -87,5 +92,17 @@ export default class DefaultSessionProvider implements SessionProvider {
     return windows.find(w => {
       return w.tabs.some(t => t.url === appURL);
     });
+  }
+
+  private enableBrowserEvents() {
+    this.browserController.addEventListener(this.handleBrowserEvent);
+  }
+
+  private disableBrowserEvents() {
+    try {
+      this.browserController.removeEventListener(this.handleBrowserEvent);
+    } catch (e) {
+      // ignore error
+    }
   }
 }

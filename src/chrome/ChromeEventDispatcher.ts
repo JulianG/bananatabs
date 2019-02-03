@@ -7,11 +7,9 @@ interface EventListener {
 
 export default class ChromeEventDispatcher implements BrowserEventDispatcher {
   private appTabId: number = 0;
-  private enabled: boolean;
   private eventListeners: EventListener[];
 
   constructor(chromeAPI: PromisingChromeAPI) {
-    this.enabled = true;
     this.eventListeners = [];
 
     chromeAPI.windows.onRemoved.addListener(id => {
@@ -56,20 +54,10 @@ export default class ChromeEventDispatcher implements BrowserEventDispatcher {
     }
   }
 
-  enable() {
-    this.enabled = true;
-  }
-
-  disable() {
-    this.enabled = false;
-  }
-
   ////
 
   private dispatchEvent(event: string, reason?: string) {
-    if (this.enabled) {
-      this.eventListeners.forEach(listener => listener(event, reason || event));
-    }
+    this.eventListeners.forEach(listener => listener(event, reason || event));
   }
 
   private isPanelTab(id: number): boolean {

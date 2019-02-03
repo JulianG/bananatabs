@@ -31,8 +31,14 @@ describe('ChromeEventController', async () => {
     const wins = await controller.getAllWindows();
     expect(wins).toHaveLength(1);
 
-    // also expect NO events to happen (due to event supression)
-    expect(callback).toHaveBeenCalledTimes(0);
+    // also expect the following events
+    expect(callback.mock.calls.map(args => args[0])).toMatchObject([
+      'onTabsCreated',
+      'onActivated',
+      'onTabsCreated',
+      'onActivated',
+      'onRemoved'
+    ]);
   });
 
   test('closeWindow', async () => {
@@ -50,8 +56,11 @@ describe('ChromeEventController', async () => {
     const wins = await controller.getAllWindows();
     expect(wins).toHaveLength(0);
 
-    // also expect NO events to happen (due to event supression)
-    expect(callback).toHaveBeenCalledTimes(0);
+    // also expect the following events
+    expect(callback.mock.calls.map(args => args[0])).toMatchObject([
+      'onFocusChanged',
+      'onRemoved'
+    ]);
   });
 
   test('createTab in window with one tab', async () => {
@@ -72,8 +81,10 @@ describe('ChromeEventController', async () => {
     expect(wins[0].tabs[0].visible).toBeTruthy();
     expect(wins[0].tabs[1].visible).toBeTruthy();
 
-    // also expect NO events to happen (due to event supression)
-    expect(callback).toHaveBeenCalledTimes(0);
+    // also expect the following events
+    expect(callback.mock.calls.map(args => args[0])).toMatchObject([
+      'onTabsCreated'
+    ]);
 
     await controller.closeTab(wins[0].tabs[0].id);
 
@@ -98,8 +109,10 @@ describe('ChromeEventController', async () => {
     expect(wins[0].tabs).toHaveLength(1);
     expect(wins[0].tabs[0].visible).toBeTruthy();
 
-    // also expect NO events to happen (due to event supression)
-    expect(callback).toHaveBeenCalledTimes(0);
+    // also expect the following events
+    expect(callback.mock.calls.map(args => args[0])).toMatchObject([
+      'onTabsRemoved'
+    ]);
   });
 
   test('closeWindow', async () => {
@@ -118,8 +131,10 @@ describe('ChromeEventController', async () => {
     const wins = await controller.getAllWindows();
     expect(wins).toHaveLength(0);
 
-    // also expect NO events to happen (due to event supression)
-    expect(callback).toHaveBeenCalledTimes(0);
+    // also expect the following events
+    expect(callback.mock.calls.map(args => args[0])).toMatchObject([
+      'onFocusChanged', 'onRemoved'
+    ]);
   });
 
   test('selectTab', async () => {
