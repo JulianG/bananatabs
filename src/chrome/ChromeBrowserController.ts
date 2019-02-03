@@ -1,4 +1,4 @@
-import * as BT from '../model/CoreTypes';
+import * as BT from '../model/core/CoreTypes';
 import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
 import BrowserController, {
   SystemDisplayInfo
@@ -20,7 +20,6 @@ export default class ChromeBrowserController implements BrowserController {
       await this.chromeAPI.windows.remove(id);
     } catch (e) {
       console.warn(`Could not remove window from chromeAPI... ${id}`);
-      console.warn(e);
     }
   }
 
@@ -29,7 +28,6 @@ export default class ChromeBrowserController implements BrowserController {
       await this.chromeAPI.tabs.remove(id);
     } catch (e) {
       console.warn(`Could not remove tab from chromeAPI ... ${id}`);
-      console.warn(e);
     }
   }
 

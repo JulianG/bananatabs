@@ -1,4 +1,4 @@
-import * as BT from '../model/CoreTypes';
+import * as BT from '../model/core/CoreTypes';
 import { compareSessions } from '../_test-utils/';
 
 import { convertLegacySession } from './JSONSerialisation';

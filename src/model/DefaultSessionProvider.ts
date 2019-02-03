@@ -1,4 +1,4 @@
-import * as BT from '../model/CoreTypes';
+import * as BT from './core/CoreTypes';
 import BrowserController from '../model/mutators/BrowserController';
 import SessionProvider from '../model/SessionProvider';
 import SessionMerger from './mergers/SessionMerger';

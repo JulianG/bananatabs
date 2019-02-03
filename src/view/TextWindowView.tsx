@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as BT from '../model/CoreTypes';
+import * as BT from '../model/core/CoreTypes';
 import { windowsToString } from '../serialisation/MarkdownSerialisation';
 
 interface Props {

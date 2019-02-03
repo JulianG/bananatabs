@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CONFIG } from '../config';
-import * as BT from '../model/CoreTypes';
+import * as BT from '../model/core/CoreTypes';
 import TabToolsView from './TabToolsView';
 import TabMutator from '../model/mutators/TabMutator';
 

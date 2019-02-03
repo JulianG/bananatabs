@@ -1,4 +1,4 @@
-import { Session } from '../model/CoreTypes';
+import { Session } from '../model/core/CoreTypes';
 import { PromisingChromeAPI } from '../chrome-api/PromisingChromeAPI';
 import RealPromisingChromeAPI from '../chrome-api/RealPromisingChromeAPI';
 import BrowserController from '../model/mutators/BrowserController';

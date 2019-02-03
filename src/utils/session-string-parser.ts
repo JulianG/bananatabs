@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import * as BT from '../model/CoreTypes';
+import * as BT from '../model/core/CoreTypes';
 
 export function parseSessionString(ss: string): BT.Session {
   let lastId = 1000;

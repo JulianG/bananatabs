@@ -1,5 +1,5 @@
 import BananaFactory from './BananaFactory';
-import { EmptySession } from '../model/CoreTypes';
+import { EmptySession } from '../model/core/CoreTypes';
 
 const fakeInitialSessions = { live: EmptySession, stored: EmptySession };
 

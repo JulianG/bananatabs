@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import * as BT from './model/CoreTypes';
+import * as BT from './model/core/CoreTypes';
 import BananaFactory from './factory/BananaFactory';
 import SessionProvider from './model/SessionProvider';
 import SessionMutator from './model/mutators/SessionMutator';

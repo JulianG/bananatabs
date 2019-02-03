@@ -1,4 +1,4 @@
-import * as BT from '../CoreTypes';
+import * as CoreMutations from '../core/CoreMutations';
 import SessionProvider from '../SessionProvider';
 import TabMutator from './TabMutator';
 import WindowMutator from './WindowMutator';
@@ -14,8 +14,8 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
 
   async selectTab(winId: number, tabId: number) {
     await this.browser.selectTab(winId, tabId);
-    const newSession = selectTab(this.provider.session, winId, tabId);
-    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
+    const newSession = CoreMutations.selectTab(this.provider.session, winId, tabId);
+    await this.provider.setSession(newSession);
   }
 
   async hideTab(winId: number, tabId: number) {
@@ -24,18 +24,19 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
       await this.browser.closeTab(tabId);
     }
 
-    const newSession = mutateTab(this.provider.session, winId, tabId, {
-      visible: false
-    });
-    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
+    await this.provider.setSession(
+      CoreMutations.mutateTab(this.provider.session, winId, tabId, {
+        visible: false
+      })
+    );
   }
 
   async showTab(winId: number, tabId: number) {
     const session = this.provider.session;
-    const windowWasVisible = session.getWindow(winId).visible;
-    const newSession = mutateTab(session, winId, tabId, { visible: true });
+    const wasWindowVisible = session.getWindow(winId).visible;
+    const newSession = CoreMutations.mutateTab(session, winId, tabId, { visible: true });
 
-    if (windowWasVisible) {
+    if (wasWindowVisible) {
       await this.browser.showTab(
         newSession.getWindow(winId),
         newSession.getTab(tabId)
@@ -43,155 +44,60 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     } else {
       await this.browser.showWindow(newSession.getWindow(winId));
     }
-    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
+    await this.provider.setSession(newSession);
   }
-  
+
   async deleteTab(winId: number, tabId: number) {
-    const session = this.provider.session;
-    const newSession = deleteTab(session, winId, tabId);
-    
-    const tabWasVisible =
-    session.getWindow(winId).visible && session.getTab(tabId).visible;
-    if (tabWasVisible) {
-      await this.browser.closeTab(tabId);
-    }
-    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
+    await this.browser.closeTab(tabId);
+
+    await this.provider.setSession(
+      CoreMutations.deleteTab(this.provider.session, winId, tabId)
+    );
   }
 
   /// WindowMutator
 
   async renameWindow(id: number, title: string) {
-    const newSession = mutateWindow(this.provider.session, id, { title });
-    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
+    await this.provider.setSession(
+      CoreMutations.mutateWindow(this.provider.session, id, { title })
+    );
   }
 
   async collapseWindow(id: number) {
     await this.provider.setSession(
-      mutateWindow(this.provider.session, id, { expanded: false })
+      CoreMutations.mutateWindow(this.provider.session, id, { expanded: false })
     );
   }
 
   async expandWindow(id: number) {
     await this.provider.setSession(
-      mutateWindow(this.provider.session, id, { expanded: true })
+      CoreMutations.mutateWindow(this.provider.session, id, { expanded: true })
     );
   }
 
   async hideWindow(id: number) {
-    const newSession = mutateWindow(this.provider.session, id, {
-      visible: false
-    });
     await this.browser.closeWindow(id);
-    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
+
+    await this.provider.setSession(
+      CoreMutations.mutateWindow(this.provider.session, id, {
+        visible: false
+      })
+    );
   }
 
   async showWindow(id: number) {
-    const newSession = mutateWindow(this.provider.session, id, {
-      visible: true
-    });
-    await this.browser.showWindow(newSession.getWindow(id));
-    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
+    await this.browser.showWindow(this.provider.session.getWindow(id));
+
+    await this.provider.setSession(
+      CoreMutations.mutateWindow(this.provider.session, id, {
+        visible: true
+      })
+    );
   }
 
   async deleteWindow(id: number) {
-    const wasWindowVisible = this.provider.session.getWindow(id).visible;
-    const newSession = deleteWindow(this.provider.session, id);
-    if (wasWindowVisible) {
-      await this.browser.closeWindow(id);
-    }
-    await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<
+    await this.browser.closeWindow(id);
+
+    await this.provider.setSession(CoreMutations.deleteWindow(this.provider.session, id));
   }
-}
-
-////////////
-////////////
-////////////
-////////////
-
-function selectTab(
-  session: BT.Session,
-  winId: number,
-  tabId: number
-): BT.Session {
-  const windows = session.windows.map(w => {
-    return winId === w.id
-      ? BT.cloneWindow(w, {
-          tabs: w.tabs.map(t => ({ ...t, active: t.id === tabId }))
-        })
-      : BT.cloneWindow(w);
-  });
-  return new BT.Session(windows, session.panelWindow);
-}
-
-function mutateTab(
-  session: BT.Session,
-  winId: number,
-  tabId: number,
-  props: Partial<BT.Tab>
-): BT.Session {
-  const windows = session.windows.map(w => {
-    return w.id === winId
-      ? {
-          ...safeRenameWindow(w),
-          tabs: w.tabs.map(t => {
-            return t.id === tabId ? BT.cloneTab(t, props) : BT.cloneTab(t);
-          })
-        }
-      : { ...w };
-  });
-  return new BT.Session(windows, session.panelWindow);
-}
-
-function safeRenameWindow(window: BT.Window): BT.Window {
-  return { ...window, title: window.title || 'My Window' };
-}
-
-function deleteTab(
-  session: BT.Session,
-  winId: number,
-  tabId: number
-): BT.Session {
-  const windows = session.windows.map(w => {
-    if (w.id === winId) {
-      const tabIndex = w.tabs.findIndex(t => t.id === tabId);
-      console.assert(tabIndex >= 0);
-      const tabs =
-        tabIndex >= 0
-          ? [...w.tabs.slice(0, tabIndex), ...w.tabs.slice(tabIndex + 1)]
-          : w.tabs.map(t => t);
-      return {
-        ...safeRenameWindow(w),
-        tabs: tabs
-      };
-    } else {
-      return BT.cloneWindow(w);
-    }
-  });
-  return new BT.Session(windows, session.panelWindow);
-}
-
-function mutateWindow(
-  session: BT.Session,
-  id: number,
-  props: Partial<BT.Window>
-): BT.Session {
-  const windows = session.windows.map(w => {
-    return w.id === id
-      ? BT.cloneWindow(safeRenameWindow(w), props)
-      : BT.cloneWindow(w);
-  });
-  return new BT.Session(windows, session.panelWindow);
-}
-
-function deleteWindow(session: BT.Session, id: number): BT.Session {
-  const index = session.windows.findIndex(w => w.id === id);
-  console.assert(index >= 0);
-  const windows =
-    index >= 0
-      ? [
-          ...session.windows.slice(0, index),
-          ...session.windows.slice(index + 1)
-        ]
-      : [...session.windows];
-  return new BT.Session(windows, session.panelWindow);
 }

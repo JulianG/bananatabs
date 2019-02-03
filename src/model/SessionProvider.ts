@@ -1,4 +1,4 @@
-import * as BT from './CoreTypes';
+import * as BT from './core/CoreTypes';
 
 export default interface SessionProvider {
   session: BT.Session;

@@ -1,4 +1,4 @@
-import * as BT from '../model/CoreTypes';
+import * as BT from '../model/core/CoreTypes';
 import ChromeBrowserController from './ChromeBrowserController';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 

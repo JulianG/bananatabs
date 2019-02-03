@@ -1,4 +1,4 @@
-import * as BT from '../model/CoreTypes';
+import * as BT from '../model/core/CoreTypes';
 
 interface LegacyWindow extends BT.Window {
   geometry?: BT.Rectangle;

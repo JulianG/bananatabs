@@ -1,7 +1,7 @@
 import { DefaultSessionMerger } from './SessionMerger';
 import { stringToSession } from '../../serialisation/MarkdownSerialisation';
 
-import * as BT from '../CoreTypes';
+import * as BT from '../core/CoreTypes';
 
 function mergeSessions(
   live: string,

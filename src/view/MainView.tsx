@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as BT from '../model/CoreTypes';
+import * as BT from '../model/core/CoreTypes';
 
 import SessionMutator from '../model/mutators/SessionMutator';
 import WindowMutator from '../model/mutators/WindowMutator';
