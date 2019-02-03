@@ -18,13 +18,6 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     await this.provider.setSession(newSession); // <<<<<<<<<<<<<<<<<<<<<<<<
   }
 
-  toggleTabVisibility(winId: number, tabId: number) {
-    const tab = this.provider.session.getTab(tabId);
-    return tab.visible
-      ? this.hideTab(winId, tabId)
-      : this.showTab(winId, tabId);
-  }
-
   async hideTab(winId: number, tabId: number) {
     const win = this.provider.session.getWindow(winId);
     if (win.visible) {
@@ -82,11 +75,6 @@ export default class WindowAndTabMutator implements TabMutator, WindowMutator {
     await this.provider.setSession(
       mutateWindow(this.provider.session, id, { expanded: true })
     );
-  }
-
-  async toggleWindowVisibility(id: number) {
-    const win = this.provider.session.getWindow(id);
-    return win.visible ? this.hideWindow(id) : this.showWindow(id);
   }
 
   async hideWindow(id: number) {

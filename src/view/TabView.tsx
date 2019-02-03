@@ -9,7 +9,7 @@ const Icons = {
   OnHidden: require('./icons/on-hidden.svg'),
   Off: require('./icons/off.svg'),
   Delete: require('./icons/delete.svg'),
-  Page: require('./icons/page.svg'),
+  Page: require('./icons/page.svg')
 };
 
 interface Props {
@@ -43,7 +43,7 @@ export default class TabView extends React.Component<Props, State> {
       'tab',
       tab.active ? 'active' : '',
       this.state.toolsVisible ? 'highlight' : '',
-      tab.visible ? 'visible' : 'hidden',
+      tab.visible ? 'visible' : 'hidden'
     ];
 
     const icon = tab.icon || Icons.Page;
@@ -98,10 +98,9 @@ export default class TabView extends React.Component<Props, State> {
   }
 
   private onToggleVisibilityAction() {
-    this.props.mutator.toggleTabVisibility(
-      this.props.window.id,
-      this.props.tab.id
-    );
+    this.props.tab.visible
+     ? this.props.mutator.hideTab(this.props.window.id, this.props.tab.id)
+     : this.props.mutator.showTab(this.props.window.id, this.props.tab.id);
   }
 
   private onDeleteAction() {

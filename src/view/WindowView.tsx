@@ -16,7 +16,7 @@ const Icons = {
   Off: require('./icons/off.svg'),
   Delete: require('./icons/delete.svg'),
   ArrowDown: require('./icons/arrow-down.svg'),
-  ArrowRight: require('./icons/arrow-right.svg'),
+  ArrowRight: require('./icons/arrow-right.svg')
 };
 
 interface Props {
@@ -55,11 +55,15 @@ export default class WindowView extends React.Component<Props, State> {
       'window-group',
       w.focused ? 'focused' : '',
       this.state.toolsVisible ? 'highlight' : '',
-      w.visible ? 'visible' : 'hidden',
+      w.visible ? 'visible' : 'hidden'
     ];
 
     return (
-      <div id="window-group" data-testid="window-group" className={styles.join(' ')}>
+      <div
+        id="window-group"
+        data-testid="window-group"
+        className={styles.join(' ')}
+      >
         {this.renderHeader()}
         {CONFIG.debug && createDebugInfo(w, ['id'])}
         {this.renderTabs()}
@@ -114,12 +118,7 @@ export default class WindowView extends React.Component<Props, State> {
       window.tabs.map((tab, i) => {
         const key = `win-${window.id}/tab-${tab.id}`;
         return (
-          <TabView
-            key={key}
-            window={window}
-            tab={tab}
-            mutator={tabMutator}
-          />
+          <TabView key={key} window={window} tab={tab} mutator={tabMutator} />
         );
       })
     );
@@ -189,7 +188,9 @@ export default class WindowView extends React.Component<Props, State> {
   }
 
   private handleToggleVisibility() {
-    this.props.windowMutator.toggleWindowVisibility(this.props.window.id);
+    this.props.window.visible
+      ? this.props.windowMutator.hideWindow(this.props.window.id)
+      : this.props.windowMutator.showWindow(this.props.window.id);
   }
 
   private handleDelete() {
