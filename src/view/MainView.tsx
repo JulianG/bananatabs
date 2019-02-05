@@ -11,6 +11,7 @@ import MainViewCmdButtons from './MainViewCmdButtons';
 import TextWindowView from './TextWindowView';
 import NewWindowView from './NewWindowView';
 import Footer from './Footer';
+import { compareWindows } from '../model/core/CoreComparisons';
 
 interface Props {
   version: string;
@@ -32,6 +33,15 @@ export default class MainView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.changeMode = this.changeMode.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+    // create session compare?
+    // make sure we compare the state
+    return (
+      compareWindows(nextProps.session.windows, this.props.session.windows) ===
+        false || nextState.mode !== this.state.mode
+    );
   }
 
   render() {

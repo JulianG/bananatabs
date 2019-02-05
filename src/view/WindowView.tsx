@@ -9,6 +9,7 @@ import { createDebugInfo } from '../utils/DebugUtils';
 
 import WindowMutator from '../model/mutators/WindowMutator';
 import TabMutator from '../model/mutators/TabMutator';
+import { compareWindow } from '../model/core/CoreComparisons';
 
 const Icons = {
   Edit: require('./icons/edit.svg'),
@@ -46,6 +47,14 @@ export default class WindowView extends React.Component<Props, State> {
     this.handleToggleCollapse = this.handleToggleCollapse.bind(this);
     this.showTools = this.showTools.bind(this);
     this.hideTools = this.hideTools.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+    return (
+      compareWindow(nextProps.window, this.props.window) === false ||
+      nextState.toolsVisible !== this.state.toolsVisible ||
+      nextState.renaming !== this.state.renaming
+    );
   }
 
   render() {
@@ -113,14 +122,17 @@ export default class WindowView extends React.Component<Props, State> {
 
   private renderTabs() {
     const { window, tabMutator } = this.props;
+    const display = window.expanded ? 'block' : 'none';
     return (
-      window.expanded &&
-      window.tabs.map((tab, i) => {
-        const key = `win-${window.id}/tab-${tab.id}`;
-        return (
-          <TabView key={key} window={window} tab={tab} mutator={tabMutator} />
-        );
-      })
+      // window.expanded &&
+      <div style={{ display }}>
+        {window.tabs.map((tab, i) => {
+          const key = `tab-${tab.id}`; // `win-${window.id}/tab-${tab.id}`;
+          return (
+            <TabView key={key} window={window} tab={tab} mutator={tabMutator} />
+          );
+        })}
+      </div>
     );
   }
 

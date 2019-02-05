@@ -55,70 +55,74 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
             </span>
           </div>
           <div
-            class="item-row tab   visible"
-            id="tab"
+            style="display: block;"
           >
-            <img
-              alt="tab-visible"
-              class="left-most tool icon"
-              data-testid="visibility-toggle"
-              id="tab-visibility-visible"
-              src="[object Object]"
-              title="Hide Tab"
-            />
-            <img
-              class="icon "
-              src="[object Object]"
-            />
-            <span
-              class="tab-title"
+            <div
+              class="item-row tab   visible"
+              id="tab"
             >
-              http://tab-1.1/
-            </span>
-          </div>
-          <div
-            class="item-row tab   visible"
-            id="tab"
-          >
-            <img
-              alt="tab-visible"
-              class="left-most tool icon"
-              data-testid="visibility-toggle"
-              id="tab-visibility-visible"
-              src="[object Object]"
-              title="Hide Tab"
-            />
-            <img
-              class="icon "
-              src="[object Object]"
-            />
-            <span
-              class="tab-title"
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-1.1/
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
             >
-              http://tab-1.2/
-            </span>
-          </div>
-          <div
-            class="item-row tab   visible"
-            id="tab"
-          >
-            <img
-              alt="tab-visible"
-              class="left-most tool icon"
-              data-testid="visibility-toggle"
-              id="tab-visibility-visible"
-              src="[object Object]"
-              title="Hide Tab"
-            />
-            <img
-              class="icon "
-              src="[object Object]"
-            />
-            <span
-              class="tab-title"
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-1.2/
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
             >
-              http://tab-1.3/
-            </span>
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-1.3/
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -159,70 +163,74 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
             </span>
           </div>
           <div
-            class="item-row tab   visible"
-            id="tab"
+            style="display: block;"
           >
-            <img
-              alt="tab-visible"
-              class="left-most tool icon"
-              data-testid="visibility-toggle"
-              id="tab-visibility-visible"
-              src="[object Object]"
-              title="Hide Tab"
-            />
-            <img
-              class="icon "
-              src="[object Object]"
-            />
-            <span
-              class="tab-title"
+            <div
+              class="item-row tab   visible"
+              id="tab"
             >
-              http://tab-2.1/
-            </span>
-          </div>
-          <div
-            class="item-row tab   visible"
-            id="tab"
-          >
-            <img
-              alt="tab-visible"
-              class="left-most tool icon"
-              data-testid="visibility-toggle"
-              id="tab-visibility-visible"
-              src="[object Object]"
-              title="Hide Tab"
-            />
-            <img
-              class="icon "
-              src="[object Object]"
-            />
-            <span
-              class="tab-title"
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-2.1/
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
             >
-              http://tab-2.2/
-            </span>
-          </div>
-          <div
-            class="item-row tab   visible"
-            id="tab"
-          >
-            <img
-              alt="tab-visible"
-              class="left-most tool icon"
-              data-testid="visibility-toggle"
-              id="tab-visibility-visible"
-              src="[object Object]"
-              title="Hide Tab"
-            />
-            <img
-              class="icon "
-              src="[object Object]"
-            />
-            <span
-              class="tab-title"
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-2.2/
+              </span>
+            </div>
+            <div
+              class="item-row tab   visible"
+              id="tab"
             >
-              http://tab-2.3/
-            </span>
+              <img
+                alt="tab-visible"
+                class="left-most tool icon"
+                data-testid="visibility-toggle"
+                id="tab-visibility-visible"
+                src="[object Object]"
+                title="Hide Tab"
+              />
+              <img
+                class="icon "
+                src="[object Object]"
+              />
+              <span
+                class="tab-title"
+              >
+                http://tab-2.3/
+              </span>
+            </div>
           </div>
         </div>
       </div>

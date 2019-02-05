@@ -49,6 +49,10 @@ export default class BananaTabs extends React.Component<Props, State> {
     this.tabMutator = this.windowMutator = mutator;
   }
 
+  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+    return this.state.session !== nextState.session;
+  }
+  
   componentDidMount() {
     window.addEventListener('resize', this.handleResizeEvent.bind(this));
     this.sessionProvider.onSessionChanged = session => {

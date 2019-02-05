@@ -3,6 +3,7 @@ import { CONFIG } from '../config';
 import * as BT from '../model/core/CoreTypes';
 import TabToolsView from './TabToolsView';
 import TabMutator from '../model/mutators/TabMutator';
+import { compareTab } from '../model/core/CoreComparisons';
 
 const Icons = {
   On: require('./icons/on.svg'),
@@ -32,6 +33,13 @@ export default class TabView extends React.Component<Props, State> {
     this.onToggleVisibilityAction = this.onToggleVisibilityAction.bind(this);
     this.showTools = this.showTools.bind(this);
     this.hideTools = this.hideTools.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+    return (
+      compareTab(nextProps.tab, this.props.tab) === false ||
+      nextState.toolsVisible !== this.state.toolsVisible
+    );
   }
 
   render() {
@@ -99,8 +107,8 @@ export default class TabView extends React.Component<Props, State> {
 
   private onToggleVisibilityAction() {
     this.props.tab.visible
-     ? this.props.mutator.hideTab(this.props.window.id, this.props.tab.id)
-     : this.props.mutator.showTab(this.props.window.id, this.props.tab.id);
+      ? this.props.mutator.hideTab(this.props.window.id, this.props.tab.id)
+      : this.props.mutator.showTab(this.props.window.id, this.props.tab.id);
   }
 
   private onDeleteAction() {

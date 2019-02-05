@@ -37,6 +37,14 @@ export default class TabToolsView extends React.Component<Props, State> {
     this.resetToolTip = this.resetToolTip.bind(this);
   }
 
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    return (
+      nextProps.actionIconVisibility.copy !== this.props.actionIconVisibility.copy ||
+      nextProps.actionIconVisibility.rename !== this.props.actionIconVisibility.rename ||
+      nextProps.actionIconVisibility.delete !== this.props.actionIconVisibility.delete
+    );
+  }
+
   render() {
     return (
       <div className="tab-tools" onMouseOut={this.resetToolTip}>

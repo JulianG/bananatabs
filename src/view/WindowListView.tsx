@@ -7,6 +7,7 @@ import TabMutator from '../model/mutators/TabMutator';
 
 import WindowView from './WindowView';
 import RLDD from 'react-list-drag-and-drop/lib/RLDD';
+import { compareWindows } from '../model/core/CoreComparisons';
 
 interface Props {
   windows: ReadonlyArray<BT.Window>;
@@ -21,6 +22,10 @@ export default class WindowListView extends React.Component<Props, {}> {
     super(props);
     this.itemRenderer = this.itemRenderer.bind(this);
     this.onListUpdated = this.onListUpdated.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps: Props): boolean {
+    return compareWindows(nextProps.windows, this.props.windows) === false;
   }
 
   render() {
@@ -42,7 +47,7 @@ export default class WindowListView extends React.Component<Props, {}> {
     const windows = this.props.windows;
     return (
       <WindowView
-        key={'window-' + i}
+        key={`window-${windows[i].id}`}
         window={windows[i]}
         windowMutator={this.props.windowMutator}
         tabMutator={this.props.tabMutator}
