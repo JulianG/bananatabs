@@ -1,9 +1,9 @@
 import * as React from 'react';
-import BananaTabs from './BananaTabs';
-import BananaFactory from './factory/BananaFactory';
-import * as FakeInitialState from './utils/dev-utils/fake-initial-state';
+import { BananaTabs } from './BananaTabs';
+import { BananaFactory } from './factory/BananaFactory';
+import { ChromeAPIView } from './chrome-api/ChromeAPIView';
 import { stringToSession } from './serialisation/MarkdownSerialisation';
-import ChromeAPIView from './chrome-api/ChromeAPIView';
+import * as FakeInitialState from './utils/dev-utils/fake-initial-state';
 
 const hasChrome = !!(chrome && chrome.windows);
 
@@ -39,4 +39,4 @@ const DevelopmentApp = () => {
 
 const App = hasChrome ? ProductionApp : DevelopmentApp;
 
-export default App;
+export { App };

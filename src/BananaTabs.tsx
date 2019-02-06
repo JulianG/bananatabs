@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import * as BT from './model/core/CoreTypes';
-import BananaFactory from './factory/BananaFactory';
-import SessionProvider from './model/SessionProvider';
-import SessionMutator from './model/mutators/SessionMutator';
-import WindowMutator from './model/mutators/WindowMutator';
-import TabMutator from './model/mutators/TabMutator';
-import WindowAndTabMutator from './model/mutators/WindowAndTabMutator';
-import MainView from './view/MainView';
+import { BananaFactory } from './factory/BananaFactory';
+import { SessionProvider } from './model/SessionProvider';
+import { SessionMutator } from './model/mutators/SessionMutator';
+import { WindowMutator } from './model/mutators/WindowMutator';
+import { TabMutator } from './model/mutators/TabMutator';
+import { WindowAndTabMutator } from './model/mutators/WindowAndTabMutator';
+import { MainView } from './view/MainView';
 
 const MANIFEST = require('./manifest.lnk.json');
 
@@ -19,7 +19,7 @@ interface State {
   session: BT.Session;
 }
 
-export default class BananaTabs extends React.Component<Props, State> {
+export class BananaTabs extends React.Component<Props, State> {
   readonly state: State = { session: BT.EmptySession };
   private version: string;
   private buildString: string;
@@ -52,7 +52,7 @@ export default class BananaTabs extends React.Component<Props, State> {
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
     return this.state.session !== nextState.session;
   }
-  
+
   componentDidMount() {
     window.addEventListener('resize', this.handleResizeEvent.bind(this));
     this.sessionProvider.onSessionChanged = session => {
@@ -64,9 +64,9 @@ export default class BananaTabs extends React.Component<Props, State> {
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResizeEvent);
     this.sessionProvider.onSessionChanged = session => {
-      console.warn(
-        'BananaTabs.componentWillUnmount -> sessionProvider.onSessionChanged'
-      );
+      // console.warn(
+      //   'BananaTabs.componentWillUnmount -> sessionProvider.onSessionChanged'
+      // );
     };
   }
 

@@ -4,7 +4,7 @@ interface Props {
   onClick?(): void;
 }
 
-const Title = (props: Props) => {
+export const Title = (props: Props) => {
   return (
     <h3>
       <img
@@ -16,5 +16,3 @@ const Title = (props: Props) => {
     </h3>
   );
 };
-
-export default Title;

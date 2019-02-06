@@ -17,7 +17,7 @@ interface State {
   tempText: string;
 }
 
-export default class InputForm extends React.Component<Props, State> {
+export class InputForm extends React.Component<Props, State> {
   readonly state: State = { tempText: '', edited: false };
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {

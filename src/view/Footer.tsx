@@ -4,7 +4,8 @@ interface Props {
   version: string;
   buildString: string;
 }
-const Footer = ({ version, buildString }: Props) => {
+
+export const Footer = ({ version, buildString }: Props) => {
   const showCredits = () => {
     window.alert(`BananaTabs! version ${version} ${buildString}
     `);
@@ -33,5 +34,3 @@ const Footer = ({ version, buildString }: Props) => {
     </div>
   );
 };
-
-export default Footer;

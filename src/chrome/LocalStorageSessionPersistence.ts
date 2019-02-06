@@ -1,10 +1,9 @@
 import * as BT from '../model/core/CoreTypes';
-import SessionPersistence from '../model/SessionPersistence';
+import { SessionPersistence } from '../model/SessionPersistence';
 
 import { convertLegacySession } from '../serialisation/JSONSerialisation';
 
-export default class LocalStorageSessionPersistence
-  implements SessionPersistence {
+export class LocalStorageSessionPersistence implements SessionPersistence {
   storeSession(session: BT.Session) {
     const serialisedSession = JSON.stringify(session);
     localStorage.setItem('session', serialisedSession);

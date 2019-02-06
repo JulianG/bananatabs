@@ -1,16 +1,16 @@
 import * as React from 'react';
 import * as BT from '../model/core/CoreTypes';
 
-import SessionMutator from '../model/mutators/SessionMutator';
-import WindowMutator from '../model/mutators/WindowMutator';
-import TabMutator from '../model/mutators/TabMutator';
+import { SessionMutator } from '../model/mutators/SessionMutator';
+import { WindowMutator } from '../model/mutators/WindowMutator';
+import { TabMutator } from '../model/mutators/TabMutator';
 
-import Title from './Title';
-import WindowListView from './WindowListView';
-import MainViewCmdButtons from './MainViewCmdButtons';
-import TextWindowView from './TextWindowView';
-import NewWindowView from './NewWindowView';
-import Footer from './Footer';
+import { Title } from './Title';
+import { WindowListView } from './WindowListView';
+import { MainViewCmdButtons } from './MainViewCmdButtons';
+import { TextWindowView } from './TextWindowView';
+import { NewWindowView } from './NewWindowView';
+import { Footer } from './Footer';
 import { compareWindows } from '../model/core/CoreComparisons';
 
 interface Props {
@@ -27,7 +27,7 @@ interface State {
   windowId: number;
 }
 
-export default class MainView extends React.Component<Props, State> {
+export class MainView extends React.Component<Props, State> {
   readonly state: State = { mode: 'list', windowId: 0 };
 
   constructor(props: Props) {

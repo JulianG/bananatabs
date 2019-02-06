@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PromisingChromeAPI } from './PromisingChromeAPI';
-import BrowserEventDispatcher from '../model/mutators/BrowserEventDispatcher';
-import ChromeEventDispatcher from '../chrome/ChromeEventDispatcher';
+import { BrowserEventDispatcher } from '../model/mutators/BrowserEventDispatcher';
+import { ChromeEventDispatcher } from '../chrome/ChromeEventDispatcher';
 
 type Props = {
   chromeAPI: PromisingChromeAPI;
@@ -11,7 +11,7 @@ type State = {
   windows: chrome.windows.Window[];
 };
 
-export default class ChromeAPIView extends React.Component<Props, State> {
+export class ChromeAPIView extends React.Component<Props, State> {
   private browserEventDispatcher: BrowserEventDispatcher;
 
   constructor(props: Props) {

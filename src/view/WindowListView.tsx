@@ -1,12 +1,10 @@
 import * as React from 'react';
-import * as BT from '../model/core/CoreTypes';
-
-import SessionMutator from '../model/mutators/SessionMutator';
-import WindowMutator from '../model/mutators/WindowMutator';
-import TabMutator from '../model/mutators/TabMutator';
-
-import WindowView from './WindowView';
 import RLDD from 'react-list-drag-and-drop/lib/RLDD';
+import * as BT from '../model/core/CoreTypes';
+import { SessionMutator } from '../model/mutators/SessionMutator';
+import { WindowMutator } from '../model/mutators/WindowMutator';
+import { TabMutator } from '../model/mutators/TabMutator';
+import { WindowView } from './WindowView';
 import { compareWindows } from '../model/core/CoreComparisons';
 
 interface Props {
@@ -17,7 +15,7 @@ interface Props {
   onWindowCopied(id: number): void;
 }
 
-export default class WindowListView extends React.Component<Props, {}> {
+export class WindowListView extends React.Component<Props, {}> {
   constructor(props: Props) {
     super(props);
     this.itemRenderer = this.itemRenderer.bind(this);

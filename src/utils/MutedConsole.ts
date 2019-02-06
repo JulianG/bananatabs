@@ -37,5 +37,4 @@ class MutedConsole implements Console {
   warn(message?: any, ...optionalParams: any[]): void {}
 }
 
-const mutedConsole = new MutedConsole();
-export default mutedConsole;
+export const console = new MutedConsole();

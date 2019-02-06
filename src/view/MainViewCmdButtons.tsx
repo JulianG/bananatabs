@@ -5,7 +5,7 @@ interface Props {
   onCopyAll(): void;
 }
 
-const MainViewCmdButtons = (props: Props) => {
+export const MainViewCmdButtons = (props: Props) => {
   return (
     <div className="command-buttons">
       <button className="ok" onClick={props.onPaste}>
@@ -18,5 +18,3 @@ const MainViewCmdButtons = (props: Props) => {
     </div>
   );
 };
-
-export default MainViewCmdButtons;

@@ -1,12 +1,13 @@
 import * as BT from '../model/core/CoreTypes';
-import ChromeBrowserController from '../chrome/ChromeBrowserController';
-import SessionMerger, {
+import { ChromeBrowserController } from '../chrome/ChromeBrowserController';
+import {
+  SessionMerger,
   DefaultSessionMerger
 } from '../model/mergers/SessionMerger';
-import RAMSessionPersistence from '../utils/RAMSessionPersistence';
-import DefaultSessionProvider from '../model/DefaultSessionProvider';
+import { RAMSessionPersistence } from '../utils/RAMSessionPersistence';
+import { DefaultSessionProvider } from '../model/DefaultSessionProvider';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
-import FakePromisingChromeAPI from 'chrome-api/FakePromisingChromeAPI';
+import { FakePromisingChromeAPI } from 'chrome-api/FakePromisingChromeAPI';
 import { parseSessionString } from '../utils/session-string-parser';
 
 export async function createProvider(sessionString: string) {

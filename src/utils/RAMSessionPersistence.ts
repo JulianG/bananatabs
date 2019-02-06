@@ -1,7 +1,7 @@
 import * as BT from '../model/core/CoreTypes';
-import SessionPersistence from '../model/SessionPersistence';
+import { SessionPersistence } from '../model/SessionPersistence';
 
-export default class RAMSessionPersistence implements SessionPersistence {
+export class RAMSessionPersistence implements SessionPersistence {
   constructor(private session: BT.Session = BT.EmptySession) {
     this.storeSession(session);
   }

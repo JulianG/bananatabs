@@ -8,7 +8,7 @@ interface State {
   count: number;
 }
 
-export default class ClickCounter extends React.Component<Props, State> {
+export class ClickCounter extends React.Component<Props, State> {
   readonly state: State = { count: 0 };
 
   constructor(props: Props) {

@@ -1,5 +1,5 @@
 import * as BT from '../model/core/CoreTypes';
-import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
+import { FakePromisingChromeAPI } from '../chrome-api/FakePromisingChromeAPI';
 import { parseSessionString } from './session-string-parser';
 
 export function initialiseFakeChromeAPI(session: string | BT.Session) {
@@ -20,7 +20,7 @@ function initialiseFchromeFromSession(session: BT.Session) {
       const newTab: chrome.tabs.Tab = fchrome.fake.tabs.create({
         windowId,
         active: vt.active,
-        url: vt.url,
+        url: vt.url
       });
       newTab.highlighted = vt.highlighted;
       newTab.title = `${vt.url}`;

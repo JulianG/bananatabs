@@ -1,5 +1,5 @@
 import * as BT from '../model/core/CoreTypes';
-import ChromeBrowserController from './ChromeBrowserController';
+import { ChromeBrowserController } from './ChromeBrowserController';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 
 describe('ChromeEventController', async () => {
@@ -133,7 +133,8 @@ describe('ChromeEventController', async () => {
 
     // also expect the following events
     expect(callback.mock.calls.map(args => args[0])).toMatchObject([
-      'onFocusChanged', 'onRemoved'
+      'onFocusChanged',
+      'onRemoved'
     ]);
   });
 

@@ -1,4 +1,4 @@
-import FakePromisingChromeAPI from './FakePromisingChromeAPI';
+import { FakePromisingChromeAPI } from './FakePromisingChromeAPI';
 import '../_test-utils/expect-extend-functions';
 import { getAllCallbacks } from '../_test-utils/fake-chrome-test-utils';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
@@ -23,7 +23,7 @@ describe('FakePromisingChromeAPI closing windows and tabs', async () => {
     expect(allCallbacks).toHaveBeenCalledLike([
       { event: fchrome.tabs.onRemoved, times: 1 },
       { event: fchrome.windows.onFocusChanged, times: 1 },
-      { event: fchrome.windows.onRemoved, times: 1 },
+      { event: fchrome.windows.onRemoved, times: 1 }
     ]);
   });
 
@@ -43,7 +43,7 @@ describe('FakePromisingChromeAPI closing windows and tabs', async () => {
     // expect exactly these events
     expect(allCallbacks).toHaveBeenCalledLike([
       { event: fchrome.tabs.onRemoved, times: 1 },
-      { event: fchrome.windows.onRemoved, times: 1 },
+      { event: fchrome.windows.onRemoved, times: 1 }
     ]);
   });
 
@@ -64,7 +64,7 @@ describe('FakePromisingChromeAPI closing windows and tabs', async () => {
     expect(allCallbacks).toHaveBeenCalledLike([
       { event: fchrome.tabs.onRemoved, times: 2 },
       { event: fchrome.windows.onFocusChanged, times: 1 },
-      { event: fchrome.windows.onRemoved, times: 1 },
+      { event: fchrome.windows.onRemoved, times: 1 }
     ]);
   });
 });
@@ -102,7 +102,7 @@ describe('creating tabs', async () => {
     expect(allCallbacks).toHaveBeenCalledLike([
       { event: fchrome.tabs.onCreated, times: 1 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 
@@ -126,7 +126,7 @@ describe('creating tabs', async () => {
     expect(allCallbacks).toHaveBeenCalledLike([
       { event: fchrome.tabs.onCreated, times: 1 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 
@@ -151,7 +151,7 @@ describe('creating tabs', async () => {
     expect(allCallbacks).toHaveBeenCalledLike([
       { event: fchrome.tabs.onCreated, times: 1 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 
@@ -181,7 +181,7 @@ describe('creating windows', async () => {
       { event: fchrome.windows.onCreated, times: 1 },
       { event: fchrome.tabs.onCreated, times: 1 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 
@@ -203,7 +203,7 @@ describe('creating windows', async () => {
       { event: fchrome.windows.onFocusChanged, times: 1 },
       { event: fchrome.tabs.onCreated, times: 1 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 
@@ -224,7 +224,7 @@ describe('creating windows', async () => {
       { event: fchrome.windows.onCreated, times: 1 },
       { event: fchrome.tabs.onCreated, times: 1 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 
@@ -245,7 +245,7 @@ describe('creating windows', async () => {
       { event: fchrome.windows.onCreated, times: 1 },
       { event: fchrome.tabs.onCreated, times: 1 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 
@@ -268,7 +268,7 @@ describe('creating windows', async () => {
       { event: fchrome.windows.onCreated, times: 1 },
       { event: fchrome.tabs.onCreated, times: 1 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 
@@ -292,7 +292,7 @@ describe('creating windows', async () => {
       { event: fchrome.windows.onFocusChanged, times: 1 },
       { event: fchrome.tabs.onCreated, times: 1 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 
@@ -323,7 +323,7 @@ describe('creating windows', async () => {
       { event: fchrome.windows.onCreated, times: 1 },
       { event: fchrome.tabs.onCreated, times: 3 },
       { event: fchrome.tabs.onActivated, times: 3 },
-      { event: fchrome.tabs.onHighlighted, times: 3 },
+      { event: fchrome.tabs.onHighlighted, times: 3 }
     ]);
   });
 
@@ -392,7 +392,7 @@ describe('updating windows', async () => {
       top: 10,
       left: 11,
       width: 0,
-      height: 450,
+      height: 450
     };
     await fchrome.windows.update(windowId, updateInfo);
 
@@ -418,7 +418,7 @@ describe('updating tabs', async () => {
 
     // when the first true is set to active
     const updateProps: chrome.tabs.UpdateProperties = {
-      active: true,
+      active: true
     };
     const updateResult = await fchrome.tabs.update(firstTabId, updateProps);
 
@@ -435,7 +435,7 @@ describe('updating tabs', async () => {
     expect(allCallbacks).toHaveBeenCalledLike([
       { event: fchrome.windows.onFocusChanged, times: 0 },
       { event: fchrome.tabs.onActivated, times: 1 },
-      { event: fchrome.tabs.onHighlighted, times: 1 },
+      { event: fchrome.tabs.onHighlighted, times: 1 }
     ]);
   });
 

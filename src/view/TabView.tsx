@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { CONFIG } from '../config';
 import * as BT from '../model/core/CoreTypes';
-import TabToolsView from './TabToolsView';
-import TabMutator from '../model/mutators/TabMutator';
+import { TabToolsView } from './TabToolsView';
+import { TabMutator } from '../model/mutators/TabMutator';
 import { compareTab } from '../model/core/CoreComparisons';
 
 const Icons = {
@@ -23,7 +23,7 @@ interface State {
   toolsVisible: boolean;
 }
 
-export default class TabView extends React.Component<Props, State> {
+export class TabView extends React.Component<Props, State> {
   readonly state: State = { toolsVisible: false };
 
   constructor(props: Props) {

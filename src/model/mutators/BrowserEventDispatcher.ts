@@ -1,4 +1,4 @@
-export default interface BrowserEventDispatcher {
+export interface BrowserEventDispatcher {
   addListener(listener: BrowserEventListener): void;
   removeListener(listener: BrowserEventListener): void;
 }

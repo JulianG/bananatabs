@@ -7,9 +7,9 @@ import {
   getByTestId
 } from 'react-testing-library';
 import { stringToSession } from '../serialisation/MarkdownSerialisation';
-import FakePromisingChromeAPI from '../chrome-api/FakePromisingChromeAPI';
-import BananaFactory from '../factory/BananaFactory';
-import BananaTabs from '../BananaTabs';
+import { FakePromisingChromeAPI } from '../chrome-api/FakePromisingChromeAPI';
+import { BananaFactory } from '../factory/BananaFactory';
+import { BananaTabs } from '../BananaTabs';
 import { wait } from '.';
 
 export { wait };

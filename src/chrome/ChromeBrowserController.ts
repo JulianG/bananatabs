@@ -1,12 +1,13 @@
 import * as BT from '../model/core/CoreTypes';
 import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
-import BrowserController, {
+import {
+  BrowserController,
   SystemDisplayInfo
 } from '../model/mutators/BrowserController';
-import BrowserEventDispatcher from 'model/mutators/BrowserEventDispatcher';
-import ChromeEventDispatcher from './ChromeEventDispatcher';
+import { BrowserEventDispatcher } from 'model/mutators/BrowserEventDispatcher';
+import { ChromeEventDispatcher } from './ChromeEventDispatcher';
 
-export default class ChromeBrowserController implements BrowserController {
+export class ChromeBrowserController implements BrowserController {
   private chromeAPI: PromisingChromeAPI;
   private browserEventDispatcher: BrowserEventDispatcher;
 

@@ -9,7 +9,7 @@ export interface EventListener {
   (event: string, reason?: string): void;
 }
 
-export default interface BrowserController {
+export interface BrowserController {
   closeWindow(id: number): Promise<void>;
   closeTab(id: number): Promise<void>;
   selectTab(windowId: number, tabId: number): Promise<void>;

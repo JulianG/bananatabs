@@ -1,8 +1,8 @@
 import * as BT from '../core/CoreTypes';
 
-import console from '../../utils/MutedConsole';
+import { console } from '../../utils/MutedConsole';
 
-export default interface SessionMerger {
+export interface SessionMerger {
   merge(live: BT.Session, stored: BT.Session): BT.Session;
 }
 
@@ -40,10 +40,7 @@ export class DefaultSessionMerger implements SessionMerger {
           visible: true,
           title: storedWindow.title,
           expanded: storedWindow.expanded,
-          tabs: this.mergeTabs(
-            liveMatchingWindow.tabs,
-            storedWindow.tabs
-          )
+          tabs: this.mergeTabs(liveMatchingWindow.tabs, storedWindow.tabs)
         };
         this.pushUniqueWindow(mergedSessionWindows, pushingWindow);
       } else {

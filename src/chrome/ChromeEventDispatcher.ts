@@ -1,11 +1,11 @@
 import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
-import BrowserEventDispatcher from '../model/mutators/BrowserEventDispatcher';
+import { BrowserEventDispatcher } from '../model/mutators/BrowserEventDispatcher';
 
 interface EventListener {
   (event: string, reason?: string): void;
 }
 
-export default class ChromeEventDispatcher implements BrowserEventDispatcher {
+export class ChromeEventDispatcher implements BrowserEventDispatcher {
   private appTabId: number = 0;
   private eventListeners: EventListener[];
 

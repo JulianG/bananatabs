@@ -1,10 +1,10 @@
 import * as BT from './core/CoreTypes';
-import BrowserController from '../model/mutators/BrowserController';
-import SessionProvider from '../model/SessionProvider';
-import SessionMerger from './mergers/SessionMerger';
-import SessionPersistence from '../model/SessionPersistence';
+import { BrowserController } from '../model/mutators/BrowserController';
+import { SessionProvider } from '../model/SessionProvider';
+import { SessionMerger } from './mergers/SessionMerger';
+import { SessionPersistence } from '../model/SessionPersistence';
 
-export default class DefaultSessionProvider implements SessionProvider {
+export class DefaultSessionProvider implements SessionProvider {
   public session: BT.Session;
   private busy: boolean;
   public onSessionChanged: (session: BT.Session) => void = () => {

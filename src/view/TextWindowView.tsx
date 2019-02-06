@@ -7,7 +7,7 @@ interface Props {
   onClose(): void;
 }
 
-export default class TextWindowView extends React.Component<Props> {
+export class TextWindowView extends React.Component<Props> {
   private textAreaRef: HTMLTextAreaElement | null | undefined;
 
   constructor(props: Props) {

@@ -2,13 +2,13 @@ import * as React from 'react';
 import { CONFIG } from '../config';
 
 import * as BT from '../model/core/CoreTypes';
-import TabView from './TabView';
-import TabToolsView from './TabToolsView';
-import InputForm from './InputForm';
+import { TabView } from './TabView';
+import { TabToolsView } from './TabToolsView';
+import { InputForm } from './InputForm';
 import { createDebugInfo } from '../utils/DebugUtils';
 
-import WindowMutator from '../model/mutators/WindowMutator';
-import TabMutator from '../model/mutators/TabMutator';
+import { WindowMutator } from '../model/mutators/WindowMutator';
+import { TabMutator } from '../model/mutators/TabMutator';
 import { compareWindow } from '../model/core/CoreComparisons';
 
 const Icons = {
@@ -32,7 +32,7 @@ interface State {
   renaming: boolean;
 }
 
-export default class WindowView extends React.Component<Props, State> {
+export class WindowView extends React.Component<Props, State> {
   readonly state: State = { toolsVisible: false, renaming: false };
 
   constructor(props: Props) {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { stringToWindows } from '../serialisation/MarkdownSerialisation';
-import SessionMutator from '../model/mutators/SessionMutator';
+import { SessionMutator } from '../model/mutators/SessionMutator';
 
 interface Props {
   minimumLines: number;
@@ -13,7 +13,7 @@ interface State {
   edited: boolean;
 }
 
-export default class TextWindowView extends React.Component<Props, State> {
+export class NewWindowView extends React.Component<Props, State> {
   readonly state: State = { text: '', edited: false };
 
   constructor(props: Props) {

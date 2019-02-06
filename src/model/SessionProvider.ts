@@ -1,6 +1,6 @@
 import * as BT from './core/CoreTypes';
 
-export default interface SessionProvider {
+export interface SessionProvider {
   session: BT.Session;
   onSessionChanged(session: BT.Session): void;
   initialiseSession(): Promise<void>;

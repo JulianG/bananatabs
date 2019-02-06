@@ -8,7 +8,7 @@ import {
 
 import * as FCE from './FakeChromeEvent';
 
-const FakeDisplayUnitInfo: chrome.system.display.DisplayUnitInfo = {
+const DefaultFakeDisplayUnitInfo: chrome.system.display.DisplayUnitInfo = {
   id: 'fake-display',
   name: 'FakeDisplay',
   isPrimary: true,
@@ -17,7 +17,7 @@ const FakeDisplayUnitInfo: chrome.system.display.DisplayUnitInfo = {
   workArea: { top: 0, left: 0, width: 1920, height: 1040 }
 };
 
-export default class FakePromisingChromeAPI implements PromisingChromeAPI {
+export class FakePromisingChromeAPI implements PromisingChromeAPI {
   public readonly windows: ChromeWindowsAPI;
   public readonly tabs: ChromeTabsAPI;
   public readonly system: ChromeSystemAPI;
@@ -61,7 +61,7 @@ export default class FakePromisingChromeAPI implements PromisingChromeAPI {
   }
   constructor(
     private fakeDisplayUnitInfoArray: chrome.system.display.DisplayUnitInfo[] = [
-      FakeDisplayUnitInfo
+      { ...DefaultFakeDisplayUnitInfo }
     ]
   ) {
     const self = this;
