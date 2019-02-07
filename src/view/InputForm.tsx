@@ -1,6 +1,9 @@
 import * as React from 'react';
 
-const doNothing = () => {
+const ENTER: number = 13;
+const ESC: number = 27;
+
+const DoNothing = () => {
   /**/
 };
 
@@ -8,66 +11,57 @@ interface Props {
   text: string;
   className?: string;
   inlineStyles?: {};
-  onSubmit?(text: string): void;
-  onCancel?(): void;
+  onSubmit(text: string): void;
+  onCancel(): void;
 }
 
-interface State {
-  edited: boolean;
-  tempText: string;
-}
+export class InputForm extends React.Component<Props> {
+  public static defaultProps: Partial<Props> = {
+    onSubmit: DoNothing,
+    onCancel: DoNothing
+  };
 
-export class InputForm extends React.Component<Props, State> {
-  readonly state: State = { tempText: '', edited: false };
-
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    return prevState.edited
-      ? prevState
-      : { tempText: nextProps.text, edited: false };
-  }
+  private textField: React.RefObject<HTMLInputElement>;
 
   constructor(props: Props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
+    this.textField = React.createRef();
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
   }
 
   render() {
-    const text = this.state.tempText;
     return (
       <input
+        ref={this.textField}
         className={this.props.className}
         style={this.props.inlineStyles}
         autoFocus={true}
         type="text"
-        defaultValue={text}
-        onChange={this.handleChange}
+        defaultValue={this.props.text}
         onKeyUp={this.handleKeyUp}
         onBlur={this.handleBlur}
       />
     );
   }
 
-  private handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ tempText: event.target.value, edited: true });
-  }
-
   private handleKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
     switch (event.keyCode) {
-      case 13: // enter
-        (this.props.onSubmit || doNothing)(this.state.tempText);
+      case ENTER:
+        const text = this.textField.current
+          ? this.textField.current.value
+          : this.props.text;
+        this.props.onSubmit(text);
         break;
-      case 27: // esc
+      case ESC:
         this.setState({ tempText: this.props.text });
-        (this.props.onCancel || doNothing)();
+        this.props.onCancel();
         break;
       default:
     }
   }
 
   private handleBlur(event: React.FocusEvent<HTMLInputElement>) {
-    this.setState({ tempText: this.props.text });
-    (this.props.onCancel || doNothing)();
+    this.props.onCancel();
   }
 }
