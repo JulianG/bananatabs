@@ -1,14 +1,17 @@
 import { Session } from '../model/core/CoreTypes';
-import { PromisingChromeAPI } from '../chrome-api/PromisingChromeAPI';
-import { RealPromisingChromeAPI } from '../chrome-api/RealPromisingChromeAPI';
-import { BrowserController } from '../model/browsercontroller/BrowserController';
-import { ChromeBrowserController } from '../chrome/ChromeBrowserController';
+
 import { SessionProvider } from '../model/SessionProvider';
 import { DefaultSessionProvider } from '../model/DefaultSessionProvider';
-import {
-  SessionMerger,
-  DefaultSessionMerger
-} from '../model/mergers/SessionMerger';
+
+import { PromisingChromeAPI } from '../chrome-api/PromisingChromeAPI';
+import { RealPromisingChromeAPI } from '../chrome-api/RealPromisingChromeAPI';
+import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
+
+import { BrowserController } from '../model/browsercontroller/BrowserController';
+import { ChromeBrowserController } from '../chrome/ChromeBrowserController';
+
+import { SessionMerger } from '../model/mergers/SessionMerger';
+import { DefaultSessionMerger } from '../model/mergers/DefaultSessionMerger';
 
 import {
   SessionMutator,
@@ -22,7 +25,6 @@ import { DefaultTabMutator } from '../model/mutators/DefaultTabMutator';
 import { SessionPersistence } from '../model/SessionPersistence';
 import { LocalStorageSessionPersistence } from '../chrome/LocalStorageSessionPersistence';
 import { RAMSessionPersistence } from '../utils/RAMSessionPersistence';
-import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 
 export class BananaFactory {
   public readonly chromeAPI: PromisingChromeAPI;

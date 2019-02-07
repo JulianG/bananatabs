@@ -1,4 +1,4 @@
-import { DefaultSessionMerger } from './SessionMerger';
+import { DefaultSessionMerger } from './DefaultSessionMerger';
 import { stringToSession } from '../../serialisation/MarkdownSerialisation';
 
 import * as BT from '../core/CoreTypes';
