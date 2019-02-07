@@ -8,7 +8,7 @@ import {
 } from 'react-testing-library';
 import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import { FakePromisingChromeAPI } from '../chrome-api/FakePromisingChromeAPI';
-import { BananaFactory } from '../factory/BananaFactory';
+import { getBananaFactory } from '../factory/BananaFactory';
 import { BananaTabs } from '../BananaTabs';
 import { wait } from '.';
 
@@ -85,7 +85,7 @@ export function getFactory(live: string, stored: string) {
   const liveSession = stringToSession(live);
   const storedSession = stringToSession(stored);
   const fake = { live: liveSession, stored: storedSession };
-  return new BananaFactory(fake);
+  return getBananaFactory(fake);
 }
 
 export function getWindowGroups(container: HTMLElement) {

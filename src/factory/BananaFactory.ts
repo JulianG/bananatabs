@@ -26,43 +26,65 @@ import { SessionPersistence } from '../model/SessionPersistence';
 import { LocalStorageSessionPersistence } from '../chrome/LocalStorageSessionPersistence';
 import { RAMSessionPersistence } from '../utils/RAMSessionPersistence';
 
-export class BananaFactory {
-  public readonly chromeAPI: PromisingChromeAPI;
-  public readonly persistence: SessionPersistence;
-  public readonly sessionMerger: SessionMerger;
-  public readonly sessionProvider: SessionProvider;
-  public readonly browserController: BrowserController;
-  public readonly sessionMutator: SessionMutator;
-  public readonly windowMutator: WindowMutator;
-  public readonly tabMutator: TabMutator;
+export interface BananaFactory {
+  chromeAPI: PromisingChromeAPI;
+  persistence: SessionPersistence;
+  sessionMerger: SessionMerger;
+  browserController: BrowserController;
+  sessionProvider: SessionProvider;
+  sessionMutator: SessionMutator;
+  windowMutator: WindowMutator;
+  tabMutator: TabMutator;
+}
 
-  constructor(fakeInitialSessions: { live: Session; stored: Session } | null) {
-    this.chromeAPI = fakeInitialSessions
-      ? initialiseFakeChromeAPI(fakeInitialSessions.live)
-      : new RealPromisingChromeAPI();
+type Sessions = {
+  live: Session;
+  stored: Session;
+};
 
-    this.persistence = fakeInitialSessions
-      ? new RAMSessionPersistence(fakeInitialSessions.stored)
-      : new LocalStorageSessionPersistence();
+export function getBananaFactory(
+  fakeInitialSessions: Sessions | null
+): BananaFactory {
+  let chromeAPI: PromisingChromeAPI = fakeInitialSessions
+    ? initialiseFakeChromeAPI(fakeInitialSessions.live)
+    : new RealPromisingChromeAPI();
 
-    this.sessionMerger = new DefaultSessionMerger();
+  let persistence: SessionPersistence = fakeInitialSessions
+    ? new RAMSessionPersistence(fakeInitialSessions.stored)
+    : new LocalStorageSessionPersistence();
 
-    this.browserController = new ChromeBrowserController(this.chromeAPI);
+  let sessionMerger: SessionMerger = new DefaultSessionMerger();
 
-    this.sessionProvider = new DefaultSessionProvider(
-      this.browserController,
-      this.sessionMerger,
-      this.persistence
-    );
+  let browserController: BrowserController = new ChromeBrowserController(
+    chromeAPI
+  );
 
-    this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
-    this.windowMutator = new DefaultWindowMutator(
-      this.sessionProvider,
-      this.browserController
-    );
-    this.tabMutator = new DefaultTabMutator(
-      this.sessionProvider,
-      this.browserController
-    );
-  }
+  let sessionProvider: SessionProvider = new DefaultSessionProvider(
+    browserController,
+    sessionMerger,
+    persistence
+  );
+
+  let sessionMutator: SessionMutator = new DefaultSessionMutator(
+    sessionProvider
+  );
+  let windowMutator: WindowMutator = new DefaultWindowMutator(
+    sessionProvider,
+    browserController
+  );
+  let tabMutator: TabMutator = new DefaultTabMutator(
+    sessionProvider,
+    browserController
+  );
+
+  return {
+    chromeAPI,
+    persistence,
+    sessionMerger,
+    browserController,
+    sessionProvider,
+    sessionMutator,
+    windowMutator,
+    tabMutator
+  };
 }

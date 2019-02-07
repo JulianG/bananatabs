@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BananaTabs } from './BananaTabs';
-import { BananaFactory } from './factory/BananaFactory';
+import { getBananaFactory } from './factory/BananaFactory';
 import { ChromeAPIView } from './chrome-api/ChromeAPIView';
 import { stringToSession } from './serialisation/MarkdownSerialisation';
 import * as FakeInitialState from './utils/dev-utils/fake-initial-state';
@@ -14,7 +14,7 @@ const fakeSessions = !hasChrome
     }
   : null;
 
-const factory = new BananaFactory(fakeSessions);
+const factory = getBananaFactory(fakeSessions);
 
 const ProductionApp = () => {
   return <BananaTabs factory={factory} />;
