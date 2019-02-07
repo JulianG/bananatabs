@@ -1,6 +1,5 @@
 import { wait, createIniatilisedProvider } from '../../_test-utils';
 import { DefaultWindowMutator } from './DefaultWindowMutator';
-import { DefaultTabMutator } from './DefaultTabMutator';
 
 async function initialise(sessionString: string) {
   const {
