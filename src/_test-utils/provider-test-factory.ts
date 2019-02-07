@@ -1,6 +1,6 @@
 import * as BT from '../model/core/CoreTypes';
 import { ChromeBrowserController } from '../chrome/ChromeBrowserController';
-import { SessionMerger } from '../model/mergers/SessionMerger';
+import { SessionMerger } from '../model/core/SessionMerger';
 import { DefaultSessionMerger } from '../model/mergers/DefaultSessionMerger';
 import { RAMSessionPersistence } from '../utils/RAMSessionPersistence';
 import { DefaultSessionProvider } from '../model/DefaultSessionProvider';

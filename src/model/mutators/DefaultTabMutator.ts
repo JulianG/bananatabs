@@ -1,5 +1,5 @@
-import { TabMutator } from './Mutators';
-import { SessionProvider } from '../SessionProvider';
+import { TabMutator } from '../core/Mutators';
+import { SessionProvider } from '../core/SessionProvider';
 import * as CoreMutations from '../core/CoreMutations';
 import { BrowserController } from '../browsercontroller/BrowserController';
 

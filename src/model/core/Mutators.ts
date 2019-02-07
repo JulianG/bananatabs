@@ -1,4 +1,4 @@
-import * as BT from '../core/CoreTypes';
+import * as BT from './CoreTypes';
 
 export interface SessionMutator {
   sortWindows(f: (a: BT.Window, b: BT.Window) => number): void;

@@ -5,7 +5,7 @@ import {
   SessionMutator,
   WindowMutator,
   TabMutator
-} from '../model/mutators/Mutators';
+} from '../model/core/Mutators';
 import { WindowView } from './WindowView';
 import { compareWindows } from '../model/core/CoreComparisons';
 

@@ -6,7 +6,7 @@ import { TabView } from './TabView';
 import { TabToolsView } from './TabToolsView';
 import { InputForm } from './InputForm';
 import { createDebugInfo } from '../utils/DebugUtils';
-import { WindowMutator, TabMutator } from '../model/mutators/Mutators';
+import { WindowMutator, TabMutator } from '../model/core/Mutators';
 import { compareWindow } from '../model/core/CoreComparisons';
 
 const Icons = {

@@ -1,4 +1,4 @@
-import * as BT from './core/CoreTypes';
+import * as BT from './CoreTypes';
 
 export interface SessionPersistence {
   storeSession(session: BT.Session): Promise<void>;

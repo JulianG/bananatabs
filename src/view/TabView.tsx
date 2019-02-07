@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CONFIG } from '../config';
 import * as BT from '../model/core/CoreTypes';
 import { TabToolsView } from './TabToolsView';
-import { TabMutator } from '../model/mutators/Mutators';
+import { TabMutator } from '../model/core/Mutators';
 import { compareTab } from '../model/core/CoreComparisons';
 
 const Icons = {

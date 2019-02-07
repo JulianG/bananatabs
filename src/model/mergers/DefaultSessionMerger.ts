@@ -1,5 +1,5 @@
 import * as BT from '../core/CoreTypes';
-import { SessionMerger } from './SessionMerger';
+import { SessionMerger } from '../core/SessionMerger';
 import { console } from '../../utils/MutedConsole';
 
 export class DefaultSessionMerger implements SessionMerger {

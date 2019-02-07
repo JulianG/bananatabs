@@ -1,7 +1,7 @@
 import * as BT from '../core/CoreTypes';
-import { SessionMutator } from './Mutators';
+import { SessionMutator } from '../core/Mutators';
 import * as CoreMutations from '../core/CoreMutations';
-import { SessionProvider } from '../SessionProvider';
+import { SessionProvider } from '../core/SessionProvider';
 
 export class DefaultSessionMutator implements SessionMutator {
   constructor(private provider: SessionProvider) {}

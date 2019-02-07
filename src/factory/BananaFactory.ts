@@ -1,6 +1,6 @@
 import { Session } from '../model/core/CoreTypes';
 
-import { SessionProvider } from '../model/SessionProvider';
+import { SessionProvider } from '../model/core/SessionProvider';
 import { DefaultSessionProvider } from '../model/DefaultSessionProvider';
 
 import { PromisingChromeAPI } from '../chrome-api/PromisingChromeAPI';
@@ -10,19 +10,19 @@ import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 import { BrowserController } from '../model/browsercontroller/BrowserController';
 import { ChromeBrowserController } from '../chrome/ChromeBrowserController';
 
-import { SessionMerger } from '../model/mergers/SessionMerger';
+import { SessionMerger } from '../model/core/SessionMerger';
 import { DefaultSessionMerger } from '../model/mergers/DefaultSessionMerger';
 
 import {
   SessionMutator,
   WindowMutator,
   TabMutator
-} from '../model/mutators/Mutators';
+} from '../model/core/Mutators';
 import { DefaultSessionMutator } from '../model/mutators/DefaultSessionMutator';
 import { DefaultWindowMutator } from '../model/mutators/DefaultWindowMutator';
 import { DefaultTabMutator } from '../model/mutators/DefaultTabMutator';
 
-import { SessionPersistence } from '../model/SessionPersistence';
+import { SessionPersistence } from '../model/core/SessionPersistence';
 import { LocalStorageSessionPersistence } from '../chrome/LocalStorageSessionPersistence';
 import { RAMSessionPersistence } from '../utils/RAMSessionPersistence';
 

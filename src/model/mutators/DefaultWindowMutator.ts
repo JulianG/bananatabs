@@ -1,6 +1,6 @@
 import * as CoreMutations from '../core/CoreMutations';
-import { SessionProvider } from '../SessionProvider';
-import { WindowMutator } from './Mutators';
+import { SessionProvider } from '../core/SessionProvider';
+import { WindowMutator } from '../core/Mutators';
 import { BrowserController } from '../browsercontroller/BrowserController';
 
 export class DefaultWindowMutator implements WindowMutator {

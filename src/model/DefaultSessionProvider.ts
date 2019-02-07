@@ -1,8 +1,8 @@
 import * as BT from './core/CoreTypes';
 import { BrowserController } from './browsercontroller/BrowserController';
-import { SessionProvider } from '../model/SessionProvider';
-import { SessionMerger } from './mergers/SessionMerger';
-import { SessionPersistence } from '../model/SessionPersistence';
+import { SessionProvider } from './core/SessionProvider';
+import { SessionMerger } from './core/SessionMerger';
+import { SessionPersistence } from './core/SessionPersistence';
 
 export class DefaultSessionProvider implements SessionProvider {
   public session: BT.Session;
