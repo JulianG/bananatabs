@@ -6,7 +6,6 @@ import { SessionProvider } from './model/SessionProvider';
 import { SessionMutator } from './model/mutators/SessionMutator';
 import { WindowMutator } from './model/mutators/WindowMutator';
 import { TabMutator } from './model/mutators/TabMutator';
-import { WindowAndTabMutator } from './model/mutators/WindowAndTabMutator';
 import { MainView } from './view/MainView';
 
 const MANIFEST = require('./manifest.lnk.json');
@@ -42,11 +41,8 @@ export class BananaTabs extends React.Component<Props, State> {
 
     this.sessionMutator = factory.sessionMutator;
     this.sessionProvider = factory.sessionProvider;
-    const mutator = new WindowAndTabMutator(
-      this.sessionProvider,
-      factory.browserController
-    );
-    this.tabMutator = this.windowMutator = mutator;
+    this.windowMutator = factory.windowMutator;
+    this.tabMutator = factory.tabMutator;
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
