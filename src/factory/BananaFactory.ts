@@ -9,17 +9,20 @@ import {
   SessionMerger,
   DefaultSessionMerger
 } from '../model/mergers/SessionMerger';
+
 import {
   SessionMutator,
-  DefaultSessionMutator
-} from '../model/mutators/SessionMutator';
-import { WindowMutator } from '../model/mutators/WindowMutator';
-import { TabMutator } from '../model/mutators/TabMutator';
+  WindowMutator,
+  TabMutator
+} from '../model/mutators/Mutators';
+import { DefaultSessionMutator } from '../model/mutators/DefaultSessionMutator';
+import { DefaultWindowMutator } from '../model/mutators/DefaultWindowMutator';
+import { DefaultTabMutator } from '../model/mutators/DefaultTabMutator';
+
 import { SessionPersistence } from '../model/SessionPersistence';
 import { LocalStorageSessionPersistence } from '../chrome/LocalStorageSessionPersistence';
 import { RAMSessionPersistence } from '../utils/RAMSessionPersistence';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
-import { WindowAndTabMutator } from '../model/mutators/WindowAndTabMutator';
 
 export class BananaFactory {
   public readonly chromeAPI: PromisingChromeAPI;
@@ -51,11 +54,11 @@ export class BananaFactory {
     );
 
     this.sessionMutator = new DefaultSessionMutator(this.sessionProvider);
-    this.windowMutator = new WindowAndTabMutator(
+    this.windowMutator = new DefaultWindowMutator(
       this.sessionProvider,
       this.browserController
     );
-    this.tabMutator = new WindowAndTabMutator(
+    this.tabMutator = new DefaultTabMutator(
       this.sessionProvider,
       this.browserController
     );

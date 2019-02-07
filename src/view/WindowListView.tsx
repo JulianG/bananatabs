@@ -1,9 +1,11 @@
 import * as React from 'react';
 import RLDD from 'react-list-drag-and-drop/lib/RLDD';
 import * as BT from '../model/core/CoreTypes';
-import { SessionMutator } from '../model/mutators/SessionMutator';
-import { WindowMutator } from '../model/mutators/WindowMutator';
-import { TabMutator } from '../model/mutators/TabMutator';
+import {
+  SessionMutator,
+  WindowMutator,
+  TabMutator
+} from '../model/mutators/Mutators';
 import { WindowView } from './WindowView';
 import { compareWindows } from '../model/core/CoreComparisons';
 

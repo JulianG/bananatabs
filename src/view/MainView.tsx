@@ -1,9 +1,12 @@
 import * as React from 'react';
 import * as BT from '../model/core/CoreTypes';
 
-import { SessionMutator } from '../model/mutators/SessionMutator';
-import { WindowMutator } from '../model/mutators/WindowMutator';
-import { TabMutator } from '../model/mutators/TabMutator';
+import {
+  SessionMutator,
+  WindowMutator,
+  TabMutator
+} from '../model/mutators/Mutators';
+import { compareWindows } from '../model/core/CoreComparisons';
 
 import { Title } from './Title';
 import { WindowListView } from './WindowListView';
@@ -11,7 +14,6 @@ import { MainViewCmdButtons } from './MainViewCmdButtons';
 import { TextWindowView } from './TextWindowView';
 import { NewWindowView } from './NewWindowView';
 import { Footer } from './Footer';
-import { compareWindows } from '../model/core/CoreComparisons';
 
 interface Props {
   version: string;

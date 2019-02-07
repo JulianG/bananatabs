@@ -1,15 +1,9 @@
 import * as BT from '../core/CoreTypes';
+import { SessionMutator } from './Mutators';
 import * as CoreMutations from '../core/CoreMutations';
-
 import { SessionProvider } from '../SessionProvider';
 
-export interface SessionMutator {
-  sortWindows(f: (a: BT.Window, b: BT.Window) => number): void;
-  setWindows(windows: BT.Window[]): void;
-  addWindows(windows: BT.Window[]): void;
-}
-
-export class DefaultSessionMutator {
+export class DefaultSessionMutator implements SessionMutator {
   constructor(private provider: SessionProvider) {}
 
   sortWindows(f: (a: BT.Window, b: BT.Window) => number): void {

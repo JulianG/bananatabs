@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { stringToWindows } from '../serialisation/MarkdownSerialisation';
-import { SessionMutator } from '../model/mutators/SessionMutator';
+import { SessionMutator } from '../model/mutators/Mutators';
 
 interface Props {
   minimumLines: number;

@@ -2,9 +2,11 @@ import * as React from 'react';
 import * as BT from './model/core/CoreTypes';
 import { BananaFactory } from './factory/BananaFactory';
 import { SessionProvider } from './model/SessionProvider';
-import { SessionMutator } from './model/mutators/SessionMutator';
-import { WindowMutator } from './model/mutators/WindowMutator';
-import { TabMutator } from './model/mutators/TabMutator';
+import {
+  SessionMutator,
+  WindowMutator,
+  TabMutator
+} from './model/mutators/Mutators';
 import { MainView } from './view/MainView';
 
 const MANIFEST = require('./manifest.lnk.json');

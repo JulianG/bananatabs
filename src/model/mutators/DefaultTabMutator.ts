@@ -1,16 +1,13 @@
-import * as CoreMutations from '../core/CoreMutations';
+import { TabMutator } from './Mutators';
 import { SessionProvider } from '../SessionProvider';
-import { TabMutator } from './TabMutator';
-import { WindowMutator } from './WindowMutator';
+import * as CoreMutations from '../core/CoreMutations';
 import { BrowserController } from '../browsercontroller/BrowserController';
 
-export class WindowAndTabMutator implements TabMutator, WindowMutator {
+export class DefaultTabMutator implements TabMutator {
   constructor(
     private provider: SessionProvider,
     private browser: BrowserController
   ) {}
-
-  // TabMutator interface
 
   async selectTab(winId: number, tabId: number) {
     await this.browser.selectTab(winId, tabId);
@@ -53,54 +50,6 @@ export class WindowAndTabMutator implements TabMutator, WindowMutator {
 
     await this.provider.setSession(
       CoreMutations.deleteTab(this.provider.session, winId, tabId)
-    );
-  }
-
-  /// WindowMutator
-
-  async renameWindow(id: number, title: string) {
-    await this.provider.setSession(
-      CoreMutations.mutateWindow(this.provider.session, id, { title })
-    );
-  }
-
-  async collapseWindow(id: number) {
-    await this.provider.setSession(
-      CoreMutations.mutateWindow(this.provider.session, id, { expanded: false })
-    );
-  }
-
-  async expandWindow(id: number) {
-    await this.provider.setSession(
-      CoreMutations.mutateWindow(this.provider.session, id, { expanded: true })
-    );
-  }
-
-  async hideWindow(id: number) {
-    await this.browser.closeWindow(id);
-
-    await this.provider.setSession(
-      CoreMutations.mutateWindow(this.provider.session, id, {
-        visible: false
-      })
-    );
-  }
-
-  async showWindow(id: number) {
-    await this.browser.showWindow(this.provider.session.getWindow(id));
-
-    await this.provider.setSession(
-      CoreMutations.mutateWindow(this.provider.session, id, {
-        visible: true
-      })
-    );
-  }
-
-  async deleteWindow(id: number) {
-    await this.browser.closeWindow(id);
-
-    await this.provider.setSession(
-      CoreMutations.deleteWindow(this.provider.session, id)
     );
   }
 }
