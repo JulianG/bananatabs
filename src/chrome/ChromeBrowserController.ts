@@ -3,8 +3,8 @@ import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
 import {
   BrowserController,
   SystemDisplayInfo
-} from '../model/mutators/BrowserController';
-import { BrowserEventDispatcher } from 'model/mutators/BrowserEventDispatcher';
+} from '../model/browsercontroller/BrowserController';
+import { BrowserEventDispatcher } from 'model/browsercontroller/BrowserEventDispatcher';
 import { ChromeEventDispatcher } from './ChromeEventDispatcher';
 
 export class ChromeBrowserController implements BrowserController {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PromisingChromeAPI } from './PromisingChromeAPI';
-import { BrowserEventDispatcher } from '../model/mutators/BrowserEventDispatcher';
+import { BrowserEventDispatcher } from '../model/browsercontroller/BrowserEventDispatcher';
 import { ChromeEventDispatcher } from '../chrome/ChromeEventDispatcher';
 
 type Props = {

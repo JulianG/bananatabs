@@ -2,7 +2,7 @@ import * as CoreMutations from '../core/CoreMutations';
 import { SessionProvider } from '../SessionProvider';
 import { TabMutator } from './TabMutator';
 import { WindowMutator } from './WindowMutator';
-import { BrowserController } from './BrowserController';
+import { BrowserController } from '../browsercontroller/BrowserController';
 
 export class WindowAndTabMutator implements TabMutator, WindowMutator {
   constructor(

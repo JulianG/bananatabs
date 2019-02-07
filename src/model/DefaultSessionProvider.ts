@@ -1,5 +1,5 @@
 import * as BT from './core/CoreTypes';
-import { BrowserController } from '../model/mutators/BrowserController';
+import { BrowserController } from './browsercontroller/BrowserController';
 import { SessionProvider } from '../model/SessionProvider';
 import { SessionMerger } from './mergers/SessionMerger';
 import { SessionPersistence } from '../model/SessionPersistence';

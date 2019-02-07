@@ -1,5 +1,5 @@
 import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
-import { BrowserEventDispatcher } from '../model/mutators/BrowserEventDispatcher';
+import { BrowserEventDispatcher } from '../model/browsercontroller/BrowserEventDispatcher';
 
 interface EventListener {
   (event: string, reason?: string): void;
