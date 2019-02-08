@@ -40,15 +40,15 @@ export function createFakeBananaContext(sessions: {
   live: Session | string;
   stored: Session | string;
 }): BananaContext {
-  const chromeAPI: PromisingChromeAPI = initialiseFakeChromeAPI(sessions.live);
-
-  const stored =
-    typeof sessions.stored === 'string'
-      ? stringToSession(sessions.stored)
-      : sessions.stored;
-
+  const live = getSession(sessions.live);
+  const stored = getSession(sessions.stored);
+  const chromeAPI: PromisingChromeAPI = initialiseFakeChromeAPI(live);
   const persistence: SessionPersistence = new RAMSessionPersistence(stored);
   return createContext(chromeAPI, persistence);
+}
+
+function getSession(session: string | Session): Session {
+  return typeof session === 'string' ? stringToSession(session) : session;
 }
 
 export function createContext(
