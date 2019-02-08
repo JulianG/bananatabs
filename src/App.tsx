@@ -5,7 +5,6 @@ import {
   createFakeBananaContext
 } from './context/BananaContextFactory';
 import { ChromeAPIView } from './chrome-api/ChromeAPIView';
-// import { stringToSession } from './serialisation/MarkdownSerialisation';
 import * as FakeInitialState from './utils/dev-utils/fake-initial-state';
 
 const hasChrome = !!(chrome && chrome.windows);
