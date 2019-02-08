@@ -39,37 +39,42 @@ type Sessions = {
   stored: Session;
 };
 
-export function createBananaContext(
-  fakeInitialSessions: Sessions | null
+export function createRealBananaContext(): BananaContext {
+  const chromeAPI: PromisingChromeAPI = new RealPromisingChromeAPI();
+  const persistence: SessionPersistence = new LocalStorageSessionPersistence();
+  return getNewContext(chromeAPI, persistence);
+}
+
+export function createFakeBananaContext(sessions: Sessions): BananaContext {
+  const chromeAPI: PromisingChromeAPI = initialiseFakeChromeAPI(sessions.live);
+  const persistence: SessionPersistence = new RAMSessionPersistence(sessions.stored);
+  return getNewContext(chromeAPI, persistence);
+}
+
+function getNewContext(
+  chromeAPI: PromisingChromeAPI,
+  persistence: SessionPersistence
 ): BananaContext {
-  let chromeAPI: PromisingChromeAPI = fakeInitialSessions
-    ? initialiseFakeChromeAPI(fakeInitialSessions.live)
-    : new RealPromisingChromeAPI();
+  const sessionMerger: SessionMerger = new DefaultSessionMerger();
 
-  let persistence: SessionPersistence = fakeInitialSessions
-    ? new RAMSessionPersistence(fakeInitialSessions.stored)
-    : new LocalStorageSessionPersistence();
-
-  let sessionMerger: SessionMerger = new DefaultSessionMerger();
-
-  let browserController: BrowserController = new ChromeBrowserController(
+  const browserController: BrowserController = new ChromeBrowserController(
     chromeAPI
   );
 
-  let sessionProvider: SessionProvider = new DefaultSessionProvider(
+  const sessionProvider: SessionProvider = new DefaultSessionProvider(
     browserController,
     sessionMerger,
     persistence
   );
 
-  let sessionMutator: SessionMutator = new DefaultSessionMutator(
+  const sessionMutator: SessionMutator = new DefaultSessionMutator(
     sessionProvider
   );
-  let windowMutator: WindowMutator = new DefaultWindowMutator(
+  const windowMutator: WindowMutator = new DefaultWindowMutator(
     sessionProvider,
     browserController
   );
-  let tabMutator: TabMutator = new DefaultTabMutator(
+  const tabMutator: TabMutator = new DefaultTabMutator(
     sessionProvider,
     browserController
   );

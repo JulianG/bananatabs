@@ -1,4 +1,4 @@
-import { createBananaContext } from './BananaContext';
+import { createFakeBananaContext } from './BananaContext';
 import { EmptySession } from '../model/core/CoreTypes';
 
 const fakeInitialSessions = { live: EmptySession, stored: EmptySession };
@@ -6,7 +6,7 @@ const fakeInitialSessions = { live: EmptySession, stored: EmptySession };
 describe('BananaContext tests', async () => {
   test('SessionProvider must be singleton', async () => {
     // given a BananaContext
-    const factory = createBananaContext(fakeInitialSessions);
+    const factory = createFakeBananaContext(fakeInitialSessions);
 
     // when calling getSessionProvider more than once
     const provider0 = factory.sessionProvider;
@@ -18,7 +18,7 @@ describe('BananaContext tests', async () => {
 
   test('BrowserController must be singleton', async () => {
     // given a BananaContext
-    const factory = createBananaContext(fakeInitialSessions);
+    const factory = createFakeBananaContext(fakeInitialSessions);
 
     // when calling getBrowserController more than once
     const controller0 = factory.browserController;
@@ -30,7 +30,7 @@ describe('BananaContext tests', async () => {
 
   test('SessionMutator must be singleton', async () => {
     // given a BananaContext
-    const factory = createBananaContext(fakeInitialSessions);
+    const factory = createFakeBananaContext(fakeInitialSessions);
 
     // when calling getSessionMutator more than once
     const mutator0 = factory.sessionMutator;
@@ -42,7 +42,7 @@ describe('BananaContext tests', async () => {
 
   test('ChromeAPI must be singleton', async () => {
     // given a BananaContext
-    const factory = createBananaContext(fakeInitialSessions);
+    const factory = createFakeBananaContext(fakeInitialSessions);
 
     // when calling getChromeAPI more than once
     const api0 = factory.chromeAPI;

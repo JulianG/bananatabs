@@ -1,26 +1,28 @@
 import * as React from 'react';
 import { BananaTabs } from './BananaTabs';
-import { createBananaContext } from './context/BananaContext';
+import {
+  createRealBananaContext,
+  createFakeBananaContext
+} from './context/BananaContext';
 import { ChromeAPIView } from './chrome-api/ChromeAPIView';
 import { stringToSession } from './serialisation/MarkdownSerialisation';
 import * as FakeInitialState from './utils/dev-utils/fake-initial-state';
 
 const hasChrome = !!(chrome && chrome.windows);
 
-const fakeSessions = !hasChrome
-  ? {
-      live: stringToSession(FakeInitialState.live),
-      stored: stringToSession(FakeInitialState.stored)
-    }
-  : null;
-
-const context = createBananaContext(fakeSessions);
-
 const ProductionApp = () => {
+  const context = createRealBananaContext();
   return <BananaTabs context={context} />;
 };
 
 const DevelopmentApp = () => {
+
+  const fakeSessions = {
+    live: stringToSession(FakeInitialState.live),
+    stored: stringToSession(FakeInitialState.stored)
+  };
+
+  const context = createFakeBananaContext(fakeSessions);
   const chromeAPI = context.chromeAPI;
   // tslint:disable-next-line no-string-literal
   window['chromeAPI'] = chromeAPI;

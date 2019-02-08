@@ -8,7 +8,7 @@ import {
 } from 'react-testing-library';
 import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import { FakePromisingChromeAPI } from '../chrome-api/FakePromisingChromeAPI';
-import { createBananaContext } from '../context/BananaContext';
+import { createFakeBananaContext } from '../context/BananaContext';
 import { BananaTabs } from '../BananaTabs';
 import { wait } from '.';
 
@@ -84,7 +84,7 @@ function getBananaContext(live: string, stored: string) {
   const liveSession = stringToSession(live);
   const storedSession = stringToSession(stored);
   const fake = { live: liveSession, stored: storedSession };
-  return createBananaContext(fake);
+  return createFakeBananaContext(fake);
 }
 
 export function getWindowGroups(container: HTMLElement) {
