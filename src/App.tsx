@@ -17,10 +17,7 @@ const ProductionApp = () => {
 
 const DevelopmentApp = () => {
 
-
   const fakeSessions = { live: FakeInitialState.live, stored: FakeInitialState.stored };
-
-  console.log(fakeSessions);
   
   const context = createFakeBananaContext(fakeSessions);
   const chromeAPI = context.chromeAPI;

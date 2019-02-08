@@ -50,10 +50,9 @@ export class TabToolsView extends React.Component<Props, State> {
   }
 
   render() {
-    console.log('TabToolsView render');
     return (
       <div className="tab-tools" onMouseOut={this.resetToolTip}>
-        <span className="tooltip">{this.state.tooltip}!</span>&nbsp;
+        <span className="tooltip">{this.state.tooltip}</span>&nbsp;
         {this.props.actionIconVisibility.copy && (
           <ToolButton
             id="share"

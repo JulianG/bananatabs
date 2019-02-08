@@ -178,7 +178,6 @@ export class WindowView extends React.Component<Props, State> {
 
   private renderTools() {
     if (this.state.toolsVisible) {
-      console.log('rendering window view');
       return (
         <TabToolsView
           actionIconVisibility={{ rename: true, delete: true, copy: true }}
