@@ -172,7 +172,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
     return existingWindow;
   }
 
-  private removeWindow(id: number) {
+  private removeWindow(id: number): void {
     const index = this.fakeWindows.findIndex(w => w.id === id);
     if (index > -1) {
       const win = this.fakeWindows[index];
@@ -190,13 +190,16 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
       }
       consoleLogFakeDispatch(`windows.onRemoved`);
       (this.windows.onRemoved as FCE.WindowIdEvent).fakeDispatch(id);
-      return win;
+      return;
     } else {
       throw new Error(`failed to remove window with id: ${id}`);
     }
   }
 
-  private removeTabWhileWindowClosing(id: number) {
+  private removeTabWhileWindowClosing(id: number | undefined): void {
+    if(!id) {
+      return;
+    }
     try {
       const winId = this._removeTab(id);
       consoleLogFakeDispatch(`tabs.onRemoved`);

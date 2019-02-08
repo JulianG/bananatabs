@@ -12,12 +12,12 @@ export interface ChromeWindowsAPI {
   getAll(getInfo: chrome.windows.GetInfo): Promise<chrome.windows.Window[]>;
   create(
     createData: chrome.windows.CreateData
-  ): Promise<chrome.windows.Window | undefined>;
+  ): Promise<chrome.windows.Window | undefined> | chrome.windows.Window | undefined;
   update(
     id: number,
     updateInfo: chrome.windows.UpdateInfo
-  ): Promise<chrome.windows.Window>;
-  remove(id: number): Promise<void>;
+  ): Promise<chrome.windows.Window> | chrome.windows.Window;
+  remove(id: number): Promise<void> | void;
 }
 
 export interface ChromeTabsAPI {
@@ -28,16 +28,16 @@ export interface ChromeTabsAPI {
   onRemoved: chrome.tabs.TabRemovedEvent;
   onActivated: chrome.tabs.TabActivatedEvent;
   onHighlighted: chrome.tabs.TabHighlightedEvent;
-  create(props: chrome.tabs.CreateProperties): Promise<chrome.tabs.Tab>;
+  create(props: chrome.tabs.CreateProperties): Promise<chrome.tabs.Tab> | chrome.tabs.Tab;
   update(
     id: number,
     props: chrome.tabs.UpdateProperties
-  ): Promise<chrome.tabs.Tab | undefined>;
-  remove(id: number): Promise<void>;
+  ): Promise<chrome.tabs.Tab | undefined> | chrome.tabs.Tab | undefined;
+  remove(id: number): Promise<void> | void;
   move(
     tabIds: number,
     moveProperties: chrome.tabs.MoveProperties
-  ): Promise<chrome.tabs.Tab | chrome.tabs.Tab[]>;
+  ): Promise<chrome.tabs.Tab | chrome.tabs.Tab[]> | void;
   getCurrent(): Promise<chrome.tabs.Tab>;
 }
 

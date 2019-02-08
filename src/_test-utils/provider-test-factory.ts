@@ -5,7 +5,7 @@ import { DefaultSessionMerger } from '../model/mergers/DefaultSessionMerger';
 import { RAMSessionPersistence } from '../utils/RAMSessionPersistence';
 import { DefaultSessionProvider } from '../model/DefaultSessionProvider';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
-import { FakePromisingChromeAPI } from 'chrome-api/FakePromisingChromeAPI';
+import { FakePromisingChromeAPI } from '../chrome-api/FakePromisingChromeAPI';
 import { parseSessionString } from '../utils/session-string-parser';
 
 export async function createProvider(sessionString: string) {

@@ -81,19 +81,19 @@ export class TabToolsView extends React.Component<Props, State> {
     );
   }
 
-  private handleRenameAction(e: React.MouseEvent<HTMLImageElement>) {
+  private handleRenameAction(e: React.MouseEvent) {
     (this.props.onRenameAction || doNothing)();
   }
 
-  private handleDeleteAction(e: React.MouseEvent<HTMLImageElement>) {
+  private handleDeleteAction(e: React.MouseEvent) {
     (this.props.onDeleteAction || doNothing)();
   }
 
-  private handleCopyAction(e: React.MouseEvent<HTMLImageElement>) {
+  private handleCopyAction(e: React.MouseEvent) {
     (this.props.onCopyAction || doNothing)();
   }
 
-  private handleMouseOver(e: React.MouseEvent<HTMLImageElement>) {
+  private handleMouseOver(e: { currentTarget: { id: string } }) {
     this.setState({ tooltip: e.currentTarget.id });
   }
 

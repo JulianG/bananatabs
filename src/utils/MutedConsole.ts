@@ -30,6 +30,7 @@ class MutedConsole implements Console {
   table(...data: any[]): void {}
   time(timerName?: string): void {}
   timeEnd(timerName?: string): void {}
+  timeLog(): void {}
   timeStamp(label?: string): void {}
   timeline(label?: string): void {}
   timelineEnd(label?: string): void {}

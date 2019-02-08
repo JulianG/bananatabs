@@ -1,4 +1,4 @@
-import { PromisingChromeAPI } from 'chrome-api/PromisingChromeAPI';
+import { PromisingChromeAPI } from '../chrome-api/PromisingChromeAPI';
 import { BrowserEventDispatcher } from '../model/browsercontroller/BrowserEventDispatcher';
 
 interface EventListener {
