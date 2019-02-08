@@ -39,16 +39,21 @@ export class TabToolsView extends React.Component<Props, State> {
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
     return (
-      nextProps.actionIconVisibility.copy !== this.props.actionIconVisibility.copy ||
-      nextProps.actionIconVisibility.rename !== this.props.actionIconVisibility.rename ||
-      nextProps.actionIconVisibility.delete !== this.props.actionIconVisibility.delete
+      nextProps.actionIconVisibility.copy !==
+        this.props.actionIconVisibility.copy ||
+      nextProps.actionIconVisibility.rename !==
+        this.props.actionIconVisibility.rename ||
+      nextProps.actionIconVisibility.delete !==
+        this.props.actionIconVisibility.delete ||
+      nextState.tooltip !== this.state.tooltip
     );
   }
 
   render() {
+    console.log('TabToolsView render');
     return (
       <div className="tab-tools" onMouseOut={this.resetToolTip}>
-        <span className="tooltip">{this.state.tooltip}</span>&nbsp;
+        <span className="tooltip">{this.state.tooltip}!</span>&nbsp;
         {this.props.actionIconVisibility.copy && (
           <ToolButton
             id="share"
