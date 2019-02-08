@@ -3,9 +3,8 @@ import { BananaTabs } from './BananaTabs';
 import {
   createRealBananaContext,
   createFakeBananaContext
-} from './context/BananaContext';
+} from './context/BananaContextFactory';
 import { ChromeAPIView } from './chrome-api/ChromeAPIView';
-import { stringToSession } from './serialisation/MarkdownSerialisation';
 import * as FakeInitialState from './utils/dev-utils/fake-initial-state';
 
 const hasChrome = !!(chrome && chrome.windows);
@@ -16,14 +15,9 @@ const ProductionApp = () => {
 };
 
 const DevelopmentApp = () => {
-
-  const fakeSessions = {
-    live: stringToSession(FakeInitialState.live),
-    stored: stringToSession(FakeInitialState.stored)
-  };
-
-  const context = createFakeBananaContext(fakeSessions);
+  const context = createFakeBananaContext(FakeInitialState);
   const chromeAPI = context.chromeAPI;
+  
   // tslint:disable-next-line no-string-literal
   window['chromeAPI'] = chromeAPI;
 

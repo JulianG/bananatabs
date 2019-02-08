@@ -8,7 +8,7 @@ import {
 } from 'react-testing-library';
 import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import { FakePromisingChromeAPI } from '../chrome-api/FakePromisingChromeAPI';
-import { createFakeBananaContext } from '../context/BananaContext';
+import { createFakeBananaContext } from '../context/BananaContextFactory';
 import { BananaTabs } from '../BananaTabs';
 import { wait } from '.';
 
