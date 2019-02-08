@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BananaTabs } from './BananaTabs';
-import { getBananaFactory } from './factory/BananaFactory';
+import { createBananaContext } from './context/BananaContext';
 import { ChromeAPIView } from './chrome-api/ChromeAPIView';
 import { stringToSession } from './serialisation/MarkdownSerialisation';
 import * as FakeInitialState from './utils/dev-utils/fake-initial-state';
@@ -14,21 +14,21 @@ const fakeSessions = !hasChrome
     }
   : null;
 
-const factory = getBananaFactory(fakeSessions);
+const context = createBananaContext(fakeSessions);
 
 const ProductionApp = () => {
-  return <BananaTabs factory={factory} />;
+  return <BananaTabs context={context} />;
 };
 
 const DevelopmentApp = () => {
-  const chromeAPI = factory.chromeAPI;
+  const chromeAPI = context.chromeAPI;
   // tslint:disable-next-line no-string-literal
   window['chromeAPI'] = chromeAPI;
 
   return (
     <div className="split">
       <div className="split-bananatabs">
-        <BananaTabs factory={factory} />
+        <BananaTabs context={context} />
       </div>
       <div className="split-browser">
         <ChromeAPIView chromeAPI={chromeAPI} />

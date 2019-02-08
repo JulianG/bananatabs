@@ -8,26 +8,25 @@ import {
 } from 'react-testing-library';
 import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import { FakePromisingChromeAPI } from '../chrome-api/FakePromisingChromeAPI';
-import { getBananaFactory } from '../factory/BananaFactory';
+import { createBananaContext } from '../context/BananaContext';
 import { BananaTabs } from '../BananaTabs';
 import { wait } from '.';
 
 export { wait };
 
-// tslint:disable no-any
 export async function renderBananaTabs(
   live: string,
   stored: string | null = null
 ) {
   stored = stored !== null ? stored : live;
-  const factory = getFactory(live, stored);
-  const fchrome = factory.chromeAPI as FakePromisingChromeAPI;
+  const context = getBananaContext(live, stored);
+  const fchrome = context.chromeAPI as FakePromisingChromeAPI;
 
   const { container, ...renderResult } = render(
-    React.createElement(BananaTabs, { factory })
+    React.createElement(BananaTabs, { context: context })
   );
   await wait();
-  const provider = factory.sessionProvider;
+  const provider = context.sessionProvider;
 
   return {
     container,
@@ -81,11 +80,11 @@ function createFunctions(container: HTMLElement) {
   };
 }
 
-export function getFactory(live: string, stored: string) {
+function getBananaContext(live: string, stored: string) {
   const liveSession = stringToSession(live);
   const storedSession = stringToSession(stored);
   const fake = { live: liveSession, stored: storedSession };
-  return getBananaFactory(fake);
+  return createBananaContext(fake);
 }
 
 export function getWindowGroups(container: HTMLElement) {

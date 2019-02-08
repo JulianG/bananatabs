@@ -26,11 +26,8 @@ import { SessionPersistence } from '../model/core/SessionPersistence';
 import { LocalStorageSessionPersistence } from '../chrome/LocalStorageSessionPersistence';
 import { RAMSessionPersistence } from '../utils/RAMSessionPersistence';
 
-export interface BananaFactory {
+export interface BananaContext {
   chromeAPI: PromisingChromeAPI;
-  persistence: SessionPersistence;
-  sessionMerger: SessionMerger;
-  browserController: BrowserController;
   sessionProvider: SessionProvider;
   sessionMutator: SessionMutator;
   windowMutator: WindowMutator;
@@ -42,9 +39,9 @@ type Sessions = {
   stored: Session;
 };
 
-export function getBananaFactory(
+export function createBananaContext(
   fakeInitialSessions: Sessions | null
-): BananaFactory {
+): BananaContext {
   let chromeAPI: PromisingChromeAPI = fakeInitialSessions
     ? initialiseFakeChromeAPI(fakeInitialSessions.live)
     : new RealPromisingChromeAPI();
@@ -79,9 +76,6 @@ export function getBananaFactory(
 
   return {
     chromeAPI,
-    persistence,
-    sessionMerger,
-    browserController,
     sessionProvider,
     sessionMutator,
     windowMutator,
