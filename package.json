@@ -28,7 +28,6 @@
     "@types/react": "16.8.2",
     "@types/react-dom": "16.8.0",
     "faker": "^4.1.0",
-    "fsevents": "^1.2.4",
     "jest": "^23.6.0",
     "prettier": "1.15.3",
     "react-testing-library": "^5.3.1",
