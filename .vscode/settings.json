@@ -6,11 +6,5 @@
         "statusBar.background" : "#ffcc00",
         "statusBar.foreground" : "#000",
         "sideBar.background": "#221b00"
-    },
-    "prettier.semi": false,
-    "prettier.singleQuote": true,
-    "prettier.trailingComma": "es5",
-    "editor.wordWrapColumn": 120,
-    "prettier.printWidth": 120,
-    "prettier.tslintIntegration": true
+    }
 }
