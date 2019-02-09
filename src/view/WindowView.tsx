@@ -56,6 +56,9 @@ export class WindowView extends React.Component<Props, State> {
   }
 
   render() {
+
+    console.log('WindowView.render');
+    
     const w = this.props.window;
 
     const styles = [
