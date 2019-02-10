@@ -31,18 +31,17 @@ export const WindowView = React.memo((props: Props) => {
 
   const w = props.window;
 
-  const styles = [
+  const classNames = [
     'window-group',
     w.focused ? 'focused' : '',
-    areToolsVisible ? 'highlight' : '',
     w.visible ? 'visible' : 'hidden',
-  ];
+  ].filter(c => !!c);
 
   return (
     <div
       id="window-group"
       data-testid="window-group"
-      className={styles.join(' ')}
+      className={classNames.join(' ')}
     >
       {renderHeader(
         props,
