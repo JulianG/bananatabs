@@ -199,6 +199,7 @@ img.icon.hidden {
 }
 
 .hint {
+	display: inline;
 	color: #666666;
 	font-size: 0.75rem;
 	text-transform: uppercase;

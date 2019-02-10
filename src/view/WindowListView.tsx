@@ -6,7 +6,7 @@ import {
   WindowMutator,
   TabMutator
 } from '../model/core/Mutators';
-import { WindowView } from './WindowView';
+import { WindowView } from './windowview/WindowView';
 import { compareWindows } from '../model/core/CoreComparisons';
 
 interface Props {

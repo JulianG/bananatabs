@@ -1,7 +1,10 @@
 import * as React from 'react';
+import { CONFIG } from '../config';
 
-export function createDebugInfo(item: { id: number }, keys: string[]) {
-  return (
+type Props = { item: { id: number }; keys: string[] };
+
+export const DebugInfo = ({ item, keys }: Props) => {
+  return CONFIG.debug ? (
     <table className="debug-info">
       <tbody>
         {keys.map(key => {
@@ -14,5 +17,5 @@ export function createDebugInfo(item: { id: number }, keys: string[]) {
         })}
       </tbody>
     </table>
-  );
-}
+  ) : null;
+};
