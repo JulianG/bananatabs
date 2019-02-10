@@ -26,9 +26,6 @@ interface Props {
 }
 
 export const WindowView = React.memo((props: Props) => {
-  const [areToolsVisible, setToolsVisible] = React.useState(false); // could be moved to renderHeader
-  const [renaming, setRenaming] = React.useState(false);
-
   const w = props.window;
 
   const classNames = [
@@ -43,13 +40,7 @@ export const WindowView = React.memo((props: Props) => {
       data-testid="window-group"
       className={classNames.join(' ')}
     >
-      {renderHeader(
-        props,
-        areToolsVisible,
-        setToolsVisible,
-        renaming,
-        setRenaming
-      )}
+      {renderHeader(props)}
       {CONFIG.debug && createDebugInfo(w, ['id'])}
       {renderTabs(w, props.tabMutator)}
     </div>
@@ -60,13 +51,11 @@ function shouldNotRerender(prevProps: Props, nextProps: Props) {
   return compareWindow(prevProps.window, nextProps.window);
 }
 
-function renderHeader(
-  props: Props,
-  areToolsVisible: boolean,
-  setToolsVisible: (b: boolean) => void,
-  renaming: boolean,
-  setRenaming: (b: boolean) => void
-) {
+function renderHeader(props: Props) {
+
+  const [areToolsVisible, setToolsVisible] = React.useState(false); // could be moved to renderHeader
+  const [renaming, setRenaming] = React.useState(false);
+
   const w = props.window;
   return (
     <div
