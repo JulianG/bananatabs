@@ -29,7 +29,7 @@ export const WindowView = React.memo((props: Props) => {
       data-testid="window-group"
       className={classNames.join(' ')}
     >
-      <DebugInfo item={window} keys={['id']} />
+      <DebugInfo item={window} />
       <WindowHeader {...props} />
       <TabList window={window} tabMutator={tabMutator} />
     </div>

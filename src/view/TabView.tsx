@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { CONFIG } from '../config';
 import * as BT from '../model/core/CoreTypes';
 import { TabToolsView } from './TabToolsView';
 import { TabMutator } from '../model/core/Mutators';
 import { compareTab } from '../model/core/CoreComparisons';
+import { DebugInfo } from '../utils/DebugUtils';
 
 const Icons = {
   On: require('./icons/on.svg'),
@@ -79,7 +79,7 @@ export const TabView = React.memo((props: Props) => {
         />
       )}
       <span className="tab-title" onClick={selectTab}>
-        {CONFIG.debug && <span className="debug-info">{tab.id}</span>}
+        <DebugInfo item={tab} />
         {tab.title || tab.url}
       </span>
     </div>
