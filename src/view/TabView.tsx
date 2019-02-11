@@ -57,7 +57,7 @@ export const TabView = React.memo((props: Props) => {
       id={'tab'}
       className={styles.join(' ')}
       onMouseEnter={() => setToolsVisible(true)}
-      onMouseLeave={() => setToolsVisible(true)}
+      onMouseLeave={() => setToolsVisible(false)}
     >
       <img
         data-testid="visibility-toggle"
