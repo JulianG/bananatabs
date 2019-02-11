@@ -20,7 +20,7 @@ interface Props {
 }
 
 export const WindowHeader = (props: Props) => {
-  const [areToolsVisible, setToolsVisible] = React.useState(false); // could be moved to renderHeader
+  const [areToolsVisible, setToolsVisible] = React.useState(false);
   const [renaming, setRenaming] = React.useState(false);
 
   const { window, windowMutator } = props;
