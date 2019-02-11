@@ -7,7 +7,7 @@ const doNothing = () => {
 const Icons = {
   Share: require('./icons/share.svg'),
   Edit: require('./icons/edit.svg'),
-  Delete: require('./icons/delete.svg')
+  Delete: require('./icons/delete.svg'),
 };
 
 interface Props {
@@ -21,85 +21,77 @@ interface Props {
   onCopyAction?(): void;
 }
 
-interface State {
-  tooltip: string;
-}
+export const TabToolsView = React.memo((props: Props) => {
+  
+  const {
+    onRenameAction = doNothing,
+    onDeleteAction = doNothing,
+    onCopyAction = doNothing,
+    actionIconVisibility
+  } = props;
+  
+  const [tooltip, setTooltip] = React.useState('');
 
-export class TabToolsView extends React.Component<Props, State> {
-  readonly state: State = { tooltip: '' };
-
-  constructor(props: Props) {
-    super(props);
-    this.handleRenameAction = this.handleRenameAction.bind(this);
-    this.handleDeleteAction = this.handleDeleteAction.bind(this);
-    this.handleCopyAction = this.handleCopyAction.bind(this);
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.resetToolTip = this.resetToolTip.bind(this);
+  function dispatchRenameAction(e: React.MouseEvent) {
+    (onRenameAction || doNothing)();
   }
 
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    return (
-      nextProps.actionIconVisibility.copy !==
-        this.props.actionIconVisibility.copy ||
-      nextProps.actionIconVisibility.rename !==
-        this.props.actionIconVisibility.rename ||
-      nextProps.actionIconVisibility.delete !==
-        this.props.actionIconVisibility.delete ||
-      nextState.tooltip !== this.state.tooltip
-    );
+  function dispatchDeleteAction(e: React.MouseEvent) {
+    (onDeleteAction || doNothing)();
   }
 
-  render() {
-    return (
-      <div className="tab-tools" onMouseOut={this.resetToolTip}>
-        <span className="tooltip">{this.state.tooltip}</span>&nbsp;
-        {this.props.actionIconVisibility.copy && (
-          <ToolButton
-            id="share"
-            src={Icons.Share}
-            onClick={this.handleCopyAction}
-            onMouseOver={this.handleMouseOver}
-          />
-        )}
-        {this.props.actionIconVisibility.rename && (
-          <ToolButton
-            id="rename"
-            src={Icons.Edit}
-            onClick={this.handleRenameAction}
-            onMouseOver={this.handleMouseOver}
-          />
-        )}
-        {this.props.actionIconVisibility.delete && (
-          <ToolButton
-            id="delete"
-            src={Icons.Delete}
-            onClick={this.handleDeleteAction}
-            onMouseOver={this.handleMouseOver}
-          />
-        )}
-      </div>
-    );
+  function dispatchCopyAction(e: React.MouseEvent) {
+    (onCopyAction || doNothing)();
   }
 
-  private handleRenameAction(e: React.MouseEvent) {
-    (this.props.onRenameAction || doNothing)();
+  function handleMouseOver(e: { currentTarget: { id: string } }) {
+    setTooltip(e.currentTarget.id);
   }
 
-  private handleDeleteAction(e: React.MouseEvent) {
-    (this.props.onDeleteAction || doNothing)();
+  function resetToolTip() {
+    setTooltip('');
   }
 
-  private handleCopyAction(e: React.MouseEvent) {
-    (this.props.onCopyAction || doNothing)();
-  }
+  return (
+    <div className="tab-tools" onMouseOut={resetToolTip}>
+      <span className="tooltip">{tooltip}</span>&nbsp;
+      {actionIconVisibility.copy && (
+        <ToolButton
+          id="share"
+          src={Icons.Share}
+          onClick={dispatchCopyAction}
+          onMouseOver={handleMouseOver}
+        />
+      )}
+      {actionIconVisibility.rename && (
+        <ToolButton
+          id="rename"
+          src={Icons.Edit}
+          onClick={dispatchRenameAction}
+          onMouseOver={handleMouseOver}
+        />
+      )}
+      {actionIconVisibility.delete && (
+        <ToolButton
+          id="delete"
+          src={Icons.Delete}
+          onClick={dispatchDeleteAction}
+          onMouseOver={handleMouseOver}
+        />
+      )}
+    </div>
+  );
+}, areEqual);
 
-  private handleMouseOver(e: { currentTarget: { id: string } }) {
-    this.setState({ tooltip: e.currentTarget.id });
-  }
-
-  private resetToolTip() {
-    this.setState({ tooltip: '' });
-  }
+function areEqual(prevProps: Props, nextProps: Props): boolean {
+  return (
+    nextProps.actionIconVisibility.copy ===
+      prevProps.actionIconVisibility.copy &&
+    nextProps.actionIconVisibility.rename ===
+      prevProps.actionIconVisibility.rename &&
+    nextProps.actionIconVisibility.delete ==
+      prevProps.actionIconVisibility.delete
+  );
 }
 
 function ToolButton(props: {
