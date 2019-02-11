@@ -10,7 +10,7 @@ const Icons = {
   OnHidden: require('./icons/on-hidden.svg'),
   Off: require('./icons/off.svg'),
   Delete: require('./icons/delete.svg'),
-  Page: require('./icons/page.svg')
+  Page: require('./icons/page.svg'),
 };
 
 interface Props {
@@ -18,107 +18,74 @@ interface Props {
   tab: BT.Tab;
   mutator: TabMutator;
 }
+export const TabView = React.memo((props: Props) => {
+  const [areToolsVisible, setToolsVisible] = React.useState(false);
 
-interface State {
-  toolsVisible: boolean;
-}
+  const window = props.window;
+  const tab = props.tab;
 
-export class TabView extends React.Component<Props, State> {
-  readonly state: State = { toolsVisible: false };
+  const styles = [
+    'item-row',
+    'tab',
+    tab.active ? 'active' : '',
+    areToolsVisible ? 'highlight' : '',
+    tab.visible ? 'visible' : 'hidden',
+  ];
 
-  constructor(props: Props) {
-    super(props);
-    this.onSelectAction = this.onSelectAction.bind(this);
-    this.onDeleteAction = this.onDeleteAction.bind(this);
-    this.onToggleVisibilityAction = this.onToggleVisibilityAction.bind(this);
-    this.showTools = this.showTools.bind(this);
-    this.hideTools = this.hideTools.bind(this);
-  }
+  const icon = tab.icon || Icons.Page;
 
-  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-    return (
-      compareTab(nextProps.tab, this.props.tab) === false ||
-      nextState.toolsVisible !== this.state.toolsVisible
-    );
-  }
+  const iconStyles = ['icon', tab.visible && window.visible ? '' : 'hidden'];
 
-  render() {
-    const window = this.props.window;
-    const tab = this.props.tab;
+  const visibilityIconSrc = tab.visible
+    ? window.visible
+      ? Icons.On
+      : Icons.OnHidden
+    : Icons.Off;
+  const visibilityIconText = tab.visible ? 'Hide Tab' : 'Show Tab';
 
-    const styles = [
-      'item-row',
-      'tab',
-      tab.active ? 'active' : '',
-      this.state.toolsVisible ? 'highlight' : '',
-      tab.visible ? 'visible' : 'hidden'
-    ];
+  const toggleVisibility = () => {
+    props.tab.visible
+      ? props.mutator.hideTab(props.window.id, props.tab.id)
+      : props.mutator.showTab(props.window.id, props.tab.id);
+  };
 
-    const icon = tab.icon || Icons.Page;
+  const selectTab = () =>
+    props.mutator.selectTab(props.window.id, props.tab.id);
 
-    const iconStyles = ['icon', tab.visible && window.visible ? '' : 'hidden'];
+  return (
+    <div
+      id={'tab'}
+      className={styles.join(' ')}
+      onMouseEnter={() => setToolsVisible(true)}
+      onMouseLeave={() => setToolsVisible(true)}
+    >
+      <img
+        data-testid="visibility-toggle"
+        id={'tab-visibility' + (tab.visible ? '-visible' : '-hidden')}
+        alt={'tab' + (tab.visible ? '-visible' : '-hidden')}
+        className="left-most tool icon"
+        src={visibilityIconSrc}
+        title={visibilityIconText}
+        onClick={toggleVisibility}
+      />
 
-    const visibilityIconSrc = tab.visible
-      ? window.visible
-        ? Icons.On
-        : Icons.OnHidden
-      : Icons.Off;
-    const visibilityIconText = tab.visible ? 'Hide Tab' : 'Show Tab';
-
-    return (
-      <div
-        id={'tab'}
-        className={styles.join(' ')}
-        onMouseEnter={this.showTools}
-        onMouseLeave={this.hideTools}
-      >
-        <img
-          data-testid="visibility-toggle"
-          id={'tab-visibility' + (tab.visible ? '-visible' : '-hidden')}
-          alt={'tab' + (tab.visible ? '-visible' : '-hidden')}
-          className="left-most tool icon"
-          src={visibilityIconSrc}
-          title={visibilityIconText}
-          onClick={this.onToggleVisibilityAction}
+      <img className={iconStyles.join(' ')} src={icon} onClick={selectTab} />
+      {areToolsVisible && (
+        <TabToolsView
+          actionIconVisibility={{ delete: true, rename: false, copy: false }}
+          onDeleteAction={() =>
+            props.mutator.deleteTab(props.window.id, props.tab.id)
+          }
         />
+      )}
+      <span className="tab-title" onClick={selectTab}>
+        {CONFIG.debug && <span className="debug-info">{tab.id}</span>}
+        {tab.title || tab.url}
+      </span>
+    </div>
+  );
+}, areEqual);
 
-        <img
-          className={iconStyles.join(' ')}
-          src={icon}
-          onClick={this.onSelectAction}
-        />
-        {this.state.toolsVisible && (
-          <TabToolsView
-            actionIconVisibility={{ delete: true, rename: false, copy: false }}
-            onDeleteAction={this.onDeleteAction}
-          />
-        )}
-        <span className="tab-title" onClick={this.onSelectAction}>
-          {CONFIG.debug && <span className="debug-info">{tab.id}</span>}
-          {tab.title || tab.url}
-        </span>
-      </div>
-    );
-  }
-
-  private onSelectAction() {
-    this.props.mutator.selectTab(this.props.window.id, this.props.tab.id);
-  }
-
-  private onToggleVisibilityAction() {
-    this.props.tab.visible
-      ? this.props.mutator.hideTab(this.props.window.id, this.props.tab.id)
-      : this.props.mutator.showTab(this.props.window.id, this.props.tab.id);
-  }
-
-  private onDeleteAction() {
-    this.props.mutator.deleteTab(this.props.window.id, this.props.tab.id);
-  }
-
-  private showTools() {
-    this.setState({ toolsVisible: true });
-  }
-  private hideTools() {
-    this.setState({ toolsVisible: false });
-  }
+function areEqual(prevProps: Props, nextProps: Props): boolean {
+  return compareTab(prevProps.tab, nextProps.tab);
 }
