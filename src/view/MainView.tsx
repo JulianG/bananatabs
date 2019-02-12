@@ -4,7 +4,7 @@ import * as BT from '../model/core/CoreTypes';
 import {
   SessionMutator,
   WindowMutator,
-  TabMutator
+  TabMutator,
 } from '../model/core/Mutators';
 import { compareWindows } from '../model/core/CoreComparisons';
 
@@ -29,92 +29,79 @@ interface State {
   windowId: number;
 }
 
-export class MainView extends React.Component<Props, State> {
-  readonly state: State = { mode: 'list', windowId: 0 };
+interface ChangeMode {
+  (mode: State['mode'], windowId?: number): () => void;
+}
 
-  constructor(props: Props) {
-    super(props);
-    this.changeMode = this.changeMode.bind(this);
-  }
+const stateReducer = (state: State, newState: State) => {
+  return { ...state, ...newState };
+};
 
-  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-    // create session compare?
-    // make sure we compare the state
-    return (
-      compareWindows(nextProps.session.windows, this.props.session.windows) ===
-        false || nextState.mode !== this.state.mode
-    );
-  }
+export const MainView = React.memo((props: Props) => {
+  const [state, setState] = React.useReducer(stateReducer, {
+    mode: 'list',
+    windowId: 0,
+  });
 
-  render() {
-    return (
-      <div>
-        <Title />
-        {this.renderBody()}
-        <Footer
-          version={this.props.version}
-          buildString={this.props.buildString}
-        />
-      </div>
-    );
-  }
+  const changeMode: ChangeMode = (
+    mode: State['mode'],
+    windowId: number = -1
+  ) => {
+    return () => setState({ mode, windowId });
+  };
 
-  private renderBody() {
-    switch (this.state.mode) {
-      case 'list':
-        return this.renderListMode();
-      case 'read':
-        return this.renderReadMode();
-      case 'write':
-        return this.renderWriteMode();
-      default:
-        return null;
-    }
-  }
+  const { version, buildString } = props;
 
-  private renderListMode() {
-    const { session, sessionMutator, windowMutator, tabMutator } = this.props;
-    return (
-      <>
-        <WindowListView
-          windows={session.windows}
-          sessionMutator={sessionMutator}
-          windowMutator={windowMutator}
-          tabMutator={tabMutator}
-          onWindowCopied={windowId => this.changeMode('read', windowId)()}
-        />
-        <MainViewCmdButtons
-          onPaste={this.changeMode('write')}
-          onCopyAll={this.changeMode('read')}
-        />
-      </>
-    );
+  switch (state.mode) {
+    case 'list':
+      const { session, sessionMutator, windowMutator, tabMutator } = props;
+      return (
+        <div>
+          <Title />
+          <WindowListView
+            windows={session.windows}
+            sessionMutator={sessionMutator}
+            windowMutator={windowMutator}
+            tabMutator={tabMutator}
+            onWindowCopied={windowId => changeMode('read', windowId)()}
+          />
+          <MainViewCmdButtons
+            onPaste={changeMode('write')}
+            onCopyAll={changeMode('read')}
+          />
+          <Footer version={version} buildString={buildString} />
+        </div>
+      );
+    case 'read':
+      return (
+        <div>
+          <Title />
+          <TextWindowView
+            windows={props.session.windows.filter(w => {
+              return state.windowId === -1 || w.id === state.windowId;
+            })}
+            onClose={changeMode('list')}
+          />
+          <Footer version={version} buildString={buildString} />
+        </div>
+      );
+    case 'write':
+      return (
+        <div>
+          <Title />
+          <NewWindowView
+            minimumLines={10}
+            sessionMutator={props.sessionMutator}
+            onClose={changeMode('list')}
+          />
+          <Footer version={version} buildString={buildString} />
+        </div>
+      );
+    default:
+      return null;
   }
+}, areEqual);
 
-  private renderReadMode() {
-    const windows = this.props.session.windows;
-    const { windowId } = this.state;
-    return (
-      <TextWindowView
-        windows={windows.filter(w => {
-          return windowId === -1 || w.id === windowId;
-        })}
-        onClose={this.changeMode('list')}
-      />
-    );
-  }
-
-  private renderWriteMode() {
-    return (
-      <NewWindowView
-        minimumLines={10}
-        sessionMutator={this.props.sessionMutator}
-        onClose={this.changeMode('list')}
-      />
-    );
-  }
-
-  private changeMode(mode: State['mode'], windowId: number = -1) {
-    return () => this.setState({ mode, windowId });
-  }
+function areEqual(prevProps: Props, nextProps: Props): boolean {
+  return compareWindows(prevProps.session.windows, nextProps.session.windows);
 }
