@@ -1,18 +1,8 @@
 import * as React from 'react';
+import { CONFIG } from '../config';
 
-export function createDebugInfo(item: { id: number }, keys: string[]) {
-  return (
-    <table className="debug-info">
-      <tbody>
-        {keys.map(key => {
-          return (
-            <tr key={item.id + key}>
-              <td>{key}:</td>
-              <td>{JSON.stringify(item[key])}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
-}
+type Props = { item: { id: number } };
+
+export const DebugInfo = ({ item }: Props) => {
+  return CONFIG.debug ? <span className="debug-info">{item.id}</span> : null;
+};

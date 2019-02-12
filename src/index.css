@@ -199,6 +199,7 @@ img.icon.hidden {
 }
 
 .hint {
+	display: inline;
 	color: #666666;
 	font-size: 0.75rem;
 	text-transform: uppercase;
@@ -285,5 +286,5 @@ img.icon.hidden {
 	flex-grow: 1;
 }
 .split-browser {
-	flex-grow: 4;
+	flex-grow: 1;
 }

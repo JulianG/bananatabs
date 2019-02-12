@@ -4,9 +4,9 @@ import * as BT from '../model/core/CoreTypes';
 import {
   SessionMutator,
   WindowMutator,
-  TabMutator
+  TabMutator,
 } from '../model/core/Mutators';
-import { WindowView } from './WindowView';
+import { WindowView } from './windowview/WindowView';
 import { compareWindows } from '../model/core/CoreComparisons';
 
 interface Props {
@@ -17,46 +17,34 @@ interface Props {
   onWindowCopied(id: number): void;
 }
 
-export class WindowListView extends React.Component<Props, {}> {
-  constructor(props: Props) {
-    super(props);
-    this.itemRenderer = this.itemRenderer.bind(this);
-    this.onListUpdated = this.onListUpdated.bind(this);
-  }
+export const WindowListView = React.memo((props: Props) => {
+  const windows = props.windows;
 
-  shouldComponentUpdate(nextProps: Props): boolean {
-    return compareWindows(nextProps.windows, this.props.windows) === false;
-  }
-
-  render() {
-    const windows = this.props.windows;
-    return (
-      <RLDD
-        cssClasses="session"
-        items={[...windows]}
-        layout={'vertical'}
-        threshold={25}
-        dragDelay={250}
-        onChange={this.onListUpdated}
-        itemRenderer={this.itemRenderer}
-      />
-    );
-  }
-
-  private itemRenderer(item: BT.Window, i: number) {
-    const windows = this.props.windows;
+  const itemRenderer = (item: BT.Window, i: number) => {
     return (
       <WindowView
         key={`window-${windows[i].id}`}
         window={windows[i]}
-        windowMutator={this.props.windowMutator}
-        tabMutator={this.props.tabMutator}
-        onCopy={this.props.onWindowCopied}
+        windowMutator={props.windowMutator}
+        tabMutator={props.tabMutator}
+        onCopy={props.onWindowCopied}
       />
     );
-  }
+  };
 
-  private onListUpdated(items: BT.Window[]) {
-    this.props.sessionMutator.setWindows(items);
-  }
+  return (
+    <RLDD
+      cssClasses="session"
+      items={[...windows]}
+      layout={'vertical'}
+      threshold={25}
+      dragDelay={250}
+      onChange={(items: BT.Window[]) => props.sessionMutator.setWindows(items)}
+      itemRenderer={itemRenderer}
+    />
+  );
+}, areEqual);
+
+function areEqual(prevProps: Props, nextProps: Props): boolean {
+  return compareWindows(prevProps.windows, nextProps.windows);
 }

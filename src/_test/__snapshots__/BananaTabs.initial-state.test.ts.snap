@@ -22,7 +22,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
         class="dl-item   "
       >
         <div
-          class="window-group   visible"
+          class="window-group visible"
           data-testid="window-group"
           id="window-group"
         >
@@ -130,7 +130,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
         class="dl-item   "
       >
         <div
-          class="window-group   visible"
+          class="window-group visible"
           data-testid="window-group"
           id="window-group"
         >

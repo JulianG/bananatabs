@@ -5,7 +5,7 @@
  * whether or not each stored window is matched to a live window.
  */
 
-export const stored: string = `Stored Visible Window (Should be Matched):
+export const stored: string = `Stored Visible Window:
 ~ http://esperanza.biz/hidden-tab
 * http://eino.info
 * https://zetta.org/
