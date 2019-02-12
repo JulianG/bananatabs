@@ -8,30 +8,15 @@ interface Props {
   onClose(): void;
 }
 
-interface State {
-  text: string;
-  edited: boolean;
-}
-
-const stateReducer = (state: State, newState: State) => {
-  return { ...state, ...newState };
-};
-
 export const NewWindowView = ({
   minimumLines,
   sessionMutator,
   onClose,
 }: Props) => {
-  const [state, setState] = React.useReducer(stateReducer, {
-    text: '',
-    edited: false,
-  });
-
-  const text = state.text;
-  const rows = Math.max(minimumLines, text.split('\n').length);
+  const [text, setText] = React.useState('');
 
   const save = () => {
-    sessionMutator.addWindows(stringToHiddenWindows(state.text));
+    sessionMutator.addWindows(stringToHiddenWindows(text));
     onClose();
   };
 
@@ -43,11 +28,11 @@ export const NewWindowView = ({
       </p>
       <textarea
         role="input"
-        rows={rows}
         autoComplete="off"
         wrap="off"
         value={text}
-        onChange={event => setState({ text: event.target.value, edited: true })}
+        rows={Math.max(minimumLines, text.split('\n').length)}
+        onChange={event => setText(event.target.value)}
         onKeyUp={event => {
           if (event.keyCode === 13 && event.ctrlKey) {
             save();
