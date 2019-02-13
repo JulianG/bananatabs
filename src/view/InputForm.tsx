@@ -14,12 +14,15 @@ type Props = {
 export const InputForm = (props: Props) => {
   const { text, className, inlineStyles, onSubmit, onCancel } = props;
 
-  const [currentText, setText] = React.useState(text);
+  const textFieldRef = React.useRef<HTMLInputElement>(null);
 
   const handleKeyUp = ({ keyCode }: { keyCode: number }) => {
     switch (keyCode) {
       case ENTER:
-        onSubmit && onSubmit(currentText);
+        const newText = textFieldRef.current
+        ? textFieldRef.current.value
+        : text;
+        onSubmit && onSubmit(newText);
         break;
       case ESC:
         onCancel && onCancel();
@@ -29,13 +32,13 @@ export const InputForm = (props: Props) => {
 
   return (
     <input
+      ref={textFieldRef}
       className={className}
       style={inlineStyles}
       autoFocus={true}
       type="text"
       defaultValue={text}
       onKeyUp={handleKeyUp}
-      onChange={e => setText(e.target.value)}
       onBlur={() => onCancel()}
     />
   );
