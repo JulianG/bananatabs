@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as BT from '../model/core/CoreTypes';
 import { TabToolsView } from './TabToolsView';
 import { TabMutator } from '../model/core/Mutators';
-import { compareTab } from '../model/core/CoreComparisons';
+import { compareTab, compareWindow } from '../model/core/CoreComparisons';
 import { DebugInfo } from '../utils/DebugUtils';
 
 const Icons = {
@@ -87,5 +87,8 @@ export const TabView = React.memo((props: Props) => {
 }, areEqual);
 
 function areEqual(prevProps: Props, nextProps: Props): boolean {
-  return compareTab(prevProps.tab, nextProps.tab);
+  return (
+    compareTab(prevProps.tab, nextProps.tab) &&
+    compareWindow(prevProps.window, nextProps.window)
+  );
 }
