@@ -160,10 +160,8 @@ describe('BananaTabs Tests: Text Mode', async () => {
     // assert we have some window groups
     getByTestId('window-group');
 
-    // WHEN hovering the title for the second window group
-    fireEvent.mouseEnter(getByText(/window 2/i));
-    // and clicking the share button on in
-    fireEvent.click(getAllByAltText(/share/i)[0]);
+    // WHEN clicking the share button on in
+    fireEvent.click(getAllByAltText(/share/i)[1]);
     await wait();
 
     // THEN the text window screen appears

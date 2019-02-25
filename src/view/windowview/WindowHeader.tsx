@@ -20,20 +20,15 @@ interface Props {
 }
 
 export const WindowHeader = (props: Props) => {
-  const [areToolsVisible, setToolsVisible] = React.useState(false);
   const [renaming, setRenaming] = React.useState(false);
 
   const { window, windowMutator } = props;
 
   return (
-    <div
-      className="item-row"
-      onMouseEnter={() => setToolsVisible(true)}
-      onMouseLeave={() => setToolsVisible(false)}
-    >
+    <div className="item-row">
       <DisclosureButton {...props} />
       <VisibilityIcon {...props} />
-      {!renaming && areToolsVisible && (
+      {!renaming && (
         <TabToolsView
           actionIconVisibility={{ rename: true, delete: true, copy: true }}
           onRenameAction={() => setRenaming(true)}

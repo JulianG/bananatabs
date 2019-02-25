@@ -44,6 +44,35 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               src="[object Object]"
               title="Hide Window"
             />
+            <div
+              class="tab-tools"
+            >
+              <span
+                class="tooltip"
+              />
+               
+              <img
+                alt="share"
+                class="icon"
+                id="share"
+                src="[object Object]"
+                title="share"
+              />
+              <img
+                alt="rename"
+                class="icon"
+                id="rename"
+                src="[object Object]"
+                title="rename"
+              />
+              <img
+                alt="delete"
+                class="icon"
+                id="delete"
+                src="[object Object]"
+                title="delete"
+              />
+            </div>
             <span
               class="window-title"
             >
@@ -58,7 +87,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
             style="display: block;"
           >
             <div
-              class="item-row tab   visible"
+              class="item-row tab  visible"
               id="tab"
             >
               <img
@@ -73,6 +102,21 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
                 class="icon "
                 src="[object Object]"
               />
+              <div
+                class="tab-tools"
+              >
+                <span
+                  class="tooltip"
+                />
+                 
+                <img
+                  alt="delete"
+                  class="icon"
+                  id="delete"
+                  src="[object Object]"
+                  title="delete"
+                />
+              </div>
               <span
                 class="tab-title"
               >
@@ -80,7 +124,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               </span>
             </div>
             <div
-              class="item-row tab   visible"
+              class="item-row tab  visible"
               id="tab"
             >
               <img
@@ -95,6 +139,21 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
                 class="icon "
                 src="[object Object]"
               />
+              <div
+                class="tab-tools"
+              >
+                <span
+                  class="tooltip"
+                />
+                 
+                <img
+                  alt="delete"
+                  class="icon"
+                  id="delete"
+                  src="[object Object]"
+                  title="delete"
+                />
+              </div>
               <span
                 class="tab-title"
               >
@@ -102,7 +161,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               </span>
             </div>
             <div
-              class="item-row tab   visible"
+              class="item-row tab  visible"
               id="tab"
             >
               <img
@@ -117,6 +176,21 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
                 class="icon "
                 src="[object Object]"
               />
+              <div
+                class="tab-tools"
+              >
+                <span
+                  class="tooltip"
+                />
+                 
+                <img
+                  alt="delete"
+                  class="icon"
+                  id="delete"
+                  src="[object Object]"
+                  title="delete"
+                />
+              </div>
               <span
                 class="tab-title"
               >
@@ -152,6 +226,35 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               src="[object Object]"
               title="Hide Window"
             />
+            <div
+              class="tab-tools"
+            >
+              <span
+                class="tooltip"
+              />
+               
+              <img
+                alt="share"
+                class="icon"
+                id="share"
+                src="[object Object]"
+                title="share"
+              />
+              <img
+                alt="rename"
+                class="icon"
+                id="rename"
+                src="[object Object]"
+                title="rename"
+              />
+              <img
+                alt="delete"
+                class="icon"
+                id="delete"
+                src="[object Object]"
+                title="delete"
+              />
+            </div>
             <span
               class="window-title"
             >
@@ -166,7 +269,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
             style="display: block;"
           >
             <div
-              class="item-row tab   visible"
+              class="item-row tab  visible"
               id="tab"
             >
               <img
@@ -181,6 +284,21 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
                 class="icon "
                 src="[object Object]"
               />
+              <div
+                class="tab-tools"
+              >
+                <span
+                  class="tooltip"
+                />
+                 
+                <img
+                  alt="delete"
+                  class="icon"
+                  id="delete"
+                  src="[object Object]"
+                  title="delete"
+                />
+              </div>
               <span
                 class="tab-title"
               >
@@ -188,7 +306,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               </span>
             </div>
             <div
-              class="item-row tab   visible"
+              class="item-row tab  visible"
               id="tab"
             >
               <img
@@ -203,6 +321,21 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
                 class="icon "
                 src="[object Object]"
               />
+              <div
+                class="tab-tools"
+              >
+                <span
+                  class="tooltip"
+                />
+                 
+                <img
+                  alt="delete"
+                  class="icon"
+                  id="delete"
+                  src="[object Object]"
+                  title="delete"
+                />
+              </div>
               <span
                 class="tab-title"
               >
@@ -210,7 +343,7 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
               </span>
             </div>
             <div
-              class="item-row tab   visible"
+              class="item-row tab  visible"
               id="tab"
             >
               <img
@@ -225,6 +358,21 @@ exports[`BananaTabs Tests: Initial State initial UI snapshot 1`] = `
                 class="icon "
                 src="[object Object]"
               />
+              <div
+                class="tab-tools"
+              >
+                <span
+                  class="tooltip"
+                />
+                 
+                <img
+                  alt="delete"
+                  class="icon"
+                  id="delete"
+                  src="[object Object]"
+                  title="delete"
+                />
+              </div>
               <span
                 class="tab-title"
               >
