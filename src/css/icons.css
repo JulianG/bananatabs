@@ -13,6 +13,6 @@ img.tool.icon {
 
 /* and when they're hidden... */
 img.icon.hidden {
-  -webkit-filter: grayscale(1);
-	filter: grayscale(1);
+  -webkit-filter: opacity(0.5) grayscale(1);
+	filter: opacity(0.5) grayscale(1);
 }
