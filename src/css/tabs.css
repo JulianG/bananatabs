@@ -1,0 +1,28 @@
+/* The tab that is currently active on each window */
+.item-row.tab.active {
+	font-weight: bold;
+}
+
+/* The row representing a tab and it's currently under the mouse pointer. */
+.item-row.tab.highlight {
+	background-color: rgba(32, 32, 32, .05);
+}
+
+.item-row.tab .left-most.icon {
+	margin-left: 2.25rem;
+}
+
+/*
+   Tab Titles under a visible tab and window-group
+*/
+.visible .visible .tab-title {
+	color: #000000;
+}
+
+.visible .window-title {
+	color: #000000;
+}
+
+.item-row .tab-title {
+	padding-top: 0.2rem;
+}

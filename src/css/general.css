@@ -1,0 +1,25 @@
+html {
+	font-size: 0.85em;
+}
+
+body {
+	padding: 0.625rem;
+	color: #000000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.0rem;
+	background-color: #cccccc;
+}
+
+h3 {
+	font-size: 1.25rem;
+	font-weight: bolder;
+}
+
+div {
+	border-radius: 0;
+}
+
+.app-icon {
+	width: 2rem;
+  height: 2rem;
+}

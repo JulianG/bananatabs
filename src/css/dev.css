@@ -1,0 +1,16 @@
+.debug-info {
+	background-color: #fff3b5;
+	color: black;
+	font-size: 0.80rem;
+	margin: 0.25rem;
+}
+
+.split {
+	display: flex;
+}
+.split-bananatabs {
+	flex-grow: 1;
+}
+.split-browser {
+	flex-grow: 1;
+}

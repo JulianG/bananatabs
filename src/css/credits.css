@@ -1,0 +1,20 @@
+/* Credits */
+
+.credits {
+	margin-top: 1.5em;
+	font-size: 0.70em;
+	color: #444444;
+}
+
+.hint {
+	display: inline;
+	color: #666666;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	padding-top: 0.4rem;
+}
+
+.credits a.version {
+	color: #000000;
+	text-decoration: none;
+}
