@@ -20,7 +20,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
   //
   describe('Hiding and Showing Tabs', async () => {
     //
-    test.only('hiding a tab in a window with multiple tabs', async () => {
+    test('hiding a tab in a window with multiple tabs', async () => {
       //
       // given an initial rendered app
       const {
@@ -75,7 +75,6 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       //
       // given an initial rendered app
       const {
-        /*container, debug, */
         fchrome,
         provider,
         getTabVisibilityToggle
@@ -99,7 +98,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
         compareSessions(
           provider.session,
           stringToSession(`
-      window 1:
+      window 1~
       ~ http://tab-1.1/
 
       window 2:
