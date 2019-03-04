@@ -19,8 +19,6 @@ interface Props {
   mutator: TabMutator;
 }
 export const TabView = React.memo((props: Props) => {
-  const [areToolsVisible, setToolsVisible] = React.useState(false);
-
   const window = props.window;
   const tab = props.tab;
 
@@ -28,7 +26,6 @@ export const TabView = React.memo((props: Props) => {
     'item-row',
     'tab',
     tab.active ? 'active' : '',
-    areToolsVisible ? 'highlight' : '',
     tab.visible ? 'visible' : 'hidden',
   ];
 
@@ -53,12 +50,7 @@ export const TabView = React.memo((props: Props) => {
     props.mutator.selectTab(props.window.id, props.tab.id);
 
   return (
-    <div
-      id={'tab'}
-      className={styles.join(' ')}
-      onMouseEnter={() => setToolsVisible(true)}
-      onMouseLeave={() => setToolsVisible(false)}
-    >
+    <div id={'tab'} className={styles.join(' ')}>
       <img
         data-testid="visibility-toggle"
         id={'tab-visibility' + (tab.visible ? '-visible' : '-hidden')}
@@ -70,14 +62,12 @@ export const TabView = React.memo((props: Props) => {
       />
 
       <img className={iconStyles.join(' ')} src={icon} onClick={selectTab} />
-      {areToolsVisible && (
-        <TabToolsView
-          actionIconVisibility={{ delete: true, rename: false, copy: false }}
-          onDeleteAction={() =>
-            props.mutator.deleteTab(props.window.id, props.tab.id)
-          }
-        />
-      )}
+      <TabToolsView
+        actionIconVisibility={{ delete: true, rename: false, copy: false }}
+        onDeleteAction={() =>
+          props.mutator.deleteTab(props.window.id, props.tab.id)
+        }
+      />
       <span className="tab-title" onClick={selectTab}>
         <DebugInfo item={tab} />
         {tab.title || tab.url}

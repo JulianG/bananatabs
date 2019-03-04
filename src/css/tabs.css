@@ -4,7 +4,7 @@
 }
 
 /* The row representing a tab and it's currently under the mouse pointer. */
-.item-row.tab.highlight {
+.item-row.tab:hover {
 	background-color: rgba(32, 32, 32, .05);
 }
 
