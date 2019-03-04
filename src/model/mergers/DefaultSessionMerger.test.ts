@@ -1,6 +1,5 @@
 import * as BT from '../core/CoreTypes';
-import { DefaultSessionMerger } from './DefaultSessionMerger';
-// import { mergeSessions } from './DefaultSessionMerger';
+import { mergeSessions } from './DefaultSessionMerger';
 import {
   stringToSession
 } from '../../serialisation/MarkdownSerialisation';
@@ -13,8 +12,7 @@ function mergeStringSessions(
 ): { live: BT.Session; stored: BT.Session; merged: BT.Session } {
   const liveSession = stringToSession(live);
   const storedSession = stringToSession(stored);
-  const merger = new DefaultSessionMerger();
-  const mergedSession = merger.merge(liveSession, storedSession);
+  const mergedSession = mergeSessions(storedSession, liveSession);
   return { live: liveSession, stored: storedSession, merged: mergedSession };
 }
 
@@ -23,7 +21,11 @@ describe('DefaultSessionMerger cases', () => {
     'merging',
     (opts: { live: string; stored: string; expected: string }) => {
 
+      // console.log('live', opts.live);
+      // console.log('stored', opts.stored);
+      // console.log('expected', opts.expected);
       const { merged } = mergeStringSessions(opts.live, opts.stored);
+      // console.log('merged', windowsToString(merged.windows));
 
       expect(
         compareSessions(
