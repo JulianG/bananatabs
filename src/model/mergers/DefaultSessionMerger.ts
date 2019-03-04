@@ -1,21 +1,21 @@
 import * as BT from '../core/CoreTypes';
 import { SessionMerger } from '../core/SessionMerger';
-import { console } from '../../utils/MutedConsole';
+import { console as mconsole } from '../../utils/MutedConsole';
 
 export class DefaultSessionMerger implements SessionMerger {
   merge(live: BT.Session, stored: BT.Session): BT.Session {
-    console.group('SessionMerger.mergeSessions');
+    mconsole.group('SessionMerger.mergeSessions');
     const mergedSessionWindows: BT.Window[] = [];
     const liveWindowsWithTabs = live.windows.filter(w => w.tabs.length > 0);
     stored.windows.forEach(storedWindow => {
-      console.group(
+      mconsole.group(
         'processing a stored window: ' +
           storedWindow.id +
           ' ' +
           storedWindow.title
       );
 
-      console.log('looking for a live matching window...');
+      mconsole.log('looking for a live matching window...');
 
       const liveMatchingWindow = liveWindowsWithTabs.find(liveWindow => {
         return (
@@ -24,13 +24,13 @@ export class DefaultSessionMerger implements SessionMerger {
         );
       });
       if (liveMatchingWindow) {
-        console.log(
+        mconsole.log(
           'found liveMatchingWindow: ' +
             liveMatchingWindow.id +
             ' ' +
             liveMatchingWindow.title
         );
-        console.log('pushing live matching window: ');
+        mconsole.log('pushing live matching window: ');
         const pushingWindow = {
           ...liveMatchingWindow,
           visible: true,
@@ -40,9 +40,9 @@ export class DefaultSessionMerger implements SessionMerger {
         };
         this.pushUniqueWindow(mergedSessionWindows, pushingWindow);
       } else {
-        console.log('could not find a live matching window');
+        mconsole.log('could not find a live matching window');
         if (storedWindow.title !== '') {
-          console.log('pushing a hidden window: ');
+          mconsole.log('pushing a hidden window: ');
           const pushingWindow = {
             ...storedWindow,
             focused: false,
@@ -50,13 +50,13 @@ export class DefaultSessionMerger implements SessionMerger {
           };
           this.pushUniqueWindow(mergedSessionWindows, pushingWindow);
         } else {
-          console.log(
+          mconsole.log(
             'NOT pushing stored window because title was empty string.'
           );
         }
       }
 
-      console.groupEnd();
+      mconsole.groupEnd();
     });
 
     const nonMatchedWindows = liveWindowsWithTabs.filter(liveW => {
@@ -66,13 +66,13 @@ export class DefaultSessionMerger implements SessionMerger {
       );
     });
 
-    console.group(
+    mconsole.group(
       `adding nonMatchedWindows... (${nonMatchedWindows.map(nmw => nmw.id)})`
     );
     const newSessionWindows = [...mergedSessionWindows, ...nonMatchedWindows];
-    console.table(nonMatchedWindows);
-    console.groupEnd();
-    console.groupEnd();
+    mconsole.table(nonMatchedWindows);
+    mconsole.groupEnd();
+    mconsole.groupEnd();
     return new BT.Session(newSessionWindows, live.panelWindow);
   }
 
@@ -80,20 +80,20 @@ export class DefaultSessionMerger implements SessionMerger {
     liveTabs: ReadonlyArray<BT.Tab>,
     storedTabs: ReadonlyArray<BT.Tab>
   ): ReadonlyArray<BT.Tab> {
-    console.log('storedTabs...');
-    console.table(storedTabs);
-    console.log('liveTabs...');
-    console.table(liveTabs);
+    mconsole.log('storedTabs...');
+    mconsole.table(storedTabs);
+    mconsole.log('liveTabs...');
+    mconsole.table(liveTabs);
 
-    console.log(
+    mconsole.log(
       'extraLiveTabs... (tabs in liveTabs not present in storedTabs)'
     );
     const extraLiveTabs = liveTabs.filter(liveTab => {
       return storedTabs.find(tab => tab.url === liveTab.url) === undefined;
     });
-    console.table(extraLiveTabs);
+    mconsole.table(extraLiveTabs);
 
-    console.log(`filteredTabs... 
+    mconsole.log(`filteredTabs... 
 		(storedTabs which are either not visible or are visible AND have a liveTab with the same id)`);
     const filteredTabs: BT.Tab[] = storedTabs.filter((storedTab, i) => {
       return (
@@ -102,17 +102,17 @@ export class DefaultSessionMerger implements SessionMerger {
           liveTabs.find(liveTab => liveTab.url === storedTab.url))
       );
     });
-    console.table(filteredTabs);
+    mconsole.table(filteredTabs);
 
-    console.log(`mergedTabs... 
+    mconsole.log(`mergedTabs... 
 		(filteredTabs with extraLiveTabs inserted by index... hmmmm not accurate enough?)`);
     const mergedTabs = [...filteredTabs];
     extraLiveTabs.forEach(t => {
       mergedTabs.splice(t.index, 0, t);
     });
-    console.table(mergedTabs);
+    mconsole.table(mergedTabs);
 
-    console.log(
+    mconsole.log(
       'mergedLiveTabs... mergedTabs fixed to get details from liveTabs where possible'
     );
     let highestLiveTabIndex = -1;
@@ -126,23 +126,23 @@ export class DefaultSessionMerger implements SessionMerger {
       newTab.listIndex = i;
       return newTab;
     });
-    console.table(mergedLiveTabs);
+    mconsole.table(mergedLiveTabs);
 
     let finalTabs = mergedLiveTabs.sort((ta, tb) => ta.index - tb.index);
 
-    console.log('finalTabs...');
-    console.table(finalTabs);
+    mconsole.log('finalTabs...');
+    mconsole.table(finalTabs);
 
     if (
       finalTabs.length === 0 ||
       (finalTabs.length < liveTabs.length &&
         finalTabs.length < storedTabs.length)
     ) {
-      console.error(`ERROR! merging tabs!
+      mconsole.error(`ERROR! merging tabs!
 					live tabs   : ${liveTabs.length} vs. 
 					stored tabs : ${storedTabs.length}
 					final tabs  : ${finalTabs.length}`);
-      console.warn('Using stored tabs instead of live or merged tabs.');
+      mconsole.warn('Using stored tabs instead of live or merged tabs.');
       return storedTabs;
     }
     return finalTabs;
@@ -169,7 +169,7 @@ export class DefaultSessionMerger implements SessionMerger {
     if (array.some(w => w.id === window.id) === false) {
       array.push(window);
     } else {
-      console.warn('duplicate window: ', window.id, window.title);
+      mconsole.warn('duplicate window: ', window.id, window.title);
     }
   }
 
