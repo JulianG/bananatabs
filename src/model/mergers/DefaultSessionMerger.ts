@@ -10,25 +10,25 @@ export class DefaultSessionMerger implements SessionMerger {
     stored.windows.forEach(storedWindow => {
       mconsole.group(
         'processing a stored window: ' +
-          storedWindow.id +
-          ' ' +
-          storedWindow.title
+        storedWindow.id +
+        ' ' +
+        storedWindow.title
       );
 
       mconsole.log('looking for a live matching window...');
 
       const liveMatchingWindow = liveWindowsWithTabs.find(liveWindow => {
         return (
-          this.compareWindows(liveWindow, storedWindow) >= 0.75 &&
+          this.compareWindows(liveWindow, storedWindow) >= 0.50 &&
           this.shouldAddLiveWindow(liveWindow, live)
         );
       });
       if (liveMatchingWindow) {
         mconsole.log(
           'found liveMatchingWindow: ' +
-            liveMatchingWindow.id +
-            ' ' +
-            liveMatchingWindow.title
+          liveMatchingWindow.id +
+          ' ' +
+          liveMatchingWindow.title
         );
         mconsole.log('pushing live matching window: ');
         const pushingWindow = {
@@ -152,17 +152,18 @@ export class DefaultSessionMerger implements SessionMerger {
     if (live.id === stored.id) {
       return 1;
     }
-    const liveURLs = live.tabs.map(tab => tab.url).sort();
-    const storedURLs = stored.tabs.map(tab => tab.url).sort();
-    const matchesInLive = liveURLs.filter(
-      liveURL => storedURLs.indexOf(liveURL) >= 0
-    ).length;
-    const matchesInStored = storedURLs.filter(
-      storedURL => liveURLs.indexOf(storedURL) >= 0
-    ).length;
-    const similarity = () =>
-      ((matchesInLive / liveURLs.length) * matchesInStored) / storedURLs.length;
-    return liveURLs.length === matchesInLive ? 0.99 : similarity();
+    const liveTabURLs = live.tabs.map(t => t.url);
+    const storedTabURLs = stored.tabs.map(t => t.url);
+
+    const allURLs = [...liveTabURLs, ...storedTabURLs];
+    const uniqueURLs = Array.from(new Set(allURLs));
+
+    const intersection = uniqueURLs.filter(url => (
+      liveTabURLs.includes(url) && storedTabURLs.includes(url)
+    ));
+
+    const similarity = intersection.length / uniqueURLs.length;
+    return similarity;
   }
 
   private pushUniqueWindow(array: BT.Window[], window: BT.Window) {
