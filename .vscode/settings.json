@@ -1,19 +1,19 @@
 {
-	"workbench.colorCustomizations": {
-    "editor.background": "#111",
-    "titleBar.activeBackground": "#ffcc00",
-    "titleBar.activeForeground": "#000000",
-    "statusBar.background": "#ffcc00",
-    "statusBar.foreground": "#000000",
-    "titleBar.inactiveBackground": "#ffcc00",
-    "titleBar.inactiveForeground": "#000000",
-    "activityBar.background": "#ffcc00",
-    "activityBar.foreground": "#000000",
-    "activityBar.inactiveForeground": "#000000"
-  },
   "peacock.affectedSettings": [
     "activityBar",
     "statusBar",
     "titleBar"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "editor.background": "#111",
+    "activityBar.background": "#ffd633",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#504e2d",
+    "titleBar.activeBackground": "#ffcc00",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#806600",
+    "titleBar.inactiveForeground": "#504b20",
+    "statusBar.background": "#ffcc00",
+    "statusBar.foreground": "#15202b"
+  }
 }
