@@ -1,7 +1,6 @@
 import * as BT from './core/CoreTypes';
 import { BrowserController } from './browsercontroller/BrowserController';
 import { SessionProvider } from './core/SessionProvider';
-import { SessionMerger } from './core/SessionMerger';
 import { SessionPersistence } from './core/SessionPersistence';
 
 export class DefaultSessionProvider implements SessionProvider {
@@ -13,7 +12,7 @@ export class DefaultSessionProvider implements SessionProvider {
 
   constructor(
     private browserController: BrowserController,
-    private sessionMerger: SessionMerger,
+    private mergeSessions: (stored: BT.Session, live: BT.Session) => BT.Session,
     private persistence: SessionPersistence
   ) {
     this.session = BT.EmptySession;
@@ -78,11 +77,6 @@ export class DefaultSessionProvider implements SessionProvider {
       w => w !== panelWindow
     );
     return new BT.Session(filteredSessionWindows, panelWindow);
-  }
-
-  private mergeSessions(retrievedSession: BT.Session, liveSession: BT.Session) {
-    const session = this.sessionMerger.merge(liveSession, retrievedSession);
-    return session;
   }
 
   private findBrowserExtensionWindow(

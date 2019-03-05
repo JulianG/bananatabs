@@ -10,8 +10,7 @@ import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
 import { BrowserController } from '../model/browsercontroller/BrowserController';
 import { ChromeBrowserController } from '../chrome/ChromeBrowserController';
 
-import { SessionMerger } from '../model/core/SessionMerger';
-import { DefaultSessionMerger } from '../model/mergers/DefaultSessionMerger';
+import { mergeSessions } from '../model/mergers/DefaultSessionMerger';
 
 import {
   SessionMutator,
@@ -55,15 +54,13 @@ export function createContext(
   chromeAPI: PromisingChromeAPI,
   persistence: SessionPersistence
 ): BananaContext {
-  const sessionMerger: SessionMerger = new DefaultSessionMerger();
-
   const browserController: BrowserController = new ChromeBrowserController(
     chromeAPI
   );
 
   const sessionProvider: SessionProvider = new DefaultSessionProvider(
     browserController,
-    sessionMerger,
+    mergeSessions,
     persistence
   );
 

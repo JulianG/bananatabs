@@ -1,7 +1,6 @@
 import * as BT from '../model/core/CoreTypes';
 import { ChromeBrowserController } from '../chrome/ChromeBrowserController';
-import { SessionMerger } from '../model/core/SessionMerger';
-import { DefaultSessionMerger } from '../model/mergers/DefaultSessionMerger';
+import { mergeSessions } from '../model/mergers/DefaultSessionMerger';
 import { RAMSessionPersistence } from '../utils/RAMSessionPersistence';
 import { DefaultSessionProvider } from '../model/DefaultSessionProvider';
 import { initialiseFakeChromeAPI } from '../utils/initialise-fake-chrome-api';
@@ -39,11 +38,10 @@ function createProviderWFC(
   session: BT.Session
 ) {
   const browserController = new ChromeBrowserController(fchrome);
-  const merger: SessionMerger = new DefaultSessionMerger();
   const persistence = new RAMSessionPersistence(session);
   const provider = new DefaultSessionProvider(
     browserController,
-    merger,
+    mergeSessions,
     persistence
   );
   const onSessionChanged = jest.fn();
