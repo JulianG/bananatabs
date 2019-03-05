@@ -147,6 +147,10 @@ function mergeTabs(
 }
 
 function compareWindows(live: BT.Window, stored: BT.Window): number {
+  if (live.id === stored.id) {
+    return 1;
+  }
+
   const liveTabURLs = live.tabs.map(t => t.url);
   const storedTabURLs = stored.tabs.map(t => t.url);
 
