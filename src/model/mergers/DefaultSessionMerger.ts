@@ -152,7 +152,7 @@ function compareWindows(live: BT.Window, stored: BT.Window): number {
   }
 
   const liveTabURLs = live.tabs.map(t => t.url);
-  const storedTabURLs = stored.tabs.map(t => t.url);
+  const storedTabURLs = stored.tabs.filter(t => t.visible).map(t => t.url);
 
   const allURLs = [...liveTabURLs, ...storedTabURLs];
   const uniqueURLs = Array.from(new Set(allURLs));

@@ -1,7 +1,7 @@
 import * as BT from '../core/CoreTypes';
 import { mergeSessions } from './DefaultSessionMerger';
 import {
-  stringToSession
+  stringToSession, windowsToString
 } from '../../serialisation/MarkdownSerialisation';
 import { compareSessions } from '../../_test-utils/session-compare-functions';
 
@@ -25,29 +25,27 @@ describe('DefaultSessionMerger merge cases', () => {
   const cases = [
     {
       only: true,
-      name: 'WIP',
+      name: 'after turning on 1 tab in a hidden window',
       live: `
-      window 1:
-      * http://tab-1.1/
-      * http://tab-1.2/
+      :
       * http://tab-1.3/
       `,
       stored: `
-      window 1:
-      * http://tab-1.1/
-      * http://tab-1.2/
+      My Stored Window:
+      ~ http://tab-1.1/
+      ~ http://tab-1.2/
       * http://tab-1.3/
       
-      window 2:
+      Some Other Window:
       * http://tab-2.1/        
       `,
       expected: `
-      window 1:
-      * http://tab-1.1/
-      * http://tab-1.2/
+      My Stored Window:
+      ~ http://tab-1.1/
+      ~ http://tab-1.2/
       * http://tab-1.3/
       
-      window 2~
+      Some Other Window~
       * http://tab-2.1/        
       `,
     },
@@ -163,7 +161,7 @@ describe('DefaultSessionMerger merge cases', () => {
     },
     {
       name:
-        'if only a few tabs are the same, then the merged session contains 2 windows',
+        'some differences in tabs, but still the same window',
       live: `
         :
         * http://tab-1.01/same
@@ -179,17 +177,12 @@ describe('DefaultSessionMerger merge cases', () => {
         * http://tab-1.uu/--old-on
       `,
       expected: `
-      window 1~
-      * http://tab-1.01/same
-      * http://tab-1.02/same
-      ~ http://tab-1.xx/--old-off
-      ~ http://tab-1.yy/--old-off
-      * http://tab-1.uu/--old-on
-     
-     :
-      * http://tab-1.01/same
-      * http://tab-1.02/same
-      * http://tab-1.99/new
+        window 1:
+        * http://tab-1.01/same
+        * http://tab-1.02/same
+        * http://tab-1.99/new
+        ~ http://tab-1.xx/--old-off
+        ~ http://tab-1.yy/--old-off
      `,
     },
   ];

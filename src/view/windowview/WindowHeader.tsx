@@ -1,6 +1,6 @@
 import React from 'react';
 import * as BT from '../../model/core/CoreTypes';
-import { WindowMutator } from '../../model/core/Mutators';
+import { WindowMutator, TabMutator } from '../../model/core/Mutators';
 import { TabToolsView } from '../TabToolsView';
 import { WindowTitle } from './WindowTitle';
 
@@ -16,6 +16,7 @@ const Icons = {
 interface Props {
   window: BT.Window;
   windowMutator: WindowMutator;
+  tabMutator: TabMutator;
   onCopy(windowId: number): void;
 }
 
@@ -41,15 +42,25 @@ export const WindowHeader = (props: Props) => {
   );
 };
 
-const VisibilityIcon = ({ window, windowMutator }: Props) => {
+const VisibilityIcon = ({ window, windowMutator, tabMutator }: Props) => {
   const visibilityIconSrc = window.visible ? Icons.On : Icons.Off;
   const visibilityIconText = window.visible ? 'Hide Window' : 'Show Window';
   const imgId = 'win-visibility' + (window.visible ? '-visible' : '-hidden');
 
+  const showWindow = () => {
+    hasVisibleTabs(window)
+      ? windowMutator.showWindow(window.id)
+      : tabMutator.showTab(window.id, window.tabs[0].id);
+  };
+
+  const hideWindow = () => {
+    windowMutator.hideWindow(window.id);
+  };
+
   const toggleVisibility = () => {
     window.visible
-      ? windowMutator.hideWindow(window.id)
-      : windowMutator.showWindow(window.id);
+      ? hideWindow()
+      : showWindow();
   };
 
   return (
@@ -87,3 +98,7 @@ const DisclosureButton = ({ window, windowMutator }: Props) => {
     />
   );
 };
+
+function hasVisibleTabs(win: BT.Window): boolean {
+  return win.tabs.filter(t => t.visible).length > 0;
+}
