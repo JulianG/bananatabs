@@ -1,6 +1,6 @@
 {
   "name": "bananatabs",
-  "version": "0.30.2",
+  "version": "1.0.0",
   "private": true,
   "rootDir": "./src",
   "dependencies": {
