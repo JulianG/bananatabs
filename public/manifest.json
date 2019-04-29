@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "short_name": "Banana Tabs!",
+  "short_name": "BananaTabs",
   "version": "0.30.2",
-  "name": "Banana Tabs! by JG",
-  "description": "BananaTabs! Automatically organises your tabs and windows.",
+  "name": "BananaTabs",
+  "description": "BananaTabs automatically organises your tabs and windows.",
   "icons": {
     "16": "icons/app-icon.png",
     "48": "icons/app-icon.png",
@@ -16,7 +16,7 @@
   },
   "browser_action": {
     "default_icon": "icons/app-icon.png",
-    "default_title": "Banana Tabs!"
+    "default_title": "BananaTabs"
   },
   "permissions": [
     "tabs",
