@@ -13,46 +13,42 @@ interface Props {
   context: BananaContext;
 }
 
-export class BananaTabs extends React.Component<Props> {
-  private version: string;
-  private buildString: string;
+const version = MANIFEST.version || '0.0';
+const buildString = '';
 
-  constructor(props: Props) {
-    super(props);
-    this.version = MANIFEST.version || '0.0';
-    this.buildString = '';
-  }
+export const BananaTabs = ({context}:Props) => {
 
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResizeEvent.bind(this));
-    this.props.context.sessionProvider.onSessionChanged = _ => {
-      this.forceUpdate();
+  const [, setState] = React.useState(0);
+
+  const handleResizeEvent = (e: UIEvent) => {
+    context.sessionProvider.updateSession();
+  };
+
+  React.useEffect(()=>{
+
+    window.addEventListener('resize', handleResizeEvent);
+    context.sessionProvider.onSessionChanged = _ => {
+      setState(Math.random());
     };
-    this.props.context.sessionProvider.initialiseSession();
-  }
+    context.sessionProvider.initialiseSession();
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResizeEvent);
-    this.props.context.sessionProvider.onSessionChanged = _ => {
+    return () => {
+      window.removeEventListener('resize', handleResizeEvent);
+      context.sessionProvider.onSessionChanged = _ => {
       /**/
+      };
     };
-  }
 
-  render() {
-    const { context } = this.props;
-    return (
-      <MainView
-        version={this.version}
-        buildString={this.buildString}
-        session={context.sessionProvider.session}
-        sessionMutator={context.sessionMutator}
-        windowMutator={context.windowMutator}
-        tabMutator={context.tabMutator}
-      />
-    );
-  }
+  }, [context]);
 
-  private handleResizeEvent(e: UIEvent) {
-    this.props.context.sessionProvider.updateSession();
-  }
+  return (
+    <MainView
+      version={version}
+      buildString={buildString}
+      session={context.sessionProvider.session}
+      sessionMutator={context.sessionMutator}
+      windowMutator={context.windowMutator}
+      tabMutator={context.tabMutator}
+    />
+  );
 }

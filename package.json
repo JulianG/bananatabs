@@ -12,7 +12,7 @@
     "build": "react-scripts build",
     "start": "react-scripts start",
     "build-qa": "node _build-and-qa.js",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --silent --verbose",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config=jest.config.js",
     "test:coverage": "react-scripts test --env=jsdom --coverage --watch",
     "tsc": "./node_modules/typescript/bin/tsc --noEmit",

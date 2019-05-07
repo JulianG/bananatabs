@@ -1,49 +1,33 @@
+declare let globalThis: { chromeAPI: PromisingChromeAPI };
+
 import * as React from 'react';
 import { PromisingChromeAPI } from './PromisingChromeAPI';
-import { BrowserEventDispatcher } from '../model/browsercontroller/BrowserEventDispatcher';
 import { ChromeEventDispatcher } from '../chrome/ChromeEventDispatcher';
 
-type Props = {
-  chromeAPI: PromisingChromeAPI;
+type Props = { chromeAPI: PromisingChromeAPI };
+
+export const ChromeAPIView = ({ chromeAPI }: Props) => {
+
+  // making chromeAPI a global to enable acceess via the browser's console
+  globalThis.chromeAPI = chromeAPI;
+
+  const [windows, setWindows] = React.useState<chrome.windows.Window[]>([])
+
+  React.useEffect(() => {
+    const updateWindows = async () => setWindows([... (await chromeAPI.windows.getAll({}))]);
+    const dispatcher = new ChromeEventDispatcher(chromeAPI);
+    dispatcher.addListener(updateWindows);
+    updateWindows();
+    return () => dispatcher.removeListener(updateWindows);
+  }, [chromeAPI]);
+
+  return (
+    <div>
+      <h2>Fake Chrome</h2>
+      <pre>{stateToString(windows)}</pre>
+    </div>
+  );
 };
-
-type State = {
-  windows: chrome.windows.Window[];
-};
-
-export class ChromeAPIView extends React.Component<Props, State> {
-  private browserEventDispatcher: BrowserEventDispatcher;
-
-  constructor(props: Props) {
-    super(props);
-    this.state = { windows: [] };
-    this.browserEventDispatcher = new ChromeEventDispatcher(props.chromeAPI);
-  }
-
-  componentDidMount() {
-    this.browserEventDispatcher.addListener(this.browserEventHandler);
-    //
-    this.browserEventHandler();
-  }
-
-  componentWillUnmount() {
-    this.browserEventDispatcher.removeListener(this.browserEventHandler);
-  }
-
-  render() {
-    return (
-      <div>
-        <h2>Fake Chrome</h2>
-        <pre>{stateToString(this.state.windows)}</pre>
-      </div>
-    );
-  }
-
-  browserEventHandler = async () => {
-    const windows = await this.props.chromeAPI.windows.getAll({});
-    this.setState({ windows });
-  };
-}
 
 function stateToString(windows: chrome.windows.Window[]): string {
   return windows.map(windowToString).join('\n');

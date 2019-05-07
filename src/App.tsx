@@ -20,8 +20,6 @@ const DevelopmentApp = () => {
   
   const context = createFakeBananaContext(fakeSessions);
   const chromeAPI = context.chromeAPI;
-  // tslint:disable-next-line no-string-literal
-  window['chromeAPI'] = chromeAPI;
 
   return (
     <div className="split">
