@@ -1,15 +1,15 @@
 import * as BT from '../core/CoreTypes';
 import { mergeSessions } from './DefaultSessionMerger';
-import {
-  stringToSession, windowsToString
-} from '../../serialisation/MarkdownSerialisation';
+import { stringToSession } from '../../serialisation/MarkdownSerialisation';
 import { compareSessions } from '../../_test-utils/session-compare-functions';
 
-
-function mergeStringSessions(stored: string, live: string): {
+function mergeStringSessions(
+  stored: string,
+  live: string
+): {
   live: BT.Session;
   stored: BT.Session;
-  merged: BT.Session
+  merged: BT.Session;
 } {
   const liveSession = stringToSession(live);
   const storedSession = stringToSession(stored);
@@ -17,7 +17,7 @@ function mergeStringSessions(stored: string, live: string): {
   return {
     live: liveSession,
     stored: storedSession,
-    merged: mergedSession
+    merged: mergedSession,
   };
 }
 
@@ -160,8 +160,7 @@ describe('DefaultSessionMerger merge cases', () => {
         `,
     },
     {
-      name:
-        'some differences in tabs, but still the same window',
+      name: 'some differences in tabs, but still the same window',
       live: `
         :
         * http://tab-1.01/same
@@ -219,5 +218,31 @@ describe('DefaultSessionMerger tab order', () => {
     expect(merged.windows[0].tabs[2].visible).toBe(false);
     expect(merged.windows[0].tabs[3].url).toBe('http://tab-4');
     expect(merged.windows[0].tabs[3].visible).toBe(true);
+  });
+});
+
+describe('DefaultSessionMerger remove duplicate tabs', () => {
+  test('merged tabs should neve contain duplicates', () => {
+    const storedSession: BT.Mutable<BT.Session> = stringToSession(`:
+    * http://tab-1
+    * http://tab-1
+    * http://tab-2
+    `);
+    const liveSession: BT.Mutable<BT.Session> = stringToSession(`:
+    * http://tab-1
+    * http://tab-2
+    `);
+
+    ((storedSession.windows[0].tabs as BT.Mutable<BT.Tab[]>)[0].id as BT.Mutable<number>) = 99999;
+    ((storedSession.windows[0].tabs as BT.Mutable<BT.Tab[]>)[1].id as BT.Mutable<number>) = 99999;
+    ((liveSession.windows[0].tabs as BT.Mutable<BT.Tab[]>)[0].id as BT.Mutable<number>) = 99999;
+
+    const merged = mergeSessions(storedSession, liveSession);
+
+    expect(merged.windows.length).toBe(1);
+    expect(merged.windows[0].tabs.map(t => t.url)).toMatchObject([
+      'http://tab-1',
+      'http://tab-2',
+    ]);
   });
 });

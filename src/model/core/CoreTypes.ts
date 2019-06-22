@@ -1,3 +1,4 @@
+
 export class Session {
   constructor(
     readonly windows: ReadonlyArray<Window>,

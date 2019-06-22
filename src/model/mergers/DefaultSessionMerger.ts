@@ -1,32 +1,35 @@
 import * as BT from '../core/CoreTypes';
 import { console as mconsole } from '../../utils/MutedConsole';
 
-export function mergeSessions(stored: BT.Session, live: BT.Session): BT.Session {
+export function mergeSessions(
+  stored: BT.Session,
+  live: BT.Session
+): BT.Session {
   mconsole.group('SessionMerger.mergeSessions');
   const mergedSessionWindows: BT.Window[] = [];
   const liveWindowsWithTabs = live.windows.filter(w => w.tabs.length > 0);
   stored.windows.forEach(storedWindow => {
     mconsole.group(
       'processing a stored window: ' +
-      storedWindow.id +
-      ' ' +
-      storedWindow.title
+        storedWindow.id +
+        ' ' +
+        storedWindow.title
     );
 
     mconsole.log('looking for a live matching window...');
 
     const liveMatchingWindow = liveWindowsWithTabs.find(liveWindow => {
       return (
-        compareWindows(liveWindow, storedWindow) >= 0.50 &&
+        compareWindows(liveWindow, storedWindow) >= 0.5 &&
         shouldAddLiveWindow(liveWindow, live)
       );
     });
     if (liveMatchingWindow) {
       mconsole.log(
         'found liveMatchingWindow: ' +
-        liveMatchingWindow.id +
-        ' ' +
-        liveMatchingWindow.title
+          liveMatchingWindow.id +
+          ' ' +
+          liveMatchingWindow.title
       );
       mconsole.log('pushing live matching window: ');
       const pushingWindow = {
@@ -34,7 +37,7 @@ export function mergeSessions(stored: BT.Session, live: BT.Session): BT.Session 
         visible: true,
         title: storedWindow.title,
         expanded: storedWindow.expanded,
-        tabs: mergeTabs(liveMatchingWindow.tabs, storedWindow.tabs)
+        tabs: mergeTabs(liveMatchingWindow.tabs, storedWindow.tabs),
       };
       pushUniqueWindow(mergedSessionWindows, pushingWindow);
     } else {
@@ -44,7 +47,7 @@ export function mergeSessions(stored: BT.Session, live: BT.Session): BT.Session 
         const pushingWindow = {
           ...storedWindow,
           focused: false,
-          visible: false
+          visible: false,
         };
         pushUniqueWindow(mergedSessionWindows, pushingWindow);
       } else {
@@ -83,9 +86,7 @@ function mergeTabs(
   mconsole.log('liveTabs...');
   mconsole.table(liveTabs);
 
-  mconsole.log(
-    'extraLiveTabs... (tabs in liveTabs not present in storedTabs)'
-  );
+  mconsole.log('extraLiveTabs... (tabs in liveTabs not present in storedTabs)');
   const extraLiveTabs = liveTabs.filter(liveTab => {
     return storedTabs.find(tab => tab.url === liveTab.url) === undefined;
   });
@@ -122,7 +123,7 @@ function mergeTabs(
     newTab.icon = newTab.icon || tab.icon;
     newTab.index = liveTab ? newTab.index : highestLiveTabIndex;
     newTab.listIndex = i;
-    return newTab;
+    return newTab as BT.Tab;
   });
   mconsole.table(mergedLiveTabs);
 
@@ -133,8 +134,7 @@ function mergeTabs(
 
   if (
     finalTabs.length === 0 ||
-    (finalTabs.length < liveTabs.length &&
-      finalTabs.length < storedTabs.length)
+    (finalTabs.length < liveTabs.length && finalTabs.length < storedTabs.length)
   ) {
     mconsole.error(`ERROR! merging tabs!
 					live tabs   : ${liveTabs.length} vs. 
@@ -143,7 +143,15 @@ function mergeTabs(
     mconsole.warn('Using stored tabs instead of live or merged tabs.');
     return storedTabs;
   }
-  return finalTabs;
+  const uniqueTabs = finalTabs.reduce<BT.Tab[]>(uniqueIdsReducer, []);
+  return uniqueTabs;
+}
+
+function uniqueIdsReducer<T extends { id: number }>(acc: Array<T>, element: T) {
+  if (acc.find(t => t.id === element.id) === undefined) {
+    acc.push(element);
+  }
+  return acc;
 }
 
 function compareWindows(live: BT.Window, stored: BT.Window): number {
@@ -157,9 +165,9 @@ function compareWindows(live: BT.Window, stored: BT.Window): number {
   const allURLs = [...liveTabURLs, ...storedTabURLs];
   const uniqueURLs = Array.from(new Set(allURLs));
 
-  const intersection = uniqueURLs.filter(url => (
-    liveTabURLs.includes(url) && storedTabURLs.includes(url)
-  ));
+  const intersection = uniqueURLs.filter(
+    url => liveTabURLs.includes(url) && storedTabURLs.includes(url)
+  );
 
   const similarity = intersection.length / uniqueURLs.length;
   return similarity;
