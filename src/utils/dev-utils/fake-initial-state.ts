@@ -38,4 +38,7 @@ export const live: string = `:
 * http://taya.biz
 * https://orlo.org
 * https://randall.net
+
+:
+* chrome-extension://index.html
 `;

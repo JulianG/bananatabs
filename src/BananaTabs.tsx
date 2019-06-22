@@ -49,6 +49,7 @@ export const BananaTabs = ({context}:Props) => {
       sessionMutator={context.sessionMutator}
       windowMutator={context.windowMutator}
       tabMutator={context.tabMutator}
+      browserController={context.browserController}
     />
   );
 }

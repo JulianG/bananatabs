@@ -1,4 +1,5 @@
 import { SessionProvider } from '../model/core/SessionProvider';
+import { BrowserController } from '../model/browsercontroller/BrowserController';
 import { PromisingChromeAPI } from '../chrome-api/PromisingChromeAPI';
 import {
   SessionMutator,
@@ -12,4 +13,5 @@ export interface BananaContext {
   sessionMutator: SessionMutator;
   windowMutator: WindowMutator;
   tabMutator: TabMutator;
+  browserController: BrowserController;
 }

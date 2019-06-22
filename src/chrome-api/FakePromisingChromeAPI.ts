@@ -115,7 +115,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
 
     this.extension = {
       getURL: (path: string) => {
-        return '/' + path;
+        return 'chrome-extension://' + path;
       }
     };
   }

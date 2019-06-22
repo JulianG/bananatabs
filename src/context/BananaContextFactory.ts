@@ -81,6 +81,7 @@ export function createContext(
     sessionProvider,
     sessionMutator,
     windowMutator,
-    tabMutator
+    tabMutator,
+    browserController
   };
 }

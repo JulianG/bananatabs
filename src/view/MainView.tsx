@@ -7,6 +7,7 @@ import {
   TabMutator,
 } from '../model/core/Mutators';
 import { compareWindows } from '../model/core/CoreComparisons';
+import { BrowserController } from '../model/browsercontroller/BrowserController';
 
 import { Title } from './Title';
 import { WindowListView } from './WindowListView';
@@ -22,6 +23,7 @@ interface Props {
   sessionMutator: SessionMutator;
   windowMutator: WindowMutator;
   tabMutator: TabMutator;
+  browserController: BrowserController;
 }
 
 interface State {
@@ -57,7 +59,7 @@ export const MainView = React.memo((props: Props) => {
       const { session, sessionMutator, windowMutator, tabMutator } = props;
       return (
         <div>
-          <Title />
+          <Title onClick={() => props.browserController.dockAppWindow('right', 5)} />
           <WindowListView
             windows={session.windows}
             sessionMutator={sessionMutator}
