@@ -14,7 +14,11 @@ function tabsToString(tabs: ReadonlyArray<BT.Tab>): string {
 
 export function stringToSession(str: string): BT.Session {
   const windows = stringToWindows(str);
-  return new BT.Session(windows, BT.getNewWindow());
+
+  const panelWindow =
+    windows.find(w => w.tabs[0].url.startsWith('chrome-extension://')) ||
+    BT.getNewWindow();
+  return new BT.Session(windows, panelWindow);
 }
 
 export function stringToWindows(str: string): BT.Window[] {
@@ -39,7 +43,7 @@ export function stringToWindows(str: string): BT.Window[] {
         title: '',
         tabs: [],
         expanded: true,
-        visible: newWindowVisibility
+        visible: newWindowVisibility,
       });
       tabIndex = 0;
       wins.push(win);
@@ -68,8 +72,8 @@ export function stringToWindows(str: string): BT.Window[] {
             title: url,
             id: getId(),
             listIndex: win.tabs.length,
-            index: tabIndex
-          }
+            index: tabIndex,
+          },
         ];
 
         tabIndex += visible ? 1 : 0;
@@ -95,8 +99,11 @@ function isTabLine(line: string): boolean {
 
 function isValidURL(str: string) {
   const trimmed = str.trim();
+
   return (
-    trimmed.substr(0, 7) === 'http://' || trimmed.substr(0, 8) === 'https://'
+    trimmed.startsWith('http://') ||
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('chrome-extension://')
   );
 }
 

@@ -23,4 +23,6 @@ export interface BrowserController {
   getDisplayInfo(): Promise<SystemDisplayInfo[]>;
 
   getAppURL(): string;
+
+  dockAppWindow(position: 'left' | 'right', fraction: 3 | 4 | 5): void;
 }
