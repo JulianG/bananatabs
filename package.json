@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "react-scripts build",
-    "start": "react-scripts start",
+    "start": "cross-env TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling react-scripts start",
     "build-qa": "node _build-and-qa.js",
     "test": "react-scripts test --env=jsdom --silent --verbose",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config=jest.config.js",
@@ -27,12 +27,13 @@
     "@types/node": "10.12.23",
     "@types/react": "16.8.2",
     "@types/react-dom": "16.8.0",
+    "cross-env": "^5.2.0",
     "faker": "^4.1.0",
     "jest": "^23.6.0",
     "prettier": "1.15.3",
+    "react-scripts": "2.1.3",
     "react-testing-library": "^5.3.1",
     "tslint-config-prettier": "^1.17.0",
-    "react-scripts": "2.1.3",
     "typescript": "3.3.3",
     "why-did-you-update": "^0.1.1"
   },
