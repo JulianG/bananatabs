@@ -17,7 +17,7 @@ interface Props {
   onWindowCopied(id: number): void;
 }
 
-export const WindowListView = React.memo((props: Props) => {
+export const WindowListView = React.memo( function WindowListView(props: Props) {
   const windows = props.windows;
 
   const itemRenderer = (item: BT.Window, i: number) => {

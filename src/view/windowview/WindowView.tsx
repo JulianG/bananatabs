@@ -14,7 +14,7 @@ interface Props {
   onCopy(windowId: number): void;
 }
 
-export const WindowView = React.memo((props: Props) => {
+export const WindowView = React.memo(function WindowView(props: Props) {
   const { window, tabMutator } = props;
 
   const classNames = [
@@ -50,7 +50,7 @@ function TabList({ window, tabMutator }: TabListProps) {
       {window.tabs.map((tab, i) => {
         const key = `tab-${tab.id}`;
         return (
-          <TabView key={key} window={window} tab={tab} mutator={tabMutator} />
+          <TabView key={key} window={window} tab={tab} tabMutator={tabMutator} />
         );
       })}
     </div>

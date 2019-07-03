@@ -1,14 +1,7 @@
 import * as React from 'react';
+import { Icons } from './icons';
 
-const doNothing = () => {
-  /**/
-};
-
-const Icons = {
-  Share: require('./icons/share.svg'),
-  Edit: require('./icons/edit.svg'),
-  Delete: require('./icons/delete.svg'),
-};
+const doNothing = () => {};
 
 interface Props {
   actionIconVisibility: {
@@ -21,15 +14,14 @@ interface Props {
   onCopyAction?(): void;
 }
 
-export const TabToolsView = React.memo((props: Props) => {
-  
+export const TabToolsView = React.memo(function TabToolsView(props: Props) {
   const {
     onRenameAction = doNothing,
     onDeleteAction = doNothing,
     onCopyAction = doNothing,
-    actionIconVisibility
+    actionIconVisibility,
   } = props;
-  
+
   const [tooltip, setTooltip] = React.useState('');
 
   function dispatchRenameAction(e: React.MouseEvent) {

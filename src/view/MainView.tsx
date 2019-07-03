@@ -39,7 +39,7 @@ const stateReducer = (state: State, newState: State) => {
   return { ...state, ...newState };
 };
 
-export const MainView = React.memo((props: Props) => {
+export const MainView = React.memo(function MainView(props: Props) {
   const [state, setState] = React.useReducer(stateReducer, {
     mode: 'list',
     windowId: 0,
