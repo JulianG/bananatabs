@@ -45,11 +45,17 @@ export const MainView = React.memo(function MainView(props: Props) {
     return () => setState({ mode, windowId });
   };
 
-  const { version, buildString } = props;
+  const {
+    version,
+    buildString,
+    session,
+    sessionMutator,
+    windowMutator,
+    tabMutator,
+  } = props;
 
   switch (state.mode) {
     case 'list':
-      const { session, sessionMutator, windowMutator, tabMutator } = props;
       return (
         <div>
           <Title
@@ -74,7 +80,7 @@ export const MainView = React.memo(function MainView(props: Props) {
         <div>
           <Title />
           <TextWindowView
-            windows={props.session.windows.filter(w => {
+            windows={session.windows.filter(w => {
               return state.windowId === -1 || w.id === state.windowId;
             })}
             onClose={changeMode('list')}
@@ -88,7 +94,7 @@ export const MainView = React.memo(function MainView(props: Props) {
           <Title />
           <NewWindowView
             minimumLines={10}
-            sessionMutator={props.sessionMutator}
+            sessionMutator={sessionMutator}
             onClose={changeMode('list')}
           />
           <Footer version={version} buildString={buildString} />
