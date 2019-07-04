@@ -35,15 +35,8 @@ interface ChangeMode {
   (mode: State['mode'], windowId?: number): () => void;
 }
 
-const stateReducer = (state: State, newState: State) => {
-  return { ...state, ...newState };
-};
-
 export const MainView = React.memo(function MainView(props: Props) {
-  const [state, setState] = React.useReducer(stateReducer, {
-    mode: 'list',
-    windowId: 0,
-  });
+  const { state, setState } = useStateReducer({ mode: 'list', windowId: 0 });
 
   const changeMode: ChangeMode = (
     mode: State['mode'],
@@ -59,7 +52,9 @@ export const MainView = React.memo(function MainView(props: Props) {
       const { session, sessionMutator, windowMutator, tabMutator } = props;
       return (
         <div>
-          <Title onClick={() => props.browserController.dockAppWindow('right', 5)} />
+          <Title
+            onClick={() => props.browserController.dockAppWindow('right', 5)}
+          />
           <WindowListView
             windows={session.windows}
             sessionMutator={sessionMutator}
@@ -106,4 +101,12 @@ export const MainView = React.memo(function MainView(props: Props) {
 
 function areEqual(prevProps: Props, nextProps: Props): boolean {
   return compareWindows(prevProps.session.windows, nextProps.session.windows);
+}
+
+function useStateReducer<T>(defaultValue: T) {
+  const stateReducer = (state: T, newState: Partial<T>) => {
+    return { ...state, ...newState };
+  };
+  const [state, setState] = React.useReducer(stateReducer, defaultValue);
+  return { state, setState };
 }
