@@ -8,14 +8,14 @@ Accepted
 
 ## Context
 
-There is a lot of prop-drilling in the current component tree.
+There was a lot of prop-drilling in the component tree.
 
-### Current Render Tree -- A lot of prop-drilling
+### Old Render Tree -- A lot of prop-drilling
 
 ```
 <App/>
   <BananaTabs />
-    <MainView /> (✅session, ❌sessionMutator, ❌windowMutator, ❌tabMutator, browserController)
+    <MainView /> (✅session, ❌sessionMutator, ❌windowMutator, ❌tabMutator, ✅browserController)
       <Title />
       <WindowListView />          (✅windows, ✅sessionMutator, ❌windowMutator, ❌tabMutator)
         <WindowView />            (✅window, ❌windowMutator, ❌tabMutator)
@@ -29,9 +29,9 @@ There is a lot of prop-drilling in the current component tree.
       <MainViewCmdButtons /> (none)
 
 Legend:
-✅ actually used by component
-⚠️only reading id (e.g. window.id, tab.id)
-❌ only passing it down to children
+✅prop: actually used by component
+⚠️prop: only reading id (e.g. window.id, tab.id)
+❌prop: only passing it down to children
 
 ```
 
@@ -41,4 +41,27 @@ I'm going to try to use React Context with the `useContext` hook to see if I can
 
 ## Consequences
 
-We'll see...
+### Old Render Tree -- A lot of prop-drilling
+
+```
+<App/>
+  <BananaTabs />
+    <MainView /> (✅session, ❌sessionMutator, ❌windowMutator, ❌tabMutator, ✅browserController)
+      <Title />
+      <WindowListView />          (✅windows, ✅sessionMutator, ❌windowMutator, ❌tabMutator)
+        <WindowView />            (✅window, ❌windowMutator, ❌tabMutator)
+          <WindowHeader />        (️️⚠️window️, ✅windowMutator, ❌tabMutator)
+            <DisclosureButton />  (✅window, ✅windowMutator)
+            <VisibilityIcon />    (✅window, ✅windowMutator, ✅tabMutator)
+            <WindowTitle />       (✅window, ✅windowMutator)
+          <TabList />             (✅window, ❌tabMutator)
+            <TabView />           (✅window, ✅tab, ✅tabMutator)
+              <TabToolsView />
+      <MainViewCmdButtons /> (none)
+
+Legend:
+✅prop: actually used by component
+⚠️prop: only reading id (e.g. window.id, tab.id)
+❌prop: only passing it down to children
+
+```
