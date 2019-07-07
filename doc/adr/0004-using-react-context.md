@@ -41,27 +41,27 @@ I'm going to try to use React Context with the `useContext` hook to see if I can
 
 ## Consequences
 
-### Old Render Tree -- A lot of prop-drilling
+### New Render Tree -- No prop-drilling
 
 ```
 <App/>
   <BananaTabs />
-    <MainView /> (✅session, ❌sessionMutator, ❌windowMutator, ❌tabMutator, ✅browserController)
+    <MainView /> (✅session, ✅browserController)
       <Title />
-      <WindowListView />          (✅windows, ✅sessionMutator, ❌windowMutator, ❌tabMutator)
-        <WindowView />            (✅window, ❌windowMutator, ❌tabMutator)
-          <WindowHeader />        (️️⚠️window️, ✅windowMutator, ❌tabMutator)
-            <DisclosureButton />  (✅window, ✅windowMutator)
-            <VisibilityIcon />    (✅window, ✅windowMutator, ✅tabMutator)
-            <WindowTitle />       (✅window, ✅windowMutator)
-          <TabList />             (✅window, ❌tabMutator)
-            <TabView />           (✅window, ✅tab, ✅tabMutator)
+      <WindowListView />          (✅windows, ⚛️sessionMutator)
+        <WindowView />            (✅window)
+          <WindowHeader />        (️️⚠️window️, ⚛️windowMutator)
+            <DisclosureButton />  (✅window, ⚛️windowMutator)
+            <VisibilityIcon />    (✅window, ⚛️windowMutator, ⚛️tabMutator)
+            <WindowTitle />       (✅window, ⚛️windowMutator)
+          <TabList />             (✅window)
+            <TabView />           (✅window, ✅tab, ⚛️tabMutator)
               <TabToolsView />
       <MainViewCmdButtons /> (none)
 
 Legend:
-✅prop: actually used by component
+✅prop: used by component
 ⚠️prop: only reading id (e.g. window.id, tab.id)
 ❌prop: only passing it down to children
-
+⚛️context: using context hook
 ```

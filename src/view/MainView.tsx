@@ -1,11 +1,6 @@
 import * as React from 'react';
 import * as BT from '../model/core/CoreTypes';
 
-import {
-  SessionMutator,
-  WindowMutator,
-  TabMutator,
-} from '../model/core/Mutators';
 import { compareWindows } from '../model/core/CoreComparisons';
 import { BrowserController } from '../model/browsercontroller/BrowserController';
 
@@ -20,9 +15,6 @@ interface Props {
   version: string;
   buildString: string;
   session: BT.Session;
-  sessionMutator: SessionMutator;
-  windowMutator: WindowMutator;
-  tabMutator: TabMutator;
   browserController: BrowserController;
 }
 
@@ -45,27 +37,15 @@ export const MainView = React.memo(function MainView(props: Props) {
     return () => setState({ mode, windowId });
   };
 
-  const {
-    version,
-    buildString,
-    session,
-    sessionMutator,
-    windowMutator,
-    tabMutator,
-  } = props;
+  const { version, buildString, session, browserController } = props;
 
   switch (state.mode) {
     case 'list':
       return (
         <div>
-          <Title
-            onClick={() => props.browserController.dockAppWindow('right', 5)}
-          />
+          <Title onClick={() => browserController.dockAppWindow('right', 5)} />
           <WindowListView
             windows={session.windows}
-            sessionMutator={sessionMutator}
-            windowMutator={windowMutator}
-            tabMutator={tabMutator}
             onWindowCopied={windowId => changeMode('read', windowId)()}
           />
           <MainViewCmdButtons
@@ -92,11 +72,7 @@ export const MainView = React.memo(function MainView(props: Props) {
       return (
         <div>
           <Title />
-          <NewWindowView
-            minimumLines={10}
-            sessionMutator={sessionMutator}
-            onClose={changeMode('list')}
-          />
+          <NewWindowView minimumLines={10} onClose={changeMode('list')} />
           <Footer version={version} buildString={buildString} />
         </div>
       );

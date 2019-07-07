@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as BT from '../model/core/CoreTypes';
 import { TabToolsView } from './TabToolsView';
-import { TabMutator } from '../model/core/Mutators';
 import { compareTab, compareWindow } from '../model/core/CoreComparisons';
 import { DebugInfo } from '../utils/DebugUtils';
+import { useTabMutatorContext } from '../context/ReactContextFactory';
 
 const Icons = {
   On: require('./icons/on.svg'),
@@ -16,11 +16,10 @@ const Icons = {
 interface Props {
   window: BT.Window;
   tab: BT.Tab;
-  tabMutator: TabMutator;
 }
-export const TabView = React.memo(function TabView(props: Props) {
-  const window = props.window;
-  const tab = props.tab;
+export const TabView = React.memo(function TabView({window, tab}: Props) {
+  
+  const tabMutator = useTabMutatorContext();
 
   const styles = [
     'item-row',
@@ -41,13 +40,13 @@ export const TabView = React.memo(function TabView(props: Props) {
   const visibilityIconText = tab.visible ? 'Hide Tab' : 'Show Tab';
 
   const toggleVisibility = () => {
-    props.tab.visible
-      ? props.tabMutator.hideTab(props.window.id, props.tab.id)
-      : props.tabMutator.showTab(props.window.id, props.tab.id);
+    tab.visible
+      ? tabMutator.hideTab(window.id, tab.id)
+      : tabMutator.showTab(window.id, tab.id);
   };
 
   const selectTab = () =>
-    props.tabMutator.selectTab(props.window.id, props.tab.id);
+    tabMutator.selectTab(window.id, tab.id);
 
   return (
     <div id={'tab'} className={styles.join(' ')}>
@@ -65,7 +64,7 @@ export const TabView = React.memo(function TabView(props: Props) {
       <TabToolsView
         actionIconVisibility={{ delete: true, rename: false, copy: false }}
         onDeleteAction={() =>
-          props.tabMutator.deleteTab(props.window.id, props.tab.id)
+          tabMutator.deleteTab(window.id, tab.id)
         }
       />
       <span className="tab-title" onClick={selectTab}>
