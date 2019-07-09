@@ -6,9 +6,7 @@ import { SessionPersistence } from './core/SessionPersistence';
 export class DefaultSessionProvider implements SessionProvider {
   public session: BT.Session;
   private busy: boolean;
-  public onSessionChanged: (session: BT.Session) => void = () => {
-    /**/
-  };
+  public onSessionChanged: (session: BT.Session) => void = () => {};
 
   constructor(
     private browserController: BrowserController,
