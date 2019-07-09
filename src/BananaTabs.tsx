@@ -22,42 +22,52 @@ const version = MANIFEST.version || '0.0';
 const buildString = '';
 
 export const BananaTabs = ({ context }: Props) => {
-  const [, setState] = React.useState(0);
+  const forceUpdate = useForceUpdate();
+  const {
+    sessionProvider,
+    sessionMutator,
+    windowMutator,
+    tabMutator,
+    browserController,
+  } = context;
 
   const handleResizeEvent = (e: UIEvent) => {
-    context.sessionProvider.updateSession();
+    sessionProvider.updateSession();
   };
 
   React.useEffect(
     () => {
       window.addEventListener('resize', handleResizeEvent);
-      context.sessionProvider.onSessionChanged = _ => {
-        setState(Math.random());
+      sessionProvider.onSessionChanged = _ => {
+        forceUpdate();
       };
-      context.sessionProvider.initialiseSession();
+      sessionProvider.initialiseSession();
 
       return () => {
         window.removeEventListener('resize', handleResizeEvent);
-        context.sessionProvider.onSessionChanged = _ => {
-          /**/
-        };
+        sessionProvider.onSessionChanged = _ => {};
       };
     },
     [context]
   );
 
   return (
-    <SessionMutatorContext.Provider value={context.sessionMutator}>
-      <WindowMutatorContext.Provider value={context.windowMutator}>
-        <TabMutatorContext.Provider value={context.tabMutator}>
+    <SessionMutatorContext.Provider value={sessionMutator}>
+      <WindowMutatorContext.Provider value={windowMutator}>
+        <TabMutatorContext.Provider value={tabMutator}>
           <MainView
             version={version}
             buildString={buildString}
-            session={context.sessionProvider.session}
-            browserController={context.browserController}
+            session={sessionProvider.session}
+            browserController={browserController}
           />
         </TabMutatorContext.Provider>
       </WindowMutatorContext.Provider>
     </SessionMutatorContext.Provider>
   );
 };
+
+function useForceUpdate() {
+  const [, setState] = React.useState({});
+  return () => setState({});
+}
