@@ -2,9 +2,9 @@ import * as React from 'react';
 import { BananaContext } from './context/BananaContext';
 import { MainView } from './view/MainView';
 import {
-  WindowMutatorContext,
-  TabMutatorContext,
-  SessionMutatorContext,
+  WindowMutatorProvider,
+  TabMutatorProvider,
+  SessionMutatorProvider,
 } from './context/ReactContextFactory';
 
 const MANIFEST = require('./manifest.lnk.json');
@@ -52,18 +52,18 @@ export const BananaTabs = ({ context }: Props) => {
   );
 
   return (
-    <SessionMutatorContext.Provider value={sessionMutator}>
-      <WindowMutatorContext.Provider value={windowMutator}>
-        <TabMutatorContext.Provider value={tabMutator}>
+    <SessionMutatorProvider value={sessionMutator}>
+      <WindowMutatorProvider value={windowMutator}>
+        <TabMutatorProvider value={tabMutator}>
           <MainView
             version={version}
             buildString={buildString}
             session={sessionProvider.session}
             browserController={browserController}
           />
-        </TabMutatorContext.Provider>
-      </WindowMutatorContext.Provider>
-    </SessionMutatorContext.Provider>
+        </TabMutatorProvider>
+      </WindowMutatorProvider>
+    </SessionMutatorProvider>
   );
 };
 

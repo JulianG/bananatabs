@@ -6,9 +6,11 @@ import {
   SessionMutator,
 } from '../model/core/Mutators';
 
-export const SessionMutatorContext = React.createContext<
+const SessionMutatorContext = React.createContext<
   SessionMutator | undefined
 >(undefined);
+
+export const SessionMutatorProvider = SessionMutatorContext.Provider;
 
 export const useSessionMutator = () => {
   const context = React.useContext(SessionMutatorContext);
@@ -20,9 +22,11 @@ export const useSessionMutator = () => {
   return context;
 };
 
-export const WindowMutatorContext = React.createContext<
+const WindowMutatorContext = React.createContext<
   WindowMutator | undefined
 >(undefined);
+
+export const WindowMutatorProvider = WindowMutatorContext.Provider;
 
 export const useWindowMutator = () => {
   const context = React.useContext(WindowMutatorContext);
@@ -34,9 +38,11 @@ export const useWindowMutator = () => {
   return context;
 };
 
-export const TabMutatorContext = React.createContext<TabMutator | undefined>(
+const TabMutatorContext = React.createContext<TabMutator | undefined>(
   undefined
 );
+
+export const TabMutatorProvider = TabMutatorContext.Provider;
 
 export const useTabMutator = () => {
   const context = React.useContext(TabMutatorContext);
