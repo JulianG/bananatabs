@@ -1,7 +1,7 @@
 import React from 'react';
 import * as BT from '../../model/core/CoreTypes';
 import { Icons } from '../icons';
-import { useWindowMutatorContext } from '../../context/ReactContextFactory';
+import { useWindowMutator } from '../../context/ReactContextFactory';
 
 interface DisclosureButtonProps {
   window: BT.Window;
@@ -9,7 +9,7 @@ interface DisclosureButtonProps {
 }
 
 export const DisclosureButton = ({ window }: DisclosureButtonProps) => {
-  const windowMutator = useWindowMutatorContext();
+  const windowMutator = useWindowMutator();
   const iconSrc = window.expanded ? Icons.ArrowDown : Icons.ArrowRight;
   const iconText = window.expanded ? 'Collapse' : 'Expand';
   const iconStyles = ['tool', 'icon', window.visible ? '' : 'hidden'];

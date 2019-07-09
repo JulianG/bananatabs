@@ -3,7 +3,7 @@ import RLDD from 'react-list-drag-and-drop/lib/RLDD';
 import * as BT from '../model/core/CoreTypes';
 import { WindowView } from './windowview/WindowView';
 import { compareWindows } from '../model/core/CoreComparisons';
-import { useSessionMutatorContext } from '../context/ReactContextFactory';
+import { useSessionMutator } from '../context/ReactContextFactory';
 
 interface Props {
   windows: ReadonlyArray<BT.Window>;
@@ -12,7 +12,7 @@ interface Props {
 
 export const WindowListView = React.memo(function WindowListView(props: Props) {
   const { windows, onWindowCopied } = props;
-  const sessionMutator = useSessionMutatorContext();
+  const sessionMutator = useSessionMutator();
 
   const itemRenderer = (item: BT.Window, i: number) => {
     return (

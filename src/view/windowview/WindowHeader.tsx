@@ -4,7 +4,7 @@ import { TabToolsView } from '../TabToolsView';
 import { WindowTitle } from './WindowTitle';
 import { VisibilityIcon } from './VisibilityIcon';
 import { DisclosureButton } from './DisclosureButton';
-import { useWindowMutatorContext } from '../../context/ReactContextFactory';
+import { useWindowMutator } from '../../context/ReactContextFactory';
 
 interface WindowHeaderProps {
   window: BT.Window;
@@ -14,7 +14,7 @@ interface WindowHeaderProps {
 export const WindowHeader = (props: WindowHeaderProps) => {
   const [renaming, setRenaming] = React.useState(false);
 
-  const windowMutator = useWindowMutatorContext();
+  const windowMutator = useWindowMutator();
 
   const { window, onCopy } = props;
 

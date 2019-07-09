@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { stringToWindows } from '../serialisation/MarkdownSerialisation';
-import { useSessionMutatorContext } from '../context/ReactContextFactory';
+import { useSessionMutator } from '../context/ReactContextFactory';
 
 interface Props {
   minimumLines: number;
@@ -9,7 +9,7 @@ interface Props {
 
 export const NewWindowView = ({ minimumLines, onClose }: Props) => {
   const [text, setText] = React.useState('');
-  const sessionMutator = useSessionMutatorContext();
+  const sessionMutator = useSessionMutator();
   const save = () => {
     sessionMutator.addWindows(stringToHiddenWindows(text));
     onClose();

@@ -1,24 +1,49 @@
 import * as React from 'react';
 
-import { WindowMutator, TabMutator, SessionMutator } from '../model/core/Mutators';
-import { NullWindowMutator } from '../model/mutators/NullWindowMutator';
-import { NullTabMutator } from '../model/mutators/NullTabMutator';
-import { NullSessionMutator } from '../model/mutators/NullSessionMutator';
+import {
+  WindowMutator,
+  TabMutator,
+  SessionMutator,
+} from '../model/core/Mutators';
 
-export const SessionMutatorContext = React.createContext<SessionMutator>(new NullSessionMutator());
+export const SessionMutatorContext = React.createContext<
+  SessionMutator | undefined
+>(undefined);
 
-export const useSessionMutatorContext = () => {
-  return React.useContext(SessionMutatorContext);
+export const useSessionMutator = () => {
+  const context = React.useContext(SessionMutatorContext);
+  if (context === undefined) {
+    throw new Error(
+      `useSessionMutator must be used withing a SessionMutatorContext.Provider`
+    );
+  }
+  return context;
 };
 
-export const WindowMutatorContext = React.createContext<WindowMutator>(new NullWindowMutator());
+export const WindowMutatorContext = React.createContext<
+  WindowMutator | undefined
+>(undefined);
 
-export const useWindowMutatorContext = () => {
-  return React.useContext(WindowMutatorContext);
+export const useWindowMutator = () => {
+  const context = React.useContext(WindowMutatorContext);
+  if (context === undefined) {
+    throw new Error(
+      `useWindowMutator must be used withing a WindowMutatorContext.Provider`
+    );
+  }
+  return context;
 };
 
-export const TabMutatorContext = React.createContext<TabMutator>(new NullTabMutator());
+export const TabMutatorContext = React.createContext<TabMutator | undefined>(
+  undefined
+);
 
-export const useTabMutatorContext = () => {
-  return React.useContext(TabMutatorContext);
+export const useTabMutator = () => {
+  const context = React.useContext(TabMutatorContext);
+  if (context === undefined) {
+    throw new Error(
+      `useTabMutator must be used withing a TabMutatorContext.Provider`
+    );
+  }
+  return context;
 };

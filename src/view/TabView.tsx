@@ -3,7 +3,7 @@ import * as BT from '../model/core/CoreTypes';
 import { TabToolsView } from './TabToolsView';
 import { compareTab, compareWindow } from '../model/core/CoreComparisons';
 import { DebugInfo } from '../utils/DebugUtils';
-import { useTabMutatorContext } from '../context/ReactContextFactory';
+import { useTabMutator } from '../context/ReactContextFactory';
 
 const Icons = {
   On: require('./icons/on.svg'),
@@ -19,7 +19,7 @@ interface Props {
 }
 export const TabView = React.memo(function TabView({window, tab}: Props) {
   
-  const tabMutator = useTabMutatorContext();
+  const tabMutator = useTabMutator();
 
   const styles = [
     'item-row',

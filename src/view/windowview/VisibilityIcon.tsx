@@ -2,8 +2,8 @@ import React from 'react';
 import * as BT from '../../model/core/CoreTypes';
 import { Icons } from '../icons';
 import {
-  useWindowMutatorContext,
-  useTabMutatorContext,
+  useWindowMutator,
+  useTabMutator,
 } from '../../context/ReactContextFactory';
 
 interface Props {
@@ -11,8 +11,8 @@ interface Props {
 }
 
 export const VisibilityIcon = ({ window }: Props) => {
-  const windowMutator = useWindowMutatorContext();
-  const tabMutator = useTabMutatorContext();
+  const windowMutator = useWindowMutator();
+  const tabMutator = useTabMutator();
 
   const visibilityIconSrc = window.visible ? Icons.On : Icons.Off;
   const visibilityIconText = window.visible ? 'Hide Window' : 'Show Window';
