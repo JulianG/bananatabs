@@ -27,7 +27,7 @@ export const WindowListView = React.memo(function WindowListView(props: Props) {
   return (
     <RLDD
       cssClasses="session"
-      items={[...windows]}
+      items={windows as BT.Window[]}
       layout={'vertical'}
       threshold={25}
       dragDelay={250}
