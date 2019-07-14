@@ -1,7 +1,7 @@
 import {
   wait,
   createProvider,
-  createIniatilisedProvider
+  createIniatilisedProvider,
 } from '../_test-utils';
 import { parseSessionString } from '../utils/session-string-parser';
 
@@ -27,7 +27,7 @@ describe('creating windows and tabs', () => {
     const {
       provider,
       onSessionChanged,
-      fchrome
+      fchrome,
     } = await createIniatilisedProvider('');
 
     // when a window is created via the Chrome API
@@ -46,7 +46,7 @@ describe('creating windows and tabs', () => {
     const {
       provider,
       onSessionChanged,
-      fchrome
+      fchrome,
     } = await createIniatilisedProvider('[v(v)]');
     const existingWindow = (await fchrome.windows.getAll({}))[0];
     const windowId = existingWindow.id;
@@ -76,7 +76,7 @@ describe('closing tabs', () => {
     const {
       provider,
       onSessionChanged,
-      fchrome
+      fchrome,
     } = await createIniatilisedProvider(sessionString);
     const existingWindows = await fchrome.windows.getAll({});
     const windowId = existingWindows[windowIndex].id;
@@ -116,7 +116,7 @@ describe('closing tabs', () => {
     const {
       provider,
       onSessionChanged,
-      fchrome
+      fchrome,
     } = await createIniatilisedProvider(sessionString);
     const existingWindows = await fchrome.windows.getAll({});
     const windowId = existingWindows[windowIndex].id;
@@ -149,9 +149,7 @@ describe('closing windows', () => {
   });
 
   // TODO: test difference when closing a named window and an unnamed window
-  test.skip('difference when closing a named window and an unnamed window', () => {
-    /**/
-  });
+  test.skip('difference when closing a named window and an unnamed window', () => {});
 
   //
   async function closeWindowTest(
@@ -164,7 +162,7 @@ describe('closing windows', () => {
     const {
       provider,
       onSessionChanged,
-      fchrome
+      fchrome,
     } = await createIniatilisedProvider(sessionString);
     const existingWindows = await fchrome.windows.getAll({});
     const windowId = existingWindows[closingWindowIndex].id;

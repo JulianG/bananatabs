@@ -1,20 +1,18 @@
 import React from 'react';
-import { InputForm } from '../InputForm';
-
 import * as BT from '../../model/core/CoreTypes';
-import { WindowMutator } from '../../model/core/Mutators';
+import { InputForm } from '../InputForm';
+import { useWindowMutator } from '../../context/ReactContextFactory';
 
 type Props = {
   window: BT.Window;
-  windowMutator: WindowMutator;
   onCopy(windowId: number): void;
   renaming: boolean;
   setRenaming(b: boolean): void;
 };
 
-export const WindowTitle = (props: Props) => {
-  const { renaming, setRenaming, window, windowMutator } = props;
-
+export const WindowTitle = ({ renaming, setRenaming, window }: Props) => {
+  const windowMutator = useWindowMutator();
+  
   const submitRename = (text: string) => {
     windowMutator.renameWindow(window.id, text);
     setRenaming(false);

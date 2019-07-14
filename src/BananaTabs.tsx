@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { BananaContext } from './context/BananaContext';
 import { MainView } from './view/MainView';
+import {
+  WindowMutatorProvider,
+  TabMutatorProvider,
+  SessionMutatorProvider,
+} from './context/ReactContextFactory';
 
 const MANIFEST = require('./manifest.lnk.json');
 
@@ -16,40 +21,53 @@ interface Props {
 const version = MANIFEST.version || '0.0';
 const buildString = '';
 
-export const BananaTabs = ({context}:Props) => {
-
-  const [, setState] = React.useState(0);
+export const BananaTabs = ({ context }: Props) => {
+  const forceUpdate = useForceUpdate();
+  const {
+    sessionProvider,
+    sessionMutator,
+    windowMutator,
+    tabMutator,
+    browserController,
+  } = context;
 
   const handleResizeEvent = (e: UIEvent) => {
-    context.sessionProvider.updateSession();
+    sessionProvider.updateSession();
   };
 
-  React.useEffect(()=>{
-
-    window.addEventListener('resize', handleResizeEvent);
-    context.sessionProvider.onSessionChanged = _ => {
-      setState(Math.random());
-    };
-    context.sessionProvider.initialiseSession();
-
-    return () => {
-      window.removeEventListener('resize', handleResizeEvent);
-      context.sessionProvider.onSessionChanged = _ => {
-      /**/
+  React.useEffect(
+    () => {
+      window.addEventListener('resize', handleResizeEvent);
+      sessionProvider.onSessionChanged = _ => {
+        forceUpdate();
       };
-    };
+      sessionProvider.initialiseSession();
 
-  }, [context]);
+      return () => {
+        window.removeEventListener('resize', handleResizeEvent);
+        sessionProvider.onSessionChanged = _ => {};
+      };
+    },
+    [context]
+  );
 
   return (
-    <MainView
-      version={version}
-      buildString={buildString}
-      session={context.sessionProvider.session}
-      sessionMutator={context.sessionMutator}
-      windowMutator={context.windowMutator}
-      tabMutator={context.tabMutator}
-      browserController={context.browserController}
-    />
+    <SessionMutatorProvider value={sessionMutator}>
+      <WindowMutatorProvider value={windowMutator}>
+        <TabMutatorProvider value={tabMutator}>
+          <MainView
+            version={version}
+            buildString={buildString}
+            session={sessionProvider.session}
+            browserController={browserController}
+          />
+        </TabMutatorProvider>
+      </WindowMutatorProvider>
+    </SessionMutatorProvider>
   );
+};
+
+function useForceUpdate() {
+  const [, setState] = React.useState({});
+  return () => setState({});
 }

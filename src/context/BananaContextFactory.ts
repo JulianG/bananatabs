@@ -15,7 +15,7 @@ import { mergeSessions } from '../model/mergers/DefaultSessionMerger';
 import {
   SessionMutator,
   WindowMutator,
-  TabMutator
+  TabMutator,
 } from '../model/core/Mutators';
 import { DefaultSessionMutator } from '../model/mutators/DefaultSessionMutator';
 import { DefaultWindowMutator } from '../model/mutators/DefaultWindowMutator';
@@ -82,6 +82,6 @@ export function createContext(
     sessionMutator,
     windowMutator,
     tabMutator,
-    browserController
+    browserController,
   };
 }

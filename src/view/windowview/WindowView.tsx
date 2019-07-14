@@ -3,20 +3,16 @@ import * as React from 'react';
 import * as BT from '../../model/core/CoreTypes';
 import { TabView } from '../TabView';
 import { DebugInfo } from '../../utils/DebugUtils';
-import { WindowMutator, TabMutator } from '../../model/core/Mutators';
 import { compareWindow } from '../../model/core/CoreComparisons';
 import { WindowHeader } from './WindowHeader';
 
 interface Props {
   window: BT.Window;
-  windowMutator: WindowMutator;
-  tabMutator: TabMutator;
   onCopy(windowId: number): void;
 }
 
 export const WindowView = React.memo(function WindowView(props: Props) {
-  const { window, tabMutator } = props;
-
+  const { window } = props;
   const classNames = [
     'window-group',
     window.focused ? 'focused' : '',
@@ -31,7 +27,7 @@ export const WindowView = React.memo(function WindowView(props: Props) {
     >
       <DebugInfo item={window} />
       <WindowHeader {...props} />
-      <TabList window={window} tabMutator={tabMutator} />
+      <TabList window={window} />
     </div>
   );
 }, areEqual);
@@ -42,16 +38,14 @@ function areEqual(prevProps: Props, nextProps: Props) {
 
 ////
 
-type TabListProps = { window: BT.Window; tabMutator: TabMutator };
+type TabListProps = { window: BT.Window };
 
-function TabList({ window, tabMutator }: TabListProps) {
+function TabList({ window }: TabListProps) {
   return (
     <div style={{ display: window.expanded ? 'block' : 'none' }}>
       {window.tabs.map((tab, i) => {
         const key = `tab-${tab.id}`;
-        return (
-          <TabView key={key} window={window} tab={tab} tabMutator={tabMutator} />
-        );
+        return <TabView key={key} window={window} tab={tab} />;
       })}
     </div>
   );
