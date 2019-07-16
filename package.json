@@ -11,6 +11,7 @@
   "scripts": {
     "build": "react-scripts build",
     "start": "cross-env TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling react-scripts start",
+    "watch": "tsc -w -p tsconfig.json --noEmit",
     "build-qa": "node _build-and-qa.js",
     "test": "react-scripts test --env=jsdom --silent --verbose",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config=jest.config.js",

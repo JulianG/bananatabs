@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { BananaContext } from './context/BananaContext';
 import { MainView } from './view/MainView';
-import {
-  WindowMutatorProvider,
-  TabMutatorProvider,
-  SessionMutatorProvider,
-} from './context/ReactContextFactory';
+import { AppContextProvider } from './context/ReactContextFactory';
 
 const MANIFEST = require('./manifest.lnk.json');
 
@@ -23,47 +19,33 @@ const buildString = '';
 
 export const BananaTabs = ({ context }: Props) => {
   const forceUpdate = useForceUpdate();
-  const {
-    sessionProvider,
-    sessionMutator,
-    windowMutator,
-    tabMutator,
-    browserController,
-  } = context;
-
-  const handleResizeEvent = (e: UIEvent) => {
-    sessionProvider.updateSession();
-  };
+  const { sessionProvider, browserController } = context;
 
   React.useEffect(
     () => {
+      const handleResizeEvent = (e: UIEvent) => sessionProvider.updateSession();
+
       window.addEventListener('resize', handleResizeEvent);
-      sessionProvider.onSessionChanged = _ => {
-        forceUpdate();
-      };
+      sessionProvider.onSessionChanged = () => forceUpdate();
       sessionProvider.initialiseSession();
 
       return () => {
         window.removeEventListener('resize', handleResizeEvent);
-        sessionProvider.onSessionChanged = _ => {};
+        sessionProvider.onSessionChanged = () => {};
       };
     },
-    [context]
+    [sessionProvider]
   );
 
   return (
-    <SessionMutatorProvider value={sessionMutator}>
-      <WindowMutatorProvider value={windowMutator}>
-        <TabMutatorProvider value={tabMutator}>
-          <MainView
-            version={version}
-            buildString={buildString}
-            session={sessionProvider.session}
-            browserController={browserController}
-          />
-        </TabMutatorProvider>
-      </WindowMutatorProvider>
-    </SessionMutatorProvider>
+    <AppContextProvider context={context}>
+      <MainView
+        version={version}
+        buildString={buildString}
+        session={sessionProvider.session}
+        browserController={browserController}
+      />
+    </AppContextProvider>
   );
 };
 

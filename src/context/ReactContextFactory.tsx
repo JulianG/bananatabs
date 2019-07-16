@@ -1,16 +1,32 @@
 import * as React from 'react';
-
+import { BananaContext } from './BananaContext';
 import {
   WindowMutator,
   TabMutator,
   SessionMutator,
 } from '../model/core/Mutators';
 
-const SessionMutatorContext = React.createContext<
-  SessionMutator | undefined
->(undefined);
+function createTypedContext<T>() {
+  return React.createContext<T | undefined>(undefined);
+}
 
-export const SessionMutatorProvider = SessionMutatorContext.Provider;
+const SessionMutatorContext = createTypedContext<SessionMutator>();
+const WindowMutatorContext = createTypedContext<WindowMutator>();
+const TabMutatorContext = createTypedContext<TabMutator>();
+
+type Props = { context: BananaContext };
+
+export const AppContextProvider: React.FC<Props> = ({ context, children }) => {
+  return (
+    <SessionMutatorContext.Provider value={context.sessionMutator}>
+      <WindowMutatorContext.Provider value={context.windowMutator}>
+        <TabMutatorContext.Provider value={context.tabMutator}>
+          {children}
+        </TabMutatorContext.Provider>
+      </WindowMutatorContext.Provider>
+    </SessionMutatorContext.Provider>
+  );
+};
 
 export const useSessionMutator = () => {
   const context = React.useContext(SessionMutatorContext);
@@ -22,12 +38,6 @@ export const useSessionMutator = () => {
   return context;
 };
 
-const WindowMutatorContext = React.createContext<
-  WindowMutator | undefined
->(undefined);
-
-export const WindowMutatorProvider = WindowMutatorContext.Provider;
-
 export const useWindowMutator = () => {
   const context = React.useContext(WindowMutatorContext);
   if (context === undefined) {
@@ -37,12 +47,6 @@ export const useWindowMutator = () => {
   }
   return context;
 };
-
-const TabMutatorContext = React.createContext<TabMutator | undefined>(
-  undefined
-);
-
-export const TabMutatorProvider = TabMutatorContext.Provider;
 
 export const useTabMutator = () => {
   const context = React.useContext(TabMutatorContext);
