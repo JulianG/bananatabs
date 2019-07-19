@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "short_name": "BananaTabs",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "name": "BananaTabs",
   "description": "BananaTabs automatically organises your tabs and windows.",
   "icons": {
