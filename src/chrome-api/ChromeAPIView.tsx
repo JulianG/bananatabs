@@ -6,7 +6,7 @@ import { ChromeEventDispatcher } from '../chrome/ChromeEventDispatcher';
 
 type Props = { chromeAPI: PromisingChromeAPI };
 
-export const ChromeAPIView = ({ chromeAPI }: Props) => {
+export const ChromeAPIView: React.FC<Props> = ({ chromeAPI }) => {
 
   // making chromeAPI a global to enable acceess via the browser's console
   globalThis.chromeAPI = chromeAPI;

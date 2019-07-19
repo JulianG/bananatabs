@@ -3,12 +3,12 @@ import * as BT from '../../model/core/CoreTypes';
 import { Icons } from '../icons';
 import { useWindowMutator } from '../../context/ReactContextFactory';
 
-interface DisclosureButtonProps {
+interface Props {
   window: BT.Window;
   onCopy(windowId: number): void;
 }
 
-export const DisclosureButton = ({ window }: DisclosureButtonProps) => {
+export const DisclosureButton: React.FC<Props> = ({ window }) => {
   const windowMutator = useWindowMutator();
   const iconSrc = window.expanded ? Icons.ArrowDown : Icons.ArrowRight;
   const iconText = window.expanded ? 'Collapse' : 'Expand';

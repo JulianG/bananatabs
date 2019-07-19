@@ -17,7 +17,7 @@ interface Props {
 const version = MANIFEST.version || '0.0';
 const buildString = '';
 
-export const BananaTabs = ({ context }: Props) => {
+export const BananaTabs: React.FC<Props> = ({ context }) => {
   const forceUpdate = useForceUpdate();
   const { sessionProvider, browserController } = context;
 

@@ -6,12 +6,12 @@ import { VisibilityIcon } from './VisibilityIcon';
 import { DisclosureButton } from './DisclosureButton';
 import { useWindowMutator } from '../../context/ReactContextFactory';
 
-interface WindowHeaderProps {
+interface Props {
   window: BT.Window;
   onCopy(windowId: number): void;
 }
 
-export const WindowHeader = (props: WindowHeaderProps) => {
+export const WindowHeader: React.FC<Props> = props => {
   const [renaming, setRenaming] = React.useState(false);
 
   const windowMutator = useWindowMutator();

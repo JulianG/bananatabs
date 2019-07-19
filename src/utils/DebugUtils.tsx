@@ -3,6 +3,6 @@ import { CONFIG } from '../config';
 
 type Props = { item: { id: number } };
 
-export const DebugInfo = ({ item }: Props) => {
+export const DebugInfo: React.FC<Props> = ({ item }) => {
   return CONFIG.debug ? <span className="debug-info">{item.id}</span> : null;
 };

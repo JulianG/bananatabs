@@ -6,11 +6,9 @@ import {
   useTabMutator,
 } from '../../context/ReactContextFactory';
 
-interface Props {
-  window: BT.Window;
-}
+type Props = { window: BT.Window };
 
-export const VisibilityIcon = ({ window }: Props) => {
+export const VisibilityIcon: React.FC<Props> = ({ window }) => {
   const windowMutator = useWindowMutator();
   const tabMutator = useTabMutator();
 
