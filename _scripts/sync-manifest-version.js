@@ -1,7 +1,7 @@
 const fs = require('fs');
 const exec = require('child_process').exec;
 
-const package = require('./package.json');
+const package = require('../package.json');
 const manifest_file = './public/manifest.json';
 
 const execLog = (err, stdout, stderr) => {
