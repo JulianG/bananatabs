@@ -20,12 +20,12 @@ $ yarn test
 
 From VSCode you can use the "Debug Jest Tests" launch configuration to run the tests with breakpoints enabled.
 
-You can also run `npm run test:debug` and use Chrome dev tools to debug tests.
+You can also run `yarn test:debug` and use Chrome dev tools to debug tests.
 
 ## Build
 
 ```sh
-$ npm run-script build
+$ yarn build
 ```
 
 ## Bump Version and Distribute
