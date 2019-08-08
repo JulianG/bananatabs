@@ -11,9 +11,9 @@ https://chrome.google.com/webstore/detail/banana-tabs-by-jg/hphakbojjadmnhhkflbg
 ## Development
 
 ```sh
-$ npm install
-$ npm start
-$ npm test
+$ yarn install
+$ yarn start
+$ yarn test
 ```
 
 #### Debugging Tests
