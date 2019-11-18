@@ -143,15 +143,15 @@ function mergeTabs(
     mconsole.warn('Using stored tabs instead of live or merged tabs.');
     return storedTabs;
   }
-  const uniqueTabs = finalTabs.reduce<BT.Tab[]>(uniqueIdsReducer, []);
-  return uniqueTabs;
+  return uniqueTabsById(finalTabs);
 }
 
-function uniqueIdsReducer<T extends { id: number }>(acc: Array<T>, element: T) {
-  if (acc.find(t => t.id === element.id) === undefined) {
-    acc.push(element);
-  }
-  return acc;
+function uniqueTabsById(tabs: BT.Tab[]): BT.Tab[] {
+  const uniqueArray: BT.Tab[] = [];
+  tabs.forEach(tab => {
+    if (uniqueArray.some(t => t.id === tab.id) === false) uniqueArray.push(tab);
+  });
+  return uniqueArray;
 }
 
 function compareWindows(live: BT.Window, stored: BT.Window): number {
