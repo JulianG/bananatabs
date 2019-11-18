@@ -1,5 +1,6 @@
 import * as faker from 'faker';
 import * as BT from '../model/core/CoreTypes';
+import fromentries from 'fromentries';
 
 export function parseSessionString(ss: string): BT.Session {
   let lastId = 1000;
@@ -53,23 +54,19 @@ function parseWindowDefinitionString(wd: string, tabs: {}[]) {
 
 function parseProps(sp: string): {} {
   const propList = (sp.match(/(!.)|(.)/g) || []).map(parseProp);
-  return convertPropArrayToObject(propList);
+  return fromentries(propList);
 }
 
-function parseProp(p: string) {
+function parseProp(p: string): [string, boolean | string] {
   const v: boolean = p[0] !== '!';
   const n: string = translatePropName(v ? p[0] : p[1]);
-  let obj = {};
+
   switch (n) {
     case 'title':
-      obj[n] = faker.hacker.phrase();
-      break;
-    case undefined:
-      break;
+      return [n, faker.hacker.phrase()];
     default:
-      obj[n] = v;
+      return [n, v];
   }
-  return obj;
 }
 
 function translatePropName(n: string): string {
@@ -84,10 +81,6 @@ function translatePropName(n: string): string {
   } else {
     throw `Error! Invalid input string. I don't know what to do with '${n}'.`;
   }
-}
-
-function convertPropArrayToObject(propList: {}[]): {} {
-  return propList.reduce<{}>((acc: {}, p: {}) => Object.assign(acc, p), {});
 }
 
 ////
