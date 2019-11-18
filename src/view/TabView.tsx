@@ -17,8 +17,7 @@ interface Props {
   window: BT.Window;
   tab: BT.Tab;
 }
-export const TabView = React.memo(function TabView({window, tab}: Props) {
-  
+export const TabView = React.memo(function TabView({ window, tab }: Props) {
   const tabMutator = useTabMutator();
 
   const styles = [
@@ -39,14 +38,15 @@ export const TabView = React.memo(function TabView({window, tab}: Props) {
     : Icons.Off;
   const visibilityIconText = tab.visible ? 'Hide Tab' : 'Show Tab';
 
-  const toggleVisibility = () => {
+  function toggleVisibility() {
     tab.visible
       ? tabMutator.hideTab(window.id, tab.id)
       : tabMutator.showTab(window.id, tab.id);
-  };
+  }
 
-  const selectTab = () =>
-    tabMutator.selectTab(window.id, tab.id);
+  function selectTab() {
+    return tabMutator.selectTab(window.id, tab.id);
+  }
 
   return (
     <div id={'tab'} className={styles.join(' ')}>
@@ -63,9 +63,7 @@ export const TabView = React.memo(function TabView({window, tab}: Props) {
       <img className={iconStyles.join(' ')} src={icon} onClick={selectTab} />
       <TabToolsView
         actionIconVisibility={{ delete: true, rename: false, copy: false }}
-        onDeleteAction={() =>
-          tabMutator.deleteTab(window.id, tab.id)
-        }
+        onDeleteAction={() => tabMutator.deleteTab(window.id, tab.id)}
       />
       <span className="tab-title" onClick={selectTab}>
         <DebugInfo item={tab} />

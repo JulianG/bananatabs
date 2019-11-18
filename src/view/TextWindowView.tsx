@@ -7,7 +7,7 @@ interface Props {
   onClose(): void;
 }
 
-export const TextWindowView = ({ windows, onClose }: Props) => {
+export const TextWindowView: React.FC<Props> = ({ windows, onClose }) => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
   const text = windowsToString(windows);
 
@@ -18,10 +18,10 @@ export const TextWindowView = ({ windows, onClose }: Props) => {
     [text]
   );
 
-  const copyToClipboardAndClose = () => {
+  function copyToClipboardAndClose() {
     document.execCommand('copy');
     onClose();
-  };
+  }
 
   return (
     <div className="textsession" data-testid="text-window-view">

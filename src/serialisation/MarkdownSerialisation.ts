@@ -23,9 +23,7 @@ export function stringToSession(str: string): BT.Session {
 
 export function stringToWindows(str: string): BT.Window[] {
   let _id = Math.floor(Math.random() * 99999);
-  const getId = () => {
-    return ++_id;
-  };
+  const getId = () => ++_id;
 
   const wins: BT.Window[] = [];
   const lines = str.split('\n');

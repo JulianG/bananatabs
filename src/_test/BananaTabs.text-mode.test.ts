@@ -5,7 +5,7 @@ import {
   getWindowsVisibilities,
   getTabsVisibilities,
   getTabsInWindow,
-  renderBananaTabs
+  renderBananaTabs,
 } from '../_test-utils/bananatabs.utils';
 
 import { wait } from '../_test-utils';
@@ -14,13 +14,14 @@ import { fireEvent } from '@testing-library/react';
 describe('BananaTabs Tests: Text Mode', async () => {
   //
 
-  const trimLines = (text: string) =>
-    text
+  function trimLines(text: string) {
+    return text
       .split('\n')
       .map(line => line.trim())
       .filter(line => line.length > 0)
       .join('\n');
-
+  }
+  
   test('NewWindowView', async () => {
     //
     // GIVEN an initially rendered app
@@ -33,7 +34,7 @@ describe('BananaTabs Tests: Text Mode', async () => {
       getByText,
       getAllByTestId,
       getByRole,
-      provider
+      provider,
     } = await renderBananaTabs(windows);
     await wait();
 
@@ -56,8 +57,8 @@ describe('BananaTabs Tests: Text Mode', async () => {
     * http://pasted-tab-1/
     * http://pasted-tab-2/
     * http://pasted-tab-3/
-    `
-      }
+    `,
+      },
     });
 
     // AND clicking again on the add links button
@@ -134,10 +135,9 @@ describe('BananaTabs Tests: Text Mode', async () => {
     // WHEN clicking the "go back" button
     fireEvent.click(getByText(/go back/i));
     await wait();
-    
+
     // EXPECT we have some window groups
     getAllByTestId('window-group');
-
   });
 
   test('TextWindowView - sharing one window', async () => {
@@ -152,9 +152,12 @@ describe('BananaTabs Tests: Text Mode', async () => {
       ~ http://tab-2.1/
       * http://tab-2.2/
     `;
-    const { getByText, getAllByTestId, getByRole, getAllByAltText } = await renderBananaTabs(
-      windows
-    );
+    const {
+      getByText,
+      getAllByTestId,
+      getByRole,
+      getAllByAltText,
+    } = await renderBananaTabs(windows);
     await wait();
 
     // assert we have some window groups
@@ -183,9 +186,8 @@ describe('BananaTabs Tests: Text Mode', async () => {
     // WHEN clicking the "go back" button
     fireEvent.click(getByText(/go back/i));
     await wait();
-    
+
     // EXPECT we have some window groups
     getAllByTestId('window-group');
-
   });
 });

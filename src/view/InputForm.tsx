@@ -11,24 +11,24 @@ type Props = {
   onCancel(): void;
 };
 
-export const InputForm = (props: Props) => {
+export const InputForm: React.FC<Props> = (props) => {
   const { text, className, inlineStyles, onSubmit, onCancel } = props;
 
   const textFieldRef = React.useRef<HTMLInputElement>(null);
 
-  const handleKeyUp = ({ keyCode }: { keyCode: number }) => {
+  function handleKeyUp({ keyCode }: { keyCode: number }) {
     switch (keyCode) {
       case ENTER:
         const newText = textFieldRef.current
-        ? textFieldRef.current.value
-        : text;
+          ? textFieldRef.current.value
+          : text;
         onSubmit && onSubmit(newText);
         break;
       case ESC:
         onCancel && onCancel();
         break;
     }
-  };
+  }
 
   return (
     <input

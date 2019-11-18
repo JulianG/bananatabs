@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Icons } from './icons';
 
-const doNothing = () => {};
+function doNothing() {}
 
 interface Props {
   actionIconVisibility: {

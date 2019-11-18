@@ -28,7 +28,7 @@ export const AppContextProvider: React.FC<Props> = ({ context, children }) => {
   );
 };
 
-export const useSessionMutator = () => {
+export function useSessionMutator() {
   const context = React.useContext(SessionMutatorContext);
   if (context === undefined) {
     throw new Error(
@@ -36,9 +36,9 @@ export const useSessionMutator = () => {
     );
   }
   return context;
-};
+}
 
-export const useWindowMutator = () => {
+export function useWindowMutator() {
   const context = React.useContext(WindowMutatorContext);
   if (context === undefined) {
     throw new Error(
@@ -46,9 +46,9 @@ export const useWindowMutator = () => {
     );
   }
   return context;
-};
+}
 
-export const useTabMutator = () => {
+export function useTabMutator() {
   const context = React.useContext(TabMutatorContext);
   if (context === undefined) {
     throw new Error(
@@ -56,4 +56,4 @@ export const useTabMutator = () => {
     );
   }
   return context;
-};
+}

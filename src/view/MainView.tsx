@@ -46,7 +46,7 @@ export const MainView = React.memo(function MainView(props: Props) {
           <Title onClick={() => browserController.dockAppWindow('right', 5)} />
           <WindowListView
             windows={session.windows}
-            onWindowCopied={windowId => changeMode('read', windowId)()}
+            onWindowCopied={(windowId) => changeMode('read', windowId)()}
           />
           <MainViewCmdButtons
             onPaste={changeMode('write')}
@@ -60,7 +60,7 @@ export const MainView = React.memo(function MainView(props: Props) {
         <div>
           <Title />
           <TextWindowView
-            windows={session.windows.filter(w => {
+            windows={session.windows.filter((w) => {
               return state.windowId === -1 || w.id === state.windowId;
             })}
             onClose={changeMode('list')}
@@ -86,9 +86,9 @@ function areEqual(prevProps: Props, nextProps: Props): boolean {
 }
 
 function useStateReducer<T>(defaultValue: T) {
-  const stateReducer = (state: T, newState: Partial<T>) => {
+  function stateReducer(state: T, newState: Partial<T>) {
     return { ...state, ...newState };
-  };
+  }
   const [state, setState] = React.useReducer(stateReducer, defaultValue);
   return { state, setState };
 }

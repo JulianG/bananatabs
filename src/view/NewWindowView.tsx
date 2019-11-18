@@ -7,13 +7,14 @@ interface Props {
   onClose(): void;
 }
 
-export const NewWindowView = ({ minimumLines, onClose }: Props) => {
+export const NewWindowView: React.FC<Props> = ({ minimumLines, onClose }) => {
   const [text, setText] = React.useState('');
   const sessionMutator = useSessionMutator();
-  const save = () => {
+  
+  function save() {
     sessionMutator.addWindows(stringToHiddenWindows(text));
     onClose();
-  };
+  }
 
   return (
     <div className="textsession" data-testid="new-window-view">
@@ -27,8 +28,8 @@ export const NewWindowView = ({ minimumLines, onClose }: Props) => {
         wrap="off"
         value={text}
         rows={Math.max(minimumLines, text.split('\n').length)}
-        onChange={event => setText(event.target.value)}
-        onKeyUp={event => {
+        onChange={(event) => setText(event.target.value)}
+        onKeyUp={(event) => {
           if (event.keyCode === 13 && event.ctrlKey) {
             save();
           }
@@ -48,5 +49,5 @@ export const NewWindowView = ({ minimumLines, onClose }: Props) => {
 };
 
 function stringToHiddenWindows(text: string) {
-  return stringToWindows(text).map(w => ({ ...w, visible: false }));
+  return stringToWindows(text).map((w) => ({ ...w, visible: false }));
 }

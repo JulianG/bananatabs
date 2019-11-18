@@ -14,7 +14,7 @@ export const WindowListView = React.memo(function WindowListView(props: Props) {
   const { windows, onWindowCopied } = props;
   const sessionMutator = useSessionMutator();
 
-  const itemRenderer = (item: BT.Window, i: number) => {
+  function itemRenderer(item: BT.Window, i: number) {
     return (
       <WindowView
         key={`window-${windows[i].id}`}
@@ -22,7 +22,7 @@ export const WindowListView = React.memo(function WindowListView(props: Props) {
         onCopy={onWindowCopied}
       />
     );
-  };
+  }
 
   return (
     <RLDD

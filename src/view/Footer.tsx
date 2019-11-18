@@ -5,16 +5,18 @@ interface Props {
   buildString: string;
 }
 
-export const Footer = ({ version, buildString }: Props) => {
-  const showCredits = () => {
+export const Footer: React.FC<Props> = ({ version, buildString }) => {
+  function showCredits() {
     window.alert(`BananaTabs! version ${version} ${buildString}
     `);
-  };
+  }
 
   return (
     <div className="credits">
       <p>
-        <strong onClick={showCredits} title="click for version">BananaTabs!</strong>
+        <strong onClick={showCredits} title="click for version">
+          BananaTabs!
+        </strong>
         <br />
         Developed by Julian Garamendy.
         <br />

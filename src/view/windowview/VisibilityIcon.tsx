@@ -16,19 +16,19 @@ export const VisibilityIcon: React.FC<Props> = ({ window }) => {
   const visibilityIconText = window.visible ? 'Hide Window' : 'Show Window';
   const imgId = 'win-visibility' + (window.visible ? '-visible' : '-hidden');
 
-  const showWindow = () => {
+  function showWindow() {
     hasVisibleTabs(window)
       ? windowMutator.showWindow(window.id)
       : tabMutator.showTab(window.id, window.tabs[0].id);
-  };
+  }
 
-  const hideWindow = () => {
+  function hideWindow() {
     windowMutator.hideWindow(window.id);
-  };
+  }
 
-  const toggleVisibility = () => {
+  function toggleVisibility() {
     window.visible ? hideWindow() : showWindow();
-  };
+  }
 
   return (
     <img
@@ -44,5 +44,5 @@ export const VisibilityIcon: React.FC<Props> = ({ window }) => {
 };
 
 function hasVisibleTabs(win: BT.Window): boolean {
-  return win.tabs.filter(t => t.visible).length > 0;
+  return win.tabs.filter((t) => t.visible).length > 0;
 }

@@ -123,7 +123,7 @@ export interface DisplayInfo {
 }
 
 export function DEBUG_sessionToString(s: Session): string {
-  const f = (key: string, value: Object) => {
+  function replacer(key: string, value: Object) {
     switch (key) {
       case 'windows':
         if (Array.isArray(value)) {
@@ -142,7 +142,7 @@ export function DEBUG_sessionToString(s: Session): string {
     }
   };
 
-  return JSON.stringify(s, f, 2);
+  return JSON.stringify(s, replacer, 2);
 }
 
 export type Mutable<T> = { -readonly [P in keyof T]: T[P] };

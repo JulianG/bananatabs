@@ -10,13 +10,17 @@ type Props = {
   setRenaming(b: boolean): void;
 };
 
-export const WindowTitle = ({ renaming, setRenaming, window }: Props) => {
+export const WindowTitle: React.FC<Props> = ({
+  renaming,
+  setRenaming,
+  window,
+}) => {
   const windowMutator = useWindowMutator();
-  
-  const submitRename = (text: string) => {
+
+  function submitRename(text: string) {
     windowMutator.renameWindow(window.id, text);
     setRenaming(false);
-  };
+  }
 
   const tabsStr = window.expanded ? '' : ' (' + window.tabs.length + ' tabs)';
   const fullscreen = window.state === 'fullscreen' ? '(fullscreen)' : '';
