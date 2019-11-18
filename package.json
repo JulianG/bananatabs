@@ -4,8 +4,8 @@
   "private": true,
   "rootDir": "./src",
   "dependencies": {
-    "react": "16.8.1",
-    "react-dom": "16.8.1",
+    "react": "16.9",
+    "react-dom": "16.9",
     "react-list-drag-and-drop": "^0.8.1"
   },
   "scripts": {
@@ -14,7 +14,8 @@
     "start:debug-info": "cross-env REACT_APP_DEBUG=info react-scripts start",
     "watch": "tsc -w -p tsconfig.json --noEmit",
     "build:qa": "node ./_scripts/build-and-qa.js",
-    "test": "react-scripts test --env=jsdom --silent --verbose",
+    "test": "react-scripts test --env=jsdom --silent",
+    "test:verbose": "react-scripts test --env=jsdom --silent --verbose",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config=jest.config.js",
     "test:coverage": "react-scripts test --env=jsdom --coverage --watch",
     "tsc": "./node_modules/typescript/bin/tsc --noEmit",
@@ -23,6 +24,7 @@
     "postversion": "node ./_scripts/build-and-dist.js"
   },
   "devDependencies": {
+    "@testing-library/react": "^8.0.8",
     "@types/chrome": "0.0.69",
     "@types/faker": "^4.1.4",
     "@types/jest": "24.0.0",
@@ -34,7 +36,6 @@
     "jest": "^23.6.0",
     "prettier": "1.15.3",
     "react-scripts": "2.1.3",
-    "react-testing-library": "^5.3.1",
     "tslint-config-prettier": "^1.17.0",
     "typescript": "3.3.3",
     "why-did-you-update": "^0.1.1"

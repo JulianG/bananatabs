@@ -4,8 +4,8 @@ import {
   render,
   queryAllByAttribute,
   queryByAltText,
-  getByTestId
-} from 'react-testing-library';
+  getAllByTestId,
+} from '@testing-library/react';
 import { stringToSession } from '../serialisation/MarkdownSerialisation';
 import { FakePromisingChromeAPI } from '../chrome-api/FakePromisingChromeAPI';
 import { createFakeBananaContext } from '../context/BananaContextFactory';
@@ -33,7 +33,7 @@ export async function renderBananaTabs(
     fchrome,
     provider,
     ...renderResult,
-    ...createFunctions(container)
+    ...createFunctions(container),
   };
 }
 
@@ -49,11 +49,11 @@ function createFunctions(container: HTMLElement) {
       const tab = getTabsInWindow(getWindowGroups(container)[windowIndex])[
         tabIndex
       ];
-      return getByTestId(tab, 'visibility-toggle');
+      return getAllByTestId(tab, 'visibility-toggle')[0];
     },
     getWindowVisibilityToggle: (windowIndex: number) => {
       const win = getWindowGroups(container)[windowIndex];
-      return getByTestId(win, 'visibility-toggle');
+      return getAllByTestId(win, 'visibility-toggle')[0];
     },
     getWindowDisclosureButton: (windowIndex: number) => {
       const win = getWindowGroups(container)[windowIndex];
@@ -76,7 +76,7 @@ function createFunctions(container: HTMLElement) {
         );
       }
       return !!expanded;
-    }
+    },
   };
 }
 

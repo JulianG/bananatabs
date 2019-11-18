@@ -1,5 +1,5 @@
-import { fireEvent /*, getByTestId, cleanup*/ } from 'react-testing-library';
-import 'react-testing-library/cleanup-after-each';
+import { fireEvent } from '@testing-library/react';
+import '@testing-library/react/cleanup-after-each';
 
 import {
   /*getWindowGroups,

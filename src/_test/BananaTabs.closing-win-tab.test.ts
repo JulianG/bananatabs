@@ -1,4 +1,4 @@
-import 'react-testing-library/cleanup-after-each';
+import '@testing-library/react/cleanup-after-each';
 
 import { renderBananaTabs } from '../_test-utils/bananatabs.utils';
 import { wait } from '../_test-utils';

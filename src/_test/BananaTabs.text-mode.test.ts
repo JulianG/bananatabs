@@ -1,4 +1,4 @@
-import 'react-testing-library/cleanup-after-each';
+import '@testing-library/react/cleanup-after-each';
 
 import {
   getWindowGroups,
@@ -9,7 +9,7 @@ import {
 } from '../_test-utils/bananatabs.utils';
 
 import { wait } from '../_test-utils';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 
 describe('BananaTabs Tests: Text Mode', async () => {
   //
@@ -31,14 +31,14 @@ describe('BananaTabs Tests: Text Mode', async () => {
     const {
       container,
       getByText,
-      getByTestId,
+      getAllByTestId,
       getByRole,
       provider
     } = await renderBananaTabs(windows);
     await wait();
 
     // assert we have some window groups
-    getByTestId('window-group');
+    getAllByTestId('window-group');
 
     // WHEN clicking the add links button
     const button = getByText(/add links/i);
@@ -46,7 +46,7 @@ describe('BananaTabs Tests: Text Mode', async () => {
     await wait();
 
     // THEN the new window screen appears
-    getByTestId('new-window-view');
+    getAllByTestId('new-window-view');
 
     // WHEN typing in a list of links in the textarea
     fireEvent.change(getByRole('input'), {
@@ -99,20 +99,20 @@ describe('BananaTabs Tests: Text Mode', async () => {
       ~ http://tab-2.1/
       * http://tab-2.2/
     `;
-    const { getByText, getByTestId, getByRole } = await renderBananaTabs(
+    const { getByText, getAllByTestId, getByRole } = await renderBananaTabs(
       windows
     );
     await wait();
 
     // assert we have some window groups
-    getByTestId('window-group');
+    getAllByTestId('window-group');
 
     // WHEN clicking the share all windows button
     fireEvent.click(getByText(/share all windows/i));
     await wait();
 
     // THEN the text window screen appears
-    getByTestId('text-window-view');
+    getAllByTestId('text-window-view');
 
     const input = getByRole('input') as HTMLTextAreaElement;
 
@@ -136,7 +136,7 @@ describe('BananaTabs Tests: Text Mode', async () => {
     await wait();
     
     // EXPECT we have some window groups
-    getByTestId('window-group');
+    getAllByTestId('window-group');
 
   });
 
@@ -152,20 +152,20 @@ describe('BananaTabs Tests: Text Mode', async () => {
       ~ http://tab-2.1/
       * http://tab-2.2/
     `;
-    const { getByText, getByTestId, getByRole, getAllByAltText } = await renderBananaTabs(
+    const { getByText, getAllByTestId, getByRole, getAllByAltText } = await renderBananaTabs(
       windows
     );
     await wait();
 
     // assert we have some window groups
-    getByTestId('window-group');
+    getAllByTestId('window-group');
 
     // WHEN clicking the share button on in
     fireEvent.click(getAllByAltText(/share/i)[1]);
     await wait();
 
     // THEN the text window screen appears
-    getByTestId('text-window-view');
+    getAllByTestId('text-window-view');
 
     const input = getByRole('input') as HTMLTextAreaElement;
 
@@ -185,7 +185,7 @@ describe('BananaTabs Tests: Text Mode', async () => {
     await wait();
     
     // EXPECT we have some window groups
-    getByTestId('window-group');
+    getAllByTestId('window-group');
 
   });
 });
