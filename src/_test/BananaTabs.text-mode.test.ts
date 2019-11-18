@@ -17,11 +17,11 @@ describe('BananaTabs Tests: Text Mode', async () => {
   function trimLines(text: string) {
     return text
       .split('\n')
-      .map(line => line.trim())
-      .filter(line => line.length > 0)
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
       .join('\n');
   }
-  
+
   test('NewWindowView', async () => {
     //
     // GIVEN an initially rendered app

@@ -7,19 +7,22 @@ import { ChromeEventDispatcher } from '../chrome/ChromeEventDispatcher';
 type Props = { chromeAPI: PromisingChromeAPI };
 
 export const ChromeAPIView: React.FC<Props> = ({ chromeAPI }) => {
-
   // making chromeAPI a global to enable acceess via the browser's console
   globalThis.chromeAPI = chromeAPI;
 
-  const [windows, setWindows] = React.useState<chrome.windows.Window[]>([])
+  const [windows, setWindows] = React.useState<chrome.windows.Window[]>([]);
 
-  React.useEffect(() => {
-    const updateWindows = async () => setWindows([... (await chromeAPI.windows.getAll({}))]);
-    const dispatcher = new ChromeEventDispatcher(chromeAPI);
-    dispatcher.addListener(updateWindows);
-    updateWindows();
-    return () => dispatcher.removeListener(updateWindows);
-  }, [chromeAPI]);
+  React.useEffect(
+    () => {
+      const updateWindows = async () =>
+        setWindows([...(await chromeAPI.windows.getAll({}))]);
+      const dispatcher = new ChromeEventDispatcher(chromeAPI);
+      dispatcher.addListener(updateWindows);
+      updateWindows();
+      return () => dispatcher.removeListener(updateWindows);
+    },
+    [chromeAPI]
+  );
 
   return (
     <div>

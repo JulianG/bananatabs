@@ -12,29 +12,31 @@ export class ChromeEventDispatcher implements BrowserEventDispatcher {
   constructor(chromeAPI: PromisingChromeAPI) {
     this.eventListeners = [];
 
-    chromeAPI.windows.onRemoved.addListener(id => {
+    chromeAPI.windows.onRemoved.addListener((id) => {
       this.dispatchEvent('onRemoved', `onWindowRemoved ${id}`);
     });
-    chromeAPI.windows.onFocusChanged.addListener(_ =>
+    chromeAPI.windows.onFocusChanged.addListener((_) =>
       this.dispatchEvent('onFocusChanged')
     );
-    chromeAPI.tabs.onCreated.addListener(tab => {
+    chromeAPI.tabs.onCreated.addListener((tab) => {
       this.dispatchEvent('onTabsCreated', `onTabsCreated ${tab.id}`);
     });
     chromeAPI.tabs.onUpdated.addListener(this.onTabsUpdated.bind(this));
-    chromeAPI.tabs.onMoved.addListener(_ => this.dispatchEvent('onTabsMoved'));
+    chromeAPI.tabs.onMoved.addListener((_) =>
+      this.dispatchEvent('onTabsMoved')
+    );
     chromeAPI.tabs.onAttached.addListener((id, info) =>
       this.dispatchEvent('onTabsAttached')
     );
     chromeAPI.tabs.onRemoved.addListener(this.onTabsRemoved.bind(this));
-    chromeAPI.tabs.onActivated.addListener(tab =>
+    chromeAPI.tabs.onActivated.addListener((tab) =>
       this.dispatchEvent('onActivated', `onActivated tabId:${tab.tabId}`)
     );
     // chromeAPI.tabs.onHighlighted.addListener((_) => this.updateSessionSilently('onHighlighted'));
     // chromeAPI.tabs.onDetached.addListener((_) => this.updateSessionSilently('onDetached'));
     // chromeAPI.tabs.onReplaced.addListener((_) => this.updateSessionSilently('onReplaced'));
 
-    chromeAPI.tabs.getCurrent().then(tab => {
+    chromeAPI.tabs.getCurrent().then((tab) => {
       if (tab) {
         this.appTabId = tab.id || 0;
       }
@@ -57,7 +59,7 @@ export class ChromeEventDispatcher implements BrowserEventDispatcher {
   ////
 
   private dispatchEvent(event: string, reason?: string) {
-    this.eventListeners.forEach(listener => listener(event, reason || event));
+    this.eventListeners.forEach((listener) => listener(event, reason || event));
   }
 
   private isPanelTab(id: number): boolean {

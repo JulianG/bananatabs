@@ -81,7 +81,7 @@ export class ChromeBrowserController implements BrowserController {
 
   public async getDisplayInfo(): Promise<SystemDisplayInfo[]> {
     const chromeDisplays = await this.chromeAPI.system.display.getInfo({});
-    return chromeDisplays.map(d => {
+    return chromeDisplays.map((d) => {
       return { id: d.id, bounds: d.bounds };
     });
   }
@@ -144,7 +144,7 @@ export class ChromeBrowserController implements BrowserController {
       ...bounds,
       focused: window.focused,
       type: window.type,
-      url: window.tabs.filter(t => t.visible).map(t => t.url),
+      url: window.tabs.filter((t) => t.visible).map((t) => t.url),
     };
 
     const newWindow = await this.chromeAPI.windows.create(createData);
@@ -158,8 +158,8 @@ export class ChromeBrowserController implements BrowserController {
   private async getAppWindowId(): Promise<number> {
     const appURL = this.getAppURL();
     const windows = await this.chromeAPI.windows.getAll({ populate: true });
-    const window = windows.find(w => {
-      return (w.tabs || []).some(t => t.url === appURL);
+    const window = windows.find((w) => {
+      return (w.tabs || []).some((t) => t.url === appURL);
     });
     return window ? window.id : 0;
   }
@@ -168,7 +168,7 @@ export class ChromeBrowserController implements BrowserController {
     const id = await this.getAppWindowId();
     const appWindow = (await this.chromeAPI.windows.getAll({
       populate: true,
-    })).find(w => w.id === id);
+    })).find((w) => w.id === id);
     return appWindow;
   }
 }
@@ -179,7 +179,7 @@ function convertWindow(w: chrome.windows.Window): BT.Window {
     title: '',
     visible: true,
     icon: '',
-    tabs: (w.tabs || []).filter(t => t.incognito === false).map(convertTab),
+    tabs: (w.tabs || []).filter((t) => t.incognito === false).map(convertTab),
     focused: w.focused || false,
     type: w.type,
     state: w.state,
@@ -213,8 +213,11 @@ function getWindowBounds(w: chrome.windows.Window): BT.Rectangle {
   };
 }
 
-function findDisplayContainingWindow(displays: SystemDisplayInfo[], appWindow: chrome.windows.Window) {
-  return displays.find(display => {
+function findDisplayContainingWindow(
+  displays: SystemDisplayInfo[],
+  appWindow: chrome.windows.Window
+) {
+  return displays.find((display) => {
     const { top, left } = getWindowBounds(appWindow);
     const h =
       left >= display.bounds.left &&

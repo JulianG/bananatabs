@@ -144,15 +144,14 @@ describe('BananaTabs Tests: Interaction from browser', () => {
       const windowId = fchrome.fakeWindows[0].id;
 
       // WHEN creating a new tab from the (fake) browser
-      fchrome.tabs.create({windowId});
+      fchrome.tabs.create({ windowId });
       await wait();
 
       // EXPECT the following tabs in the window:
-      expect(provider.session.windows[0].tabs.map(t => t.url)).toMatchObject([
+      expect(provider.session.windows[0].tabs.map((t) => t.url)).toMatchObject([
         'http://tab-1.1/',
         'chrome://newtab/',
       ]);
-
     });
   });
 
@@ -177,14 +176,13 @@ describe('BananaTabs Tests: Interaction from browser', () => {
       await wait();
 
       // expect the tabs to be re-arranged as expected
-      expect(provider.session.windows[0].tabs.map(t => t.url)).toMatchObject([
+      expect(provider.session.windows[0].tabs.map((t) => t.url)).toMatchObject([
         'http://tab-1.1/',
         'http://tab-1.2/',
         'http://tab-1.4/',
         'http://tab-1.5/',
         'http://tab-1.3/moving-tab',
       ]);
-
     });
 
     test.skip('when dragging a tab to a new window', () => {

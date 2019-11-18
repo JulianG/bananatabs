@@ -7,7 +7,7 @@ export class ChromeEventLogger {
     this.log(new Date().toLocaleTimeString());
 
     if (chrome && chrome.tabs) {
-      chrome.windows.onCreated.addListener(w => {
+      chrome.windows.onCreated.addListener((w) => {
         const event = this.decorateEventName('chrome.windows.onCreated');
         this.log(event);
         this.log(JSON.stringify(w, null, 2));
@@ -20,25 +20,25 @@ export class ChromeEventLogger {
         this.log(JSON.stringify(info, null, 2));
         this.logState(event);
       });
-      chrome.windows.onRemoved.addListener(id => {
+      chrome.windows.onRemoved.addListener((id) => {
         const event = this.decorateEventName('chrome.windows.onRemoved');
         this.log(event);
         this.log('id:' + id);
         this.logState(event);
       });
-      chrome.windows.onFocusChanged.addListener(id => {
+      chrome.windows.onFocusChanged.addListener((id) => {
         const event = this.decorateEventName('chrome.windows.onFocusChanged');
         this.log(event);
         this.log('id:' + id);
         this.logState(event);
       });
-      chrome.tabs.onCreated.addListener(tab => {
+      chrome.tabs.onCreated.addListener((tab) => {
         const event = this.decorateEventName('chrome.tabs.onCreated');
         this.log(event);
         this.log(JSON.stringify(tab, null, 2));
         this.logState(event);
       });
-      chrome.tabs.onMoved.addListener(id => {
+      chrome.tabs.onMoved.addListener((id) => {
         const event = this.decorateEventName('chrome.tabs.onMoved');
         this.log(event);
         this.log('id:' + id);
@@ -51,37 +51,37 @@ export class ChromeEventLogger {
         this.log(JSON.stringify(info, null, 2));
         this.logState(event);
       });
-      chrome.tabs.onRemoved.addListener(id => {
+      chrome.tabs.onRemoved.addListener((id) => {
         const event = this.decorateEventName('chrome.tabs.onRemoved');
         this.log(event);
         this.log('id:' + id);
         this.logState(event);
       });
-      chrome.tabs.onActivated.addListener(info => {
+      chrome.tabs.onActivated.addListener((info) => {
         const event = this.decorateEventName('chrome.tabs.onActivated');
         this.log(event);
         this.log(JSON.stringify(info, null, 2));
         this.logState(event);
       });
-      chrome.tabs.onHighlighted.addListener(info => {
+      chrome.tabs.onHighlighted.addListener((info) => {
         const event = this.decorateEventName('chrome.tabs.onHighlighted');
         this.log(event);
         this.log(JSON.stringify(info, null, 2));
         this.logState(event);
       });
-      chrome.tabs.onDetached.addListener(id => {
+      chrome.tabs.onDetached.addListener((id) => {
         const event = this.decorateEventName('chrome.tabs.onDetached');
         this.log(event);
         this.log('id:' + id);
         this.logState(event);
       });
-      chrome.tabs.onReplaced.addListener(id => {
+      chrome.tabs.onReplaced.addListener((id) => {
         const event = this.decorateEventName('chrome.tabs.onReplaced');
         this.log(event);
         this.log('id:' + id);
         this.logState(event);
       });
-      chrome.tabs.onZoomChange.addListener(info => {
+      chrome.tabs.onZoomChange.addListener((info) => {
         const event = this.decorateEventName('chrome.tabs.onZoomChange');
         this.log(event);
         this.log(JSON.stringify(info, null, 2));

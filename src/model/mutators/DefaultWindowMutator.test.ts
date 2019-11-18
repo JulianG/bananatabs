@@ -6,14 +6,19 @@ async function initialise(sessionString: string) {
     provider,
     fchrome,
     browserController,
-    onSessionChanged
+    onSessionChanged,
   } = await createIniatilisedProvider(sessionString);
   const windowMutator = new DefaultWindowMutator(provider, browserController);
-  return { provider, fchrome, browserController, windowMutator, onSessionChanged };
+  return {
+    provider,
+    fchrome,
+    browserController,
+    windowMutator,
+    onSessionChanged,
+  };
 }
 
 describe('DefaultTabMutator tests', () => {
-
   test('show window', async () => {
     // GIVEN an initialised provider with 2 windows, one of them hidden
     const { provider, windowMutator, fchrome } = await initialise(
@@ -38,7 +43,7 @@ describe('DefaultTabMutator tests', () => {
     await wait();
 
     const getIdsList = (tabs: ReadonlyArray<{ id?: number }>): number[] => {
-      return tabs.map(t => t.id!).sort((a, b) => a - b);
+      return tabs.map((t) => t.id!).sort((a, b) => a - b);
     };
 
     expect(getIdsList(fchws[1].tabs!)).toMatchObject(

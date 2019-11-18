@@ -5,11 +5,11 @@ const package = require('../package.json');
 const manifest_file = './public/manifest.json';
 
 const execLog = (err, stdout, stderr) => {
-	if (err == null) {
-		console.log(stdout);
-	} else {
-		console.error(stderr);
-	}
+  if (err == null) {
+    console.log(stdout);
+  } else {
+    console.error(stderr);
+  }
 };
 
 const manifest_text = fs.readFileSync(manifest_file);

@@ -29,7 +29,7 @@ function confirmExpectations(
   for (let i = 0; i < allCallbacks.length; i++) {
     const pair = allCallbacks[i];
 
-    const expectation = expectations.find(ex => ex.event === pair.event);
+    const expectation = expectations.find((ex) => ex.event === pair.event);
     const times = expectation ? expectation.times : 0;
 
     if (pair.callback.mock.calls.length !== times) {
@@ -100,8 +100,10 @@ expect.extend({
   ) => {
     const visiblePass = expected.visible;
     const focusPass = actual.focused === expected.focused;
-    const actualURLs = (actual.tabs || []).map(t => t.url);
-    const expectedURLs = expected.tabs.filter(t => t.visible).map(t => t.url);
+    const actualURLs = (actual.tabs || []).map((t) => t.url);
+    const expectedURLs = expected.tabs
+      .filter((t) => t.visible)
+      .map((t) => t.url);
     const urlsLengthPass = actualURLs.length === expectedURLs.length;
     const urlsPass = actualURLs.every((url, i) => url === expectedURLs[i]);
 

@@ -4,14 +4,14 @@ import fromentries from 'fromentries';
 
 export function parseSessionString(ss: string): BT.Session {
   let lastId = 1000;
-  const windows = _parseSessionString(ss).map(w => {
+  const windows = _parseSessionString(ss).map((w) => {
     w.tabs = ensureOneActiveTab(
       w.tabs.map((t, i) => {
         const tab = Object.assign({}, t, { index: i, listIndex: i });
         return Object.assign(BT.getNewTab(), tab, {
           id: ++lastId,
           url: getRandomURL(),
-          title: getRandomTitle()
+          title: getRandomTitle(),
         });
       })
     );
@@ -27,7 +27,7 @@ export function parseSessionString(ss: string): BT.Session {
 function _parseSessionString(ss: string) {
   const windowsRegEx = /\[([^\]]+)\]/g;
   const windows = ss.match(windowsRegEx) || [];
-  const validWindows = windows.map(parseWindowString).filter(s => s != null);
+  const validWindows = windows.map(parseWindowString).filter((s) => s != null);
   return validWindows;
 }
 
@@ -74,7 +74,7 @@ function translatePropName(n: string): string {
     v: 'visible',
     f: 'focused',
     a: 'active',
-    t: 'title'
+    t: 'title',
   };
   if (keys.hasOwnProperty(n)) {
     return keys[n];
@@ -86,10 +86,10 @@ function translatePropName(n: string): string {
 ////
 
 function ensureOneActiveTab(tabs: BT.Tab[]): BT.Tab[] {
-  let visibleTabs = tabs.filter(t => t.visible);
+  let visibleTabs = tabs.filter((t) => t.visible);
   if (visibleTabs.length > 0) {
-    const activeTab = visibleTabs.find(t => t.active) || visibleTabs[0];
-    return tabs.map(t => {
+    const activeTab = visibleTabs.find((t) => t.active) || visibleTabs[0];
+    return tabs.map((t) => {
       return { ...t, active: t.id === activeTab.id };
     });
   } else {

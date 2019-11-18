@@ -4,7 +4,7 @@ import { PromisingChromeAPI } from '../chrome-api/PromisingChromeAPI';
 import {
   SessionMutator,
   WindowMutator,
-  TabMutator
+  TabMutator,
 } from '../model/core/Mutators';
 
 export interface BananaContext {

@@ -2,21 +2,21 @@ import * as BT from '../model/core/CoreTypes';
 
 export function windowsToString(windows: ReadonlyArray<BT.Window>): string {
   return windows
-    .map(w => {
+    .map((w) => {
       return `${w.title || 'Window'}:\n${tabsToString(w.tabs)}\n`;
     })
     .join('\n');
 }
 
 function tabsToString(tabs: ReadonlyArray<BT.Tab>): string {
-  return tabs.map(t => ` * ${t.url}`).join('\n');
+  return tabs.map((t) => ` * ${t.url}`).join('\n');
 }
 
 export function stringToSession(str: string): BT.Session {
   const windows = stringToWindows(str);
 
   const panelWindow =
-    windows.find(w => w.tabs[0].url.startsWith('chrome-extension://')) ||
+    windows.find((w) => w.tabs[0].url.startsWith('chrome-extension://')) ||
     BT.getNewWindow();
   return new BT.Session(windows, panelWindow);
 }
@@ -32,7 +32,7 @@ export function stringToWindows(str: string): BT.Window[] {
   let tabIndex: number;
   let shouldCreateNewWindow: boolean = true;
   let newWindowVisibility: boolean = true;
-  lines.forEach(line => {
+  lines.forEach((line) => {
     line = line.trim();
     if (shouldCreateNewWindow) {
       shouldCreateNewWindow = false;
@@ -87,7 +87,7 @@ export function stringToWindows(str: string): BT.Window[] {
     }
   });
 
-  return wins.filter(w => w.tabs.length > 0);
+  return wins.filter((w) => w.tabs.length > 0);
 }
 
 function isTabLine(line: string): boolean {

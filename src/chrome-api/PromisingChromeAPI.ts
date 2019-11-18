@@ -12,7 +12,10 @@ export interface ChromeWindowsAPI {
   getAll(getInfo: chrome.windows.GetInfo): Promise<chrome.windows.Window[]>;
   create(
     createData: chrome.windows.CreateData
-  ): Promise<chrome.windows.Window | undefined> | chrome.windows.Window | undefined;
+  ):
+    | Promise<chrome.windows.Window | undefined>
+    | chrome.windows.Window
+    | undefined;
   update(
     id: number,
     updateInfo: chrome.windows.UpdateInfo
@@ -28,7 +31,9 @@ export interface ChromeTabsAPI {
   onRemoved: chrome.tabs.TabRemovedEvent;
   onActivated: chrome.tabs.TabActivatedEvent;
   onHighlighted: chrome.tabs.TabHighlightedEvent;
-  create(props: chrome.tabs.CreateProperties): Promise<chrome.tabs.Tab> | chrome.tabs.Tab;
+  create(
+    props: chrome.tabs.CreateProperties
+  ): Promise<chrome.tabs.Tab> | chrome.tabs.Tab;
   update(
     id: number,
     props: chrome.tabs.UpdateProperties

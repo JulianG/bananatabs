@@ -3,7 +3,7 @@ import {
   ChromeWindowsAPI,
   ChromeTabsAPI,
   ChromeSystemAPI,
-  ChromeExtensionAPI
+  ChromeExtensionAPI,
 } from './PromisingChromeAPI';
 
 import * as FCE from './FakeChromeEvent';
@@ -14,7 +14,7 @@ const DefaultFakeDisplayUnitInfo: chrome.system.display.DisplayUnitInfo = {
   isPrimary: true,
   isEnabled: true,
   bounds: { top: 0, left: 0, width: 1920, height: 1040 },
-  workArea: { top: 0, left: 0, width: 1920, height: 1040 }
+  workArea: { top: 0, left: 0, width: 1920, height: 1040 },
 };
 
 export class FakePromisingChromeAPI implements PromisingChromeAPI {
@@ -29,14 +29,14 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
     windows: {
       create: this.createWindow.bind(this),
       update: this.updateWindow.bind(this),
-      remove: this.removeWindow.bind(this)
+      remove: this.removeWindow.bind(this),
     },
     tabs: {
       create: this.createTab.bind(this),
       update: this.updateTab.bind(this),
       remove: this.removeTab.bind(this),
-      move: this.moveTabs.bind(this)
-    }
+      move: this.moveTabs.bind(this),
+    },
   };
 
   private fakeIdCount: number;
@@ -49,7 +49,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
     selected: false,
     incognito: false,
     discarded: false,
-    autoDiscardable: false
+    autoDiscardable: false,
   };
 
   static clone(that: FakePromisingChromeAPI) {
@@ -61,7 +61,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
   }
   constructor(
     private fakeDisplayUnitInfoArray: chrome.system.display.DisplayUnitInfo[] = [
-      { ...DefaultFakeDisplayUnitInfo }
+      { ...DefaultFakeDisplayUnitInfo },
     ]
   ) {
     const self = this;
@@ -81,7 +81,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
       },
       create: self.createWindow.bind(this),
       update: self.updateWindow.bind(this),
-      remove: self.removeWindow.bind(this)
+      remove: self.removeWindow.bind(this),
     };
 
     this.tabs = {
@@ -100,7 +100,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
 
       async getCurrent() {
         return self.currentTab;
-      }
+      },
     };
 
     this.system = {
@@ -109,14 +109,14 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
           chrome.system.display.DisplayUnitInfo[]
         > {
           return self.fakeDisplayUnitInfoArray;
-        }
-      }
+        },
+      },
     };
 
     this.extension = {
       getURL: (path: string) => {
         return 'chrome-extension://' + path;
-      }
+      },
     };
   }
 
@@ -140,18 +140,18 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
       newWindow
     );
     if (newWindow.tabs) {
-      newWindow.tabs.forEach(async tab => {
+      newWindow.tabs.forEach(async (tab) => {
         consoleLogFakeDispatch(`tabs.onCreated`);
         (this.tabs.onCreated as FCE.TabCreatedEvent).fakeDispatch(tab);
         consoleLogFakeDispatch(`tabs.onActivated`);
         (this.tabs.onActivated as FCE.TabActivatedEvent).fakeDispatch({
           tabId: tab.id,
-          windowId: tab.windowId
+          windowId: tab.windowId,
         });
         consoleLogFakeDispatch(`tabs.onHighlighted`);
         (this.tabs.onHighlighted as FCE.TabHighlightedEvent).fakeDispatch({
           tabIds: [tab.id],
-          windowId: tab.windowId
+          windowId: tab.windowId,
         });
         this.delayedCompleteTab(tab.id!, 1);
       });
@@ -173,10 +173,10 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
   }
 
   private removeWindow(id: number): void {
-    const index = this.fakeWindows.findIndex(w => w.id === id);
+    const index = this.fakeWindows.findIndex((w) => w.id === id);
     if (index > -1) {
       const win = this.fakeWindows[index];
-      const tabIds = (win.tabs || []).map(t => t.id);
+      const tabIds = (win.tabs || []).map((t) => t.id);
       tabIds.forEach(this.removeTabWhileWindowClosing.bind(this));
       this.fakeWindows.splice(index, 1);
 
@@ -197,7 +197,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
   }
 
   private removeTabWhileWindowClosing(id: number | undefined): void {
-    if(!id) {
+    if (!id) {
       return;
     }
     try {
@@ -205,7 +205,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
       consoleLogFakeDispatch(`tabs.onRemoved`);
       (this.tabs.onRemoved as FCE.TabRemovedEvent).fakeDispatch(id, {
         windowId: winId,
-        isWindowClosing: true
+        isWindowClosing: true,
       });
     } catch (e) {
       throw new Error(`failed to remove tab with id: ${id}`);
@@ -282,7 +282,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
         consoleLogFakeDispatch(`tabs.onRemoved`);
         (this.tabs.onRemoved as FCE.TabRemovedEvent).fakeDispatch(id, {
           windowId: winId,
-          isWindowClosing: false
+          isWindowClosing: false,
         });
       }
     } catch (e) {
@@ -294,7 +294,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
     //
     const sourceWindow = this._getWindowForTab(tabId);
     const sourceTabs = sourceWindow.tabs!;
-    const fromIndex = sourceTabs.findIndex(t => t.id === tabId);
+    const fromIndex = sourceTabs.findIndex((t) => t.id === tabId);
 
     const windowId = moveProperties.windowId || sourceWindow.id;
     const toIndex = moveProperties.index;
@@ -318,7 +318,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
     (this.tabs.onMoved as FCE.TabMovedEvent).fakeDispatch(tabId, {
       toIndex,
       fromIndex,
-      windowId
+      windowId,
     });
   }
 
@@ -326,12 +326,12 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
     consoleLogFakeDispatch(`tabs.onActivated`);
     (this.tabs.onActivated as FCE.TabActivatedEvent).fakeDispatch({
       tabId,
-      windowId
+      windowId,
     });
     consoleLogFakeDispatch(`tabs.onHighlighted`);
     (this.tabs.onHighlighted as FCE.TabHighlightedEvent).fakeDispatch({
       tabIds: [tabId],
-      windowId
+      windowId,
     });
   }
 
@@ -357,7 +357,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
       top: createData.top,
       left: createData.left,
       width: createData.width,
-      height: createData.height
+      height: createData.height,
     };
   }
 
@@ -370,7 +370,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
     }
     if (Array.isArray(urls)) {
       return urls.length > 0
-        ? urls.map(url => this._createTab({ windowId, url }))
+        ? urls.map((url) => this._createTab({ windowId, url }))
         : [this._createTab({ windowId })];
     } else {
       const url = urls;
@@ -397,7 +397,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
   }
 
   private _getWindow(id: number): chrome.windows.Window {
-    const win = this.fakeWindows.find(w => w.id === id);
+    const win = this.fakeWindows.find((w) => w.id === id);
     if (win) {
       return win;
     } else {
@@ -407,7 +407,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
 
   private _createTab(props: chrome.tabs.CreateProperties): chrome.tabs.Tab {
     const windowId = props.windowId || this._getFocusedWindowId();
-    const win = this.fakeWindows.find(w => w.id === windowId);
+    const win = this.fakeWindows.find((w) => w.id === windowId);
     const defaultIndex = win ? (win.tabs || []).length : 0;
 
     const tab = {
@@ -422,7 +422,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
       discarded: false,
       autoDiscardable: false,
       url: props.url || 'chrome://newtab/',
-      openerTabId: props.openerTabId
+      openerTabId: props.openerTabId,
     };
     return tab;
   }
@@ -435,7 +435,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
       change = window.focused !== value;
     }
 
-    this.fakeWindows.forEach(w => {
+    this.fakeWindows.forEach((w) => {
       w.focused = w.id === id ? value : false;
     });
 
@@ -443,21 +443,21 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
   }
 
   private _getFocusedWindowId(): number {
-    const focusedWindow = this.fakeWindows.find(w => w.focused);
+    const focusedWindow = this.fakeWindows.find((w) => w.focused);
     return focusedWindow ? focusedWindow.id : -1;
   }
 
   private _removeTab(id: number): number {
     const win = this._getWindowForTab(id);
     const tabs = win.tabs || [];
-    const index = tabs.findIndex(t => t.id === id);
+    const index = tabs.findIndex((t) => t.id === id);
     tabs.splice(index, 1);
     return win.id;
   }
 
   private _getTab(id: number): chrome.tabs.Tab {
     const window = this._getWindowForTab(id);
-    const tab = window.tabs!.find(t => t.id === id);
+    const tab = window.tabs!.find((t) => t.id === id);
     if (!tab) {
       throw new Error(
         `Failed to find tab with id: ${id} in window ${window.id}`
@@ -467,9 +467,9 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
   }
 
   private _getWindowForTab(tabId: number): chrome.windows.Window {
-    const win = this.fakeWindows.find(w => {
+    const win = this.fakeWindows.find((w) => {
       return (
-        (w.tabs || []).find(t => {
+        (w.tabs || []).find((t) => {
           return t.id === tabId;
         }) !== undefined
       );
@@ -487,7 +487,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
   }
 
   private _getActiveTabId(window: chrome.windows.Window): number {
-    const activeTab = (window.tabs || []).find(t => t.active);
+    const activeTab = (window.tabs || []).find((t) => t.active);
     return activeTab ? activeTab.id || -1 : -1;
   }
 
@@ -511,7 +511,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
     }
     const window = this._getWindowForTab(id);
     const change = tab.active !== value;
-    window.tabs!.forEach(t => {
+    window.tabs!.forEach((t) => {
       t.active = t.id === id ? value : false;
       t.highlighted = t.active;
     });
@@ -532,7 +532,7 @@ export class FakePromisingChromeAPI implements PromisingChromeAPI {
     if (tabs.length < 1) {
       return -1;
     }
-    const activeTabs = tabs.filter(t => t.active);
+    const activeTabs = tabs.filter((t) => t.active);
 
     const id = activeTabs.length
       ? activeTabs[activeTabs.length - 1].id!

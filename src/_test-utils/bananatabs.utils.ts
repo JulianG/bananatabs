@@ -96,7 +96,7 @@ export function getTabsInWindow(windowGroup: HTMLElement) {
 }
 
 export function getTabsVisibilities(tabs: HTMLElement[]): boolean[] {
-  return tabs.map(t => {
+  return tabs.map((t) => {
     const visible = queryByAltText(t, 'tab-visible');
     // const hidden = queryByAltText(t, 'tab-hidden');
     return visible !== null;
@@ -104,7 +104,7 @@ export function getTabsVisibilities(tabs: HTMLElement[]): boolean[] {
 }
 
 export function getWindowsVisibilities(windows: HTMLElement[]): boolean[] {
-  return windows.map(w => {
+  return windows.map((w) => {
     const visible = queryByAltText(w, 'win-visible');
     return visible !== null;
   });

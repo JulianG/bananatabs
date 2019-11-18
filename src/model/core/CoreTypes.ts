@@ -1,4 +1,3 @@
-
 export class Session {
   constructor(
     readonly windows: ReadonlyArray<Window>,
@@ -6,7 +5,7 @@ export class Session {
   ) {}
 
   getWindow(id: number): Window {
-    const win = this.windows.find(w => w.id === id);
+    const win = this.windows.find((w) => w.id === id);
     console.assert(
       win,
       `Could not find a window with id ${id} in the current session.`
@@ -16,8 +15,9 @@ export class Session {
 
   getTab(id: number): Tab {
     const win =
-      this.windows.find(w => w.tabs.some(t => t.id === id)) || getNewWindow();
-    const tab = win.tabs.find(t => t.id === id);
+      this.windows.find((w) => w.tabs.some((t) => t.id === id)) ||
+      getNewWindow();
+    const tab = win.tabs.find((t) => t.id === id);
     console.assert(
       tab,
       `Could not find a tab with id ${id} in the current session.`
@@ -28,7 +28,7 @@ export class Session {
 
 export function cloneSession(session: Session): Session {
   return new Session(
-    session.windows.map(w => cloneWindow(w)),
+    session.windows.map((w) => cloneWindow(w)),
     cloneWindow(session.panelWindow)
   );
 }
@@ -53,7 +53,7 @@ export function cloneWindow(
   window: Window,
   overrides: Partial<Window> = {}
 ): Window {
-  return { ...window, tabs: window.tabs.map(t => cloneTab(t)), ...overrides };
+  return { ...window, tabs: window.tabs.map((t) => cloneTab(t)), ...overrides };
 }
 
 export interface Tab extends ListItem {
@@ -88,7 +88,7 @@ export function getNewWindow(overrides: Partial<Window> = {}): Window {
       type: 'normal',
       state: 'normal',
       tabs: [],
-      expanded: false
+      expanded: false,
     },
     overrides
   );
@@ -107,7 +107,7 @@ export function getNewTab(overrides: Partial<Tab> = {}): Tab {
       active: false,
       selected: false,
       highlighted: false,
-      status: ''
+      status: '',
     },
     overrides
   );
@@ -140,7 +140,7 @@ export function DEBUG_sessionToString(s: Session): string {
       default:
         return value;
     }
-  };
+  }
 
   return JSON.stringify(s, replacer, 2);
 }
@@ -154,7 +154,7 @@ function simplifyWindow(w: Window) {
     title: w.title,
     visible: w.visible,
     tabNum: w.tabs.length,
-    tabs: w.tabs
+    tabs: w.tabs,
   };
 }
 
@@ -163,6 +163,6 @@ function simplifyTab(t: Tab) {
   return {
     id: t.id,
     url: t.url,
-    visible: t.visible
+    visible: t.visible,
   };
 }

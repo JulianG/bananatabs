@@ -6,7 +6,7 @@ async function initialise(sessionString: string) {
     provider,
     fchrome,
     browserController,
-    onSessionChanged
+    onSessionChanged,
   } = await createIniatilisedProvider(sessionString);
   const tabMutator = new DefaultTabMutator(provider, browserController);
   return { provider, fchrome, browserController, tabMutator, onSessionChanged };
@@ -15,12 +15,15 @@ async function initialise(sessionString: string) {
 describe('DefaultTabMutator tests', () => {
   test('hide tab', async () => {
     // given an initialised provider with 1 window and 2 tabs
-    const { provider, fchrome, tabMutator, onSessionChanged } = await initialise(
-      '[v(v,v)]'
-    );
+    const {
+      provider,
+      fchrome,
+      tabMutator,
+      onSessionChanged,
+    } = await initialise('[v(v,v)]');
     const existingWindow = provider.session.windows[0];
     const windowId = existingWindow.id;
-    const tabIds = (existingWindow.tabs || []).map(t => t.id || 0);
+    const tabIds = (existingWindow.tabs || []).map((t) => t.id || 0);
 
     // when a tab is hidden via BananaTabs!
     await tabMutator.hideTab(windowId, tabIds[1]);
@@ -41,13 +44,16 @@ describe('DefaultTabMutator tests', () => {
 
   test('show tab', async () => {
     // given an initialised provider with some hidden tabs
-    const { provider, fchrome, tabMutator, onSessionChanged } = await initialise(
-      '[vt(v,!v,v,v)]'
-    );
+    const {
+      provider,
+      fchrome,
+      tabMutator,
+      onSessionChanged,
+    } = await initialise('[vt(v,!v,v,v)]');
 
     const existingWindow = provider.session.windows[0];
     const windowId = existingWindow.id;
-    const tabIds = (existingWindow.tabs || []).map(t => t.id || 0);
+    const tabIds = (existingWindow.tabs || []).map((t) => t.id || 0);
     const totalTabs = tabIds.length;
 
     // when a hidden tab is toggled
@@ -61,5 +67,4 @@ describe('DefaultTabMutator tests', () => {
     // and and event
     expect(onSessionChanged).toHaveBeenCalled();
   });
-
 });

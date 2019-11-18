@@ -5,14 +5,15 @@ import {
   /*getWindowGroups,
   getTabsVisibilities,
   getTabsInWindow,*/
-  renderBananaTabs, getTabsVisibilities
+  renderBananaTabs,
+  getTabsVisibilities,
 } from '../_test-utils/bananatabs.utils';
 
 import { wait, compareSessions } from '../_test-utils';
-import {  getTabsInWindow } from '../_test-utils/bananatabs.utils';
+import { getTabsInWindow } from '../_test-utils/bananatabs.utils';
 
 import {
-  stringToSession
+  stringToSession,
   /*windowsToString*/
 } from '../serialisation/MarkdownSerialisation';
 
@@ -27,7 +28,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
         fchrome,
         provider,
         getWindowGroups,
-        getTabVisibilityToggle
+        getTabVisibilityToggle,
       } = await renderBananaTabs(`
         window 1:
         * http://tab-1.1/
@@ -44,10 +45,10 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       const btn = getTabVisibilityToggle(0, 1);
       fireEvent.click(btn);
       await wait();
-      
+
       const tabs0 = getTabsInWindow(getWindowGroups()[0]);
       expect(getTabsVisibilities(tabs0)).toMatchObject([true, false, true]);
-      
+
       // expect the tab to be hidden!
       expect(
         compareSessions(
@@ -77,7 +78,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
       const {
         fchrome,
         provider,
-        getTabVisibilityToggle
+        getTabVisibilityToggle,
       } = await renderBananaTabs(`
         window 1:
         * http://tab-1.1/
@@ -121,7 +122,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
         /*container, debug, */
         fchrome,
         provider,
-        getTabVisibilityToggle
+        getTabVisibilityToggle,
       } = await renderBananaTabs(`
         window 1:
         * http://tab-1.1/
@@ -169,7 +170,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
         /*container, debug, */
         fchrome,
         provider,
-        getTabVisibilityToggle
+        getTabVisibilityToggle,
       } = await renderBananaTabs(`
         window 1~
         * http://tab-1.1/
@@ -218,7 +219,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
         /*container, debug, */
         fchrome,
         provider,
-        getWindowVisibilityToggle
+        getWindowVisibilityToggle,
       } = await renderBananaTabs(`
         :
         * http://tab-1.1/
@@ -266,7 +267,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
         /*container, debug, */
         fchrome,
         provider,
-        getWindowVisibilityToggle
+        getWindowVisibilityToggle,
       } = await renderBananaTabs(`
         This window has a name:
         * http://tab-1.1/
@@ -314,7 +315,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
         /*container, debug, */
         fchrome,
         provider,
-        getWindowVisibilityToggle
+        getWindowVisibilityToggle,
       } = await renderBananaTabs(`
         My Hidden Window~
         * http://tab-1.1/
@@ -362,7 +363,7 @@ describe('BananaTabs Tests: Toggling Visibility', async () => {
         /*container, debug, */
         fchrome,
         provider,
-        getWindowVisibilityToggle
+        getWindowVisibilityToggle,
       } = await renderBananaTabs(`
         My Hidden Window~
         * http://tab-1.1/

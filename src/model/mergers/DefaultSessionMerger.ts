@@ -7,8 +7,8 @@ export function mergeSessions(
 ): BT.Session {
   mconsole.group('SessionMerger.mergeSessions');
   const mergedSessionWindows: BT.Window[] = [];
-  const liveWindowsWithTabs = live.windows.filter(w => w.tabs.length > 0);
-  stored.windows.forEach(storedWindow => {
+  const liveWindowsWithTabs = live.windows.filter((w) => w.tabs.length > 0);
+  stored.windows.forEach((storedWindow) => {
     mconsole.group(
       'processing a stored window: ' +
         storedWindow.id +
@@ -18,7 +18,7 @@ export function mergeSessions(
 
     mconsole.log('looking for a live matching window...');
 
-    const liveMatchingWindow = liveWindowsWithTabs.find(liveWindow => {
+    const liveMatchingWindow = liveWindowsWithTabs.find((liveWindow) => {
       return (
         compareWindows(liveWindow, storedWindow) >= 0.5 &&
         shouldAddLiveWindow(liveWindow, live)
@@ -60,15 +60,15 @@ export function mergeSessions(
     mconsole.groupEnd();
   });
 
-  const nonMatchedWindows = liveWindowsWithTabs.filter(liveW => {
+  const nonMatchedWindows = liveWindowsWithTabs.filter((liveW) => {
     return (
       shouldAddLiveWindow(liveW, live) &&
-      !mergedSessionWindows.some(msW => msW.id === liveW.id)
+      !mergedSessionWindows.some((msW) => msW.id === liveW.id)
     );
   });
 
   mconsole.group(
-    `adding nonMatchedWindows... (${nonMatchedWindows.map(nmw => nmw.id)})`
+    `adding nonMatchedWindows... (${nonMatchedWindows.map((nmw) => nmw.id)})`
   );
   const newSessionWindows = [...mergedSessionWindows, ...nonMatchedWindows];
   mconsole.table(nonMatchedWindows);
@@ -87,8 +87,8 @@ function mergeTabs(
   mconsole.table(liveTabs);
 
   mconsole.log('extraLiveTabs... (tabs in liveTabs not present in storedTabs)');
-  const extraLiveTabs = liveTabs.filter(liveTab => {
-    return storedTabs.find(tab => tab.url === liveTab.url) === undefined;
+  const extraLiveTabs = liveTabs.filter((liveTab) => {
+    return storedTabs.find((tab) => tab.url === liveTab.url) === undefined;
   });
   mconsole.table(extraLiveTabs);
 
@@ -98,7 +98,7 @@ function mergeTabs(
     return (
       storedTab.visible === false ||
       (storedTab.visible &&
-        liveTabs.find(liveTab => liveTab.url === storedTab.url))
+        liveTabs.find((liveTab) => liveTab.url === storedTab.url))
     );
   });
   mconsole.table(filteredTabs);
@@ -106,7 +106,7 @@ function mergeTabs(
   mconsole.log(`mergedTabs... 
 		(filteredTabs with extraLiveTabs inserted by index... hmmmm not accurate enough?)`);
   const mergedTabs = [...filteredTabs];
-  extraLiveTabs.forEach(t => {
+  extraLiveTabs.forEach((t) => {
     mergedTabs.splice(t.index, 0, t);
   });
   mconsole.table(mergedTabs);
@@ -116,7 +116,7 @@ function mergeTabs(
   );
   let highestLiveTabIndex = -1;
   const mergedLiveTabs = mergedTabs.map((tab, i) => {
-    const liveTab = liveTabs.find(lt => lt.url === tab.url);
+    const liveTab = liveTabs.find((lt) => lt.url === tab.url);
     highestLiveTabIndex = liveTab ? liveTab.index + 1 : highestLiveTabIndex;
     const newTab = { ...(liveTab || tab) };
     newTab.title = newTab.title || tab.title;
@@ -148,8 +148,9 @@ function mergeTabs(
 
 function uniqueTabsById(tabs: BT.Tab[]): BT.Tab[] {
   const uniqueArray: BT.Tab[] = [];
-  tabs.forEach(tab => {
-    if (uniqueArray.some(t => t.id === tab.id) === false) uniqueArray.push(tab);
+  tabs.forEach((tab) => {
+    if (uniqueArray.some((t) => t.id === tab.id) === false)
+      uniqueArray.push(tab);
   });
   return uniqueArray;
 }
@@ -159,14 +160,14 @@ function compareWindows(live: BT.Window, stored: BT.Window): number {
     return 1;
   }
 
-  const liveTabURLs = live.tabs.map(t => t.url);
-  const storedTabURLs = stored.tabs.filter(t => t.visible).map(t => t.url);
+  const liveTabURLs = live.tabs.map((t) => t.url);
+  const storedTabURLs = stored.tabs.filter((t) => t.visible).map((t) => t.url);
 
   const allURLs = [...liveTabURLs, ...storedTabURLs];
   const uniqueURLs = Array.from(new Set(allURLs));
 
   const intersection = uniqueURLs.filter(
-    url => liveTabURLs.includes(url) && storedTabURLs.includes(url)
+    (url) => liveTabURLs.includes(url) && storedTabURLs.includes(url)
   );
 
   const similarity = intersection.length / uniqueURLs.length;
@@ -174,7 +175,7 @@ function compareWindows(live: BT.Window, stored: BT.Window): number {
 }
 
 function pushUniqueWindow(array: BT.Window[], window: BT.Window) {
-  if (array.some(w => w.id === window.id) === false) {
+  if (array.some((w) => w.id === window.id) === false) {
     array.push(window);
   } else {
     mconsole.warn('duplicate window: ', window.id, window.title);
@@ -187,6 +188,6 @@ function shouldAddLiveWindow(
 ): boolean {
   return (
     liveW.id !== liveSession.panelWindow.id &&
-    liveW.tabs.every(t => t.url.indexOf('bananatabs-ignore') < 0)
+    liveW.tabs.every((t) => t.url.indexOf('bananatabs-ignore') < 0)
   );
 }

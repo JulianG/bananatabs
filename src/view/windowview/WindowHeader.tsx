@@ -11,7 +11,7 @@ interface Props {
   onCopy(windowId: number): void;
 }
 
-export const WindowHeader: React.FC<Props> = props => {
+export const WindowHeader: React.FC<Props> = (props) => {
   const [renaming, setRenaming] = React.useState(false);
 
   const windowMutator = useWindowMutator();

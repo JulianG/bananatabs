@@ -2,7 +2,7 @@ import * as React from 'react';
 import { BananaTabs } from './BananaTabs';
 import {
   createRealBananaContext,
-  createFakeBananaContext
+  createFakeBananaContext,
 } from './context/BananaContextFactory';
 import { ChromeAPIView } from './chrome-api/ChromeAPIView';
 import * as FakeInitialState from './utils/dev-utils/fake-initial-state';
@@ -15,9 +15,11 @@ const ProductionApp = () => {
 };
 
 const DevelopmentApp = () => {
+  const fakeSessions = {
+    live: FakeInitialState.live,
+    stored: FakeInitialState.stored,
+  };
 
-  const fakeSessions = { live: FakeInitialState.live, stored: FakeInitialState.stored };
-  
   const context = createFakeBananaContext(fakeSessions);
   const chromeAPI = context.chromeAPI;
 

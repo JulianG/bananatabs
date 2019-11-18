@@ -7,7 +7,7 @@ export class DefaultWindowMutator implements WindowMutator {
   constructor(
     private provider: SessionProvider,
     private browser: BrowserController
-  ) { }
+  ) {}
 
   async renameWindow(id: number, title: string) {
     await this.provider.setSession(
@@ -32,16 +32,16 @@ export class DefaultWindowMutator implements WindowMutator {
 
     await this.provider.setSession(
       CoreMutations.mutateWindow(this.provider.session, id, {
-        visible: false
+        visible: false,
       })
     );
   }
 
   async showWindow(id: number) {
     const win = this.provider.session.getWindow(id);
-    const visibleTabs = win.tabs.filter(t => t.visible).length;
-    
-    if(visibleTabs === 0) {
+    const visibleTabs = win.tabs.filter((t) => t.visible).length;
+
+    if (visibleTabs === 0) {
       return;
     }
 
@@ -51,7 +51,7 @@ export class DefaultWindowMutator implements WindowMutator {
 
     await this.provider.setSession(
       CoreMutations.mutateWindow(session, id, {
-        visible: true
+        visible: true,
       })
     );
   }

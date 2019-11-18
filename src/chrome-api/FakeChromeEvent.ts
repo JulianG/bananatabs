@@ -13,7 +13,7 @@ export class FakeChromeEvent<S extends T> implements chrome.events.Event<T> {
 
   fakeDispatch(...args: any[]) {
     const list = this.list;
-    list.forEach(cb => {
+    list.forEach((cb) => {
       cb(...args);
     });
   }
@@ -27,11 +27,11 @@ export class FakeChromeEvent<S extends T> implements chrome.events.Event<T> {
   }
 
   hasListener(callback: T) {
-    return this.list.findIndex(c => c === callback) > -1;
+    return this.list.findIndex((c) => c === callback) > -1;
   }
 
   removeListener(callback: T) {
-    const index = this.list.findIndex(c => c === callback);
+    const index = this.list.findIndex((c) => c === callback);
     if (index > -1) {
       this.list.splice(index, 1);
     }

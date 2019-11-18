@@ -10,17 +10,17 @@ export function initialiseFakeChromeAPI(session: string | BT.Session) {
 
 function initialiseFchromeFromSession(session: BT.Session) {
   const fchrome = new FakePromisingChromeAPI();
-  const visibleWindows = session.windows.filter(w => w.visible);
+  const visibleWindows = session.windows.filter((w) => w.visible);
   fchrome.fakeWindows = visibleWindows.map((w: BT.Window) => {
     const win = fchrome.fake.windows.create({ focused: w.focused });
     win!.tabs!.splice(0, 1); // removing first tab because it's chrome://newtab/
     const windowId = win!.id;
-    const visibleTabs = w.tabs.filter(t => t.visible);
-    win.tabs = visibleTabs.map(vt => {
+    const visibleTabs = w.tabs.filter((t) => t.visible);
+    win.tabs = visibleTabs.map((vt) => {
       const newTab: chrome.tabs.Tab = fchrome.fake.tabs.create({
         windowId,
         active: vt.active,
-        url: vt.url
+        url: vt.url,
       });
       newTab.highlighted = vt.highlighted;
       newTab.title = `${vt.url}`;

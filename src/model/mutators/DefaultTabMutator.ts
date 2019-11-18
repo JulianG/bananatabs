@@ -22,7 +22,7 @@ export class DefaultTabMutator implements TabMutator {
 
     await this.provider.setSession(
       CoreMutations.mutateTab(this.provider.session, winId, tabId, {
-        visible: false
+        visible: false,
       })
     );
   }
@@ -31,7 +31,7 @@ export class DefaultTabMutator implements TabMutator {
     const session = this.provider.session;
     const wasWindowVisible = session.getWindow(winId).visible;
     const newSession = CoreMutations.mutateTab(session, winId, tabId, {
-      visible: true
+      visible: true,
     });
 
     if (wasWindowVisible) {

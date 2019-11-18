@@ -50,7 +50,7 @@ describe('creating windows and tabs', () => {
     } = await createIniatilisedProvider('[v(v)]');
     const existingWindow = (await fchrome.windows.getAll({}))[0];
     const windowId = existingWindow.id;
-    const tabIds = (existingWindow.tabs || []).map(t => t.id || 0);
+    const tabIds = (existingWindow.tabs || []).map((t) => t.id || 0);
 
     // when a tab is created via the Chrome API
     await fchrome.tabs.create({ windowId });
@@ -96,7 +96,7 @@ describe('closing tabs', () => {
     expect(
       provider.session
         .getWindow(windowId)
-        .tabs.filter(t => t.id === initialTabIds[tabIndex])
+        .tabs.filter((t) => t.id === initialTabIds[tabIndex])
     ).toHaveLength(0);
 
     // expect the window to be invisible if the closed tab was the only tab in he window

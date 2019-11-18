@@ -1,18 +1,17 @@
-
 /* All icons are displayed like this */
 img.icon {
-	width: 1.5rem;
-	height: 1.5rem;
-	margin: 0.125rem;
-	margin-right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0.125rem;
+  margin-right: 0.5rem;
 }
 
 img.tool.icon {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 /* and when they're hidden... */
 img.icon.hidden {
   -webkit-filter: opacity(0.5) grayscale(1);
-	filter: opacity(0.5) grayscale(1);
+  filter: opacity(0.5) grayscale(1);
 }

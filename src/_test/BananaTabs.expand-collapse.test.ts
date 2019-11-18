@@ -5,7 +5,7 @@ import {
   /*getWindowGroups,
   getTabsVisibilities,
   getTabsInWindow,*/
-  renderBananaTabs
+  renderBananaTabs,
 } from '../_test-utils/bananatabs.utils';
 
 import { wait } from '../_test-utils';
@@ -64,8 +64,7 @@ describe('BananaTabs Tests: Expand/Collapse Disclosure Button', async () => {
     fireEvent.mouseEnter(windowGroup0);
     await wait();
 
-    // EXPECT 
-
+    // EXPECT
   });
 
   test.skip('Hovering Tab Title reveals tools', async () => {

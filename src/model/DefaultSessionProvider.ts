@@ -70,13 +70,16 @@ export class DefaultSessionProvider implements SessionProvider {
   private async getLiveSession(): Promise<BT.Session> {
     const windows: BT.Window[] = await this.browserController.getAllWindows();
     const panelWindow = this.findPanelWindow(windows) || BT.getNewWindow();
-    return new BT.Session(windows.filter(w => w !== panelWindow), panelWindow);
+    return new BT.Session(
+      windows.filter((w) => w !== panelWindow),
+      panelWindow
+    );
   }
 
   private findPanelWindow(windows: BT.Window[]): BT.Window | undefined {
     const appURL = this.browserController.getAppURL();
-    return windows.find(w => {
-      return w.tabs.some(t => t.url === appURL);
+    return windows.find((w) => {
+      return w.tabs.some((t) => t.url === appURL);
     });
   }
 

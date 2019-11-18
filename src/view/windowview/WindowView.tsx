@@ -17,7 +17,7 @@ export const WindowView = React.memo(function WindowView(props: Props) {
     'window-group',
     window.focused ? 'focused' : '',
     window.visible ? 'visible' : 'hidden',
-  ].filter(c => !!c);
+  ].filter((c) => !!c);
 
   return (
     <div

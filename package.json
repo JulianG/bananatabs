@@ -21,7 +21,8 @@
     "tsc": "./node_modules/typescript/bin/tsc --noEmit",
     "eject": "react-scripts eject",
     "version": "node ./_scripts/sync-manifest-version.js",
-    "postversion": "node ./_scripts/build-and-dist.js"
+    "postversion": "node ./_scripts/build-and-dist.js",
+    "format": "prettier \"**/*.+(js|jsx|css|less|scss|ts|tsx)\" --write"
   },
   "devDependencies": {
     "@testing-library/react": "^8.0.8",

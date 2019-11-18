@@ -1,36 +1,36 @@
 .window-group {
-	margin-bottom: 0.3rem;
-	padding: 0.25rem;
-	white-space: nowrap;
-	background-color: #ffffff;
+  margin-bottom: 0.3rem;
+  padding: 0.25rem;
+  white-space: nowrap;
+  background-color: #ffffff;
 }
 
 /* A WindoGroup that's is not currently visible. */
 .window-group.hidden {
-	background-color: #eeeeee;
-	box-shadow: none;
+  background-color: #eeeeee;
+  box-shadow: none;
 }
 
 /* A row representing a WindowGroup title or a Tab */
 .item-row {
-	height: 2rem;
-	white-space: nowrap;
-	overflow: hidden; 
+  height: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .item-row .window-title {
-	font-size: 1.00rem;
-	font-weight: bold;
-	padding-top: 0.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  padding-top: 0.2rem;
 }
 
 .item-row input {
-	font-size: 1.0rem;
+  font-size: 1rem;
 }
 
 /* 
 	For hidden tabs and window groups
 */
 .hidden {
-	color: #999999;
+  color: #999999;
 }

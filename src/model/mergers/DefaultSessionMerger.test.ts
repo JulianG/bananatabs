@@ -186,7 +186,7 @@ describe('DefaultSessionMerger merge cases', () => {
     },
   ];
 
-  cases.forEach(testCase => {
+  cases.forEach((testCase) => {
     const { name, stored, live, expected } = testCase;
     test(name, () => {
       const { merged } = mergeStringSessions(stored, live);
@@ -233,14 +233,18 @@ describe('DefaultSessionMerger remove duplicate tabs', () => {
     * http://tab-2
     `);
 
-    ((storedSession.windows[0].tabs as BT.Mutable<BT.Tab[]>)[0].id as BT.Mutable<number>) = 99999;
-    ((storedSession.windows[0].tabs as BT.Mutable<BT.Tab[]>)[1].id as BT.Mutable<number>) = 99999;
-    ((liveSession.windows[0].tabs as BT.Mutable<BT.Tab[]>)[0].id as BT.Mutable<number>) = 99999;
+    ((storedSession.windows[0].tabs as BT.Mutable<BT.Tab[]>)[0]
+      .id as BT.Mutable<number>) = 99999;
+    ((storedSession.windows[0].tabs as BT.Mutable<BT.Tab[]>)[1]
+      .id as BT.Mutable<number>) = 99999;
+    ((liveSession.windows[0].tabs as BT.Mutable<BT.Tab[]>)[0].id as BT.Mutable<
+      number
+    >) = 99999;
 
     const merged = mergeSessions(storedSession, liveSession);
 
     expect(merged.windows.length).toBe(1);
-    expect(merged.windows[0].tabs.map(t => t.url)).toMatchObject([
+    expect(merged.windows[0].tabs.map((t) => t.url)).toMatchObject([
       'http://tab-1',
       'http://tab-2',
     ]);

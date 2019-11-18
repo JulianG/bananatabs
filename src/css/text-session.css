@@ -1,25 +1,25 @@
 /* TextSessionView  */
 
 .textsession {
-	/* position: absolute;
+  /* position: absolute;
 	left: 0;
 	top: 0; */
-	width: 100%;
-	height: 100%;
-	padding: 0.6rem;
-	display: flex;
-	flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .textsession textarea {
-	width: 100%;
-	height: 100%;
-	padding: 0.6rem;
-	font-size: 1rem;
-	resize: none;
-	overflow: hidden;
-	font-family: 'Inconsolata', 'Courier New', Courier, monospace;
-	background-color: #ffffff;
-	outline: #00000000;
-	border: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  resize: none;
+  overflow: hidden;
+  font-family: 'Inconsolata', 'Courier New', Courier, monospace;
+  background-color: #ffffff;
+  outline: #00000000;
+  border: 0;
 }

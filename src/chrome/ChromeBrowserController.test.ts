@@ -61,7 +61,7 @@ describe('ChromeBrowserController', async () => {
       expect(wins).toHaveLength(1);
 
       // also expect the following events
-      expect(callback.mock.calls.map(args => args[0])).toMatchObject([
+      expect(callback.mock.calls.map((args) => args[0])).toMatchObject([
         'onTabsCreated',
         'onActivated',
         'onTabsCreated',
@@ -86,7 +86,7 @@ describe('ChromeBrowserController', async () => {
       expect(wins).toHaveLength(0);
 
       // also expect the following events
-      expect(callback.mock.calls.map(args => args[0])).toMatchObject([
+      expect(callback.mock.calls.map((args) => args[0])).toMatchObject([
         'onFocusChanged',
         'onRemoved',
       ]);
@@ -113,7 +113,7 @@ describe('ChromeBrowserController', async () => {
       expect(wins[0].tabs[1].visible).toBeTruthy();
 
       // also expect the following events
-      expect(callback.mock.calls.map(args => args[0])).toMatchObject([
+      expect(callback.mock.calls.map((args) => args[0])).toMatchObject([
         'onTabsCreated',
       ]);
 
@@ -141,7 +141,7 @@ describe('ChromeBrowserController', async () => {
       expect(wins[0].tabs[0].visible).toBeTruthy();
 
       // also expect the following events
-      expect(callback.mock.calls.map(args => args[0])).toMatchObject([
+      expect(callback.mock.calls.map((args) => args[0])).toMatchObject([
         'onTabsRemoved',
       ]);
     });
@@ -207,7 +207,6 @@ describe('ChromeBrowserController', async () => {
         width: display.bounds.width / 5,
         height: display.bounds.height,
       });
-
     });
   });
 });

@@ -1,4 +1,8 @@
-import { windowsToString, stringToWindows, stringToSession } from './MarkdownSerialisation';
+import {
+  windowsToString,
+  stringToWindows,
+  stringToSession,
+} from './MarkdownSerialisation';
 
 // basic serialisation tests
 
@@ -224,7 +228,6 @@ Bananas 2~
   });
 
   test('detecting chrome-extension window', () => {
-
     const session = stringToSession(`
     : My Window
     * http://tab-1
@@ -238,6 +241,8 @@ Bananas 2~
     expect(session.windows).toHaveLength(2);
     expect(session.windows[0].tabs).toHaveLength(1);
     expect(session.panelWindow.tabs).toHaveLength(1);
-    expect(session.panelWindow.tabs[0].url).toBe('chrome-extension://index.html');
+    expect(session.panelWindow.tabs[0].url).toBe(
+      'chrome-extension://index.html'
+    );
   });
 });

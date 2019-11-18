@@ -1,12 +1,12 @@
 /* Drag and Drop */
 
 .dl-item.dragged .window-group {
-	opacity: 0.25;
+  opacity: 0.25;
 }
 
 .dl-item.floating .window-group {
-	box-shadow: 0em 0.4em 1.6em #666666;
+  box-shadow: 0em 0.4em 1.6em #666666;
 }
 .dl-item.floating {
-	width: 95%;
+  width: 95%;
 }

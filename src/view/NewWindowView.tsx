@@ -10,7 +10,7 @@ interface Props {
 export const NewWindowView: React.FC<Props> = ({ minimumLines, onClose }) => {
   const [text, setText] = React.useState('');
   const sessionMutator = useSessionMutator();
-  
+
   function save() {
     sessionMutator.addWindows(stringToHiddenWindows(text));
     onClose();
