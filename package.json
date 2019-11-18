@@ -4,8 +4,8 @@
   "private": true,
   "rootDir": "./src",
   "dependencies": {
-    "react": "16.8.1",
-    "react-dom": "16.8.1",
+    "react": "16.9",
+    "react-dom": "16.9",
     "react-list-drag-and-drop": "^0.8.1"
   },
   "scripts": {
